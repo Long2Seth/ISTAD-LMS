@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: "ISTAD-LMS"
+  profiles:
+    active: dev
