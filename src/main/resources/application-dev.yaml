@@ -1,9 +1,6 @@
 server:
-  port: 8888
+  port: 8080
 # our own configuration for the file storage
-file:
-  storage-dir: "filestorage/images/"
-  client-dir: "/images/**"
 spring:
   servlet: # this is for file upload
     multipart:
