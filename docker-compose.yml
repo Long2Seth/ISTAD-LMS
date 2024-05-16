@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  istad_lms:
+    container_name: 'istad_lms_image'
+    #    image: 'surveybox_stage:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - TZ=Asia/Bangkok
+    ports:
+      - '3243:8080'   #follow you port
+    volumes:
+      - '/home/istad_lms/images:/home/istad/media'
+# what i want to explain to you is like see
+  #/home/ite/media is inside contianer right
+  #/home/istad/kak-bank/images on host machine or on server that deploy container
