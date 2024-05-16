@@ -12,10 +12,10 @@ spring:
 
 
   datasource:
-    username: postgres
-    password: 2002sep24
+    username: istadlms
+    password: ISTAD@LMS
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/ISTAD-LMS
+    url: jdbc:postgresql://152.42.220.220:5433/istad_lms_db
   jpa:
     show-sql: true
     hibernate:
