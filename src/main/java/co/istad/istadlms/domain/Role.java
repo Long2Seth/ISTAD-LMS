@@ -1,17 +1,16 @@
 package co.istad.istadlms.domain;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "roles_tbl")
+@Table(name = "roles")
 @Entity
 public class Role {
 
@@ -27,7 +26,6 @@ public class Role {
     //Relationship with user
 
     @ManyToMany(mappedBy = "roles")
-    private List<User> users;
+    private Set<User> users;
 
 }
-

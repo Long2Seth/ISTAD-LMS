@@ -8,12 +8,12 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
-@Table(name = "classes")
+@Table(name = "courses")
 @Entity
-public class Classes {
+public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,27 +22,32 @@ public class Classes {
     @Column( name = "alias" , nullable = false)
     private String alias;
 
-    @Column( name = "class_name" , nullable = false)
-    private String className;
+    @Column( name = "status" , nullable = false)
+    private Integer status;
 
-    @Column( name = "description" , nullable = false)
-    private String description;
-
-    @Column( name = "created_by" , nullable = false , length = 50)
+    @Column( name = "created_by" , length = 50)
     private String createdBy;
 
     @Column( name = "created_at" , nullable = false)
     private LocalDate createdAt;
 
-    @Column( name = "modified_by" , nullable = false , length = 50)
+    @Column( name = "modified_by" , length = 50)
     private String modifiedBy;
 
     @Column( name = "modified_at" , nullable = false)
     private LocalDate modifiedAt;
 
-
     @Column( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;
+
+    @Column( name = "subject_id" , nullable = false)
+    private Long subjectId;
+
+    @Column( name = "instructor_id" , nullable = false)
+    private Long instructorId;
+
+    @Column( name = "class_id" , nullable = false)
+    private Long classId;
 
 
 }
