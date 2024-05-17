@@ -22,6 +22,7 @@ public class MediaController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/upload-single",consumes = "multipart/form-data")
     MediaResponse uploadSingle(@RequestPart MultipartFile file) {
+
         return mediaService.uploadSingle(file, "IMAGE");
     }
 

@@ -21,6 +21,12 @@ file:
   storage-dir: "filestorage/images/"
   client-dir: "/images/**"
 
+minio:
+  url: ${MINIO_URL}
+  secret-key: ${MINIO_SECRETE_KEY}
+  bucket-name: ${MINIO_BUCKET}
+  access-key: ${MINIO_ACCESS_KEY}
+
 spring:
   application:
     name: "ISTAD-LMS"
