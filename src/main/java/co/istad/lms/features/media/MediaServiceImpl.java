@@ -1,7 +1,8 @@
 package co.istad.lms.features.media;
 
-import co.istad.lms.utils.MediaUtil;
+import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.media.dto.MediaResponse;
+import co.istad.lms.utils.MediaUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,14 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -27,123 +28,85 @@ import java.util.UUID;
 @Slf4j
 public class MediaServiceImpl implements MediaService {
 
-    @Value("${media.server-path}")
-    private String serverPath;
+    private final MinioStorageService minioService;
 
     @Value("${media.base-uri}")
     private String baseUri;
 
     @Override
     public MediaResponse uploadSingle(MultipartFile file, String folderName) {
-
-        // Generate new unique name for file upload
         String newName = UUID.randomUUID().toString();
+        String extension = MediaUtil.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
+        String objectName = folderName + "/" + newName + "." + extension;
 
-        // Extract extension from file upload
-        // Assume profile.png
-        String extension = MediaUtil.extractExtension(file.getOriginalFilename());
-        newName = newName + "." + extension;
-
-        // Copy file to server
-        Path path = Paths.get(serverPath + folderName + "\\" + newName);
         try {
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    e.getLocalizedMessage());
+            minioService.uploadFile(file, objectName);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
         return MediaResponse.builder()
-                .name(newName)
+                .name(newName + "." + extension)
                 .contentType(file.getContentType())
                 .extension(extension)
                 .size(file.getSize())
-                .uri(String.format("%s%s/%s", baseUri, folderName, newName))
+                .uri(String.format("%s%s/%s", baseUri, folderName, newName + "." + extension))
                 .build();
     }
 
     @Override
     public List<MediaResponse> uploadMultiple(List<MultipartFile> files, String folderName) {
-
-        // Create empty array list, wait for adding uploaded file
         List<MediaResponse> mediaResponses = new ArrayList<>();
-
-        // Use loop to upload each file
         files.forEach(file -> {
             MediaResponse mediaResponse = this.uploadSingle(file, folderName);
             mediaResponses.add(mediaResponse);
         });
-
         return mediaResponses;
     }
 
     @Override
     public MediaResponse loadMediaByName(String mediaName, String folderName) {
-
-        // Create absolute path of media
-        Path path = Paths.get(serverPath + folderName + "\\" + mediaName);
-
+        String objectName = folderName + "/" + mediaName;
         try {
-
-            Resource resource = new UrlResource(path.toUri());
-            log.info("Load resource: {}", resource.getFilename());
-
-            if (!resource.exists()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Media has not been found!");
-            }
-
+            String contentType = minioService.getFileContentType(objectName);
             return MediaResponse.builder()
                     .name(mediaName)
-                    .contentType(Files.probeContentType(path))
+                    .contentType(contentType)
                     .extension(MediaUtil.extractExtension(mediaName))
-                    .size(resource.contentLength())
                     .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
                     .build();
-
-        } catch (MalformedURLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    e.getLocalizedMessage());
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    e.getLocalizedMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @Override
     public MediaResponse deleteMediaByName(String mediaName, String folderName) {
-
-        // Create absolute path of media
-        Path path = Paths.get(serverPath + folderName + "\\" + mediaName);
-
+        String objectName = folderName + "/" + mediaName;
         try {
-            long size = Files.size(path);
-            if (Files.deleteIfExists(path)) {
-                return MediaResponse.builder()
-                        .name(mediaName)
-                        .contentType(Files.probeContentType(path))
-                        .extension(MediaUtil.extractExtension(mediaName))
-                        .size(size)
-                        .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
-                        .build();
-            }
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Media has not been found");
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    String.format("Media path %s cannot be deleted!", e.getLocalizedMessage()));
+            minioService.deleteFile(objectName);
+            return MediaResponse.builder()
+                    .name(mediaName)
+                    .extension(MediaUtil.extractExtension(mediaName))
+                    .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
+                    .build();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @Override
     public Resource downloadMediaByName(String mediaName, String folderName) {
-        // Create absolute path of media
-        Path path = Paths.get(serverPath + folderName + "\\" + mediaName);
+        String objectName = folderName + "/" + mediaName;
         try {
-            return new UrlResource(path.toUri());
+            InputStream inputStream = minioService.getFile(objectName);
+            Path tempFile = Files.createTempFile("minio", mediaName);
+            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            return new UrlResource(tempFile.toUri());
         } catch (MalformedURLException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Media has not been found!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media has not been found!");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
