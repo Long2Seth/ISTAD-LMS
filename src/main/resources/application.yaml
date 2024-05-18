@@ -1,5 +1,5 @@
 media:
-  server-path: ${MEDIA_SERVER_PATH}
+#  server-path: ${MEDIA_SERVER_PATH}
   #  client-path: /media/**
   base-uri: ${MEDIA_BASE_URI}
 server:
