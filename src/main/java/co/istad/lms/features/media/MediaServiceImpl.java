@@ -1,6 +1,6 @@
 package co.istad.lms.features.media;
 
-import co.istad.lms.features.media.minio.MinioService;
+import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.media.dto.MediaResponse;
 import co.istad.lms.utils.MediaUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -21,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,7 +28,7 @@ import java.util.UUID;
 @Slf4j
 public class MediaServiceImpl implements MediaService {
 
-    private final MinioService minioService;
+    private final MinioStorageService minioService;
 
     @Value("${media.base-uri}")
     private String baseUri;
@@ -36,7 +36,7 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public MediaResponse uploadSingle(MultipartFile file, String folderName) {
         String newName = UUID.randomUUID().toString();
-        String extension = MediaUtil.extractExtension(file.getOriginalFilename());
+        String extension = MediaUtil.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String objectName = folderName + "/" + newName + "." + extension;
 
         try {
@@ -105,8 +105,6 @@ public class MediaServiceImpl implements MediaService {
             return new UrlResource(tempFile.toUri());
         } catch (MalformedURLException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media has not been found!");
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

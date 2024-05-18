@@ -1,4 +1,4 @@
-package co.istad.lms.features.media.minio;
+package co.istad.lms.features.minio;
 
 import lombok.Getter;
 import lombok.Setter;

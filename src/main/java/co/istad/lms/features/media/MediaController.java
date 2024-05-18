@@ -20,14 +20,14 @@ public class MediaController {
     private final MediaService mediaService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/upload-single",consumes = "multipart/form-data")
+    @PostMapping(value = "/upload-single", consumes = "multipart/form-data")
     MediaResponse uploadSingle(@RequestPart MultipartFile file) {
 
         return mediaService.uploadSingle(file, "IMAGE");
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/upload-multiple",consumes = "multipart/form-data")
+    @PostMapping(value = "/upload-multiple", consumes = "multipart/form-data")
     List<MediaResponse> uploadMultiple(@RequestPart List<MultipartFile> files) {
         return mediaService.uploadMultiple(files, "IMAGE");
     }

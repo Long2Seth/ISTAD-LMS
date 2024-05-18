@@ -20,19 +20,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (authz) ->
                                 authz
-                                        // allow all resources regarding  swagger ui
+                                        // allow all resources regarding  swagger ui and file
                                         .requestMatchers("/",
                                                 "/v3/api-docs/**",
                                                 "/swagger-ui/**",
                                                 "/v2/api-docs/**",
-                                                "/swagger-resources/**")
-                                        .permitAll()
-                                        .requestMatchers("/api/v1/auth/**")
-                                        .permitAll()
-                                        // since user will need to upload the picture in order to register
-                                        .requestMatchers(
-                                                "api/v1/files/**",
-                                                "images/**")
+                                                "/swagger-resources/**",
+                                                "/api/v1/medias/**",
+                                                "images/**"
+                                                )
                                         .permitAll()
                                         .anyRequest().authenticated()
                 )

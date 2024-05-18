@@ -1,4 +1,4 @@
-package co.istad.lms.features.media.minio;
+package co.istad.lms.features.minio;
 
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
@@ -15,13 +15,14 @@ import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
-public class MinioService {
+public class MinioStorageServiceImpl implements MinioStorageService {
 
     private final MinioClient minioClient;
 
     @Value("${minio.bucket-name}")
     private String bucketName;
 
+    @Override
     public void uploadFile(MultipartFile file, String objectName) throws Exception {
         try (InputStream inputStream = file.getInputStream()) {
             minioClient.putObject(
@@ -37,6 +38,7 @@ public class MinioService {
         }
     }
 
+    @Override
     public InputStream getFile(String objectName) throws Exception {
         try {
             return minioClient.getObject(
@@ -50,6 +52,7 @@ public class MinioService {
         }
     }
 
+    @Override
     public void deleteFile(String objectName) throws Exception {
         try {
             minioClient.removeObject(
@@ -63,6 +66,7 @@ public class MinioService {
         }
     }
 
+    @Override
     public String getFileContentType(String objectName) throws Exception {
         try {
             return minioClient.statObject(

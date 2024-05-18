@@ -1,6 +1,6 @@
 package co.istad.lms.config;
 
-import co.istad.lms.features.media.minio.MinioProperties;
+import co.istad.lms.features.minio.MinioProperties;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
