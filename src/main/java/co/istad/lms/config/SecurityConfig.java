@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (authz) ->
                                 authz
-                                        // allow all resources regarding  swagger ui and file
+                                        // Allow all resources regarding Swagger UI and file
                                         .requestMatchers("/",
                                                 "/v3/api-docs/**",
                                                 "/swagger-ui/**",
@@ -28,20 +28,21 @@ public class SecurityConfig {
                                                 "/swagger-resources/**",
                                                 "/api/v1/medias/**",
                                                 "images/**"
-                                                )
+                                        )
                                         .permitAll()
                                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-//                .oauth2ResourceServer((auth2) -> auth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtToUserConverter)))
+                .oauth2ResourceServer((oauth2) -> oauth2
+                        .jwt(Customizer.withDefaults())
+                )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling((ex) -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
-                // to make the session to stateless
-//                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling((ex) -> ex
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+                )
                 .build();
     }
-
 }

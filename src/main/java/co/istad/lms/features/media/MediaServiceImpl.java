@@ -69,11 +69,13 @@ public class MediaServiceImpl implements MediaService {
         String objectName = folderName + "/" + mediaName;
         try {
             String contentType = minioService.getFileContentType(objectName);
+            String url = minioService.getPreSignedUrl(objectName);
             return MediaResponse.builder()
                     .name(mediaName)
                     .contentType(contentType)
                     .extension(MediaUtil.extractExtension(mediaName))
-                    .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
+                    .uri(url)
+//                    .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
                     .build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

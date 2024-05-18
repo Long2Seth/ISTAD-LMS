@@ -1,11 +1,8 @@
 package co.istad.lms.features.minio;
 
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.StatObjectArgs;
+import io.minio.*;
 import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -75,6 +72,22 @@ public class MinioStorageServiceImpl implements MinioStorageService {
                             .object(objectName)
                             .build()
             ).contentType();
+        } catch (MinioException e) {
+            throw new Exception("Error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String getPreSignedUrl(String objectName) throws Exception {
+        try {
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .expiry(60 * 60 * 24) // URL expiry time in seconds (e.g., 1 day)
+                            .build()
+            );
         } catch (MinioException e) {
             throw new Exception("Error occurred: " + e.getMessage(), e);
         }

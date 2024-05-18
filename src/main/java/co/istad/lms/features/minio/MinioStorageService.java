@@ -12,4 +12,6 @@ public interface MinioStorageService {
     void deleteFile(String objectName) throws Exception;
 
     String getFileContentType(String objectName) throws Exception;
+
+    String getPreSignedUrl(String objectName) throws Exception;
 }
