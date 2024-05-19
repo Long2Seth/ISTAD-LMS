@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "courses")
 @Entity
-public class Course {
+public class Course extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,18 +29,6 @@ public class Course {
 
     @Column( name = "status" , nullable = false)
     private Integer status;
-
-    @CreatedBy
-    private String createdBy;
-
-    @CreatedDate
-    private Timestamp createdAt;
-
-    @LastModifiedBy
-    private String modifiedBy;
-
-    @LastModifiedDate
-    private Timestamp modifiedAt;
 
     @Column( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;

@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-public class User {
+public class User extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,7 +67,5 @@ public class User {
     private boolean isCredentialsNonExpired;
     private Boolean isDeleted; // manage delete status (admin want to disable or remove an account)
     private Boolean isBlocked; // manage block status (when there is bad action happened)
-
-    private LocalDateTime createdAt;
 
 }

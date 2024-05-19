@@ -11,10 +11,6 @@ public interface AdmissionMapper {
 
     Admission fromAdmissionRequest(AdmissionCreateRequest admissionCreateRequest);
 
-    @Mappings({
-            @Mapping(target = "createdAt", ignore = true),
-            @Mapping(target = "modifiedAt", ignore = true)
-    })
     AdmissionResponse toAdmissionResponse(Admission admission);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

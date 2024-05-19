@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "scores")
 @Entity
-public class Score {
+public class Score extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,20 +42,6 @@ public class Score {
 
     @Column( name ="assig nment_score"  )
     private Double assignmentScore;
-
-    @Column( name ="created_by" , nullable = false , length = 50)
-    private String createdBy;
-
-    @Column( name = "created_date")
-    private LocalDate createdDate;
-
-    @Column( name = "modified_by" , nullable = false , length = 50)
-    private String modifiedBy;
-
-    @Column( name = "modified_date")
-    private LocalDate modifiedDate;
-
-
 
     @Column( name = "student_id" , nullable = false )
     private Long studentId;

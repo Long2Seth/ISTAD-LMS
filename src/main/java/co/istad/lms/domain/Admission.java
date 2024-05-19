@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "admissions")
 @Entity
-public class Admission {
+public class Admission extends Auditable{
 
     @Id
     @Column(name = "id", nullable = false, length = 50)
@@ -28,10 +28,10 @@ public class Admission {
     @Column(name = "uuid", nullable = false, length = 50,unique = true)
     private String uuid;
 
-    @Column(name = "nameEn", nullable = false, length = 50)
+    @Column(name = "name-en", nullable = false, length = 50)
     private String nameEn;
 
-    @Column(name = "nameKh", nullable = false, length = 50)
+    @Column(name = "name-kh", nullable = false, length = 50)
     private String nameKh;
 
     @Column(name = "email", nullable = false, length = 50)
@@ -63,18 +63,6 @@ public class Admission {
 
     @Column(name = "degree_id", nullable = false)
     private String degreeUuid;
-
-    @CreatedBy
-    private String createdBy;
-
-    @CreatedDate
-    private Timestamp createdAt;
-
-    @LastModifiedBy
-    private String modifiedBy;
-
-    @LastModifiedDate
-    private Timestamp modifiedAt;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted=false;

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "shifts")
 @Entity
-public class Shift {
+public class Shift extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,18 +34,6 @@ public class Shift {
 
     @Column ( name= "description")
     private String description;
-
-    @Column ( name = "create_at", nullable = false)
-    private Boolean createAt;
-
-    @Column ( name = "created_by" )
-    private String createdBy;
-
-    @Column ( name = "modified_at" , nullable = false)
-    private Boolean modifiedAt;
-
-    @Column ( name = "modified_by" )
-    private String modifiedBy;
 
     @Column ( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;

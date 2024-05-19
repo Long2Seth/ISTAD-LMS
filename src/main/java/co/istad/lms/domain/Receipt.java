@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "receipts")
 @Entity
-public class Receipt {
+public class Receipt extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,18 +33,6 @@ public class Receipt {
 
     @Column( name = "remarks" , columnDefinition = "TEXT")
     private String remarks;
-
-    @Column( name = "create_by" )
-    private String createBy;
-
-    @Column ( name = "created_date" , nullable = false )
-    private LocalDate createdDate;
-
-    @Column ( name = "modified_by" )
-    private String modifiedBy;
-
-    @Column ( name = "modified_date" , nullable = false )
-    private LocalDate modifiedDate;
 
     @Column( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;

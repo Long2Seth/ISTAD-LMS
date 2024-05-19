@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "generations")
 @Entity
-public class Generation {
+public class Generation extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,18 +33,6 @@ public class Generation {
 
     @Column( name = "end_year" , nullable = false)
     private Integer endYear;
-
-    @Column( name = "create_By" , nullable = false , length = 50)
-    private String createdBy;
-
-    @Column( name = "created_at" , nullable = false )
-    private LocalDate createdAt;
-
-    @Column( name = "modified_by" , nullable = false , length = 50)
-    private String modifiedBy;
-
-    @Column( name = "modified_at" , nullable = false )
-    private LocalDate modifiedAt;
 
     @Column( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;

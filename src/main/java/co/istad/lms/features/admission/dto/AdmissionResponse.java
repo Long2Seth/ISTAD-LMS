@@ -4,6 +4,7 @@ import org.springframework.cglib.core.Local;
 
 import java.security.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record AdmissionResponse(
         String uuid,
@@ -20,9 +21,9 @@ public record AdmissionResponse(
         String studyProgram,
         String degreeUuid,
         String createdBy,
-        Timestamp createdAt,
-        String modifiedBy,
-        Timestamp modifiedAt,
+        LocalDateTime createdAt,
+        String lastModifiedBy,
+        LocalDateTime lastModifiedAt,
         Boolean isDeleted
 ) {
 
