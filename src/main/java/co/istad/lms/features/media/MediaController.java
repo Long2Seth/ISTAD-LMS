@@ -21,7 +21,7 @@ public class MediaController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/upload-single", consumes = "multipart/form-data")
-    MediaResponse uploadSingle(@RequestPart MultipartFile file) {
+    MediaResponse uploadSingle(@RequestPart MultipartFile file) throws Exception {
 
         return mediaService.uploadSingle(file, "IMAGE");
     }

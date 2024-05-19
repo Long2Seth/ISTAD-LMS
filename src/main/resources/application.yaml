@@ -17,10 +17,6 @@ springdoc:
   api-docs:
     path: /v3/api-docs
 
-file:
-  storage-dir: "filestorage/images/"
-  client-dir: "/images/**"
-
 minio:
   url: ${MINIO_URL}
   secret-key: ${MINIO_SECRETE_KEY}

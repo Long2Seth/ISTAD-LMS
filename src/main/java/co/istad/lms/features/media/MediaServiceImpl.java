@@ -34,11 +34,12 @@ public class MediaServiceImpl implements MediaService {
     private String baseUri;
 
     @Override
-    public MediaResponse uploadSingle(MultipartFile file, String folderName) {
+    public MediaResponse uploadSingle(MultipartFile file, String folderName) throws Exception {
         String newName = UUID.randomUUID().toString();
         String extension = MediaUtil.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String objectName = folderName + "/" + newName + "." + extension;
-
+        String url = minioService.getPreSignedUrl(objectName);
+        System.out.println(url);
         try {
             minioService.uploadFile(file, objectName);
         } catch (Exception e) {
@@ -50,7 +51,7 @@ public class MediaServiceImpl implements MediaService {
                 .contentType(file.getContentType())
                 .extension(extension)
                 .size(file.getSize())
-                .uri(String.format("%s%s/%s", baseUri, folderName, newName + "." + extension))
+                .uri(url)
                 .build();
     }
 
@@ -58,7 +59,12 @@ public class MediaServiceImpl implements MediaService {
     public List<MediaResponse> uploadMultiple(List<MultipartFile> files, String folderName) {
         List<MediaResponse> mediaResponses = new ArrayList<>();
         files.forEach(file -> {
-            MediaResponse mediaResponse = this.uploadSingle(file, folderName);
+            MediaResponse mediaResponse = null;
+            try {
+                mediaResponse = this.uploadSingle(file, folderName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             mediaResponses.add(mediaResponse);
         });
         return mediaResponses;
