@@ -46,27 +46,27 @@ public class AdmissionController {
         return ResponseEntity.ok(admissionResponse);
     }
 
-    @GetMapping("/name-contain-en/{nameContainEn}")
+    @GetMapping("/name-en-contain/{nameEnContain}")
     public ResponseEntity<Page<AdmissionResponse>> getAdmissionByNameEnContains(
-            @PathVariable String nameContainEn,
+            @PathVariable String nameEnContain,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "ASC") String sortOrder) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameEnContains(nameContainEn, pageable);
+        Page<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameEnContains(nameEnContain, pageable);
         return ResponseEntity.ok(admissionResponse);
     }
 
-    @GetMapping("/name-content-kh/{nameContainKh}")
+    @GetMapping("/name-kh-contain/{nameKhContain}")
     public ResponseEntity<Page<AdmissionResponse>> getAdmissionByNameKhContains(
-            @PathVariable String nameContainKh,
+            @PathVariable String nameKhContain,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "ASC") String sortOrder) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameKhContains(nameContainKh, pageable);
+        Page<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameKhContains(nameKhContain, pageable);
         return ResponseEntity.ok(admissionResponse);
     }
 
