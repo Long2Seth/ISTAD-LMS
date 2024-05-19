@@ -38,10 +38,10 @@ public record AdmissionCreateRequest(
         String biography,
 
         @NotBlank(message = "Shift  is required")
-        String shift,
+        String shiftId,
 
         @NotBlank(message = "Study Program ID is required")
-        String studyProgram,
+        String studyProgramName,
 
         @NotBlank(message = "Degree UUID is required")
         String degreeUuid

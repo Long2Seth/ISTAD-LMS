@@ -55,14 +55,17 @@ public class Admission extends Auditable{
     @Column(name = "biography")
     private String biography;
 
-    @Column(name = "shift_id", nullable = false)
-    private String shift;
+    @ManyToOne
+    @JoinColumn(name = "shift_id")
+    private Shift shift;
 
-    @Column(name = "study_program_id", nullable = false)
-    private String studyProgram;
+    @ManyToOne
+    @JoinColumn(name = "study_program_id")
+    private StudyProgram studyProgram;
 
-    @Column(name = "degree_id", nullable = false)
-    private String degreeUuid;
+    @ManyToOne
+    @JoinColumn(name = "degree_id")
+    private Degree degree;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted=false;
