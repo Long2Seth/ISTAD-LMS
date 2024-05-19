@@ -3,10 +3,12 @@ package co.istad.lms.exception;
 import co.istad.lms.base.BasedError;
 import co.istad.lms.base.BasedErrorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +20,7 @@ public class ValidationException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    BasedErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
-
+    public BasedErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
         BasedError<List<?>> basedError = new BasedError<>();
         List<Map<String, Object>> errors = new ArrayList<>();
 
@@ -31,10 +32,15 @@ public class ValidationException {
                     errors.add(error);
                 });
 
-        basedError.setCode(HttpStatus.BAD_GATEWAY.getReasonPhrase());
+        basedError.setCode(HttpStatus.BAD_REQUEST.getReasonPhrase());
         basedError.setDescription(errors);
 
         return new BasedErrorResponse(basedError);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<?> handleServiceErrors(ResponseStatusException ex) {
+        return ResponseEntity.status(ex.getStatusCode())
+                .body(Map.of("errors", ex.getReason()));
+    }
 }

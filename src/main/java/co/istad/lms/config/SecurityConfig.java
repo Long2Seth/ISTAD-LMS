@@ -22,10 +22,11 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v2/api-docs/**",
                                 "/swagger-resources/**",
-                                "/api/v1/medias/**"
+                                "/api/v1/medias/**",
+                                "/api/v1/admissions/**"
                         )
                         .permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
