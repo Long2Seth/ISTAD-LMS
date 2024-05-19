@@ -39,7 +39,6 @@ public class MediaServiceImpl implements MediaService {
         String extension = MediaUtil.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String objectName = folderName + "/" + newName + "." + extension;
         String url = minioService.getPreSignedUrl(objectName);
-        System.out.println(url);
         try {
             minioService.uploadFile(file, objectName);
         } catch (Exception e) {
@@ -81,7 +80,6 @@ public class MediaServiceImpl implements MediaService {
                     .contentType(contentType)
                     .extension(MediaUtil.extractExtension(mediaName))
                     .uri(url)
-//                    .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
                     .build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
