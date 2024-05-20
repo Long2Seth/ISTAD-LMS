@@ -8,14 +8,45 @@ import java.util.List;
 
 public interface MediaService {
 
-    MediaResponse uploadSingle(MultipartFile file, String folderName) throws Exception;
+    /**
+     * Uploads a single media file.
+     *
+     * @param file the media file to upload
+     *             file type can be video, image, document
+     * @return the response object containing the uploaded media details
+     * @throws Exception if an error occurs during the upload
+     */
+    MediaResponse uploadSingle(MultipartFile file) throws Exception;
 
-    List<MediaResponse> uploadMultiple(List<MultipartFile> files, String folderName);
+    /**
+     * Uploads multiple media files.
+     *
+     * @param files the list of media files to upload
+     * @return the list of response objects containing the uploaded media details
+     */
+    List<MediaResponse> uploadMultiple(List<MultipartFile> files);
 
-    MediaResponse loadMediaByName(String mediaName, String folderName);
+    /**
+     * Loads media details by its name.
+     *
+     * @param mediaName the name with extension of the media
+     * @return the response object containing the media details
+     */
+    MediaResponse loadMediaByName(String mediaName);
 
-    MediaResponse deleteMediaByName(String mediaName, String folderName);
+    /**
+     * Deletes media by its name.
+     *
+     * @param mediaName the name with extension of the media to delete
+     * @return the response object containing the details of the deleted media
+     */
+    MediaResponse deleteMediaByName(String mediaName);
 
-    Resource downloadMediaByName(String mediaName, String folderName);
-
+    /**
+     * Downloads media by its name.
+     *
+     * @param mediaName the name with extension of the media to download
+     * @return the resource object containing the media file
+     */
+    Resource downloadMediaByName(String mediaName);
 }

@@ -1,24 +1,18 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.sql.Timestamp;
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "courses")
 @Entity
-public class Course extends Auditable{
+public class Course extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

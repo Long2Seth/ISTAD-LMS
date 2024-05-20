@@ -34,11 +34,26 @@ public class MediaServiceImpl implements MediaService {
     private String baseUri;
 
     @Override
-    public MediaResponse uploadSingle(MultipartFile file, String folderName) throws Exception {
+    public MediaResponse uploadSingle(MultipartFile file) throws Exception {
+
+        String contentType = file.getContentType();
+        if (contentType == null || !(contentType.startsWith("image/") ||
+                contentType.startsWith("video/") ||
+                contentType.equals("application/pdf") ||
+                contentType.equals("application/vnd.ms-powerpoint") ||
+                contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation") ||
+                contentType.equals("application/msword") ||
+                contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+                contentType.equals("text/plain"))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported file type.");
+        }
+
+        String folderName = contentType.split("/")[0];
         String newName = UUID.randomUUID().toString();
         String extension = MediaUtil.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String objectName = folderName + "/" + newName + "." + extension;
         String url = minioService.getPreSignedUrl(objectName);
+
         try {
             minioService.uploadFile(file, objectName);
         } catch (Exception e) {
@@ -55,26 +70,31 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public List<MediaResponse> uploadMultiple(List<MultipartFile> files, String folderName) {
+    public List<MediaResponse> uploadMultiple(List<MultipartFile> files) {
+
         List<MediaResponse> mediaResponses = new ArrayList<>();
         files.forEach(file -> {
             MediaResponse mediaResponse = null;
             try {
-                mediaResponse = this.uploadSingle(file, folderName);
+                mediaResponse = this.uploadSingle(file);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             mediaResponses.add(mediaResponse);
         });
+
         return mediaResponses;
     }
 
     @Override
-    public MediaResponse loadMediaByName(String mediaName, String folderName) {
-        String objectName = folderName + "/" + mediaName;
+    public MediaResponse loadMediaByName(String mediaName) {
+
         try {
-            String contentType = minioService.getFileContentType(objectName);
+            String contentType = minioService.getFileContentType(mediaName);
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + mediaName;
             String url = minioService.getPreSignedUrl(objectName);
+
             return MediaResponse.builder()
                     .name(mediaName)
                     .contentType(contentType)
@@ -87,28 +107,38 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public MediaResponse deleteMediaByName(String mediaName, String folderName) {
-        String objectName = folderName + "/" + mediaName;
+    public MediaResponse deleteMediaByName(String mediaName) {
+
         try {
+            String contentType = minioService.getFileContentType(mediaName);
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + mediaName;
             minioService.deleteFile(objectName);
+
             return MediaResponse.builder()
                     .name(mediaName)
                     .extension(MediaUtil.extractExtension(mediaName))
                     .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
                     .build();
+
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @Override
-    public Resource downloadMediaByName(String mediaName, String folderName) {
-        String objectName = folderName + "/" + mediaName;
+    public Resource downloadMediaByName(String mediaName) {
+
         try {
+            String contentType = minioService.getFileContentType(mediaName);
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + mediaName;
             InputStream inputStream = minioService.getFile(objectName);
             Path tempFile = Files.createTempFile("minio", mediaName);
             Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+
             return new UrlResource(tempFile.toUri());
+
         } catch (MalformedURLException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media has not been found!");
         } catch (Exception e) {

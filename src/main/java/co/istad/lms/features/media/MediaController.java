@@ -23,32 +23,30 @@ public class MediaController {
     @PostMapping(value = "/upload-single", consumes = "multipart/form-data")
     MediaResponse uploadSingle(@RequestPart MultipartFile file) throws Exception {
 
-        return mediaService.uploadSingle(file, "IMAGE");
+        return mediaService.uploadSingle(file);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/upload-multiple", consumes = "multipart/form-data")
     List<MediaResponse> uploadMultiple(@RequestPart List<MultipartFile> files) {
-        return mediaService.uploadMultiple(files, "IMAGE");
+        return mediaService.uploadMultiple(files);
     }
 
     @GetMapping("/{mediaName}")
     MediaResponse loadMediaByName(@PathVariable String mediaName) {
-        return mediaService.loadMediaByName(mediaName, "IMAGE");
+        return mediaService.loadMediaByName(mediaName);
     }
 
     @DeleteMapping("/{mediaName}")
     MediaResponse deleteMediaByName(@PathVariable String mediaName) {
-        return mediaService.deleteMediaByName(mediaName, "IMAGE");
+        return mediaService.deleteMediaByName(mediaName);
     }
 
-    // produces = Accept
-    // consumes = Content-Type
     @GetMapping(path = "/{mediaName}/download",
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     ResponseEntity<?> downloadMediaByName(@PathVariable String mediaName) {
         System.out.println("Start download");
-        Resource resource = mediaService.downloadMediaByName(mediaName, "IMAGE");
+        Resource resource = mediaService.downloadMediaByName(mediaName);
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + mediaName);
         return ResponseEntity.ok()

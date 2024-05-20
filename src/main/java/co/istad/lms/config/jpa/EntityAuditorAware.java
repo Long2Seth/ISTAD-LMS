@@ -1,4 +1,4 @@
-package co.istad.lms.features.audit;
+package co.istad.lms.config.jpa;
 
 import co.istad.lms.domain.User;
 import org.jetbrains.annotations.NotNull;

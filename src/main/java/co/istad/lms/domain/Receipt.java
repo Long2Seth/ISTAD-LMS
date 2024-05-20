@@ -1,6 +1,7 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "receipts")
 @Entity
-public class Receipt extends Auditable{
+public class Receipt extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
