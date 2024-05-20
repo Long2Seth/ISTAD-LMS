@@ -12,24 +12,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "degrees")
 @Entity
-public class Degree extends Auditable{
+public class Degree extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , length = 50 , name = "alias")
+    @Column(nullable = false, length = 50, name = "alias", unique = true)
     private String alias;
 
-    @Column(nullable = false , length = 50 , name = "level")
+    @Column(nullable = false, length = 50, name = "level", unique = true)
     private String level;
 
-    @Column(nullable = false , name = "description")
+    @Column(name = "description")
     private String description;
 
-    private String modifiedBy;
-
-    @Column(name = "is_deleted" , nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private Boolean is_deleted;
 
 

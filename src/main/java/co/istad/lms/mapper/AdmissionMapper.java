@@ -2,6 +2,7 @@ package co.istad.lms.mapper;
 
 import co.istad.lms.domain.Admission;
 import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.admission.dto.AdmissionResponse;
 import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
 import org.mapstruct.*;
@@ -14,9 +15,9 @@ public interface AdmissionMapper {
     @Mapping(target = "degree", ignore = true)
     Admission fromAdmissionRequest(AdmissionCreateRequest admissionCreateRequest);
 
-    @Mapping(target = "shift", ignore = true)
-    @Mapping(target = "studyProgram", ignore = true)
     AdmissionResponse toAdmissionResponse(Admission admission);
+
+    AdmissionDetailResponse toAdmissionDetailResponse(Admission admission);
 
 
     @Mapping(target = "shift", ignore = true)

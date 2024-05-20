@@ -37,13 +37,13 @@ public record AdmissionCreateRequest(
 
         String biography,
 
-        @NotBlank(message = "Shift  is required")
-        String shiftId,
+        @NotBlank(message = "Shift  alias required")
+        String shiftAlias,
 
-        @NotBlank(message = "Study Program ID is required")
-        String studyProgramName,
+        @NotBlank(message = "Study Program alias is required")
+        String studyProgramAlias,
 
-        @NotBlank(message = "Degree UUID is required")
-        String degreeUuid
+        @NotBlank(message = "Degree alias is required")
+        String degreeAlias
 ) {
 }

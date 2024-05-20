@@ -5,8 +5,9 @@ import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public record AdmissionResponse(
+public record AdmissionDetailResponse(
         String uuid,
         String nameEn,
         String nameKh,
@@ -14,9 +15,16 @@ public record AdmissionResponse(
         LocalDate dob,
         String gender,
         String avatar,
+        String address,
+        String familyPhoneNumber,
+        String biography,
         ShiftResponse shift,
         StudyProgramResponse studyProgram,
-        DegreeResponse degree
+        DegreeResponse degree,
+        String createdBy,
+        LocalDateTime createdAt,
+        String lastModifiedBy,
+        LocalDateTime lastModifiedAt,
+        Boolean isDeleted
 ) {
-
 }
