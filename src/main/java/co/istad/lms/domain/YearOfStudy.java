@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "year_of_studies")
 @Entity
-public class YearOfStudy {
+public class YearOfStudy extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +32,6 @@ public class YearOfStudy {
     @Column(name = "semester" , nullable = false)
     private Integer semester;
 
-    @CreatedBy
-    private String createdBy;
-
-    @CreatedDate
-    private LocalDate createdDate;
-
-    @LastModifiedBy
-    private String modifiedBy;
-
-    @LastModifiedDate
-    private LocalDate modifiedDate;
 
     @Column(name = "study_program_id" , nullable = false)
     private Long studyProgramId;

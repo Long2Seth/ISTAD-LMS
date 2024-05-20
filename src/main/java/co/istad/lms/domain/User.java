@@ -11,12 +11,14 @@ import java.util.List;
 
 
 
-@Entity
-@Table(name = "users")
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+@Table(name = "users")
+@Entity
+public class User extends Auditable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -67,5 +69,4 @@ public class User {
     private Boolean isDeleted;
     private Boolean isBlocked;
 
-    private LocalDateTime createdAt;
 }

@@ -13,39 +13,25 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "study_programs")
 @Entity
-public class StudyProgram {
+public class StudyProgram extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
-    @Column(nullable = false , length = 50 , name = "alias")
+    @Column(nullable = false, length = 50, name = "alias", unique = true)
     private String alias;
 
-    @Column(nullable = false , length = 50 , name = "syudy_program_name")
+    @Column(nullable = false, length = 50, name = "syudy_program_name")
     private String studyProgramName;
 
-    @Column(nullable = false , length = 50 , name = "description")
+    @Column(nullable = false, length = 50, name = "description")
     private String description;
 
-    @Column( name = "logo" )
+    @Column(name = "logo")
     private String logo;
 
-    @Column(name = "creared_by" , nullable = false , length = 50)
-    private String createdBy;
-
-    @Column(name = "created_date" , nullable = false)
-    private LocalDate createdDate;
-
-    @Column(name = "modified_by" , nullable = false , length = 50)
-    private String modifiedBy;
-
-    @Column(name = "modified_date" , nullable = false)
-    private LocalDate modifiedDate;
-
-    @Column( name = "faculty_id" )
+    @Column(name = "faculty_id")
     private Long facultyId;
 
 }

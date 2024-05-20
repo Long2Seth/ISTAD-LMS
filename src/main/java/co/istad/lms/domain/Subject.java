@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "subjects")
 @Entity
-public class Subject {
+public class Subject extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,18 +36,5 @@ public class Subject {
 
     @Column( name = "duration" )
     private Integer duration;
-
-    @Column( name = "created_by" , nullable = false , length = 50)
-    private String createdBy;
-
-    @Column( name = "created_date" , nullable = false )
-    private LocalDate createdDate;
-
-    @Column( name = "modified_by" , nullable = false , length = 50)
-    private String modifiedBy;
-
-    @Column( name = "modified_date" , nullable = false )
-    private LocalDate modifiedDate;
-
 
 }

@@ -96,7 +96,6 @@ public class UserServiceImpl implements UserService {
         user.setKhanOrDistrict(userRequest.khanOrDistrict());
         user.setSangkatOrCommune(userRequest.sangkatOrCommune());
         user.setStreet(userRequest.street());
-        user.setCreatedAt(LocalDateTime.now());
         user.setIsBlocked(false);
         user.setIsDeleted(false);
         user.setAccountNonExpired(true);

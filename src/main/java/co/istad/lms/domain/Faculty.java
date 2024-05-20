@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "faculties")
 @Entity
-public class Faculty {
+public class Faculty extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

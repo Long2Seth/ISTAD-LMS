@@ -1,51 +1,74 @@
 package co.istad.lms.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "admissions")
 @Entity
-public class Admission {
+public class Admission extends Auditable{
 
     @Id
-    @Column(name = "admission_id" , nullable = false , length = 50)
+    @Column(name = "id", nullable = false, length = 50)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name" , nullable = false , length = 50)
-    private String name;
+    @Column(name = "uuid", nullable = false, length = 50,unique = true)
+    private String uuid;
 
-    @Column(name = "email" , nullable = false , length = 50)
+    @Column(name = "name-en", nullable = false, length = 50)
+    private String nameEn;
+
+    @Column(name = "name-kh", nullable = false, length = 50)
+    private String nameKh;
+
+    @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    @Column(name = "phone" , nullable = false , length = 50)
-    private String phone;
+    @Column(name = "dob", nullable = false)
+    private LocalDate dob;
 
-    @Column(name = "address" , nullable = false , length = 50)
+    @Column(name = "gender", nullable = false, length = 20)
+    private String gender;
+
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "major" , nullable = false , length = 50)
-    private String major;
+    @Column(name = "family_phone_number", length = 50)
+    private String familyPhoneNumber;
 
-    @Column(name = "degree" , nullable = false , length = 50)
-    private String degree;
+    @Column(name = "biography")
+    private String biography;
 
-    @Column(name = "study_program" , nullable = false , length = 50)
-    private String studyProgram;
+    @ManyToOne
+    @JoinColumn(name = "shift_id")
+    private Shift shift;
 
-    @Column(name = "course" , nullable = false , length = 50)
-    private String course;
+    @ManyToOne
+    @JoinColumn(name = "study_program_id")
+    private StudyProgram studyProgram;
 
-    @Column(name = "status" , nullable = false , length = 50)
-    private String status;
+    @ManyToOne
+    @JoinColumn(name = "degree_id")
+    private Degree degree;
+
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted=false;
 
 
 }

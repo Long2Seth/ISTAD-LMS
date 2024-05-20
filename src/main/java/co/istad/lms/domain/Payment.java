@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "payments")
 @Entity
-public class Payment {
+public class Payment extends Auditable{
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
@@ -36,18 +36,6 @@ public class Payment {
 
     @Column ( name = "total_amount" , nullable = false)
     private Double totalAmount;
-
-    @Column ( name = "create_by")
-    private String createBy;
-
-    @Column ( name = "created_date" , nullable = false)
-    private LocalDate createdDate;
-
-    @Column ( name = "modified_by")
-    private String modifiedBy;
-
-    @Column ( name = "modified_date" , nullable = false)
-    private LocalDate modifiedDate;
 
     @Column ( name = "year" , nullable = false)
     private Integer year;

@@ -25,12 +25,6 @@ public record UserRequest
                 String sangkatOrCommune,
                 String street,
 
-                List<RoleRequestToUser> roles,
-                boolean isAccountNonExpired,
-                boolean isAccountNonLocked,
-                boolean isCredentialsNonExpired,
-                Boolean isDeleted,
-                Boolean isBlocked,
-                LocalDateTime createdAt
+                List<RoleRequestToUser> roles
         ) {
 }

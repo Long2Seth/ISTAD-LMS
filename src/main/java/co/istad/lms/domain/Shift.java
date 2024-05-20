@@ -11,43 +11,31 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "shifts")
 @Entity
-public class Shift {
+public class Shift extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "alias" , nullable = false )
+    @Column(name = "alias", nullable = false, unique = true)
     private String alias;
 
-    @Column ( name = "name" , nullable = false )
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column ( name = "start_time",nullable = false)
+    @Column(name = "start_time", nullable = false)
     private String startTime;
 
-    @Column ( name = "end_time" , nullable = false)
+    @Column(name = "end_time", nullable = false)
     private String endTime;
 
-    @Column( name ="weekday" , nullable = false)
+    @Column(name = "weekday", nullable = false)
     private String weekday;
 
-    @Column ( name= "description")
+    @Column(name = "description")
     private String description;
 
-    @Column ( name = "create_at", nullable = false)
-    private Boolean createAt;
-
-    @Column ( name = "created_by" )
-    private String createdBy;
-
-    @Column ( name = "modified_at" , nullable = false)
-    private Boolean modifiedAt;
-
-    @Column ( name = "modified_by" )
-    private String modifiedBy;
-
-    @Column ( name = "is_deleted" , nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
 }

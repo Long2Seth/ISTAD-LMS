@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Table(name = "classes")
 @Entity
-public class Classes {
+public class Classes extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,19 +31,6 @@ public class Classes {
 
     @Column( name = "description" , nullable = false)
     private String description;
-
-    @CreatedBy
-    private String createdBy;
-
-    @CreatedDate
-    private Timestamp createdAt;
-
-    @LastModifiedBy
-    private String modifiedBy;
-
-    @LastModifiedDate
-    private Timestamp modifiedAt;
-
 
     @Column( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;
