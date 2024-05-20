@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -31,7 +32,7 @@ public class Role implements GrantedAuthority {
 
     //Relationship with authority
     @ManyToMany(cascade = CascadeType.PERSIST)
-    private Set<Authority> authorities;
+    private List<Authority> authorities;
 
     @Override
     public String getAuthority() {

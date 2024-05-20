@@ -1,5 +1,4 @@
-package co.istad.lms.utils;
-
+package co.istad.lms.security;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
+
 @Component
-public class KeyUtil {
+public class KeyUtils {
     @Autowired
     Environment environment;
     @Value("${ACCESS_TOKEN_PRIVATE_KEY_PATH}")

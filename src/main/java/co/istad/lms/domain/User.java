@@ -8,44 +8,44 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
+
+
+@Entity
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users")
-@Entity
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    @Column(name = "alias",unique = true,nullable = false)
+    @Column(name = "alias", unique = true, nullable = false)
     private String alias;
 
-    @Column(name = "name_en",nullable = false , length = 50)
+    @Column(name = "name_en", nullable = false, length = 50)
     private String name_en;
 
-    @Column(name = "name_kh",nullable = false , length = 50)
+    @Column(name = "name_kh", nullable = false, length = 50)
     private String name_kh;
 
-    @Column(nullable = false , length = 50, name = "user_name")
+    @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
 
-    @Column(nullable = false , length = 10)
+    @Column(nullable = false, length = 10)
     private String gender;
 
-    @Column(nullable = false , length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(nullable = false , length = 100)
+    @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false , name = "profile_image" )
+    @Column(name = "profile_image")
     private String profileImage;
 
-    @Column(name = "phone_nubmer",nullable = false , length = 20)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
     private String cityOrProvince;
@@ -53,21 +53,19 @@ public class User {
     private String sangkatOrCommune;
     private String street;
 
-    // Relationship with role
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private List<Role> roles;
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
-    private Boolean isDeleted; // manage delete status (admin want to disable or remove an account)
-    private Boolean isBlocked; // manage block status (when there is bad action happened)
+    private Boolean isDeleted;
+    private Boolean isBlocked;
 
     private LocalDateTime createdAt;
-
 }
