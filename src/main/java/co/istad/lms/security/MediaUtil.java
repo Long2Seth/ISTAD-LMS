@@ -1,4 +1,4 @@
-package co.istad.lms.utils;
+package co.istad.lms.security;
 
 public class MediaUtil {
 

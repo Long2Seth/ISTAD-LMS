@@ -2,7 +2,7 @@ package co.istad.lms.features.media;
 
 import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.media.dto.MediaResponse;
-import co.istad.lms.utils.MediaUtil;
+import co.istad.lms.security.MediaUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

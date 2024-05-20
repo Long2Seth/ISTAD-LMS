@@ -1,6 +1,7 @@
 package co.istad.lms.domain.roles;
 
 
+
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
