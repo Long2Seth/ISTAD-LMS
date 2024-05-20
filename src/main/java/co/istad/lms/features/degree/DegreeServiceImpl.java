@@ -28,13 +28,14 @@ public class DegreeServiceImpl implements DegreeService {
                     "degree with alias "+degreeRequest.alias()+"is already exist!!");
         }
 
-        if(degreeRepository.existsByLevel(degreeRequest.alias())){
+        if(degreeRepository.existsByLevel(degreeRequest.level())){
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "degree with alias "+degreeRequest.alias()+"is already exist!!");
+                    "degree with level "+degreeRequest.level()+"is already exist!!");
         }
-
         Degree degree =degreeMapper.fromDegreeRequest(degreeRequest);
-        return null;
+        degree.setIs_deleted(false);
+        degreeRepository.save(degree);
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
 
     @Override

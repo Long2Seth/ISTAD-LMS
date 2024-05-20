@@ -15,8 +15,12 @@ public interface AdmissionMapper {
     @Mapping(target = "degree", ignore = true)
     Admission fromAdmissionRequest(AdmissionCreateRequest admissionCreateRequest);
 
+    @Mapping(target = "shift", ignore = true)
+    @Mapping(target = "studyProgram", ignore = true)
     AdmissionResponse toAdmissionResponse(Admission admission);
 
+    @Mapping(target = "shift", ignore = true)
+    @Mapping(target = "studyProgram", ignore = true)
     AdmissionDetailResponse toAdmissionDetailResponse(Admission admission);
 
 

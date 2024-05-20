@@ -28,7 +28,7 @@ public class Degree extends Auditable {
     private String description;
 
     @Column(name = "is_deleted", nullable = false)
-    private Boolean is_deleted;
+    private Boolean is_deleted=false;
 
 
 }

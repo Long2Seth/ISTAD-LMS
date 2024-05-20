@@ -1,6 +1,7 @@
 package co.istad.lms.features.admission;
 
 import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.admission.dto.AdmissionResponse;
 import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
 import jakarta.validation.Valid;
@@ -29,8 +30,8 @@ public class AdmissionController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<AdmissionResponse> getAdmissionById(@PathVariable String uuid) {
-        AdmissionResponse admissionResponse = admissionService.getAdmissionByUuid(uuid);
+    public ResponseEntity<AdmissionDetailResponse> getAdmissionById(@PathVariable String uuid) {
+        AdmissionDetailResponse admissionResponse = admissionService.getAdmissionByUuid(uuid);
         return ResponseEntity.ok(admissionResponse);
     }
 
