@@ -35,7 +35,6 @@ public interface DegreeService {
      * @return the response object containing the degree details
      * @apiNote finished
      */
-    DegreeDetailResponse getDegreeByLevel(String level);
 
     /**
      * Retrieves a paginated list of all degrees.
@@ -70,8 +69,6 @@ public interface DegreeService {
      * @param degreeUpdateRequest the request object containing the updated degree details
      * @return the response object containing the updated degree details
      */
-    DegreeResponse updateDegreeByLevel(String level, DegreeUpdateRequest degreeUpdateRequest);
-
 
     /**
      * Deletes a degree by its alias.

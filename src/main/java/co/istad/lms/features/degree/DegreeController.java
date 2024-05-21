@@ -1,10 +1,13 @@
 package co.istad.lms.features.degree;
 
 
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeCreateRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
+import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,14 +35,6 @@ public class DegreeController {
     ResponseEntity<DegreeDetailResponse> getDegreeByAlias(@PathVariable String alias) {
 
         DegreeDetailResponse degreeDetailResponse = degreeService.getDegreeByAlias(alias);
-
-        return ResponseEntity.ok(degreeDetailResponse);
-    }
-
-    @GetMapping("/{level}")
-    ResponseEntity<DegreeDetailResponse> getDegreeByLevel(@PathVariable String level) {
-
-        DegreeDetailResponse degreeDetailResponse = degreeService.getDegreeByLevel(level);
 
         return ResponseEntity.ok(degreeDetailResponse);
     }
@@ -74,6 +69,17 @@ public class DegreeController {
         degreeService.deleteDegreeByAlias(alias);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/filter")
+    public Page<DegreeDetailResponse> filterDegree(
+
+            @RequestBody BaseSpecification.FilterDto filterDto,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        return degreeService.filterDegree(filterDto,page,size);
     }
 
 

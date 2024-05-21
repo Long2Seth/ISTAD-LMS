@@ -69,7 +69,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public Page<AdmissionResponse> getAllAdmissions(int page, int size) {
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "updatedAt");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
 
@@ -77,15 +77,50 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
-    public AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionRequest) {
+    public AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionUpdateRequest) {
 
         Admission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Account id = %s doesn't exist ! ", admissionUuid)));
 
-        admissionMapper.updateAdmissionFromRequest(admission, admissionRequest);
-        admission = admissionRepository.save(admission);
+        admissionMapper.updateAdmissionFromRequest(admission, admissionUpdateRequest);
+
+        /**
+         * check if degree, shift,studyProgram null or not
+         * if null don't map
+         * if not null, check it the same as original admission or not
+         * if the same don't reset
+         * if difference set new value
+         */
+        if (admissionUpdateRequest.degreeAlias() != null &&
+                !admissionUpdateRequest.degreeAlias().equals(admission.getDegree().getAlias())) {
+
+            Degree degree = degreeRepository.findByAlias(admissionUpdateRequest.degreeAlias())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("degree = %s was not found", admissionUpdateRequest.degreeAlias())));
+            admission.setDegree(degree);
+        }
+
+        if (admissionUpdateRequest.shiftAlias() != null &&
+                !admissionUpdateRequest.shiftAlias().equals(admission.getShift().getAlias())) {
+
+            Shift shift = shiftRepository.findByAlias(admissionUpdateRequest.shiftAlias())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("shift = %s was not found", admissionUpdateRequest.shiftAlias())));
+            admission.setShift(shift);
+        }
+
+        if (admissionUpdateRequest.studyProgramAlias() != null &&
+                !admissionUpdateRequest.studyProgramAlias().equals(admission.getStudyProgram().getAlias())) {
+
+            StudyProgram studyProgram = studyProgramRepository.findByAlias(admissionUpdateRequest.studyProgramAlias())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("studyProgram = %s was not found", admissionUpdateRequest.studyProgramAlias())));
+            admission.setStudyProgram(studyProgram);
+        }
+
+        admissionRepository.save(admission);
 
         return admissionMapper.toAdmissionResponse(admission);
     }
@@ -122,7 +157,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int page, int size) {
 
-        Sort sortById = Sort.by(Sort.Direction.DESC, "updatedAt");
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
         Specification<Admission> specification = baseSpecification.filter(filterDto);

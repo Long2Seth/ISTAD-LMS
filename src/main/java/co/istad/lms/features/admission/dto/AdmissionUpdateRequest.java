@@ -2,6 +2,7 @@ package co.istad.lms.features.admission.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -27,10 +28,10 @@ public record AdmissionUpdateRequest(
 
         String biography,
 
-        String shift,
+        String shiftAlias,
 
-        String studyProgram,
+        String studyProgramAlias,
 
-        String degreeUuid
+        String degreeAlias
 ) {
 }
