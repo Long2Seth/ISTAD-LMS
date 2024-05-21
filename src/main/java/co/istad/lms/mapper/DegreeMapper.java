@@ -1,9 +1,7 @@
 package co.istad.lms.mapper;
 
-import co.istad.lms.domain.Admission;
 import co.istad.lms.domain.Degree;
-import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
-import co.istad.lms.features.degree.dto.DegreeCreateRequest;
+import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
@@ -14,7 +12,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface DegreeMapper {
-    Degree fromDegreeRequest(DegreeCreateRequest degreeCreateRequest);
+    Degree fromDegreeRequest(DegreeRequest degreeCreateRequest);
     DegreeDetailResponse toDegreeDetailResponse(Degree degree);
     DegreeResponse toDegreeResponse(Degree degree);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

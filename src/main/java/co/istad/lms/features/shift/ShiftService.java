@@ -17,10 +17,9 @@ public interface ShiftService {
     void createNewShift(ShiftRequest shiftRequest);
 
     /**
-     * Retrieves the details of a shift by its alias.
      *
-     * @param alias the alias of the shift to be retrieved
-     * @return the details of the shift
+     * @param alias unique name for shift
+     * @return return detail of shift
      */
     ShiftDetailResponse getShiftByAlias(String alias);
 

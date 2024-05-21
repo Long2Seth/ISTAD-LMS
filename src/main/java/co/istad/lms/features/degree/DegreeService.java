@@ -1,13 +1,11 @@
 package co.istad.lms.features.degree;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
-import co.istad.lms.features.degree.dto.DegreeCreateRequest;
+import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface DegreeService {
 
@@ -17,7 +15,7 @@ public interface DegreeService {
      * @param degreeRequest the request object containing degree details
      *                      finished
      */
-    void createDegree(DegreeCreateRequest degreeRequest);
+    void createDegree(DegreeRequest degreeRequest);
 
     /**
      * Retrieves the details of a degree by its alias.
@@ -81,7 +79,7 @@ public interface DegreeService {
     /**
      * @param filterDto use for filter by any field
      * @param page      the current page number
-     * @param size      size fo page
+     * @param size      size of page
      * @return return Detail of degree
      */
     Page<DegreeDetailResponse> filterDegree(BaseSpecification.FilterDto filterDto, int page, int size);

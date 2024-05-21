@@ -26,8 +26,7 @@ public record ShiftRequest(
         @NotNull(message = "End time is required")
         LocalDateTime endTime,
 
-        @NotBlank(message = "Weekday is required")
-        @Size(max = 10, message = "Weekday cannot be longer than 10 characters")
+        @NotNull(message = "Weekday is required")
         Boolean weekday,
 
         String description,
