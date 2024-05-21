@@ -1,6 +1,7 @@
 package co.istad.lms.base;
 
 
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,24 +29,41 @@ public class BaseSpecification<T> {
 
                     case EQUAL -> {
 
-                        if (Boolean.parseBoolean(specs.getValue())) {
-                            Boolean value=Boolean.parseBoolean(specs.getValue());
-                            Predicate equal = criteriaBuilder.equal(root.get(specs.getColumn()), value);
-                            predicates.add(equal);
+                        Predicate equal;
+                        if (specs.getJoinTable() != null) {
+
+                            Join<Object, Object> join = root.join(specs.getJoinTable());
+                            if (Boolean.parseBoolean(specs.getValue())) {
+                                Boolean value = Boolean.parseBoolean(specs.getValue());
+                                equal = criteriaBuilder.equal(join.get(specs.getColumn()), value);
+                            } else {
+                                equal = criteriaBuilder.equal(join.get(specs.getColumn()), specs.getValue());
+                            }
                         } else {
-                            Predicate equal = criteriaBuilder.equal(root.get(specs.getColumn()), specs.getValue());
-                            predicates.add(equal);
+                            if (Boolean.parseBoolean(specs.getValue())) {
+                                Boolean value = Boolean.parseBoolean(specs.getValue());
+                                equal = criteriaBuilder.equal(root.get(specs.getColumn()), value);
+                            } else {
+                                equal = criteriaBuilder.equal(root.get(specs.getColumn()), specs.getValue());
+                            }
                         }
+                        predicates.add(equal);
 
                     }
                     case LIKE -> {
-                        Predicate like = criteriaBuilder.like(criteriaBuilder.lower(root.get(specs.getColumn())), "%" + specs.getValue().toLowerCase() + "%");
-                        predicates.add(like);
+                        if (specs.getJoinTable() != null) {
+                            Join<Object, Object> join = root.join(specs.getJoinTable());
+                            Predicate like = criteriaBuilder.like(criteriaBuilder.lower(join.get(specs.getColumn())), "%" + specs.getValue().toLowerCase() + "%");
+                            predicates.add(like);
+                        } else {
+                            Predicate like = criteriaBuilder.like(criteriaBuilder.lower(root.get(specs.getColumn())), "%" + specs.getValue().toLowerCase() + "%");
+                            predicates.add(like);
+                        }
                     }
                     case JOIN -> {
-                        Predicate join = criteriaBuilder.equal(root.join(specs.getJoinTable()).get(specs.getColumn()),
-                                specs.getValue());
-                        predicates.add(join);
+                        Join<Object, Object> join = root.join(specs.getJoinTable());
+                        Predicate joinPredicate = criteriaBuilder.equal(join.get(specs.getColumn()), specs.getValue());
+                        predicates.add(joinPredicate);
                     }
 
                     case IN -> {

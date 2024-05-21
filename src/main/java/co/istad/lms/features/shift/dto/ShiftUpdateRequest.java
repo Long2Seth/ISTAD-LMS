@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 public record ShiftUpdateRequest(
@@ -18,11 +19,11 @@ public record ShiftUpdateRequest(
         LocalDateTime startTime,
 
 
-        LocalDateTime endTime,
+       LocalDateTime endTime,
 
 
         @Size(max = 10, message = "Weekday cannot be longer than 10 characters")
-        String weekday,
+        Boolean weekday,
 
         String description
 

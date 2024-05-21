@@ -1,6 +1,7 @@
 package co.istad.lms.features.degree;
 
 import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Admission;
 import co.istad.lms.domain.Degree;
 import co.istad.lms.features.degree.dto.DegreeCreateRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +23,7 @@ public class DegreeServiceImpl implements DegreeService {
 
     private final DegreeMapper degreeMapper;
     private final DegreeRepository degreeRepository;
+    private final BaseSpecification<Degree> baseSpecification;
 
     @Override
     public void createDegree(DegreeCreateRequest degreeRequest) {
@@ -89,7 +92,16 @@ public class DegreeServiceImpl implements DegreeService {
 
     @Override
     public Page<DegreeDetailResponse> filterDegree(BaseSpecification.FilterDto filterDto, int page, int size) {
-        return null;
+
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        Specification<Degree> specification = baseSpecification.filter(filterDto);
+
+        Page<Degree> degrees = degreeRepository.findAll(specification,pageRequest);
+
+        return degrees.map(degreeMapper::toDegreeDetailResponse);
+
     }
 
 }

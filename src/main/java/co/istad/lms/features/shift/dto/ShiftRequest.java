@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.security.Timestamp;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -26,7 +28,7 @@ public record ShiftRequest(
 
         @NotBlank(message = "Weekday is required")
         @Size(max = 10, message = "Weekday cannot be longer than 10 characters")
-        String weekday,
+        Boolean weekday,
 
         String description,
 

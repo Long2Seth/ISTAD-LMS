@@ -1,5 +1,7 @@
 package co.istad.lms.features.studyprogram;
 
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
@@ -52,4 +54,14 @@ public interface StudyProgramService {
      * @param alias the alias of the study program to be deleted
      */
     void deleteStudyProgramByAlias(String alias);
+
+
+    /**
+     *
+     * @param filterDto is object for request to filter
+     * @param page  number of current page
+     * @param size size of page
+     * @return return detail of studyProgram
+     */
+    Page<StudyProgramDetailResponse> filterStudyProgram(BaseSpecification.FilterDto filterDto, int page, int size);
 }

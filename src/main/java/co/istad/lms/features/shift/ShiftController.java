@@ -1,5 +1,7 @@
 package co.istad.lms.features.shift;
 
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftRequest;
 import co.istad.lms.features.shift.dto.ShiftResponse;
@@ -56,12 +58,22 @@ public class ShiftController {
     }
 
 
-
     @DeleteMapping("/{alias}")
     public ResponseEntity<Void> deleteShift(@PathVariable String alias) {
 
         shiftService.deleteShiftByAlias(alias);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/filter")
+    public Page<ShiftDetailResponse> filterShifts(
+
+            @RequestBody BaseSpecification.FilterDto filterDto,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        return shiftService.filterShift(filterDto,page,size);
     }
 }

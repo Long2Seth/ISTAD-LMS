@@ -1,5 +1,7 @@
 package co.istad.lms.features.shift;
 
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Degree;
 import co.istad.lms.domain.Shift;
 import co.istad.lms.features.shift.dto.ShiftDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftRequest;
@@ -10,9 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.prefs.BackingStoreException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class ShiftServiceImpl implements ShiftService{
 
     private final ShiftRepository shiftRepository;
     private final ShiftMapper shiftMapper;
+    private final BaseSpecification<Shift> baseSpecification;
 
     @Override
     public void createNewShift(ShiftRequest shiftRequest) {
@@ -73,5 +79,17 @@ public class ShiftServiceImpl implements ShiftService{
                         String.format("Shift = %s was not found.", alias)));
 
         shiftRepository.delete(shift);
+    }
+
+    @Override
+    public Page<ShiftDetailResponse> filterShift(BaseSpecification.FilterDto filterDto, int page, int size) {
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        Specification<Shift> specification = baseSpecification.filter(filterDto);
+
+        Page<Shift> shifts = shiftRepository.findAll(specification,pageRequest);
+
+        return shifts.map(shiftMapper::toShiftDetailResponse);
     }
 }

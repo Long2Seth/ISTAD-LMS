@@ -1,5 +1,7 @@
 package co.istad.lms.features.studyprogram;
 
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftRequest;
 import co.istad.lms.features.shift.dto.ShiftResponse;
@@ -66,6 +68,17 @@ public class StudyProgramController {
         studyProgramService.deleteStudyProgramByAlias(alias);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/filter")
+    public Page<StudyProgramDetailResponse> filterStudyPrograms(
+
+            @RequestBody BaseSpecification.FilterDto filterDto,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        return studyProgramService.filterStudyProgram(filterDto,page,size);
     }
 
 }
