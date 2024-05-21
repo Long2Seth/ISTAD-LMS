@@ -12,9 +12,14 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface DegreeMapper {
+
     Degree fromDegreeRequest(DegreeRequest degreeCreateRequest);
+
     DegreeDetailResponse toDegreeDetailResponse(Degree degree);
+
     DegreeResponse toDegreeResponse(Degree degree);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateDegreeFromRequest(@MappingTarget Degree degree, DegreeUpdateRequest degreeUpdateRequest);
+
 }
