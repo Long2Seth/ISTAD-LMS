@@ -12,7 +12,6 @@ public interface UserService {
 
     Page<UserResponse> getAllUsers(int page , int limit);
 
-    List<UserResponse> getAllUsers();
 
     UserResponse getUserById(Long id);
 

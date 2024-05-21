@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,14 +25,6 @@ public class AuthorityServiceImpl implements AuthorityService {
     private final AuthorityMapper authorityMapper;
 
 
-    @Override
-    public List<AuthorityResponse> findAll() {
-        return authorityRepository.findAll()
-                .stream()
-                .map(authorityMapper::toAuthorityResponse)
-                .toList();
-    }
-
 
     @Override
     public Page<AuthorityResponse> findAll(int page, int limit) {
@@ -42,21 +36,54 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public AuthorityResponse findById(Long id) {
-        return null;
+        Authority authority = authorityRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Authority with id %d not found", id)
+                )
+        );
+        return authorityMapper.toAuthorityResponse(authority);
     }
 
     @Override
     public AuthorityResponse update(Long id, AuthorityRequest authorityRequest) {
-        return null;
+        Authority authority = authorityRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Authority with id %d not found", id)
+                )
+        );
+        authority.setAuthorityName(authorityRequest.authorityName());
+        authority.setDescription(authorityRequest.description());
+        authorityRepository.save(authority);
+        return authorityMapper.toAuthorityResponse(authority);
     }
 
     @Override
     public AuthorityResponse create(AuthorityRequest authorityRequest) {
-        return null;
+        if (authorityRepository.existsByAuthorityName(authorityRequest.authorityName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("Authority with name %s already exists", authorityRequest.authorityName())
+            );
+        }
+        Authority authority = authorityMapper.toAuthorityRequest(authorityRequest);
+        authority.setAuthorityName(authorityRequest.authorityName());
+        authority.setDescription(authorityRequest.description());
+        authorityRepository.save(authority);
+
+        return authorityMapper.toAuthorityResponse(authority);
     }
 
     @Override
-    public void delete(Long id) {
-
+    public AuthorityResponse delete(Long id) {
+        Authority authority = authorityRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Authority with id %d not found", id)
+                )
+        );
+        authorityRepository.delete(authority);
+        return authorityMapper.toAuthorityResponse(authority);
     }
 }

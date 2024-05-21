@@ -2,7 +2,8 @@ package co.istad.lms.features.user.dto;
 
 
 
-import co.istad.lms.features.role.dto.RoleResponse;
+
+import co.istad.lms.features.authority.dto.AuthorityResponse;
 import lombok.Builder;
 
 import java.util.List;
@@ -22,6 +23,6 @@ public record UserResponse(
         String sangkatOrCommune,
         String street,
         Boolean isBlocked,
-        List<RoleResponse> roles
+        List<AuthorityResponse> authorities
         ){
 }

@@ -1,10 +1,9 @@
 package co.istad.lms.features.user.dto;
 
 
-import co.istad.lms.features.role.dto.RoleRequestToUser;
-import lombok.Builder;
 
-import java.time.LocalDateTime;
+import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import lombok.Builder;
 import java.util.List;
 
 
@@ -25,6 +24,6 @@ public record UserRequest
                 String sangkatOrCommune,
                 String street,
 
-                List<RoleRequestToUser> roles
+                List<AuthorityRequestToUser> authorities
         ) {
 }

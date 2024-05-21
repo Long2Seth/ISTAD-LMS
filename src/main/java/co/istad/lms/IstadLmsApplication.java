@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @OpenAPIDefinition(
         info = @Info(
-                title = "Final Project Alumni Team (Data Analytics Class )",
+                title = "ISTAD LMS (Learning Management System)",
                 version = "1.0",
                 description = "This is our Final Project for Data Analytics Class 2024",
                 contact = @Contact(

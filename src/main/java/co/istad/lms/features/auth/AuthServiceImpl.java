@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService{
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final TokenGenerator tokenGenerator;
 
+
+    @Override
     public AuthResponse login(AuthRequest request) {
         Authentication authentication = daoAuthenticationProvider
                 .authenticate(
@@ -31,12 +33,20 @@ public class AuthServiceImpl {
         return tokenGenerator.generateTokens(authentication);
     }
 
+
+    @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         Authentication authentication = jwtAuthenticationProvider
                 .authenticate(
                         new BearerTokenAuthenticationToken(request.refreshToken())
                 );
         return tokenGenerator.generateTokens(authentication);
+
+    }
+
+    @Override
+    public void logout(String token) {
+        // TODO Auto-generated method stub
 
     }
 }

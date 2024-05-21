@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -21,6 +23,10 @@ public class Authority {
     private String authorityName;
 
     private String description;
+
+    @ManyToMany(mappedBy = "authorities")
+    private List<User> users;
+
 
 
 }

@@ -8,12 +8,11 @@ import java.util.List;
 
 public interface AuthorityService {
 
-    List<AuthorityResponse> findAll();
     Page<AuthorityResponse> findAll(int page, int limit);
     AuthorityResponse findById(Long id);
     AuthorityResponse update(Long id, AuthorityRequest authorityRequest);
     AuthorityResponse create(AuthorityRequest authorityRequest);
-    void delete(Long id);
+    AuthorityResponse delete(Long id);
 
 
 }

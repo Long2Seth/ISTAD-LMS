@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AuthorityMapper {
-    Authority fromAuthorityRequest(AuthorityRequest authorityRequest);
+    Authority toAuthorityRequest(AuthorityRequest authorityRequest);
     AuthorityResponse toAuthorityResponse(Authority authority);
 }

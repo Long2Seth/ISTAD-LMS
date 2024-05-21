@@ -2,9 +2,9 @@ package co.istad.lms.features.user;
 
 
 
-import co.istad.lms.domain.Role;
+import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
-import co.istad.lms.features.role.RoleRepository;
+import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.mapper.UserMapper;
@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,9 +27,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthorityRepository authorityRepository;
 
     @Override
     public Page<UserResponse> getAllUsers(int page, int limit) {
@@ -42,14 +41,6 @@ public class UserServiceImpl implements UserService {
         return users.map(userMapper::toUserResponse);
     }
 
-    @Override
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream()
-                .filter(user -> !user.getIsDeleted())
-                .filter(user -> !user.getIsBlocked())
-                .map(userMapper::toUserResponse)
-                .toList();
-    }
 
     @Override
     public UserResponse getUserById(Long id) {
@@ -103,19 +94,16 @@ public class UserServiceImpl implements UserService {
         user.setCredentialsNonExpired(true);
 
 
-        List<Role> roles = new ArrayList<>();
+        List<Authority> authorities = new ArrayList<>();
         // Create dynamic role from client
-        userRequest.roles().forEach(r -> {
-            Role newRole = roleRepository.findByRoleName(r.roleName())
+        userRequest.authorities().forEach(r -> {
+            Authority authority = authorityRepository.findByAuthorityName(r.authorityName())
                     .orElseThrow(() ->
                             new ResponseStatusException(HttpStatus.NOT_FOUND,
                                     "Role USER has not been found!"));
-            roles.add(newRole);
+            authorities.add(authority);
         });
-
-        user.setRoles(roles);
-
-
+        user.setAuthorities(authorities);
         User savedUser = userRepository.save(user);
 
         return userMapper.toUserResponse(userRepository.save(savedUser));
@@ -145,15 +133,15 @@ public class UserServiceImpl implements UserService {
         user.setStreet(userRequest.street());
 
         // Update roles
-        List<Role> roles = new ArrayList<>();
-        userRequest.roles().forEach(r -> {
-            Role newRole = roleRepository.findByRoleName(r.roleName())
+        List<Authority> authorities = new ArrayList<>();
+        userRequest.authorities().forEach(r -> {
+            Authority newAuthority = authorityRepository.findByAuthorityName(r.authorityName())
                     .orElseThrow(() ->
                             new ResponseStatusException(HttpStatus.NOT_FOUND,
                                     "Role not found"));
-            roles.add(newRole);
+            authorities.add(newAuthority);
         });
-        user.setRoles(roles);
+        user.setAuthorities(authorities);
 
         User updatedUser = userRepository.save(user);
 
