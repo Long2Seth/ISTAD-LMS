@@ -28,10 +28,8 @@ public class BaseSpecification<T> {
                 switch (specs.getOperation()) {
 
                     case EQUAL -> {
-
                         Predicate equal;
                         if (specs.getJoinTable() != null) {
-
                             Join<Object, Object> join = root.join(specs.getJoinTable());
                             if (Boolean.parseBoolean(specs.getValue())) {
                                 Boolean value = Boolean.parseBoolean(specs.getValue());
@@ -48,8 +46,8 @@ public class BaseSpecification<T> {
                             }
                         }
                         predicates.add(equal);
-
                     }
+
                     case LIKE -> {
                         if (specs.getJoinTable() != null) {
                             Join<Object, Object> join = root.join(specs.getJoinTable());
@@ -60,6 +58,7 @@ public class BaseSpecification<T> {
                             predicates.add(like);
                         }
                     }
+
                     case JOIN -> {
                         Join<Object, Object> join = root.join(specs.getJoinTable());
                         Predicate joinPredicate = criteriaBuilder.equal(join.get(specs.getColumn()), specs.getValue());
@@ -67,26 +66,55 @@ public class BaseSpecification<T> {
                     }
 
                     case IN -> {
-                        String[] split = specs.getValue().split(",");
-                        Predicate in = root.get(specs.getColumn()).in(Arrays.asList(split));
+                        Predicate in;
+                        if (specs.getJoinTable() != null) {
+                            Join<Object, Object> join = root.join(specs.getJoinTable());
+                            String[] split = specs.getValue().split(",");
+                            in = join.get(specs.getColumn()).in(Arrays.asList(split));
+                        } else {
+                            String[] split = specs.getValue().split(",");
+                            in = root.get(specs.getColumn()).in(Arrays.asList(split));
+                        }
                         predicates.add(in);
                     }
+
                     case GREATER_THAN -> {
-                        Predicate greaterThan = criteriaBuilder.greaterThan(root.get(specs.getColumn()), specs.getValue());
+                        Predicate greaterThan;
+                        if (specs.getJoinTable() != null) {
+                            Join<Object, Object> join = root.join(specs.getJoinTable());
+                            greaterThan = criteriaBuilder.greaterThan(join.get(specs.getColumn()), specs.getValue());
+                        } else {
+                            greaterThan = criteriaBuilder.greaterThan(root.get(specs.getColumn()), specs.getValue());
+                        }
                         predicates.add(greaterThan);
                     }
+
                     case LESS_THAN -> {
-                        Predicate lessThan = criteriaBuilder.lessThan(root.get(specs.getColumn()), specs.getValue());
+                        Predicate lessThan;
+                        if (specs.getJoinTable() != null) {
+                            Join<Object, Object> join = root.join(specs.getJoinTable());
+                            lessThan = criteriaBuilder.lessThan(join.get(specs.getColumn()), specs.getValue());
+                        } else {
+                            lessThan = criteriaBuilder.lessThan(root.get(specs.getColumn()), specs.getValue());
+                        }
                         predicates.add(lessThan);
                     }
+
                     case BETWEEN -> {
-                        String[] split1 = specs.getValue().split(",");
-                        Predicate between = criteriaBuilder.between(root.get(specs.getColumn()), Long.parseLong(split1[0]),
-                                Long.parseLong(split1[1]));
+                        Predicate between;
+                        String[] split = specs.getValue().split(",");
+                        if (specs.getJoinTable() != null) {
+                            Join<Object, Object> join = root.join(specs.getJoinTable());
+                            between = criteriaBuilder.between(join.get(specs.getColumn()), Long.parseLong(split[0]), Long.parseLong(split[1]));
+                        } else {
+                            between = criteriaBuilder.between(root.get(specs.getColumn()), Long.parseLong(split[0]), Long.parseLong(split[1]));
+                        }
                         predicates.add(between);
                     }
-                    default -> throw new IllegalStateException("Unexpected value: ");
+
+                    default -> throw new IllegalStateException("Unexpected value: " + specs.getOperation());
                 }
+
 
             }
             if (filterDto.globalOperator.equals(FilterDto.GlobalOperator.AND)) {

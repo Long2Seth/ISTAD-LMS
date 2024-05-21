@@ -13,12 +13,9 @@ public record FacultyRequest(
         @Size(max = 50, message = "Name cannot be longer than 50 characters")
         String name,
 
-        @NotBlank(message = "Description is required")
-        @Size(max = 50, message = "Description cannot be longer than 50 characters")
         String description,
 
 
-        @Size(max = 50, message = "Address cannot be longer than 50 characters")
         String address
 ) {
 }
