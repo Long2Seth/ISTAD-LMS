@@ -2,10 +2,14 @@ package co.istad.lms.domain;
 
 
 import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -19,7 +23,7 @@ public class YearOfStudy extends Auditable {
     private Long id;
 
     @Column(name = "uuid" , nullable = false , length = 50)
-    private String UUID;
+    private String uuid;
 
     @Column(name = "year" , nullable = false)
     private Integer year;
@@ -28,11 +32,12 @@ public class YearOfStudy extends Auditable {
     private Integer semester;
 
 
-    @Column(name = "study_program_id" , nullable = false)
-    private Long studyProgramId;
+    @ManyToOne
+    @JoinColumn(name = "study_program_id")
+    private StudyProgram studyProgram;
 
-    @Column(name = "subject_id" , nullable = false)
-    private Long subjectId;
+    @Column(name = "subject" , nullable = false)
+    private String subjectId;
 
 
 

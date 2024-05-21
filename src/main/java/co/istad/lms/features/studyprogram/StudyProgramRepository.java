@@ -10,4 +10,6 @@ public interface StudyProgramRepository extends JpaRepository<StudyProgram,Long>
     Optional<StudyProgram> findByAlias(String alias);
 
     Boolean existsByAlias(String alias);
+
+//    Optional<StudyProgram> findByUuid(String uuid);
 }
