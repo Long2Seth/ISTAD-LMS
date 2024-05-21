@@ -1,19 +1,18 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @Table(name = "generations")
 @Entity
-public class Generation extends Auditable{
+public class Generation extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

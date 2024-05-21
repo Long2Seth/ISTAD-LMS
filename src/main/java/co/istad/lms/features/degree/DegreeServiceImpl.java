@@ -1,5 +1,6 @@
 package co.istad.lms.features.degree;
 
+import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Degree;
 import co.istad.lms.features.degree.dto.DegreeCreateRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
@@ -7,8 +8,10 @@ import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
 import co.istad.lms.mapper.DegreeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,57 +22,94 @@ public class DegreeServiceImpl implements DegreeService {
     private final DegreeMapper degreeMapper;
     private final DegreeRepository degreeRepository;
 
-
     @Override
-    public DegreeDetailResponse createDegree(DegreeCreateRequest degreeRequest) {
+    public void createDegree(DegreeCreateRequest degreeRequest) {
 
-        if(degreeRepository.existsByAlias(degreeRequest.alias())){
+        if (degreeRepository.existsByAlias(degreeRequest.alias())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "degree with alias "+degreeRequest.alias()+"is already exist!!");
+                    String.format("Degree = %s already exists.", degreeRequest.alias()));
+        }
+        if (degreeRepository.existsByLevel(degreeRequest.level())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    String.format("Degree = %s already exists.", degreeRequest.level()));
         }
 
-        if(degreeRepository.existsByLevel(degreeRequest.level())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "degree with level "+degreeRequest.level()+"is already exist!!");
-        }
-        Degree degree =degreeMapper.fromDegreeRequest(degreeRequest);
+        Degree degree = degreeMapper.fromDegreeRequest(degreeRequest);
         degree.setIs_deleted(false);
         degreeRepository.save(degree);
-        return degreeMapper.toDegreeDetailResponse(degree);
+
     }
 
     @Override
     public DegreeDetailResponse getDegreeByAlias(String alias) {
-        return null;
+
+        Degree degree = degreeRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Degree = %s was not found.", alias)));
+
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
 
     @Override
     public DegreeDetailResponse getDegreeByLevel(String level) {
-        return null;
+
+        Degree degree = degreeRepository.findByLevel(level)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Degree = %s was not found.", level)));
+
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
 
     @Override
-    public DegreeDetailResponse getAllDegree() {
-        return null;
+    public Page<DegreeDetailResponse> getAllDegrees(int page, int size) {
+
+        Sort sortById = Sort.by(Sort.Direction.DESC, "updatedAt", "id");
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        Page<Degree> degree = degreeRepository.findAll(pageRequest);
+
+        return degree.map(degreeMapper::toDegreeDetailResponse);
     }
+
 
     @Override
     public DegreeResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
-        return null;
+
+        Degree degree = degreeRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Degree = %s was not found.", alias)));
+
+        degreeMapper.updateDegreeFromRequest(degree, degreeUpdateRequest);
+        degreeRepository.save(degree);
+
+        return degreeMapper.toDegreeResponse(degree);
     }
 
     @Override
     public DegreeResponse updateDegreeByLevel(String level, DegreeUpdateRequest degreeUpdateRequest) {
-        return null;
+
+        Degree degree = degreeRepository.findByLevel(level)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Degree = %s was not found.", level)));
+
+        degreeMapper.updateDegreeFromRequest(degree, degreeUpdateRequest);
+        degreeRepository.save(degree);
+
+        return degreeMapper.toDegreeResponse(degree);
     }
 
     @Override
     public void deleteDegreeByAlias(String alias) {
 
+        Degree degree = degreeRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Degree = %s was not found.", alias)));
+
+        degreeRepository.delete(degree);
     }
 
     @Override
-    public void deleteDegreeByLevel(String level) {
-
+    public Page<DegreeDetailResponse> filterDegree(BaseSpecification.FilterDto filterDto, int page, int size) {
+        return null;
     }
+
 }

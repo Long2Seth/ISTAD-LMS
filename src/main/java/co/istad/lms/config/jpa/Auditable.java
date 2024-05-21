@@ -1,4 +1,4 @@
-package co.istad.lms.domain;
+package co.istad.lms.config.jpa;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

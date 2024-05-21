@@ -22,6 +22,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
 
     @Override
     public void uploadFile(MultipartFile file, String objectName) throws Exception {
+
         try (InputStream inputStream = file.getInputStream()) {
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -38,6 +39,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
 
     @Override
     public InputStream getFile(String objectName) throws Exception {
+
         try {
             return minioClient.getObject(
                     GetObjectArgs.builder()
@@ -52,6 +54,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
 
     @Override
     public void deleteFile(String objectName) throws Exception {
+
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
@@ -66,6 +69,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
 
     @Override
     public String getFileContentType(String objectName) throws Exception {
+
         try {
             return minioClient.statObject(
                     StatObjectArgs.builder()
@@ -80,6 +84,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
 
     @Override
     public String getPreSignedUrl(String objectName) throws Exception {
+
         try {
             return minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
