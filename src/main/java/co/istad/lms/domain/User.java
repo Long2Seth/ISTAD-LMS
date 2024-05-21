@@ -47,7 +47,7 @@ public class User extends Auditable {
     @Column(nullable = false , name = "profile_image" )
     private String profileImage;
 
-    @Column(name = "phone_nubmer",nullable = false , length = 20)
+    @Column(name = "phone_nubmer" , length = 20)
     private String phoneNumber;
 
     private String cityOrProvince;
