@@ -69,7 +69,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public Page<AdmissionResponse> getAllAdmissions(int page, int size) {
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "updatedAt");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
 
@@ -122,7 +122,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int page, int size) {
 
-        Sort sortById = Sort.by(Sort.Direction.DESC, "updatedAt");
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
         Specification<Admission> specification = baseSpecification.filter(filterDto);

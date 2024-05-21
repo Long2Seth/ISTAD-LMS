@@ -63,7 +63,7 @@ public class DegreeServiceImpl implements DegreeService {
     @Override
     public Page<DegreeDetailResponse> getAllDegrees(int page, int size) {
 
-        Sort sortById = Sort.by(Sort.Direction.DESC, "updatedAt", "id");
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
         Page<Degree> degree = degreeRepository.findAll(pageRequest);
 

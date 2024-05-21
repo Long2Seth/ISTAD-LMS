@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,10 +27,10 @@ public class Shift extends Auditable {
     private String name;
 
     @Column(name = "start_time", nullable = false)
-    private String startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private String endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "weekday", nullable = false)
     private String weekday;
