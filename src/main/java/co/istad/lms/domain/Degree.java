@@ -29,5 +29,8 @@ public class Degree extends Auditable {
     @Column(name = "is_deleted", nullable = false)
     private Boolean is_deleted=false;
 
+    @Column(name = "is_draft", nullable = false)
+    private Boolean is_draft=false;
+
 
 }

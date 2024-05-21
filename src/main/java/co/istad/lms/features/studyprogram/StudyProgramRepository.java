@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface StudyProgramRepository extends JpaRepository<StudyProgram,Long> {
     Optional<StudyProgram> findByAlias(String alias);
+
+    Boolean existsByAlias(String alias);
 }

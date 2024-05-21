@@ -24,11 +24,14 @@ public class StudyProgram extends Auditable {
     @Column(nullable = false, length = 50, name = "syudy_program_name")
     private String studyProgramName;
 
-    @Column(nullable = false, length = 50, name = "description")
+    @Column(name = "description")
     private String description;
 
     @Column(name = "logo")
     private String logo;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
     @Column(name = "faculty_id")
     private Long facultyId;

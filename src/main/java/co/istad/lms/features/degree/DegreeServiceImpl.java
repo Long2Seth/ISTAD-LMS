@@ -50,15 +50,6 @@ public class DegreeServiceImpl implements DegreeService {
         return degreeMapper.toDegreeDetailResponse(degree);
     }
 
-    @Override
-    public DegreeDetailResponse getDegreeByLevel(String level) {
-
-        Degree degree = degreeRepository.findByLevel(level)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Degree = %s was not found.", level)));
-
-        return degreeMapper.toDegreeDetailResponse(degree);
-    }
 
     @Override
     public Page<DegreeDetailResponse> getAllDegrees(int page, int size) {
@@ -84,18 +75,7 @@ public class DegreeServiceImpl implements DegreeService {
         return degreeMapper.toDegreeResponse(degree);
     }
 
-    @Override
-    public DegreeResponse updateDegreeByLevel(String level, DegreeUpdateRequest degreeUpdateRequest) {
 
-        Degree degree = degreeRepository.findByLevel(level)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Degree = %s was not found.", level)));
-
-        degreeMapper.updateDegreeFromRequest(degree, degreeUpdateRequest);
-        degreeRepository.save(degree);
-
-        return degreeMapper.toDegreeResponse(degree);
-    }
 
     @Override
     public void deleteDegreeByAlias(String alias) {

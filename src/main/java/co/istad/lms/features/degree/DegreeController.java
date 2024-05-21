@@ -36,14 +36,6 @@ public class DegreeController {
         return ResponseEntity.ok(degreeDetailResponse);
     }
 
-    @GetMapping("/{level}")
-    ResponseEntity<DegreeDetailResponse> getDegreeByLevel(@PathVariable String level) {
-
-        DegreeDetailResponse degreeDetailResponse = degreeService.getDegreeByLevel(level);
-
-        return ResponseEntity.ok(degreeDetailResponse);
-    }
-
 
     @GetMapping
     public ResponseEntity<Page<DegreeDetailResponse>> getAllDegree(
