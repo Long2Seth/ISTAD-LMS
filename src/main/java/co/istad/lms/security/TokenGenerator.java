@@ -35,9 +35,7 @@ public class TokenGenerator {
                 .issuedAt(now)
                 .expiresAt(now.plus(5, ChronoUnit.SECONDS))
                 .subject(userDetails.getUsername())
-                .issuer("istad.co.mobilebanking") //
-//                .notBefore(now)
-//                .claims("scope", "read write")
+                .issuer("ITSAD-LMS") //
                 .build();
         return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
@@ -50,7 +48,7 @@ public class TokenGenerator {
                 .issuedAt(now)
                 .expiresAt(now.plus(7, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
-                .issuer("istad.co.mobilebanking")
+                .issuer("ITSAD-LMS")
                 .build();
         return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
