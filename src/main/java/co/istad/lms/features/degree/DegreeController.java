@@ -2,12 +2,10 @@ package co.istad.lms.features.degree;
 
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
-import co.istad.lms.features.degree.dto.DegreeCreateRequest;
+import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
-import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,9 +21,9 @@ public class DegreeController {
     private final DegreeService degreeService;
 
     @PostMapping
-    ResponseEntity<Void> createNewDegree(@Valid @RequestBody DegreeCreateRequest degreeCreateRequest) {
+    ResponseEntity<Void> createNewDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
 
-        degreeService.createDegree(degreeCreateRequest);
+        degreeService.createDegree(degreeRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -150,7 +150,7 @@ public class AdmissionServiceImpl implements AdmissionService {
         Admission admission = admissionRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         ""));
-        admission.setIsDeleted(true);
+        admission.setIsDeleted(false);
 
     }
 

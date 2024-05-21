@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,10 +92,11 @@ public class MediaServiceImpl implements MediaService {
     public MediaResponse loadMediaByName(String mediaName) {
 
         try {
-            String contentType = minioService.getFileContentType(mediaName);
+            String contentType = getContentType(mediaName);
             String folderName = contentType.split("/")[0];
             String objectName = folderName + "/" + mediaName;
             String url = minioService.getPreSignedUrl(objectName);
+
 
             return MediaResponse.builder()
                     .name(mediaName)
@@ -110,7 +113,7 @@ public class MediaServiceImpl implements MediaService {
     public MediaResponse deleteMediaByName(String mediaName) {
 
         try {
-            String contentType = minioService.getFileContentType(mediaName);
+            String contentType = getContentType(mediaName);
             String folderName = contentType.split("/")[0];
             String objectName = folderName + "/" + mediaName;
             minioService.deleteFile(objectName);
@@ -130,7 +133,7 @@ public class MediaServiceImpl implements MediaService {
     public Resource downloadMediaByName(String mediaName) {
 
         try {
-            String contentType = minioService.getFileContentType(mediaName);
+            String contentType = getContentType(mediaName);
             String folderName = contentType.split("/")[0];
             String objectName = folderName + "/" + mediaName;
             InputStream inputStream = minioService.getFile(objectName);
@@ -143,6 +146,16 @@ public class MediaServiceImpl implements MediaService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media has not been found!");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    public static String getContentType(String fileName) {
+        Path path = Paths.get(fileName);
+        try {
+            return Files.probeContentType(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Unknown type";
         }
     }
 }

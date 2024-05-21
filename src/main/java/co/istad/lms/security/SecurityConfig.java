@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers( "/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/receipts/**").permitAll()
                         .requestMatchers("/api/v1/payments/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)

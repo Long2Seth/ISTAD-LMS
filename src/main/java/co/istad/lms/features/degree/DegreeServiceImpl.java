@@ -1,9 +1,8 @@
 package co.istad.lms.features.degree;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Admission;
 import co.istad.lms.domain.Degree;
-import co.istad.lms.features.degree.dto.DegreeCreateRequest;
+import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
@@ -26,7 +25,7 @@ public class DegreeServiceImpl implements DegreeService {
     private final BaseSpecification<Degree> baseSpecification;
 
     @Override
-    public void createDegree(DegreeCreateRequest degreeRequest) {
+    public void createDegree(DegreeRequest degreeRequest) {
 
         if (degreeRepository.existsByAlias(degreeRequest.alias())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -59,9 +58,9 @@ public class DegreeServiceImpl implements DegreeService {
 
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
-        Page<Degree> degree = degreeRepository.findAll(pageRequest);
+        Page<Degree> degrees = degreeRepository.findAll(pageRequest);
 
-        return degree.map(degreeMapper::toDegreeDetailResponse);
+        return degrees.map(degreeMapper::toDegreeDetailResponse);
     }
 
 
