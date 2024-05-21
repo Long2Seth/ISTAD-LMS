@@ -73,8 +73,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.fromUserRequest(userRequest);
 
         // Set additional properties
-        String alias = UUID.randomUUID().toString();
-        user.setAlias(alias);
+        user.setAlias(UUID.randomUUID().toString());
         user.setUserName(userRequest.userName());
         user.setName_en(userRequest.name_en());
         user.setName_kh(userRequest.name_kh());
@@ -95,14 +94,17 @@ public class UserServiceImpl implements UserService {
 
 
         List<Authority> authorities = new ArrayList<>();
-        // Create dynamic role from client
+
         userRequest.authorities().forEach(r -> {
             Authority authority = authorityRepository.findByAuthorityName(r.authorityName())
                     .orElseThrow(() ->
                             new ResponseStatusException(HttpStatus.NOT_FOUND,
                                     "Role USER has not been found!"));
+
             authorities.add(authority);
+
         });
+
         user.setAuthorities(authorities);
         User savedUser = userRepository.save(user);
 
@@ -117,7 +119,6 @@ public class UserServiceImpl implements UserService {
                         "User not found"
                 ));
 
-        System.out.println(" User Name : " + user.getUserName());
         // Update user fields
         user.setUserName(userRequest.userName());
         user.setName_en(userRequest.name_en());

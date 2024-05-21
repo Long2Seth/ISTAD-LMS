@@ -2,10 +2,13 @@ package co.istad.lms.domain;
 
 
 import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -29,6 +32,9 @@ public class Classes extends Auditable {
 
     @Column( name = "is_deleted" , nullable = false)
     private Boolean isDeleted;
+
+    @ManyToMany(mappedBy = "classes")
+    private List<Student> students;
 
 
 }
