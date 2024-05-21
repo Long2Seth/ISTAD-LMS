@@ -1,11 +1,10 @@
 package co.istad.lms.features.shift;
 
-import co.istad.lms.domain.Degree;
 import co.istad.lms.domain.Shift;
 import co.istad.lms.features.shift.dto.ShiftDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftRequest;
+import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.shift.dto.ShiftUpdateRequest;
-import co.istad.lms.features.shift.dto.ShiftUpdateResponse;
 import co.istad.lms.mapper.ShiftMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -55,7 +54,7 @@ public class ShiftServiceImpl implements ShiftService{
     }
 
     @Override
-    public ShiftUpdateResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest) {
+    public ShiftResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest) {
         Shift shift = shiftRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Shift = %s was not found.", alias)));
@@ -63,7 +62,7 @@ public class ShiftServiceImpl implements ShiftService{
         shiftMapper.updateShiftFromRequest(shift, shiftUpdateRequest);
         shiftRepository.save(shift);
 
-        return shiftMapper.toShiftUpdateResponse(shift);
+        return shiftMapper.toShiftResponse(shift);
     }
 
     @Override

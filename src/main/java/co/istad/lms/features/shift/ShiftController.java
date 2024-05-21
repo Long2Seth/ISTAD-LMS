@@ -1,13 +1,9 @@
 package co.istad.lms.features.shift;
 
-import co.istad.lms.features.degree.dto.DegreeCreateRequest;
-import co.istad.lms.features.degree.dto.DegreeDetailResponse;
-import co.istad.lms.features.degree.dto.DegreeResponse;
-import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
 import co.istad.lms.features.shift.dto.ShiftDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftRequest;
+import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.shift.dto.ShiftUpdateRequest;
-import co.istad.lms.features.shift.dto.ShiftUpdateResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,10 +47,10 @@ public class ShiftController {
     }
 
     @PutMapping("/{alias}")
-    public ResponseEntity<ShiftUpdateResponse> updateShift(@PathVariable String alias,
-                                                            @RequestBody ShiftUpdateRequest shiftUpdateRequest) {
+    public ResponseEntity<ShiftResponse> updateShift(@PathVariable String alias,
+                                                     @RequestBody ShiftUpdateRequest shiftUpdateRequest) {
 
-        ShiftUpdateResponse shiftUpdateResponse = shiftService.updateByAlias(alias, shiftUpdateRequest);
+        ShiftResponse shiftUpdateResponse = shiftService.updateByAlias(alias, shiftUpdateRequest);
 
         return ResponseEntity.ok(shiftUpdateResponse);
     }

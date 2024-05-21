@@ -11,7 +11,7 @@ public interface ShiftService {
 
     Page<ShiftDetailResponse> getAllShift(int page, int size);
 
-    ShiftUpdateResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest);
+    ShiftResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest);
 
 
 
