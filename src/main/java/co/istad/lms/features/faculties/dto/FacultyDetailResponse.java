@@ -5,6 +5,7 @@ public record FacultyDetailResponse(
         String name,
         String description,
         String address,
+        String logo,
         Boolean isDeleted
 ) {
 }

@@ -31,7 +31,7 @@ public class StudyProgram extends Auditable {
     @Column(unique = true)
     private Boolean isDeleted;
 
-    @Column(name = "faculty_id")
+    @Column(nullable = false)
     private String facultyAlias;
 
 }

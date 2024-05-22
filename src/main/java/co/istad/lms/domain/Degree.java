@@ -26,10 +26,10 @@ public class Degree extends Auditable {
     private String description;
 
     @Column(nullable = false)
-    private Boolean is_deleted = false;
+    private Boolean isDeleted = false;
 
     @Column(nullable = false)
-    private Boolean is_draft = false;
+    private Boolean isDraft = false;
 
 
 }

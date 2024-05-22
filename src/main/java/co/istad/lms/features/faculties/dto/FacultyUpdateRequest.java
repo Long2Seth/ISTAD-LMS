@@ -14,8 +14,7 @@ public record FacultyUpdateRequest(
 
         String description,
 
-        String address,
+        String address
 
-        Boolean isDeleted
 ) {
 }
