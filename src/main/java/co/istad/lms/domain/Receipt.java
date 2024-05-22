@@ -17,13 +17,13 @@ public class Receipt extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", nullable = false)
+    @Column( nullable = false,unique = true)
     private String uuid;
 
-    @Column(name = "remarks", columnDefinition = "TEXT")
+    @Column( columnDefinition = "TEXT")
     private String remarks;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column( nullable = false)
     private Boolean isDeleted;
 
     @OneToOne

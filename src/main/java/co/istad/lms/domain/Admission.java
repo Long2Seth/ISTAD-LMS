@@ -49,15 +49,15 @@ public class Admission extends Auditable {
     private String biography;
 
     @ManyToOne
-    @JoinColumn(name = "shift_id")
+    @JoinColumn(name = "shift_id",nullable = false)
     private Shift shift;
 
     @ManyToOne
-    @JoinColumn(name = "study_program_id")
+    @JoinColumn(name = "study_program_id",nullable = false)
     private StudyProgram studyProgram;
 
     @ManyToOne
-    @JoinColumn(name = "degree_id")
+    @JoinColumn(name = "degree_id",nullable = false)
     private Degree degree;
 
     @Column(nullable = false)

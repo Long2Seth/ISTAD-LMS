@@ -10,8 +10,6 @@ import lombok.Setter;
 import java.util.List;
 
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,33 +19,33 @@ public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    @Column(name = "alias",unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String alias;
 
-    @Column(name = "name_en",nullable = false , length = 50)
-    private String name_en;
+    @Column(nullable = false, length = 50)
+    private String nameEn;
 
-    @Column(name = "name_kh",nullable = false , length = 50)
-    private String name_kh;
+    @Column(nullable = false, length = 50)
+    private String nameKh;
 
-    @Column(nullable = false , length = 50, name = "user_name")
+    @Column(nullable = false, length = 50)
     private String userName;
 
-    @Column(nullable = false , length = 10)
+    @Column(nullable = false, length = 10)
     private String gender;
 
-    @Column(nullable = false , length = 100)
+    @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false , length = 100)
+    @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false , name = "profile_image" )
+    @Column(nullable = false)
     private String profileImage;
 
-    @Column(name = "phone_nubmer" , length = 20)
+    @Column(length = 20)
     private String phoneNumber;
 
     private String cityOrProvince;

@@ -59,13 +59,13 @@ public class AdmissionController {
     @PatchMapping("/enable")
     void enableAdmission(String admissionUuid){
 
-        admissionService.enableAdmission(admissionUuid);
+        admissionService.enableAdmissionByUuid(admissionUuid);
     }
 
     @PatchMapping("/disable")
     void disableAdmission(String admissionUuid){
 
-        admissionService.enableAdmission(admissionUuid);
+        admissionService.disableAdmissionByUuid(admissionUuid);
     }
 
     @DeleteMapping("/{uuid}")

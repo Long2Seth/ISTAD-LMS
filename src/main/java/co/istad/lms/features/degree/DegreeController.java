@@ -22,13 +22,13 @@ public class DegreeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void createNewDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
+    void creatDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
+
         degreeService.createDegree(degreeRequest);
 
     }
 
     @GetMapping("/{alias}")
-    @ResponseStatus(HttpStatus.OK)
     DegreeDetailResponse getDegreeByAlias(@PathVariable String alias) {
 
         return degreeService.getDegreeByAlias(alias);
@@ -36,45 +36,51 @@ public class DegreeController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DegreeDetailResponse>> getAllDegree(
+    public Page<DegreeDetailResponse> getAllDegrees(
 
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") int size
     ) {
 
-        Page<DegreeDetailResponse> admissionsPage = degreeService.getAllDegrees(page, size);
-
-        return ResponseEntity.ok(admissionsPage);
+        return degreeService.getAllDegrees(page, size);
     }
 
 
     @PutMapping("/{alias}")
-    public ResponseEntity<DegreeResponse> updateDegree(@PathVariable String alias,
-                                                       @RequestBody DegreeUpdateRequest degreeUpdateRequest) {
+    public DegreeResponse updateDegree(@PathVariable String alias,
+                                       @Valid @RequestBody DegreeUpdateRequest degreeUpdateRequest) {
 
-        DegreeResponse updatedDegree = degreeService.updateDegreeByAlias(alias, degreeUpdateRequest);
-
-        return ResponseEntity.ok(updatedDegree);
+        return degreeService.updateDegreeByAlias(alias, degreeUpdateRequest);
     }
 
 
     @DeleteMapping("/{alias}")
-    public ResponseEntity<Void> deleteDegree(@PathVariable String alias) {
+    public void deleteDegree(@PathVariable String alias) {
 
         degreeService.deleteDegreeByAlias(alias);
+    }
 
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/enable")
+    void enableDegree(String degreeAlias){
+
+        degreeService.enableDegreeByAlias(degreeAlias);
+    }
+
+    @PatchMapping("/disable")
+    void disableDegree(String degreeAlias){
+
+        degreeService.disableDegreeByAlias(degreeAlias);
     }
 
     @GetMapping("/filter")
-    public Page<DegreeDetailResponse> filterDegree(
+    public Page<DegreeDetailResponse> filterDegrees(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        return degreeService.filterDegree(filterDto,page,size);
+        return degreeService.filterDegree(filterDto, page, size);
     }
 
 

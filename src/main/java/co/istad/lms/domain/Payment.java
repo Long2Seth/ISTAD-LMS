@@ -20,7 +20,7 @@ public class Payment extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "uuid", nullable = false,unique = true)
     private String uuid;
 
     @Column(name = "paid_amount", nullable = false)

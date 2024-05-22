@@ -18,7 +18,7 @@ public class Generation extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String alias;
 
     @Column(nullable = false , length = 50)

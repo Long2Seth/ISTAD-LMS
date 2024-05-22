@@ -75,8 +75,8 @@ public class UserServiceImpl implements UserService {
         // Set additional properties
         user.setAlias(UUID.randomUUID().toString());
         user.setUserName(userRequest.userName());
-        user.setName_en(userRequest.name_en());
-        user.setName_kh(userRequest.name_kh());
+        user.setNameEn(userRequest.name_en());
+        user.setNameKh(userRequest.name_kh());
         user.setEmail(userRequest.email());
         user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encode password
         user.setPhoneNumber(userRequest.phoneNumber());
@@ -121,8 +121,8 @@ public class UserServiceImpl implements UserService {
 
         // Update user fields
         user.setUserName(userRequest.userName());
-        user.setName_en(userRequest.name_en());
-        user.setName_kh(userRequest.name_kh());
+        user.setNameEn(userRequest.name_en());
+        user.setNameKh(userRequest.name_kh());
         user.setEmail(userRequest.email());
         user.setPassword(userRequest.password());
         user.setPhoneNumber(passwordEncoder.encode(userRequest.phoneNumber()));
