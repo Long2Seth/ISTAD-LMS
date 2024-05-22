@@ -62,16 +62,16 @@ public class ShiftController {
 
     }
 
-    @PatchMapping("/enable")
-    void enableShift(String shiftAlias){
+    @PatchMapping("/enable/{alias}")
+    void enableShift(@PathVariable String alias){
 
-        shiftService.enableShiftByAlias(shiftAlias);
+        shiftService.enableShiftByAlias(alias);
     }
 
-    @PatchMapping("/disable")
-    void disableShift(String shiftAlias){
+    @PatchMapping("/disable/{alias}")
+    void disableShift(@PathVariable String alias){
 
-        shiftService.disableShiftByAlias(shiftAlias);
+        shiftService.disableShiftByAlias(alias);
     }
 
     @GetMapping("/filter")

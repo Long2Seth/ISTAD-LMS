@@ -60,16 +60,16 @@ public class DegreeController {
         degreeService.deleteDegreeByAlias(alias);
     }
 
-    @PatchMapping("/enable")
-    void enableDegree(String degreeAlias){
+    @PatchMapping("/enable/{alias}")
+    void enableDegree(@PathVariable String alias){
 
-        degreeService.enableDegreeByAlias(degreeAlias);
+        degreeService.enableDegreeByAlias(alias);
     }
 
-    @PatchMapping("/disable")
-    void disableDegree(String degreeAlias){
+    @PatchMapping("/disable/{alias}")
+    void disableDegree(@PathVariable String alias){
 
-        degreeService.disableDegreeByAlias(degreeAlias);
+        degreeService.disableDegreeByAlias(alias);
     }
 
     @GetMapping("/filter")

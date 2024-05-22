@@ -64,16 +64,16 @@ public class FacultyController {
 
     }
 
-    @PatchMapping("/enable")
-    void enableFaculty(String facultyUuid){
+    @PatchMapping("/enable/{alias}")
+    void enableFaculty(@PathVariable String alias){
 
-        facultyService.enableFacultyByAlias(facultyUuid);
+        facultyService.enableFacultyByAlias(alias);
     }
 
-    @PatchMapping("/disable")
-    void disableFaculty(String facultyUuid){
+    @PatchMapping("/disable/{alias}")
+    void disableFaculty(@PathVariable String alias){
 
-        facultyService.disableFacultyByAlias(facultyUuid);
+        facultyService.disableFacultyByAlias(alias);
     }
 
 

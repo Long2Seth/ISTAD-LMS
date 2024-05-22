@@ -65,6 +65,20 @@ public class StudyProgramController {
 
     }
 
+    @PatchMapping("/disable/{alias}")
+    void disableStudyProgram(@PathVariable String alias){
+
+        studyProgramService.disableStudyProgramByAlias(alias);
+    }
+
+    @PatchMapping("/disable/{alias}")
+    void enableStudyProgram(@PathVariable String alias){
+
+        studyProgramService.enableStudyProgramByAlias(alias);
+    }
+
+
+
     @GetMapping("/filter")
     public Page<StudyProgramDetailResponse> filterStudyPrograms(
 
