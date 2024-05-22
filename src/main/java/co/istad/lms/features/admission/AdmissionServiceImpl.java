@@ -33,36 +33,50 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final StudyProgramRepository studyProgramRepository;
     private final BaseSpecification<Admission> baseSpecification;
 
+
     @Override
     public void createAdmission(AdmissionCreateRequest admissionCreateRequest) {
 
+        //validate degree by degree alias
         Degree degree = degreeRepository.findByAlias(admissionCreateRequest.degreeAlias())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("degree = %s was not found", admissionCreateRequest.degreeAlias())));
 
+        //validate shift by shift alias
         Shift shift = shiftRepository.findByAlias(admissionCreateRequest.shiftAlias())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("shift = %s was not found", admissionCreateRequest.shiftAlias())));
 
+        //validate
         StudyProgram studyProgram = studyProgramRepository.findByAlias(admissionCreateRequest.studyProgramAlias())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("studyProgram = %s was not found", admissionCreateRequest.studyProgramAlias())));
 
+        //map from DTO to entity
         Admission admission = admissionMapper.fromAdmissionRequest(admissionCreateRequest);
-        admission.setUuid(UUID.randomUUID().toString()); // Generate UUID
+
+        //generate uuid for admission
+        admission.setUuid(UUID.randomUUID().toString());
+
+        //set object to entity
         admission.setShift(shift);
         admission.setDegree(degree);
         admission.setStudyProgram(studyProgram);
+
+        //save to database
         admissionRepository.save(admission);
     }
 
     @Override
     public AdmissionDetailResponse getAdmissionByUuid(String uuid) {
+
+        //find admission in database by uuid
         Admission admission = admissionRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Admission = %s doesn't exist ! ", uuid)));
 
+        //save to database and return AdmissionDetail 
         return admissionMapper.toAdmissionDetailResponse(admission);
     }
 
@@ -82,17 +96,10 @@ public class AdmissionServiceImpl implements AdmissionService {
         Admission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("Account id = %s doesn't exist ! ", admissionUuid)));
+                                String.format("Account id = %s has not been found ! ", admissionUuid)));
 
         admissionMapper.updateAdmissionFromRequest(admission, admissionUpdateRequest);
 
-        /**
-         * check if degree, shift,studyProgram null or not
-         * if null don't map
-         * if not null, check it the same as original admission or not
-         * if the same don't reset
-         * if difference set new value
-         */
         if (admissionUpdateRequest.degreeAlias() != null &&
                 !admissionUpdateRequest.degreeAlias().equals(admission.getDegree().getAlias())) {
 
@@ -131,25 +138,27 @@ public class AdmissionServiceImpl implements AdmissionService {
         Admission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("Account = %s doesn't exist ! ", admissionUuid)));
+                                String.format("Account = %s has not been found ! ", admissionUuid)));
         admissionRepository.delete(admission);
     }
 
     @Override
-    public void disableAdmission(String uuid) {
+    public void disableAdmission(String admissionUuid) {
 
-        Admission admission = admissionRepository.findByUuid(uuid)
+        Admission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        ""));
+                        String.format("Account = %s has not been found ! ", admissionUuid)));
+
         admission.setIsDeleted(true);
     }
 
     @Override
-    public void enableAdmission(String uuid) {
+    public void enableAdmission(String admissionUuid) {
 
-        Admission admission = admissionRepository.findByUuid(uuid)
+        Admission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        ""));
+                        String.format("Account = %s has not been found ! ", admissionUuid)));
+
         admission.setIsDeleted(false);
 
     }

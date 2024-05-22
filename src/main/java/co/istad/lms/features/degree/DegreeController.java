@@ -21,28 +21,25 @@ public class DegreeController {
     private final DegreeService degreeService;
 
     @PostMapping
-    ResponseEntity<Void> createNewDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
-
+    @ResponseStatus(HttpStatus.CREATED)
+    void createNewDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
         degreeService.createDegree(degreeRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 
     @GetMapping("/{alias}")
-    ResponseEntity<DegreeDetailResponse> getDegreeByAlias(@PathVariable String alias) {
+    @ResponseStatus(HttpStatus.OK)
+    DegreeDetailResponse getDegreeByAlias(@PathVariable String alias) {
 
-        DegreeDetailResponse degreeDetailResponse = degreeService.getDegreeByAlias(alias);
+        return degreeService.getDegreeByAlias(alias);
 
-        return ResponseEntity.ok(degreeDetailResponse);
     }
-
 
     @GetMapping
     public ResponseEntity<Page<DegreeDetailResponse>> getAllDegree(
 
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
         Page<DegreeDetailResponse> admissionsPage = degreeService.getAllDegrees(page, size);

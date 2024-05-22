@@ -37,7 +37,7 @@ public class DegreeServiceImpl implements DegreeService {
         }
 
         Degree degree = degreeMapper.fromDegreeRequest(degreeRequest);
-        degree.setIs_deleted(false);
+        degree.setIsDeleted(false);
         degreeRepository.save(degree);
 
     }

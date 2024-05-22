@@ -21,48 +21,58 @@ public class AdmissionController {
     private final AdmissionService admissionService;
 
     @PostMapping
-    public ResponseEntity<Void> createNewAdmission(@Valid @RequestBody AdmissionCreateRequest admissionCreateRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createAdmission(@Valid @RequestBody AdmissionCreateRequest admissionCreateRequest) {
 
         admissionService.createAdmission(admissionCreateRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<AdmissionDetailResponse> getAdmissionByUuid(@PathVariable String uuid) {
+    public AdmissionDetailResponse getAdmissionByUuid(@PathVariable String uuid) {
 
-        AdmissionDetailResponse admissionResponse = admissionService.getAdmissionByUuid(uuid);
-
-        return ResponseEntity.ok(admissionResponse);
+        return admissionService.getAdmissionByUuid(uuid);
     }
 
 
     @GetMapping
-    public ResponseEntity<Page<AdmissionResponse>> getAllAdmissions(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        Page<AdmissionResponse> admissionsPage = admissionService.getAllAdmissions(page,size);
+    public Page<AdmissionResponse> getAllAdmissions(
 
-        return ResponseEntity.ok(admissionsPage);
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size
+    ) {
+
+        return admissionService.getAllAdmissions(page, size);
     }
 
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<AdmissionResponse> updateAdmission(@PathVariable String uuid,
-                                                             @RequestBody AdmissionUpdateRequest admissionRequest) {
+    @ResponseStatus(HttpStatus.OK)
+    public AdmissionResponse updateAdmission(
 
-        AdmissionResponse updatedAdmission = admissionService.updateAdmission(uuid, admissionRequest);
+            @PathVariable String uuid,
+            @Valid @RequestBody AdmissionUpdateRequest admissionRequest) {
 
-        return ResponseEntity.ok(updatedAdmission);
+        return admissionService.updateAdmission(uuid, admissionRequest);
+    }
+
+    @PatchMapping("/enable")
+    void enableAdmission(String admissionUuid){
+
+        admissionService.enableAdmission(admissionUuid);
+    }
+
+    @PatchMapping("/disable")
+    void disableAdmission(String admissionUuid){
+
+        admissionService.enableAdmission(admissionUuid);
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteAdmission(@PathVariable String uuid) {
+    public void deleteAdmission(@PathVariable String uuid) {
 
         admissionService.deleteAdmission(uuid);
 
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/filter")
@@ -70,9 +80,9 @@ public class AdmissionController {
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-            ) {
+            @RequestParam(defaultValue = "25") int size
+    ) {
 
-        return admissionService.filterAdmissions(filterDto,page,size);
+        return admissionService.filterAdmissions(filterDto, page, size);
     }
 }
