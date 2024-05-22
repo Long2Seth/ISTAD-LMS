@@ -56,13 +56,13 @@ public class AdmissionController {
         return admissionService.updateAdmission(uuid, admissionRequest);
     }
 
-    @PatchMapping("/enable/{uuid}")
+    @PatchMapping("/{uuid}/enable")
     void enableAdmission(@PathVariable String uuid){
 
         admissionService.enableAdmissionByUuid(uuid);
     }
 
-    @PatchMapping("/disable/{uuid}")
+    @PatchMapping("/{uuid}/disable")
     void disableAdmission(@PathVariable String uuid){
 
         admissionService.disableAdmissionByUuid(uuid);
