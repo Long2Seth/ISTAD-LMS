@@ -22,13 +22,13 @@ public class YearOfStudy extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid" , nullable = false , length = 50)
+    @Column( nullable = false,unique = true)
     private String uuid;
 
-    @Column(name = "year" , nullable = false)
+    @Column(nullable = false)
     private Integer year;
 
-    @Column(name = "semester" , nullable = false)
+    @Column(nullable = false)
     private Integer semester;
 
 

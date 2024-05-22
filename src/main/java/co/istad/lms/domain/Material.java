@@ -18,31 +18,26 @@ public class Material extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "alias" , nullable = false )
+    @Column( nullable = false )
     private String alias;
 
-    @Column ( name = "title" , nullable = false )
+    @Column ( nullable = false )
     private String title;
 
-    @Column( name = "content_type" )
     private String contentType;
 
-    @Column( name = "extension")
     private String extension;
 
-    @Column( name = "size" )
     private Long size;
 
-    @Column( name = "file_url" , nullable = false )
+    @Column( nullable = false )
     private String fileUrl;
 
-    @Column ( name = "thumbnail" )
     private String thumbnail;
 
-    @Column( name = "description" )
     private String description;
 
-    @Column ( name = "subject_id" , nullable = false)
-    private Long subjectId;
+    @Column (nullable = false)
+    private String subjectAlias;
 
 }

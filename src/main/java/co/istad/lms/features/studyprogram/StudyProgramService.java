@@ -37,7 +37,7 @@ public interface StudyProgramService {
      * @param size the number of study programs per page
      * @return a paginated list of study programs
      */
-    Page<StudyProgramDetailResponse> getAllStudyProgram(int page, int size);
+    Page<StudyProgramDetailResponse> getAllStudyPrograms(int page, int size);
 
     /**
      * Updates an existing study program by its alias.

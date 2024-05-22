@@ -50,7 +50,7 @@ public class ShiftServiceImpl implements ShiftService{
     }
 
     @Override
-    public Page<ShiftDetailResponse> getAllShift(int page, int size) {
+    public Page<ShiftDetailResponse> getAllShifts(int page, int size) {
 
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortById);

@@ -18,22 +18,18 @@ public class Subject extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "alias" , nullable = false )
+    @Column(nullable = false,unique = true )
     private String alias;
 
-    @Column(name = "subject_name" , nullable = false )
+    @Column( nullable = false )
     private String subjectName;
 
-    @Column(name = "description" , nullable = false )
     private String description;
 
-    @Column(name = "subject_logo" , nullable = false )
     private String subjectLogo;
 
-    @Column(name = "credit" )
     private Integer credit;
 
-    @Column( name = "duration" )
     private Integer duration;
 
 }

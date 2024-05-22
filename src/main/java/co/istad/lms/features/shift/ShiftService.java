@@ -30,7 +30,7 @@ public interface ShiftService {
      * @param size the number of shifts per page
      * @return a paginated list of shifts
      */
-    Page<ShiftDetailResponse> getAllShift(int page, int size);
+    Page<ShiftDetailResponse> getAllShifts(int page, int size);
 
     /**
      * Updates a shift identified by its alias.

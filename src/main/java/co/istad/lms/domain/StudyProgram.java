@@ -18,22 +18,20 @@ public class StudyProgram extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50, name = "alias", unique = true)
+    @Column(nullable = false, length = 50, unique = true)
     private String alias;
 
-    @Column(nullable = false, length = 50, name = "syudy_program_name")
+    @Column(nullable = false, length = 50)
     private String studyProgramName;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "logo")
     private String logo;
 
-    @Column(name = "is_deleted")
+    @Column(unique = true)
     private Boolean isDeleted;
 
     @Column(name = "faculty_id")
-    private Long facultyId;
+    private String facultyAlias;
 
 }

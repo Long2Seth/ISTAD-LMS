@@ -44,7 +44,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService{
     }
 
     @Override
-    public Page<YearOfStudyDetailResponse> getAllYearOfStudy(int page, int size) {
+    public Page<YearOfStudyDetailResponse> getAllYearOfStudies(int page, int size) {
         return null;
     }
 

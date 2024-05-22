@@ -43,7 +43,7 @@ public class ShiftController {
             @RequestParam(defaultValue = "10") int size
     ) {
 
-        Page<ShiftDetailResponse> shiftPage = shiftService.getAllShift(page, size);
+        Page<ShiftDetailResponse> shiftPage = shiftService.getAllShifts(page, size);
 
         return ResponseEntity.ok(shiftPage);
     }

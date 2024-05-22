@@ -51,7 +51,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     }
 
     @Override
-    public Page<StudyProgramDetailResponse> getAllStudyProgram(int page, int size) {
+    public Page<StudyProgramDetailResponse> getAllStudyPrograms(int page, int size) {
 
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortById);

@@ -13,7 +13,7 @@ public interface YearOfStudyService {
 
     YearOfStudyDetailResponse getYearOfStudyByAlias(String alias);
 
-    Page<YearOfStudyDetailResponse> getAllYearOfStudy(int page, int size);
+    Page<YearOfStudyDetailResponse> getAllYearOfStudies(int page, int size);
 
     YearOfStudyResponse updateYearOfStudyByAlias(String alias, YearOfStudyUpdateRequest yearOfStudyUpdateRequest);
 

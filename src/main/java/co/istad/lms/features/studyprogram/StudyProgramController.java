@@ -42,13 +42,13 @@ public class StudyProgramController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<StudyProgramDetailResponse>> getAllShift(
+    public ResponseEntity<Page<StudyProgramDetailResponse>> getAllStudyPrograms(
 
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        Page<StudyProgramDetailResponse> studyProgramPage = studyProgramService.getAllStudyProgram(page, size);
+        Page<StudyProgramDetailResponse> studyProgramPage = studyProgramService.getAllStudyPrograms(page, size);
 
         return ResponseEntity.ok(studyProgramPage);
     }
