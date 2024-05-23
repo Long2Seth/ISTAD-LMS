@@ -21,63 +21,66 @@ public class DegreeController {
     private final DegreeService degreeService;
 
     @PostMapping
-    ResponseEntity<Void> createNewDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    void creatDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
 
         degreeService.createDegree(degreeRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 
     @GetMapping("/{alias}")
-    ResponseEntity<DegreeDetailResponse> getDegreeByAlias(@PathVariable String alias) {
+    DegreeDetailResponse getDegreeByAlias(@PathVariable String alias) {
 
-        DegreeDetailResponse degreeDetailResponse = degreeService.getDegreeByAlias(alias);
+        return degreeService.getDegreeByAlias(alias);
 
-        return ResponseEntity.ok(degreeDetailResponse);
     }
 
-
     @GetMapping
-    public ResponseEntity<Page<DegreeDetailResponse>> getAllDegree(
+    public Page<DegreeDetailResponse> getAllDegrees(
 
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        Page<DegreeDetailResponse> admissionsPage = degreeService.getAllDegrees(page, size);
-
-        return ResponseEntity.ok(admissionsPage);
+        return degreeService.getAllDegrees(page, size);
     }
 
 
     @PutMapping("/{alias}")
-    public ResponseEntity<DegreeResponse> updateDegree(@PathVariable String alias,
-                                                       @RequestBody DegreeUpdateRequest degreeUpdateRequest) {
+    public DegreeResponse updateDegree(@PathVariable String alias,
+                                       @Valid @RequestBody DegreeUpdateRequest degreeUpdateRequest) {
 
-        DegreeResponse updatedDegree = degreeService.updateDegreeByAlias(alias, degreeUpdateRequest);
-
-        return ResponseEntity.ok(updatedDegree);
+        return degreeService.updateDegreeByAlias(alias, degreeUpdateRequest);
     }
 
 
     @DeleteMapping("/{alias}")
-    public ResponseEntity<Void> deleteDegree(@PathVariable String alias) {
+    public void deleteDegree(@PathVariable String alias) {
 
         degreeService.deleteDegreeByAlias(alias);
+    }
 
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/{alias}/enable")
+    void enableDegree(@PathVariable String alias){
+
+        degreeService.enableDegreeByAlias(alias);
+    }
+
+    @PatchMapping("/{alias}/disable")
+    void disableDegree(@PathVariable String alias){
+
+        degreeService.disableDegreeByAlias(alias);
     }
 
     @GetMapping("/filter")
-    public Page<DegreeDetailResponse> filterDegree(
+    public Page<DegreeDetailResponse> filterDegrees(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        return degreeService.filterDegree(filterDto,page,size);
+        return degreeService.filterDegree(filterDto, page, size);
     }
 
 

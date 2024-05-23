@@ -15,6 +15,7 @@ public record FacultyRequest(
 
         String description,
 
+        String logo,
 
         String address
 ) {

@@ -7,8 +7,7 @@ import java.time.LocalDate;
 
 @Builder
 public record PaymentResponse(
-
-        Long id,
+        String uuid,
         Double paidAmount,
         LocalDate paymentDate,
         Double discount,

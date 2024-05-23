@@ -17,18 +17,17 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "uuid" , nullable = false )
+    @Column(nullable = false, unique = true)
     private String uuid;
 
-    @Column ( name = "status" , nullable = false )
+    @Column(nullable = false)
     private Boolean status;
 
-    @Column ( name = "note")
     private String note;
 
-    @Column ( name = "student_id" , nullable = false )
-    private Long studentId;
+    @Column(nullable = false)
+    private String studentAlias;
 
-    @Column (name = "lecture_id" , nullable = false)
-    private Long lectureId;
+    @Column(nullable = false)
+    private String lectureAlias;
 }

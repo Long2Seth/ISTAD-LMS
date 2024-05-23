@@ -21,49 +21,57 @@ public class ShiftController {
     private final ShiftService shiftService;
 
     @PostMapping
-    ResponseEntity<Void> createNewShift(@Valid @RequestBody ShiftRequest shiftRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    void createShift(@Valid @RequestBody ShiftRequest shiftRequest) {
 
-        shiftService.createNewShift(shiftRequest);
+        shiftService.createShift(shiftRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{alias}")
-    ResponseEntity<ShiftDetailResponse> getShiftByAlias(@PathVariable String alias) {
+    ShiftDetailResponse getShiftByAlias(@PathVariable String alias) {
 
-        ShiftDetailResponse shiftDetailResponse = shiftService.getShiftByAlias(alias);
+        return shiftService.getShiftByAlias(alias);
 
-        return ResponseEntity.ok(shiftDetailResponse);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ShiftDetailResponse>> getAllShift(
+    public Page<ShiftDetailResponse> getAllShifts(
 
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        Page<ShiftDetailResponse> shiftPage = shiftService.getAllShift(page, size);
+        return shiftService.getAllShifts(page, size);
 
-        return ResponseEntity.ok(shiftPage);
     }
 
     @PutMapping("/{alias}")
-    public ResponseEntity<ShiftResponse> updateShift(@PathVariable String alias,
-                                                     @RequestBody ShiftUpdateRequest shiftUpdateRequest) {
+    public ShiftResponse updateShift(@PathVariable String alias,
+                                     @Valid @RequestBody ShiftUpdateRequest shiftUpdateRequest) {
 
-        ShiftResponse shiftUpdateResponse = shiftService.updateByAlias(alias, shiftUpdateRequest);
+        return shiftService.updateByAlias(alias, shiftUpdateRequest);
 
-        return ResponseEntity.ok(shiftUpdateResponse);
     }
 
 
     @DeleteMapping("/{alias}")
-    public ResponseEntity<Void> deleteShift(@PathVariable String alias) {
+    public void deleteShift(@PathVariable String alias) {
 
         shiftService.deleteShiftByAlias(alias);
 
-        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{alias}/enable")
+    void enableShift(@PathVariable String alias){
+
+        shiftService.enableShiftByAlias(alias);
+    }
+
+    @PatchMapping("/{alias}/disable")
+    void disableShift(@PathVariable String alias){
+
+        shiftService.disableShiftByAlias(alias);
     }
 
     @GetMapping("/filter")
@@ -71,9 +79,9 @@ public class ShiftController {
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        return shiftService.filterShift(filterDto,page,size);
+        return shiftService.filterShift(filterDto, page, size);
     }
 }

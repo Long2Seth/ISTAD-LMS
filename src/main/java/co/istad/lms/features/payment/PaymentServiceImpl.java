@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
 
     private final PaymentRepository paymentRepository;
@@ -32,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         PageRequest pageRequest = PageRequest.of(page, limit);
         Page<Payment> payments = paymentRepository.findAll(pageRequest);
-        return payments.map(paymentMapper::toPaymentResponse) ;
+        return payments.map(paymentMapper::toPaymentResponse);
 
     }
 
@@ -49,7 +49,11 @@ public class PaymentServiceImpl implements PaymentService{
     public PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest) {
         Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Payment with uuid = %s have been not found", uuid))
+                );
+
+
         payment.setPaidAmount(paymentRequest.paidAmount());
         payment.setPaymentDate(paymentRequest.paymentDate());
         payment.setDiscount(paymentRequest.discount());
@@ -58,8 +62,6 @@ public class PaymentServiceImpl implements PaymentService{
         payment.setYear(paymentRequest.year());
         payment.setSemester(paymentRequest.semester());
         payment.setRemark(paymentRequest.remark());
-        payment.setStatus(paymentRequest.status());
-        payment.setIsDeleted(paymentRequest.isDeleted());
         paymentRepository.save(payment);
         return paymentMapper.toPaymentResponse(payment);
     }

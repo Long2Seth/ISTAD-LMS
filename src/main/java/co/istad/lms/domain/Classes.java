@@ -21,16 +21,15 @@ public class Classes extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "alias" , nullable = false)
+    @Column(nullable = false, unique = true)
     private String alias;
 
-    @Column( name = "class_name" , nullable = false)
+    @Column(nullable = false)
     private String className;
 
-    @Column( name = "description" , nullable = false)
     private String description;
 
-    @Column( name = "is_deleted" , nullable = false)
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @ManyToMany(mappedBy = "classes")

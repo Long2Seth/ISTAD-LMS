@@ -7,80 +7,92 @@ import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
 import org.springframework.data.domain.Page;
 
+/**
+ * Business logic interface which contains to manage degrees
+ *
+ * @author Pov Soknem
+ * @since 1.0 (2024)
+ */
 public interface DegreeService {
 
     /**
      * Creates a new degree.
      *
-     * @param degreeRequest the request object containing degree details
-     *                      finished
+     * @param degreeRequest is the request object containing degree details
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     void createDegree(DegreeRequest degreeRequest);
 
     /**
      * Retrieves the details of a degree by its alias.
      *
-     * @param alias the alias of the degree
-     * @return the response object containing the degree details
-     * finished
+     * @param alias is the unique name of degree
+     * @return {@link DegreeDetailResponse}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     DegreeDetailResponse getDegreeByAlias(String alias);
 
     /**
-     * Retrieves the details of a degree by its level.
-     *
-     * @param level the level of the degree
-     * @return the response object containing the degree details
-     * @apiNote finished
-     */
-
-    /**
      * Retrieves a paginated list of all degrees.
      *
-     * @param page the page number to retrieve
-     * @param size the size of the page to retrieve
-     * @return a paginated list of degrees
+     * @param page is the current page number to retrieve
+     * @param size is the size of record per page to retrieve
+     * @return {@link Page<DegreeDetailResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     Page<DegreeDetailResponse> getAllDegrees(int page, int size);
 
     /**
-     * Retrieves a paginated list of all degrees.
-     *
-     * @param pageNumber the page number to retrieve
-     * @param pageSize   the size of the page to retrieve
-     * @return a paginated list of degrees
-     */
-
-    /**
      * Updates an existing degree by its alias.
      *
-     * @param alias               the alias of the degree to update
-     * @param degreeUpdateRequest the request object containing the updated degree details
-     * @return the response object containing the updated degree details
+     * @param alias               is the unique name of degree
+     * @param degreeUpdateRequest is the request object containing the updated degree details
+     * @return {@link DegreeResponse}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     DegreeResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest);
 
     /**
-     * Updates an existing degree by its level.
-     *
-     * @param level               the level of the degree to update
-     * @param degreeUpdateRequest the request object containing the updated degree details
-     * @return the response object containing the updated degree details
-     */
-
-    /**
      * Deletes a degree by its alias.
      *
-     * @param alias the alias of the degree to delete
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     void deleteDegreeByAlias(String alias);
 
 
     /**
-     * @param filterDto use for filter by any field
-     * @param page      the current page number
-     * @param size      size of page
-     * @return return Detail of degree
+     * Enable degree by alias
+     *
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void enableDegreeByAlias(String alias);
+
+    /**
+     * Disable degree by alias
+     *
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void disableDegreeByAlias(String alias);
+
+    /**
+     * Filters degree based on the specified criteria and retrieves a paginated list of results.
+     *
+     * @param filterDto is the request object use for filter by any column
+     * @param page      is the current page number
+     * @param size      size of record per page to retrieve
+     * @return {@link Page<DegreeDetailResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     Page<DegreeDetailResponse> filterDegree(BaseSpecification.FilterDto filterDto, int page, int size);
 }

@@ -6,73 +6,95 @@ import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
 import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.admission.dto.AdmissionResponse;
 import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
+import co.istad.lms.features.faculties.dto.FacultyDetailResponse;
 import org.springframework.data.domain.Page;
 
 
+/**
+ * Business logic interface which contains to manage admissions
+ *
+ * @author Pov Soknem
+ * @since 1.0 (2024)
+ */
 public interface AdmissionService {
 
     /**
      * Creates a new admission.
      *
-     * @param admissionCreateRequest the request object containing admission details for create admission
-     * @return the response object containing the created admission details
+     * @param admissionCreateRequest is the request object containing admission details for create admission
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     void createAdmission(AdmissionCreateRequest admissionCreateRequest);
 
     /**
      * Retrieves the details of an admission by its UUID.
      *
-     * @param uuid the UUID of the admission
-     * @return the response object containing the admission details
+     * @param uuid is the unique identifier of admission
+     * @return {@link AdmissionDetailResponse}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     AdmissionDetailResponse getAdmissionByUuid(String uuid);
 
     /**
      * Retrieves a paginated list of all admissions.
      *
-     * @param page the page number to retrieve
-     * @param size the size of the page to retrieve
-     * @return a paginated list of admissions
+     * @param page is the page number to retrieve
+     * @param size is the size of the page to retrieve
+     * @return  * @return {@link Page<AdmissionResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     Page<AdmissionResponse> getAllAdmissions(int page, int size);
 
     /**
      * Updates an existing admission.
      *
-     * @param admissionUuid    the UUID of the admission to update
+     * @param admissionUuid is the unique identifier of admission
      * @param admissionRequest the request object containing the updated admission details
-     * @return the response object containing the updated admission details
+     * @return {@link AdmissionResponse}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionRequest);
 
     /**
-     * Deletes an admission by its UUID.
+     * Delete admission by  UUID.
      *
-     * @param admissionUuid the UUID of the admission to delete
+     * @param admissionUuid is the unique identifier of admission
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     void deleteAdmission(String admissionUuid);
 
     /**
-     * Disables an admission by its UUID.
+     * Disables  admission by  UUID.
      *
-     * @param uuid the UUID of the admission to disable
+     * @param uuid is the unique identifier of admission
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
-    void disableAdmission(String uuid);
+    void disableAdmissionByUuid(String uuid);
 
     /**
      * Enables an admission by its UUID.
      *
-     * @param uuid the UUID of the admission to enable
+     * @param uuid is the unique identifier of admission
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
-    void enableAdmission(String uuid);
+    void enableAdmissionByUuid(String uuid);
 
     /**
      * Filters admissions based on the provided criteria.
      *
-     * @param filterDto use for filter any column, any operation
-     * @param page     the page number to retrieve
-     * @param size     the size of the page to retrieve
-     * @return a paginated list of filtered admissions
+     * @param filterDto is the object use for filter any column, any operation
+     * @param page      is the page number of current to retrieve
+     * @param size      is the size of record per page
+     * @return {@link  Page<AdmissionDetailResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
      */
     Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int page, int size);
 }

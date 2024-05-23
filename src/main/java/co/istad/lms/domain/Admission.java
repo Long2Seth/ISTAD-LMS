@@ -17,54 +17,51 @@ import java.time.LocalDate;
 public class Admission extends Auditable {
 
     @Id
-    @Column(name = "id", nullable = false, length = 50)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", nullable = false, length = 50,unique = true)
+    @Column(nullable = false, unique = true)
     private String uuid;
 
-    @Column(name = "name_en", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String nameEn;
 
-    @Column(name = "name_kh", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String nameKh;
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(name = "dob", nullable = false)
+    @Column(nullable = false)
     private LocalDate dob;
 
-    @Column(name = "gender", nullable = false, length = 20)
+    @Column(nullable = false, length = 20)
     private String gender;
 
-    @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "address")
     private String address;
 
-    @Column(name = "family_phone_number", length = 50)
+    @Column(length = 50)
     private String familyPhoneNumber;
 
-    @Column(name = "biography")
     private String biography;
 
     @ManyToOne
-    @JoinColumn(name = "shift_id")
+    @JoinColumn(name = "shift_id",nullable = false)
     private Shift shift;
 
     @ManyToOne
-    @JoinColumn(name = "study_program_id")
+    @JoinColumn(name = "study_program_id",nullable = false)
     private StudyProgram studyProgram;
 
     @ManyToOne
-    @JoinColumn(name = "degree_id")
+    @JoinColumn(name = "degree_id",nullable = false)
     private Degree degree;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted=false;
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
 
 
 }

@@ -17,20 +17,19 @@ public class Degree extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50, name = "alias", unique = true)
+    @Column(nullable = false, unique = true)
     private String alias;
 
-    @Column(nullable = false, length = 50, name = "level", unique = true)
+    @Column(nullable = false, length = 50)
     private String level;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean is_deleted=false;
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
 
-    @Column(name = "is_draft", nullable = false)
-    private Boolean is_draft=false;
+    @Column(nullable = false)
+    private Boolean isDraft = false;
 
 
 }

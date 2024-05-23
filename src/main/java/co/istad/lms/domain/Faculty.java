@@ -18,19 +18,19 @@ public class Faculty extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "alias")
+    @Column(nullable = false,unique = true)
     private String alias;
 
-    @Column(nullable = false, length = 50, name = "name")
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(name = "description")
+    String logo;
+
     private String description;
 
-    @Column(name = "address")
     private String address;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column( nullable = false)
     private Boolean isDeleted=false;
 
 

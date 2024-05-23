@@ -18,23 +18,23 @@ public class Course extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "alias" , nullable = false)
+    @Column(nullable = false, unique = true)
     private String alias;
 
-    @Column( name = "status" , nullable = false)
+    @Column(nullable = false)
     private Integer status;
 
-    @Column( name = "is_deleted" , nullable = false)
+    @Column(nullable = false)
     private Boolean isDeleted;
 
-    @Column( name = "subject_id" , nullable = false)
-    private Long subjectId;
+    @Column(nullable = false)
+    private String subjectAlias;
 
-    @Column( name = "instructor_id" , nullable = false)
-    private Long instructorId;
+    @Column(nullable = false)
+    private String instructorAlias;
 
-    @Column( name = "class_id" , nullable = false)
-    private Long classId;
+    @Column(nullable = false)
+    private String classAlias;
 
 
 }

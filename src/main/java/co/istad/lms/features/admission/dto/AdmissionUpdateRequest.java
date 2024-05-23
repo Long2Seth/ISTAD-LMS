@@ -1,8 +1,5 @@
 package co.istad.lms.features.admission.dto;
 
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -16,7 +13,7 @@ public record AdmissionUpdateRequest(
 
         LocalDate dob,
 
-        @Size(max = 20, message = "Gender cannot be longer than 20 characters")
+        @Size(max = 10, message = "Gender cannot be longer than 10 characters")
         String gender,
 
         String avatar,

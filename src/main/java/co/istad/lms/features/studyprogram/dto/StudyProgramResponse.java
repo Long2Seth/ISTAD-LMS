@@ -4,7 +4,6 @@ public record StudyProgramResponse(
 
         String alias,
         String studyProgramName,
-        String description,
-        Long facultyId
+        String description
 ) {
 }

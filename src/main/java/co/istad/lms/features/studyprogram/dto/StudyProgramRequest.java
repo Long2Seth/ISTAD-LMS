@@ -20,7 +20,7 @@ public record StudyProgramRequest(
         @NotNull(message = "isDeleted is required")
         Boolean isDeleted,
 
-        @NotNull(message = "Faculty ID is required")
-        Long facultyId
+        @NotBlank
+        String facultyAlias
 ) {
 }

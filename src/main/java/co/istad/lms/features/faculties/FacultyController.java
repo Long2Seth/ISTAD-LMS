@@ -25,60 +25,67 @@ public class FacultyController {
 
 
     @PostMapping
-    ResponseEntity<Void> createNewDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    void createNewDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
 
-        facultyService.createNewFaculty(facultyRequest);
+        facultyService.createFaculty(facultyRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{alias}")
-    ResponseEntity<FacultyDetailResponse> getFacultyByAlias(@PathVariable String alias) {
+    FacultyDetailResponse getFacultyByAlias(@PathVariable String alias) {
 
-        FacultyDetailResponse facultyDetailResponse = facultyService.getFacultyByAlias(alias);
-
-        return ResponseEntity.ok(facultyDetailResponse);
+        return facultyService.getFacultyByAlias(alias);
     }
 
     @GetMapping
-    public ResponseEntity<Page<FacultyDetailResponse>> getAllFaculty(
+    public Page<FacultyDetailResponse> getAllFaculties(
 
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        Page<FacultyDetailResponse> faculties = facultyService.getAllFaculties(page, size);
+        return facultyService.getAllFaculties(page, size);
 
-        return ResponseEntity.ok(faculties);
     }
 
     @PutMapping("/{alias}")
-    public ResponseEntity<FacultyResponse> updateDegree(@PathVariable String alias,
-                                                        @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
+    public FacultyResponse updateDegree(@PathVariable String alias,
+                                        @Valid @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
 
-        FacultyResponse updateFaculty = facultyService.updateFacultyByAlias(alias, facultyUpdateRequest);
+        return facultyService.updateFacultyByAlias(alias, facultyUpdateRequest);
 
-        return ResponseEntity.ok(updateFaculty);
     }
 
     @DeleteMapping("/{alias}")
-    public ResponseEntity<Void> deleteFaculty(@PathVariable String alias) {
+    public void deleteFaculty(@PathVariable String alias) {
 
         facultyService.deleteFacultyByAlias(alias);
 
-        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{alias}/enable")
+    void enableFaculty(@PathVariable String alias){
+
+        facultyService.enableFacultyByAlias(alias);
+    }
+
+    @PatchMapping("/{alias}/disable")
+    void disableFaculty(@PathVariable String alias){
+
+        facultyService.disableFacultyByAlias(alias);
     }
 
 
     @GetMapping("/filter")
-    public Page<FacultyDetailResponse> filterDegree(
+    public Page<FacultyDetailResponse> filterDegrees(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        return facultyService.filter(filterDto,page,size);
+        return facultyService.filterFaculties(filterDto,page,size);
     }
 
 }

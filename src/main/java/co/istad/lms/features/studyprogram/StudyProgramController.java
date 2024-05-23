@@ -25,60 +25,68 @@ public class StudyProgramController {
     private final StudyProgramService studyProgramService;
 
     @PostMapping
-    ResponseEntity<Void> createNewStudyProgram(@Valid @RequestBody StudyProgramRequest studyProgramRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createStudyProgram(@Valid @RequestBody StudyProgramRequest studyProgramRequest) {
 
         studyProgramService.createStudyProgram(studyProgramRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
     @GetMapping("/{alias}")
-    ResponseEntity<StudyProgramDetailResponse> getStudyProgramByAlias(@PathVariable String alias) {
+    StudyProgramDetailResponse getStudyProgramByAlias(@PathVariable String alias) {
 
-        StudyProgramDetailResponse studyProgramDetailResponse = studyProgramService.getStudyProgramByAlias(alias);
+        return studyProgramService.getStudyProgramByAlias(alias);
 
-        return ResponseEntity.ok(studyProgramDetailResponse);
     }
 
     @GetMapping
-    public ResponseEntity<Page<StudyProgramDetailResponse>> getAllShift(
+    public Page<StudyProgramDetailResponse> getAllStudyPrograms(
 
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        Page<StudyProgramDetailResponse> studyProgramPage = studyProgramService.getAllStudyProgram(page, size);
+        return studyProgramService.getAllStudyPrograms(page, size);
 
-        return ResponseEntity.ok(studyProgramPage);
     }
 
     @PutMapping("/{alias}")
-    public ResponseEntity<StudyProgramResponse> updateStudyProgram(@PathVariable String alias,
-                                                                   @RequestBody StudyProgramUpdateRequest studyProgramUpdateRequest) {
+    public StudyProgramResponse updateStudyProgram(@PathVariable String alias,
+                                                   @Valid @RequestBody StudyProgramUpdateRequest studyProgramUpdateRequest) {
 
-        StudyProgramResponse shiftUpdateResponse = studyProgramService.updateStudyProgramByAlias(alias, studyProgramUpdateRequest);
+        return studyProgramService.updateStudyProgramByAlias(alias, studyProgramUpdateRequest);
 
-        return ResponseEntity.ok(shiftUpdateResponse);
     }
 
     @DeleteMapping("/{alias}")
-    public ResponseEntity<Void> deleteStudyProgram(@PathVariable String alias) {
+    public void deleteStudyProgram(@PathVariable String alias) {
 
         studyProgramService.deleteStudyProgramByAlias(alias);
 
-        return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{alias}/enable")
+    void enableStudyProgram(@PathVariable String alias){
+
+        studyProgramService.enableStudyProgramByAlias(alias);
+    }
+
+    @PatchMapping("/{alias}/disable")
+    void disableStudyProgram(@PathVariable String alias){
+
+        studyProgramService.disableStudyProgramByAlias(alias);
+    }
+
 
     @GetMapping("/filter")
     public Page<StudyProgramDetailResponse> filterStudyPrograms(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "25") int size
     ) {
 
-        return studyProgramService.filterStudyProgram(filterDto,page,size);
+        return studyProgramService.filterStudyPrograms(filterDto, page, size);
     }
 
 }

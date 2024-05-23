@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                String.format("User with alias = %s was not found.", alias)
+                                "User has not been found ! "
                         ));
 
         return userMapper.toUserResponse(user);
@@ -144,7 +144,6 @@ public class UserServiceImpl implements UserService {
         user.setKhanOrDistrict(userRequest.khanOrDistrict());
         user.setSangkatOrCommune(userRequest.sangkatOrCommune());
         user.setStreet(userRequest.street());
-
 
         // Update roles
         List<Authority> authorities = new ArrayList<>();
