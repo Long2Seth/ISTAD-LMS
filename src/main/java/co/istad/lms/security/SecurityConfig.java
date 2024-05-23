@@ -56,10 +56,10 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/", "/v3/api-docs/**", "/swagger-ui/**", "/v2/api-docs/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("api/v1/files/**", "images/**").permitAll()
                         .requestMatchers("/api/v1/receipts/**").permitAll()
-                        .requestMatchers("/api/v1/users/login").permitAll()
+                        .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/payments/**").permitAll()
                         .anyRequest().authenticated()
                 )
