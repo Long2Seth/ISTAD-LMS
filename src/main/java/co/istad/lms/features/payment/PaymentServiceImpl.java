@@ -24,7 +24,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponse createPayment(PaymentRequest paymentRequest) {
-        return null;
+
+        Payment payment = paymentMapper.toPayment(paymentRequest);
+        payment.setPaidAmount(paymentRequest.paidAmount());
+        payment.setPaymentDate(paymentRequest.paymentDate());
+        payment.setDiscount(paymentRequest.discount());
+        payment.setDueAmount(paymentRequest.dueAmount());
+        payment.setTotalAmount(paymentRequest.totalAmount());
+        payment.setYear(paymentRequest.year());
+        payment.setSemester(paymentRequest.semester());
+        payment.setRemark(paymentRequest.remark());
+        paymentRepository.save(payment);
+        return paymentMapper.toPaymentResponse(payment);
     }
 
     @Override
