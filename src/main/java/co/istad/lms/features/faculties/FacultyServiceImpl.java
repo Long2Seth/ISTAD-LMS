@@ -23,13 +23,17 @@ import org.springframework.web.server.ResponseStatusException;
 public class FacultyServiceImpl implements FacultyService{
 
     private final FacultyRepository facultyRepository;
+
     private final FacultyMapper facultyMapper;
+
     private final BaseSpecification<Faculty> baseSpecification;
+
     @Override
     public void createFaculty(FacultyRequest facultyRequest) {
 
         //validate faculty from DTO by alias
         if(facultyRepository.existsByAlias(facultyRequest.alias())){
+
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format("Faculty = %s already exists.", facultyRequest.alias()));
         }
@@ -50,6 +54,7 @@ public class FacultyServiceImpl implements FacultyService{
 
         //find faculty in database by alias
         Faculty faculty = facultyRepository.findByAlias(alias)
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Faculty = %s has not been found.", alias)));
 

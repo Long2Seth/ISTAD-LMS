@@ -20,7 +20,7 @@ public interface FacultyService {
 
 
     /**
-     *Create new faculty
+     * Create new faculty
      *
      * @param facultyRequest is the object that contain information to create new faculty
      * @author Pov Soknem
@@ -38,11 +38,11 @@ public interface FacultyService {
     FacultyDetailResponse getFacultyByAlias(String alias);
 
     /**
-     * Retrieves a paginated list of all admissions.
+     * Retrieves a paginated list of all faculties.
      *
      * @param page is the page number to retrieve
      * @param size is the size of the page to retrieve
-     * @return  * @return {@link Page< FacultyDetailResponse >}
+     * @return * @return {@link Page<FacultyDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
@@ -52,7 +52,7 @@ public interface FacultyService {
     /**
      * Update faculty by alias
      *
-     * @param alias is the unique name
+     * @param alias                is the unique name
      * @param facultyUpdateRequest is the object that contain entity information to update
      * @return {@link FacultyResponse}
      * @author Pov Soknem
@@ -91,10 +91,11 @@ public interface FacultyService {
 
 
     /**
+     * filter faculty by dynamic field and operation
      *
      * @param filterDto is the object that use for filter
-     * @param page is the current page request
-     * @param size is the size of record per page
+     * @param page      is the current page request
+     * @param size      is the size of record per page
      * @return {@link Page<FacultyDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
