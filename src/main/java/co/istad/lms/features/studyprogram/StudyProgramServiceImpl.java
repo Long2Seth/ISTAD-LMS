@@ -48,16 +48,16 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         }
 
         //validate degree by alias from DTO
-        Degree degree=degreeRepository.findByAlias(studyProgramRequest.alias())
+        Degree degree=degreeRepository.findByAlias(studyProgramRequest.degreeAlias())
 
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("degree = %s has not been found.", studyProgramRequest.alias())));
+                        String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
 
         //validate faculty by alias from DTO
-        Faculty faculty=facultyRepository.findByAlias(studyProgramRequest.alias())
+        Faculty faculty=facultyRepository.findByAlias(studyProgramRequest.facultyAlias())
 
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found.", studyProgramRequest.alias())));
+                        String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
 
         //map from DTO to entity
         StudyProgram studyProgram=studyProgramMapper.fromStudyProgramRequest(studyProgramRequest);
