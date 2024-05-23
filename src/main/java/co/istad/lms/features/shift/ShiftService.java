@@ -89,5 +89,5 @@ public interface ShiftService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ShiftDetailResponse> filterShift(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int page, int size);
 }

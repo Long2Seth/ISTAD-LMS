@@ -10,14 +10,13 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface StudyProgramMapper {
 
+    @Mapping(target = "degree",ignore = true)
+    @Mapping(target = "faculty",ignore = true)
     StudyProgram fromStudyProgramRequest(StudyProgramRequest studyProgramRequest);
 
     StudyProgramDetailResponse toStudyProgramDetailResponse(StudyProgram studyProgram);
@@ -25,6 +24,8 @@ public interface StudyProgramMapper {
     StudyProgramResponse toStudyProgramResponse(StudyProgram studyProgram);
 
 
+    @Mapping(target = "degree", ignore = true)
+    @Mapping(target = "faculty", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateStudyProgramFromRequest(@MappingTarget StudyProgram studyProgram, StudyProgramUpdateRequest studyProgramUpdateRequest);
 }

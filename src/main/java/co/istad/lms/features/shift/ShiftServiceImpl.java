@@ -82,6 +82,21 @@ public class ShiftServiceImpl implements ShiftService{
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Shift = %s has not been found.", alias)));
 
+        //check null alias from DTO
+        if(shiftUpdateRequest.alias()!=null){
+
+            //validate alias from dto with original alias
+            if(!alias.equalsIgnoreCase(shiftUpdateRequest.alias())){
+
+                //validate new alias is conflict with other alias or not
+                if(shiftRepository.existsByAlias(shiftUpdateRequest.alias())){
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            String.format("Shift = %s already exist.", shiftUpdateRequest.alias()));
+                }
+            }
+        }
+
         //map from DTO to entity
         shiftMapper.updateShiftFromRequest(shift, shiftUpdateRequest);
 
@@ -136,7 +151,7 @@ public class ShiftServiceImpl implements ShiftService{
     }
 
     @Override
-    public Page<ShiftDetailResponse> filterShift(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int page, int size) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");

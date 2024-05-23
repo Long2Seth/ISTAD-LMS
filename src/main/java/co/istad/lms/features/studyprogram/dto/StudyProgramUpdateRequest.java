@@ -20,6 +20,8 @@ public record StudyProgramUpdateRequest(
 
         Boolean isDeleted,
 
-        Long facultyId
+        String facultyAlias,
+
+        String degreeAlias
 ) {
 }

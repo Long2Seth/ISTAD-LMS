@@ -80,7 +80,7 @@ public class DegreeController {
             @RequestParam(defaultValue = "25") int size
     ) {
 
-        return degreeService.filterDegree(filterDto, page, size);
+        return degreeService.filterDegrees(filterDto, page, size);
     }
 
 

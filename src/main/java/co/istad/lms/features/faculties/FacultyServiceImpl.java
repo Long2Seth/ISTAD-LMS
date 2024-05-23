@@ -93,7 +93,7 @@ public class FacultyServiceImpl implements FacultyService{
                 if(facultyRepository.existsByAlias(facultyUpdateRequest.alias())){
 
                     throw new ResponseStatusException(HttpStatus.CONFLICT,
-                            String.format("Degree = %s already exist.", facultyUpdateRequest.alias()));
+                            String.format("Faculty = %s already exist.", facultyUpdateRequest.alias()));
                 }
             }
         }

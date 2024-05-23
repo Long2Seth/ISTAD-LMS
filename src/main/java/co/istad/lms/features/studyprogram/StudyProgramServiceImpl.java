@@ -2,8 +2,13 @@ package co.istad.lms.features.studyprogram;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Degree;
+import co.istad.lms.domain.Faculty;
 import co.istad.lms.domain.Shift;
 import co.istad.lms.domain.StudyProgram;
+import co.istad.lms.features.degree.DegreeRepository;
+import co.istad.lms.features.degree.dto.DegreeResponse;
+import co.istad.lms.features.faculties.FacultyRepository;
+import co.istad.lms.features.faculties.dto.FacultyResponse;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
@@ -24,8 +29,15 @@ import org.springframework.web.server.ResponseStatusException;
 public class StudyProgramServiceImpl implements StudyProgramService{
 
     private final StudyProgramRepository studyProgramRepository;
+
     private final StudyProgramMapper studyProgramMapper;
+
     private final BaseSpecification<StudyProgram> baseSpecification;
+
+    private final DegreeRepository degreeRepository;
+
+    private final FacultyRepository facultyRepository;
+
     @Override
     public void createStudyProgram(StudyProgramRequest studyProgramRequest) {
 
@@ -81,6 +93,49 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Study program = %s was not found.", alias)));
+
+        //check null alias from DTO
+        if(studyProgramUpdateRequest.alias()!=null){
+
+            //validate alias from dto with original alias
+            if(!alias.equalsIgnoreCase(studyProgramUpdateRequest.alias())){
+
+                //validate new alias is conflict with other alias or not
+                if(studyProgramRepository.existsByAlias(studyProgramUpdateRequest.alias())){
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            String.format("StudyProgram = %s already exist.", studyProgramUpdateRequest.alias()));
+                }
+            }
+        }
+
+        //validate degree from dto with entity
+        //if the same, don't update
+        if (studyProgramUpdateRequest.degreeAlias() != null &&
+                !studyProgramUpdateRequest.degreeAlias().equals(studyProgram.getDegree().getAlias())) {
+
+            //find degree in database with uuid
+            Degree degree = degreeRepository.findByAlias(studyProgramUpdateRequest.degreeAlias())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Degree = %s has not been found", studyProgramUpdateRequest.degreeAlias())));
+
+            //set new degree
+            studyProgram.setDegree(degree);
+        }
+
+        //validate faculty from dto with entity
+        //if the same, don't update
+        if (studyProgramUpdateRequest.degreeAlias() != null &&
+                !studyProgramUpdateRequest.facultyAlias().equals(studyProgram.getFaculty().getAlias())) {
+
+            //find degree in database with uuid
+            Faculty faculty = facultyRepository.findByAlias(studyProgramUpdateRequest.facultyAlias())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Faculty = %s has not been found", studyProgramUpdateRequest.facultyAlias())));
+
+            //set new faculty
+            studyProgram.setFaculty(faculty);
+        }
 
         //map from DTO to entity
         studyProgramMapper.updateStudyProgramFromRequest(studyProgram, studyProgramUpdateRequest);
