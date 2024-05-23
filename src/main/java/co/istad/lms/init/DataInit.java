@@ -2,7 +2,10 @@ package co.istad.lms.init;
 
 
 import co.istad.lms.domain.Authority;
+import co.istad.lms.domain.User;
+import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.user.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +18,7 @@ import java.util.UUID;
 public class DataInit {
 
     private final AuthorityRepository authorityRepository;
+    private final UserRepository userRepository;
 
     @PostConstruct
     void initRole() {
@@ -51,6 +55,47 @@ public class DataInit {
         }
 
     }
+
+    @PostConstruct
+    void initUser() {
+        // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
+        if (userRepository.count() < 1) {
+            User user = new User();
+            user.setAlias("admin");
+            user.setNameEn("Admin");
+            user.setNameKh("Admin");
+            user.setUsername("admin");
+            user.setEmail("admin123@gmail.com");
+            user.setPassword("admin");
+            user.setGender("male");
+            user.setProfileImage("https://newogle.com");
+            user.setPhoneNumber("0123456789");
+            user.setCityOrProvince("Phnom Penh");
+            user.setKhanOrDistrict("Dangkao");
+            user.setSangkatOrCommune("Dangkao");
+            user.setVillageOrPhum("Dangkao");
+            user.setStreet("Dangkao");
+            user.setIsBlocked(false);
+            user.setIsDeleted(false);
+
+            // BirthPlace
+            BirthPlace birthPlace = new BirthPlace();
+            birthPlace.setCityOrProvince("Phnom Penh");
+            birthPlace.setKhanOrDistrict("Dangkao");
+            birthPlace.setSangkatOrCommune("Dangkao");
+            birthPlace.setVillageOrPhum("Dangkao");
+            birthPlace.setStreet("Dangkao");
+            user.setBirthPlace(birthPlace);
+
+            // Authorities
+            List<Authority>  authorities=  authorityRepository.findAll();
+            System.out.println(authorities);
+            user.setAuthorities(authorities);
+
+            userRepository.save(user);
+        }
+
+        }
 
 
 }

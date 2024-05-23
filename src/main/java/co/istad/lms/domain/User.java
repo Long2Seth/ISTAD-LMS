@@ -57,6 +57,7 @@ public class User extends Auditable {
     private String cityOrProvince;
     private String khanOrDistrict;
     private String sangkatOrCommune;
+    private String villageOrPhum;
     private String street;
 
     @Column(name = "birth_place", columnDefinition = "jsonb")
