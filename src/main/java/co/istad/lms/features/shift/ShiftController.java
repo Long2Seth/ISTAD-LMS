@@ -82,6 +82,6 @@ public class ShiftController {
             @RequestParam(defaultValue = "25") int size
     ) {
 
-        return shiftService.filterShift(filterDto, page, size);
+        return shiftService.filterShifts(filterDto, page, size);
     }
 }

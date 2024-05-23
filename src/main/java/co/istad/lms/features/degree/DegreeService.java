@@ -94,5 +94,5 @@ public interface DegreeService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<DegreeDetailResponse> filterDegree(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<DegreeDetailResponse> filterDegrees(BaseSpecification.FilterDto filterDto, int page, int size);
 }

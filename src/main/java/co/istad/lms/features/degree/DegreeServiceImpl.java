@@ -157,7 +157,7 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     @Override
-    public Page<DegreeDetailResponse> filterDegree(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<DegreeDetailResponse> filterDegrees(BaseSpecification.FilterDto filterDto, int page, int size) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
