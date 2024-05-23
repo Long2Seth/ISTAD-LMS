@@ -8,6 +8,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -53,7 +54,7 @@ public class EntityAuditorAware implements AuditorAware<String> {
 
         Object principal = authentication.getPrincipal();
 
-        if (principal instanceof CustomUserDetails user) {
+        if (principal instanceof User user) {
             return Optional.of(user.getUsername());
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user details");

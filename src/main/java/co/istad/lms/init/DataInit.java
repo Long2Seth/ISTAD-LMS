@@ -88,6 +88,10 @@ public class DataInit {
                 birthPlace.setStreet("Dangkao");
                 user.setBirthPlace(birthPlace);
 
+                user.setAccountNonExpired(true);
+                user.setAccountNonLocked(true);
+                user.setCredentialsNonExpired(true);
+
                 // Authorities
                 List<Authority> authorities = authorityRepository.findAll();
                 System.out.println(authorities);

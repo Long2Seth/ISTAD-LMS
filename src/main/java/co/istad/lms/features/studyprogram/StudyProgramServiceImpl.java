@@ -44,14 +44,32 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         //validate studyProgram from dto by alias
         if (studyProgramRepository.existsByAlias(studyProgramRequest.alias())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Study program = %s already exists.", studyProgramRequest.alias()));
+                    String.format("Study program = %s has already existed.", studyProgramRequest.alias()));
         }
+
+        //validate degree by alias from DTO
+        Degree degree=degreeRepository.findByAlias(studyProgramRequest.alias())
+
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("degree = %s has not been found.", studyProgramRequest.alias())));
+
+        //validate faculty by alias from DTO
+        Faculty faculty=facultyRepository.findByAlias(studyProgramRequest.alias())
+
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Faculty = %s has not been found.", studyProgramRequest.alias())));
 
         //map from DTO to entity
         StudyProgram studyProgram=studyProgramMapper.fromStudyProgramRequest(studyProgramRequest);
 
         //set isDeleted to false(enable)
         studyProgram.setIsDeleted(false);
+
+        //set degree
+        studyProgram.setDegree(degree);
+
+        //set faculty
+        studyProgram.setFaculty(faculty);
 
         //save to database
         studyProgramRepository.save(studyProgram);
