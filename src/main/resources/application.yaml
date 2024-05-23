@@ -60,4 +60,4 @@ spring:
         starttls:
           enable: true
   profiles:
-    active: dev
+    active: stage
