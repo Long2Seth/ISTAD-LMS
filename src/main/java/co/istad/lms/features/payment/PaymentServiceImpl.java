@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
 
     private final PaymentRepository paymentRepository;
@@ -24,32 +24,8 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public PaymentResponse createPayment(PaymentRequest paymentRequest) {
-        return null;
-    }
 
-    @Override
-    public Page<PaymentResponse> getPayments(int page, int limit) {
-
-        PageRequest pageRequest = PageRequest.of(page, limit);
-        Page<Payment> payments = paymentRepository.findAll(pageRequest);
-        return payments.map(paymentMapper::toPaymentResponse) ;
-
-    }
-
-    @Override
-    public PaymentResponse getPaymentById(Long id) {
-        Payment payment = paymentRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
-        return paymentMapper.toPaymentResponse(payment);
-
-    }
-
-    @Override
-    public PaymentResponse updatePayment(Long id, PaymentRequest paymentRequest) {
-        Payment payment = paymentRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
+        Payment payment = paymentMapper.toPayment(paymentRequest);
         payment.setPaidAmount(paymentRequest.paidAmount());
         payment.setPaymentDate(paymentRequest.paymentDate());
         payment.setDiscount(paymentRequest.discount());
@@ -58,15 +34,52 @@ public class PaymentServiceImpl implements PaymentService{
         payment.setYear(paymentRequest.year());
         payment.setSemester(paymentRequest.semester());
         payment.setRemark(paymentRequest.remark());
-        payment.setStatus(paymentRequest.status());
-        payment.setIsDeleted(paymentRequest.isDeleted());
         paymentRepository.save(payment);
         return paymentMapper.toPaymentResponse(payment);
     }
 
     @Override
-    public PaymentResponse deletePayment(Long id) {
-        Payment payment = paymentRepository.findById(id)
+    public Page<PaymentResponse> getPayments(int page, int limit) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit);
+        Page<Payment> payments = paymentRepository.findAll(pageRequest);
+        return payments.map(paymentMapper::toPaymentResponse);
+
+    }
+
+    @Override
+    public PaymentResponse getPaymentById(String uuid) {
+        Payment payment = paymentRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
+        return paymentMapper.toPaymentResponse(payment);
+
+    }
+
+    @Override
+    public PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest) {
+        Payment payment = paymentRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Payment with uuid = %s have been not found", uuid))
+                );
+
+
+        payment.setPaidAmount(paymentRequest.paidAmount());
+        payment.setPaymentDate(paymentRequest.paymentDate());
+        payment.setDiscount(paymentRequest.discount());
+        payment.setDueAmount(paymentRequest.dueAmount());
+        payment.setTotalAmount(paymentRequest.totalAmount());
+        payment.setYear(paymentRequest.year());
+        payment.setSemester(paymentRequest.semester());
+        payment.setRemark(paymentRequest.remark());
+        paymentRepository.save(payment);
+        return paymentMapper.toPaymentResponse(payment);
+    }
+
+    @Override
+    public PaymentResponse deletePayment(String uuid) {
+        Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
         payment.setIsDeleted(true);

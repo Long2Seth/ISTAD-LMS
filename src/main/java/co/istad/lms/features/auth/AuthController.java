@@ -33,11 +33,11 @@ public class AuthController {
                             schema = @Schema(implementation = AuthRequest.class),
                             examples = @ExampleObject(
                                     value = """
-                        {
-                            "email": "john.doe@example.com",
-                            "password": "password123"
-                        }
-                    """
+                                                {
+                                                    "email": "john.doe@example.com",
+                                                    "password": "password123"
+                                                }
+                                            """
                             )
                     )
             )
@@ -54,10 +54,10 @@ public class AuthController {
                             schema = @Schema(implementation = RefreshTokenRequest.class),
                             examples = @ExampleObject(
                                     value = """
-                        {
-                            "refreshToken": "sample_refresh_token"
-                        }
-                    """
+                                                {
+                                                    "refreshToken": "sample_refresh_token"
+                                                }
+                                            """
                             )
                     )
             )
@@ -75,26 +75,35 @@ public class AuthController {
                             schema = @Schema(implementation = UserRequest.class),
                             examples = @ExampleObject(
                                     value = """
-                        {
-                            "nameEn": "John",
-                            "nameKh": "សុភា",
-                            "userName": "john.doe",
-                            "gender": "Male",
-                            "email": "john.doe@example.com",
-                            "password": "password123",
-                            "profileImage": "http://example.com/profile.jpg",
-                            "phoneNumber": "+123456789",
-                            "cityOrProvince": "Phnom Penh",
-                            "khanOrDistrict": "Chamkar Mon",
-                            "sangkatOrCommune": "Tonle Bassac",
-                            "street": "123",
-                            "authorities": [
-                                {
-                                    "authorityName": "user:write"
-                                }
-                            ]
-                        }
-                    """
+                                                {
+                                                    "alias": "sophea",
+                                                    "nameEn": "sophea",
+                                                    "nameKh": "សុភា",
+                                                    "username": "sophea",
+                                                    "gender": "Male",
+                                                    "email": "sophea@example.com",
+                                                    "password": "password123",
+                                                    "profileImage": "http://example.com/profile.jpg",
+                                                    "phoneNumber": "+123456789",
+                                                    "cityOrProvince": "Phnom Penh",
+                                                    "khanOrDistrict": "Chamkar Mon",
+                                                    "sangkatOrCommune": "Tonle Bassac",
+                                                    "street": "123",
+                                                    "birthPlace": {
+                                                        "cityOrProvince": "string",
+                                                        "khanOrDistrict": "string",
+                                                        "sangkatOrCommune": "string",
+                                                        "villageOrPhum": "string",
+                                                        "street": "string",
+                                                        "houseNumber": "string"
+                                                    },
+                                                    "authorities": [
+                                                        {
+                                                            "authorityName": "user:write"
+                                                        }
+                                                    ]
+                                                }
+                                            """
                             )
                     )
             )

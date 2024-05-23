@@ -6,6 +6,6 @@ import lombok.Builder;
 @Builder
 public record PaymentReceipt
         (
-                Long id
+                String uuid
         ){
 }

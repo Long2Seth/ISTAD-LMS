@@ -56,4 +56,7 @@ public class Payment extends Auditable {
     @ManyToOne
     private Student student;
 
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+    private Receipt receipt;
+
 }

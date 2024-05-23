@@ -27,5 +27,6 @@ public class Receipt extends Auditable {
     private Boolean isDeleted;
 
     @OneToOne
+    @JoinColumn(name = "payment_id")
     private Payment payment;
 }

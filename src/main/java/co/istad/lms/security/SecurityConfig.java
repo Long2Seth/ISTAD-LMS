@@ -59,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("api/v1/files/**", "images/**").permitAll()
                         .requestMatchers("/api/v1/receipts/**").permitAll()
+                        .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/payments/**").permitAll()
                         .anyRequest().authenticated()
                 )

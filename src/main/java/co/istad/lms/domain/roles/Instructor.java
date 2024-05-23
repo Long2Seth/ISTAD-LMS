@@ -21,6 +21,9 @@ public class Instructor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    String uuid;
+
     @OneToOne
     private User user;
 
