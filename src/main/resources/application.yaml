@@ -60,4 +60,4 @@ spring:
         starttls:
           enable: true
   profiles:
-    active: devg
+    active: dev
