@@ -9,12 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class EntityAuditorAware implements AuditorAware<String> {
 
     private final HttpServletRequest request;
@@ -23,26 +25,34 @@ public class EntityAuditorAware implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
 
-        String requestURI = request.getRequestURI();
+        // Skip authentication if the initialization is running
+        if ("true".equals(System.getProperty("dataInit.running"))) {
+            return Optional.of("initializer");
+        }
 
+        // Your existing authentication logic
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        String requestURI = request.getRequestURI();
         String method = request.getMethod();
 
-        // Check if the request URI matches the registration endpoint with POST method
-        if (("POST".equalsIgnoreCase(method) && requestURI.equals("/api/v1/auth/register")) ||
-                ("POST".equalsIgnoreCase(method) && requestURI.equals("/api/v1/admissions"))) {
+        //for admission that don't know username
+        if ("POST".equalsIgnoreCase(method) && requestURI.equals("/api/v1/admissions")) {
             return Optional.of("unknown");
         }
-        //get authentication
+
+        //for user to login
+        if ("POST".equalsIgnoreCase(method) && requestURI.equals("/api/v1/auth/login")) {
+            return Optional.of("user");
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        //validate unauthorized
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please authorize");
         }
 
         Object principal = authentication.getPrincipal();
 
-        //validate user is valid or not
         if (principal instanceof CustomUserDetails user) {
             return Optional.of(user.getUsername());
         } else {
