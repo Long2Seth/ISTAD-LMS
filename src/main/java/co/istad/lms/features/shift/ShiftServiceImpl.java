@@ -144,7 +144,7 @@ public class ShiftServiceImpl implements ShiftService{
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //create a dynamic query specification for filtering Admission entities based on the criteria provided
+        //create a dynamic query specification for filtering Shift entities based on the criteria provided
         Specification<Shift> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition

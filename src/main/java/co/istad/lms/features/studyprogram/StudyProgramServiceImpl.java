@@ -147,7 +147,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //create a dynamic query specification for filtering Admission entities based on the criteria provided
+        //create a dynamic query specification for filtering YearOfStudy entities based on the criteria provided
         Specification<StudyProgram> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition

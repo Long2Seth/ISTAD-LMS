@@ -1,6 +1,6 @@
 package co.istad.lms.config.jpa;
 
-import co.istad.lms.domain.User;
+import co.istad.lms.security.CustomUserDetails;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
@@ -9,11 +9,10 @@ import org.springframework.stereotype.Component;
 import  org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
-
+import  co.istad.lms.domain.User;
 @Component
 public class EntityAuditorAware implements AuditorAware<String> {
 
-    @NotNull
     @Override
     public Optional<String> getCurrentAuditor() {
 
@@ -22,7 +21,7 @@ public class EntityAuditorAware implements AuditorAware<String> {
         if(!authentication.isAuthenticated()){
             return Optional.empty();
         }
-      UserDetails user=(UserDetails) authentication.getPrincipal();
+        CustomUserDetails user=(CustomUserDetails) authentication.getPrincipal();
         return Optional.of(user.getUsername());
     }
 }

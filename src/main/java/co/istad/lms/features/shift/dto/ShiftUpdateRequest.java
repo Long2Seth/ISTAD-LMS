@@ -19,7 +19,7 @@ public record ShiftUpdateRequest(
 
         LocalDateTime endTime,
 
-        @Size(max = 10, message = "Weekday cannot be longer than 10 characters")
+
         Boolean weekday,
 
         String description

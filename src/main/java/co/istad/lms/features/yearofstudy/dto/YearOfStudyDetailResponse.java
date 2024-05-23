@@ -9,14 +9,14 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-public record YearOfStudyDetailResponse (
+public record YearOfStudyDetailResponse(
 
         String uuid,
-         Integer year,
-         Integer semester,
-         StudyProgramDetailResponse studyProgram,
-         Long subjectId
+        Integer year,
+        Integer semester,
+        StudyProgramDetailResponse studyProgram,
+        String subjectAlias
 
 
-){
+) {
 }

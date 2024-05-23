@@ -41,17 +41,17 @@ public class AdmissionServiceImpl implements AdmissionService {
         //validate degree by degree alias
         Degree degree = degreeRepository.findByAlias(admissionCreateRequest.degreeAlias())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("degree = %s was not found", admissionCreateRequest.degreeAlias())));
+                        String.format("degree = %s has not been found", admissionCreateRequest.degreeAlias())));
 
         //validate shift by shift alias
         Shift shift = shiftRepository.findByAlias(admissionCreateRequest.shiftAlias())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("shift = %s was not found", admissionCreateRequest.shiftAlias())));
+                        String.format("shift = %s has not been found", admissionCreateRequest.shiftAlias())));
 
         //validate
         StudyProgram studyProgram = studyProgramRepository.findByAlias(admissionCreateRequest.studyProgramAlias())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("studyProgram = %s was not found", admissionCreateRequest.studyProgramAlias())));
+                        String.format("studyProgram = %s has not been found", admissionCreateRequest.studyProgramAlias())));
 
         //map from DTO to entity
         Admission admission = admissionMapper.fromAdmissionRequest(admissionCreateRequest);
@@ -79,7 +79,7 @@ public class AdmissionServiceImpl implements AdmissionService {
         Admission admission = admissionRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("Admission = %s doesn't exist ! ", uuid)));
+                                String.format("Admission = %s has not been found ", uuid)));
 
         //save to database and return AdmissionDetail
         return admissionMapper.toAdmissionDetailResponse(admission);
@@ -121,7 +121,7 @@ public class AdmissionServiceImpl implements AdmissionService {
             //find degree in database with uuid
             Degree degree = degreeRepository.findByAlias(admissionUpdateRequest.degreeAlias())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("degree = %s was not found", admissionUpdateRequest.degreeAlias())));
+                            String.format("degree = %s has not been found", admissionUpdateRequest.degreeAlias())));
 
             //set new degree
             admission.setDegree(degree);
@@ -135,7 +135,7 @@ public class AdmissionServiceImpl implements AdmissionService {
             //find shift in database with uuid
             Shift shift = shiftRepository.findByAlias(admissionUpdateRequest.shiftAlias())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("shift = %s was not found", admissionUpdateRequest.shiftAlias())));
+                            String.format("shift = %s has not been found", admissionUpdateRequest.shiftAlias())));
 
             //set new shift
             admission.setShift(shift);
@@ -149,7 +149,7 @@ public class AdmissionServiceImpl implements AdmissionService {
             //find studyProgram in database by uuid
             StudyProgram studyProgram = studyProgramRepository.findByAlias(admissionUpdateRequest.studyProgramAlias())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("studyProgram = %s was not found", admissionUpdateRequest.studyProgramAlias())));
+                            String.format("studyProgram = %s has not been found", admissionUpdateRequest.studyProgramAlias())));
 
            //set new studyProgram
             admission.setStudyProgram(studyProgram);

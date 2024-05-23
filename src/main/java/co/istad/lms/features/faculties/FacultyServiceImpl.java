@@ -83,6 +83,21 @@ public class FacultyServiceImpl implements FacultyService{
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Faculty = %s has not been found.", alias)));
 
+        //check null alias from DTO
+        if(facultyUpdateRequest.alias()!=null){
+
+            //validate alias from dto with original alias
+            if(!alias.equalsIgnoreCase(facultyUpdateRequest.alias())){
+
+                //validate new alias is conflict with other alias or not
+                if(facultyRepository.existsByAlias(facultyUpdateRequest.alias())){
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            String.format("Degree = %s already exist.", facultyUpdateRequest.alias()));
+                }
+            }
+        }
+
 
         //map from DTO to entity
         facultyMapper.updateFacultyFromRequest(faculty, facultyUpdateRequest);
@@ -145,7 +160,7 @@ public class FacultyServiceImpl implements FacultyService{
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //create a dynamic query specification for filtering Admission entities based on the criteria provided
+        //create a dynamic query specification for filtering Faculty entities based on the criteria provided
         Specification<Faculty> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition

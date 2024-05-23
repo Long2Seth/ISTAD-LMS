@@ -17,7 +17,7 @@ public record YearOfStudyRequest(
         @NotBlank(message = "Study Program ID is required")
         String studyProgramAlias,
 
-        @NotBlank(message = "Subject ID is required")
+        @NotBlank(message = "Subject alias is required")
         String subjectAlias
 ) {
 }

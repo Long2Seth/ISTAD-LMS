@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.hibernate.query.sqm.tree.SqmNode.log;
+
 @Service
 @RequiredArgsConstructor
 public class DegreeServiceImpl implements DegreeService {
@@ -47,6 +49,7 @@ public class DegreeServiceImpl implements DegreeService {
 
     @Override
     public DegreeDetailResponse getDegreeByAlias(String alias) {
+
 
         //find degree by alias
         Degree degree = degreeRepository.findByAlias(alias)
@@ -83,6 +86,20 @@ public class DegreeServiceImpl implements DegreeService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Degree = %s has not been found.", alias)));
 
+        //check null alias from DTO
+        if(degreeUpdateRequest.alias()!=null){
+
+            //validate alias from dto with original alias
+            if(!alias.equalsIgnoreCase(degreeUpdateRequest.alias())){
+
+                //validate new alias is conflict with other alias or not
+                if(degreeRepository.existsByAlias(degreeUpdateRequest.alias())){
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            String.format("Degree = %s already exist.", degreeUpdateRequest.alias()));
+                }
+            }
+        }
 
         //map DTO to entity
         degreeMapper.updateDegreeFromRequest(degree, degreeUpdateRequest);
@@ -148,7 +165,7 @@ public class DegreeServiceImpl implements DegreeService {
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //create a dynamic query specification for filtering Admission entities based on the criteria provided
+        //create a dynamic query specification for filtering Degree entities based on the criteria provided
         Specification<Degree> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition

@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
- * Service interface for managing study programs.
+ * Service interface for managing studyProgram.
  *
  * @author Pov Soknem
  * @since 1.0 (2024)
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public interface StudyProgramService {
 
     /**
-     * Creates a new study program.
+     * Creates a new studyProgram.
      *
      * @param studyProgramRequest is the request object containing the details of the study program to be created
      * @author Pov Soknem
@@ -28,7 +28,7 @@ public interface StudyProgramService {
     void createStudyProgram(StudyProgramRequest studyProgramRequest);
 
     /**
-     * Retrieves the details of a study program by its alias.
+     * Retrieves the details of a studyProgram by its alias.
      *
      * @param alias is the unique name of studyProgram
      * @return {@link StudyProgramDetailResponse}
@@ -38,7 +38,7 @@ public interface StudyProgramService {
     StudyProgramDetailResponse getStudyProgramByAlias(String alias);
 
     /**
-     * Retrieves a paginated list of all study programs.
+     * Retrieves a paginated list of all studyProgram.
      *
      * @param page is the current page number to retrieve
      * @param size is the number record per page to retrieve
@@ -51,7 +51,7 @@ public interface StudyProgramService {
     /**
      * Updates an existing study program by its alias.
      *
-     * @param alias                     the alias of the study program to be updated
+     * @param alias is the unique name of studyProgram
      * @param studyProgramUpdateRequest the request object containing the updated details of the study program
      * @return {@link StudyProgramResponse}
      * @author Pov Soknem
@@ -88,6 +88,8 @@ public interface StudyProgramService {
     void disableStudyProgramByAlias(String alias);
 
     /**
+     * filter studyProgram by any field
+     *
      * @param filterDto is object for request to filter
      * @param page is the current page number to retrieve
      * @param size is the number record per page to retrieve
