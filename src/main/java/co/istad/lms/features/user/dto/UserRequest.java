@@ -10,9 +10,10 @@ import java.util.List;
 @Builder
 public record UserRequest
         (
-                String name_en,
-                String name_kh,
-                String userName,
+                String alias,
+                String nameEn,
+                String nameKh,
+                String username,
                 String gender,
                 String email,
                 String password,
@@ -23,6 +24,8 @@ public record UserRequest
                 String khanOrDistrict,
                 String sangkatOrCommune,
                 String street,
+
+                JsonBirthPlace birthPlace,
 
                 List<AuthorityRequestToUser> authorities
         ) {

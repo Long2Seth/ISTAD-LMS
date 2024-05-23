@@ -4,14 +4,18 @@ package co.istad.lms.features.user;
 
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
+import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,22 +38,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserResponse> getAllUsers(int page, int limit) {
 
-        PageRequest pageRequest = PageRequest.of(page, limit);
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
 
         Page<User> users = userRepository.findAll(pageRequest);
 
-        return users.map(userMapper::toUserResponse);
+        List<User> filteredUsers = users.stream()
+                .filter(user -> !user.getIsDeleted())
+                .filter(user -> !user.getIsBlocked())
+                .toList();
+
+        Page<User> filteredUsersPage = new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size());
+
+        return filteredUsersPage.map(userMapper::toUserResponse);
     }
 
 
     @Override
-    public UserResponse getUserById(Long id) {
+    public UserResponse getUserById(String alias) {
 
-        User user = userRepository.findById(id)
+        User user = userRepository.findByAlias(alias)
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User has not been found ! "
+                                String.format("User with alias = %s was not found.", alias)
                         ));
 
         return userMapper.toUserResponse(user);
@@ -61,22 +72,22 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(userRequest.email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "User email has already been existed!"
+                    String.format("User email = %s has already been existed!", userRequest.email())
             );
         }
         if (userRepository.existsByPhoneNumber(userRequest.phoneNumber())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "User phone number has already been existed!"
+                    String.format("User phone number = %s has already been existed!", userRequest.phoneNumber())
             );
         }
         User user = userMapper.fromUserRequest(userRequest);
 
         // Set additional properties
-        user.setAlias(UUID.randomUUID().toString());
-        user.setUserName(userRequest.userName());
-        user.setName_en(userRequest.name_en());
-        user.setName_kh(userRequest.name_kh());
+        user.setAlias(userRequest.alias());
+        user.setUsername(userRequest.username());
+        user.setNameEn(userRequest.nameEn());
+        user.setNameKh(userRequest.nameKh());
         user.setEmail(userRequest.email());
         user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encode password
         user.setPhoneNumber(userRequest.phoneNumber());
@@ -112,26 +123,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
-        User user = userRepository.findById(id)
+    public UserResponse updateUser(String alias, UserRequest userRequest) {
+        User user = userRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "User not found"
                 ));
 
         // Update user fields
-        user.setUserName(userRequest.userName());
-        user.setName_en(userRequest.name_en());
-        user.setName_kh(userRequest.name_kh());
+        user.setAlias(userRequest.alias());
+        user.setUsername(userRequest.username());
+        user.setNameEn(userRequest.nameEn());
+        user.setNameKh(userRequest.nameKh());
         user.setEmail(userRequest.email());
-        user.setPassword(userRequest.password());
-        user.setPhoneNumber(passwordEncoder.encode(userRequest.phoneNumber()));
+        user.setPassword(passwordEncoder.encode(userRequest.password()));
+        user.setPhoneNumber(userRequest.phoneNumber());
         user.setGender(userRequest.gender());
         user.setProfileImage(userRequest.profileImage());
         user.setCityOrProvince(userRequest.cityOrProvince());
         user.setKhanOrDistrict(userRequest.khanOrDistrict());
         user.setSangkatOrCommune(userRequest.sangkatOrCommune());
         user.setStreet(userRequest.street());
+
 
         // Update roles
         List<Authority> authorities = new ArrayList<>();
@@ -150,61 +163,68 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse deleteUser(Long id) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "User has not been found ! "
-                        ));
-        userRepository.deleteById(id);
-
+    public UserResponse deleteUser(String alias) {
+        User user = userRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with alias = %s was not found.", alias)
+                ));
+        userRepository.delete(user);
         return userMapper.toUserResponse(user);
     }
 
     @Override
-    public UserResponse disableUser(Long id) {
+    public UserResponse disableUser(String alias) {
 
-        int affectedRow = userRepository.updateBlockedStatusById(id, true);
+        int affectedRow = userRepository.updateBlockedStatusById(alias, true);
         if (affectedRow > 0) {
             return userMapper.toUserResponse(
-                    userRepository.findById(id)
+                    userRepository.findByAlias(alias)
                             .orElse(null));
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "User with id = " + id + " doesn't exist ! "
+                    String.format("User with alias = %s doesn't exist ! ", alias)
             );
         }
     }
 
     @Override
-    public UserResponse enableUser(Long  id) {
-        int affectedRow = userRepository.updateBlockedStatusById(id, false);
+    public UserResponse enableUser(String alias) {
+        int affectedRow = userRepository.updateBlockedStatusById(alias, false);
         if (affectedRow > 0) {
             return userMapper.toUserResponse(
-                    userRepository.findById(id)
-                            .orElse(null));
+                    userRepository.findByAlias(alias)
+                            .orElseThrow(
+                                    () -> new ResponseStatusException(
+                                            HttpStatus.NOT_FOUND,
+                                            String.format("User with alias = %s doesn't exist ! ", alias)
+                                    ))
+                            );
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "User with id = " + id + " doesn't exist ! "
+                    String.format("User with alias = %s doesn't exist ! ", alias)
             );
         }
     }
 
     @Override
-    public UserResponse isDeleted(Long id) {
-        int affectedRow = userRepository.updateDeletedStatusById(id, true);
+    public UserResponse isDeleted(String alias) {
+        int affectedRow = userRepository.updateDeletedStatusById(alias, true);
         if (affectedRow > 0) {
             return userMapper.toUserResponse(
-                    userRepository.findById(id)
-                            .orElse(null));
+                    userRepository.findByAlias(alias)
+                            .orElseThrow(
+                                    () -> new ResponseStatusException(
+                                            HttpStatus.NOT_FOUND,
+                                            String.format("User with alias = %s doesn't exist ! ", alias)
+                                    ))
+                            );
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "User with id = " + id + " doesn't exist ! "
+                    String.format("User with alias = %s doesn't exist ! ", alias)
             );
         }
     }

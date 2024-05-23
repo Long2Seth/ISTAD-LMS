@@ -2,10 +2,14 @@ package co.istad.lms.domain;
 
 
 import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.json.BirthPlace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 
@@ -27,13 +31,13 @@ public class User extends Auditable {
     private String alias;
 
     @Column(name = "name_en",nullable = false , length = 50)
-    private String name_en;
+    private String nameEn;
 
     @Column(name = "name_kh",nullable = false , length = 50)
-    private String name_kh;
+    private String nameKh;
 
     @Column(nullable = false , length = 50, name = "user_name")
-    private String userName;
+    private String username;
 
     @Column(nullable = false , length = 10)
     private String gender;
@@ -47,13 +51,17 @@ public class User extends Auditable {
     @Column(nullable = false , name = "profile_image" )
     private String profileImage;
 
-    @Column(name = "phone_nubmer" , length = 20)
+    @Column
     private String phoneNumber;
 
     private String cityOrProvince;
     private String khanOrDistrict;
     private String sangkatOrCommune;
     private String street;
+
+    @Column(name = "birth_place", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private BirthPlace birthPlace;
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
@@ -64,7 +72,7 @@ public class User extends Auditable {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_authorities",
+            name = "users_authorities",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id")
     )

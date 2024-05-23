@@ -10,12 +10,11 @@ import java.util.List;
 
 @Builder
 public record UserResponse(
-        Long id,
         String alias,
-        String name_en,
-        String name_kh,
+        String nameEn,
+        String nameKh,
         String email,
-        String userName,
+        String username,
         String profileImage,
         String phoneNumber,
         String cityOrProvince,
@@ -23,6 +22,8 @@ public record UserResponse(
         String sangkatOrCommune,
         String street,
         Boolean isBlocked,
+
+        JsonBirthPlace birthPlace,
         List<AuthorityResponse> authorities
         ){
 }

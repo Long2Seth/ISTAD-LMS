@@ -10,10 +10,10 @@ public interface PaymentService {
 
     Page<PaymentResponse> getPayments(int page, int limit);
 
-    PaymentResponse getPaymentById(Long id);
+    PaymentResponse getPaymentById(String uuid);
 
-    PaymentResponse updatePayment(Long id, PaymentRequest paymentRequest);
+    PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest);
 
-    PaymentResponse deletePayment(Long id);
+    PaymentResponse deletePayment(String uuid);
 
 }

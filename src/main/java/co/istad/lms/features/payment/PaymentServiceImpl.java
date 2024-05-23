@@ -37,8 +37,8 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public PaymentResponse getPaymentById(Long id) {
-        Payment payment = paymentRepository.findById(id)
+    public PaymentResponse getPaymentById(String uuid) {
+        Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
         return paymentMapper.toPaymentResponse(payment);
@@ -46,8 +46,8 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public PaymentResponse updatePayment(Long id, PaymentRequest paymentRequest) {
-        Payment payment = paymentRepository.findById(id)
+    public PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest) {
+        Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
         payment.setPaidAmount(paymentRequest.paidAmount());
@@ -65,8 +65,8 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public PaymentResponse deletePayment(Long id) {
-        Payment payment = paymentRepository.findById(id)
+    public PaymentResponse deletePayment(String uuid) {
+        Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
         payment.setIsDeleted(true);

@@ -20,12 +20,13 @@ public class Receipt extends Auditable {
     @Column(name = "uuid", nullable = false)
     private String uuid;
 
-    @Column(name = "remarks", columnDefinition = "TEXT")
+    @Column( columnDefinition = "TEXT")
     private String remarks;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column( nullable = false)
     private Boolean isDeleted;
 
     @OneToOne
+    @JoinColumn(name = "payment_id")
     private Payment payment;
 }

@@ -2,10 +2,7 @@ package co.istad.lms.domain.roles;
 
 
 import co.istad.lms.domain.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +16,9 @@ public class Academic {
 
     @Id
     private Long id;
+
+    @Column(unique = true)
+    String uuid;
 
     @OneToOne
     private User user;

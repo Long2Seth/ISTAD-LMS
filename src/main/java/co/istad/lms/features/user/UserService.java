@@ -13,19 +13,19 @@ public interface UserService {
     Page<UserResponse> getAllUsers(int page , int limit);
 
 
-    UserResponse getUserById(Long id);
+    UserResponse getUserById(String alias);
 
     UserResponse createUser(UserRequest userRequest);
 
-    UserResponse updateUser(Long id, UserRequest userRequest);
+    UserResponse updateUser(String alias, UserRequest userRequest);
 
-    UserResponse deleteUser(Long id);
+    UserResponse deleteUser(String alias);
 
-    UserResponse disableUser(Long id);
+    UserResponse disableUser(String alias);
 
-    UserResponse enableUser(Long id);
+    UserResponse enableUser(String alias);
 
-    UserResponse isDeleted(Long id);
+    UserResponse isDeleted(String alias);
 
 
 }

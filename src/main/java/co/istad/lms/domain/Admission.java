@@ -24,10 +24,10 @@ public class Admission extends Auditable {
     @Column(name = "uuid", nullable = false, length = 50,unique = true)
     private String uuid;
 
-    @Column(name = "name-en", nullable = false, length = 50)
+    @Column(name = "name_en", nullable = false, length = 50)
     private String nameEn;
 
-    @Column(name = "name-kh", nullable = false, length = 50)
+    @Column(name = "name_kh", nullable = false, length = 50)
     private String nameKh;
 
     @Column(name = "email", nullable = false, length = 50)

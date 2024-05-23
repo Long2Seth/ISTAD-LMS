@@ -10,6 +10,9 @@ import co.istad.lms.features.receipt.dto.ReceiptResponse;
 import co.istad.lms.mapper.ReceiptMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,6 +30,16 @@ public class ReceiptServiceImpl implements ReceiptService {
     private final PaymentRepository paymentRepository;
     private final ReceiptMapper receiptMapper;
 
+
+    @Override
+    public Page<ReceiptResponse> getReceipts( int page, int limit) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit , Sort.by(Sort.Direction.DESC, "id"));
+        Page<Receipt> receipts = receiptRepository.findAll(pageRequest);
+        return receipts.map(receiptMapper::toReceiptResponse);
+
+    }
+
     @Override
     public ReceiptResponse createReceipt(ReceiptRequest receiptRequest) {
 
@@ -34,10 +47,9 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setUuid(UUID.randomUUID().toString());
         receipt.setRemarks(receiptRequest.remarks());
         receipt.setIsDeleted(false);
-        System.out.println(receiptRequest.remarks());
 
         for (PaymentReceipt paymentReceipt : receiptRequest.payments()) {
-            Payment payment = paymentRepository.findById(paymentReceipt.id())
+            Payment payment = paymentRepository.findByUuid(paymentReceipt.uuid())
                     .orElseThrow(() -> {
                         return new ResponseStatusException(
                                 HttpStatus.NOT_FOUND, "Payment has not been found!");
@@ -52,8 +64,8 @@ public class ReceiptServiceImpl implements ReceiptService {
 
 
     @Override
-    public ReceiptResponse getReceipt(Long id) {
-        Receipt receipt = receiptRepository.findById(id)
+    public ReceiptResponse getReceipt(String uuid) {
+        Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> {
                     return new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Receipt has not been found!");
@@ -63,8 +75,8 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public ReceiptResponse updateReceipt(Long id , ReceiptRequest receiptRequest) {
-        Receipt receipt = receiptRepository.findById(id)
+    public ReceiptResponse updateReceipt(String uuid, ReceiptRequest receiptRequest) {
+        Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> {
                     return new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Receipt has not been found!");
@@ -73,7 +85,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setIsDeleted(false);
         List<Payment> payments = new ArrayList<>();
         for (PaymentReceipt paymentReceipt : receiptRequest.payments()) {
-            Payment payment = paymentRepository.findById(paymentReceipt.id())
+            Payment payment = paymentRepository.findByUuid(paymentReceipt.uuid())
                     .orElseThrow(() -> {
                         return new ResponseStatusException(
                                 HttpStatus.NOT_FOUND, "Payment has not been found!");
@@ -84,9 +96,9 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public void deleteReceipt(Long id) {
+    public void deleteReceipt(String uuid) {
 
-        Receipt receipt = receiptRepository.findById(id)
+        Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> {
                     return new ResponseStatusException(
                             HttpStatus.NOT_FOUND, "Receipt has not been found!");

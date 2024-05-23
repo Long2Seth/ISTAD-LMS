@@ -9,7 +9,6 @@ import java.util.List;
 
 @Builder
 public record ReceiptRequest(
-        Long id,
         String remarks,
         List<PaymentReceipt> payments
 

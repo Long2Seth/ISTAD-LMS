@@ -1,11 +1,12 @@
 package co.istad.lms.features.payment;
 
-
 import co.istad.lms.features.payment.dto.PaymentRequest;
 import co.istad.lms.features.payment.dto.PaymentResponse;
-import lombok.Getter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,32 +17,35 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping
-    public Page<PaymentResponse> getPayments(
+    public ResponseEntity<Page<PaymentResponse>> getPayments(
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int limit
+            @RequestParam(required = false, defaultValue = "25") int limit
     ) {
-        return paymentService.getPayments(page, limit);
+        Page<PaymentResponse> payments = paymentService.getPayments(page, limit);
+        return ResponseEntity.ok(payments);
     }
 
-    @GetMapping("/{id}")
-    public PaymentResponse getPaymentById(@PathVariable Long id) {
-        return paymentService.getPaymentById(id);
+    @GetMapping("/{uuid}")
+    public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable String uuid) {
+        PaymentResponse paymentResponse = paymentService.getPaymentById(uuid);
+        return ResponseEntity.status(HttpStatus.OK).body(paymentResponse);
     }
 
     @PostMapping
-    public PaymentResponse createPayment(@RequestBody PaymentRequest paymentRequest) {
-        return paymentService.createPayment(paymentRequest);
+    public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
+        PaymentResponse paymentResponse = paymentService.createPayment(paymentRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(paymentResponse);
     }
 
-    @PutMapping("/{id}")
-    public PaymentResponse updatePayment(@PathVariable Long id, @RequestBody PaymentRequest paymentRequest) {
-        return paymentService.updatePayment(id, paymentRequest);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable String uuid, @Valid @RequestBody PaymentRequest paymentRequest) {
+        PaymentResponse paymentResponse = paymentService.updatePayment(uuid, paymentRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(paymentResponse);
     }
 
-    @DeleteMapping("/{id}")
-    public PaymentResponse deletePayment(@PathVariable Long id) {
-        return paymentService.deletePayment(id);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<PaymentResponse> deletePayment(@PathVariable String uuid) {
+        PaymentResponse paymentResponse = paymentService.deletePayment(uuid);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(paymentResponse);
     }
-
-
 }
