@@ -10,7 +10,7 @@ ACT_PUBLIC: access-refresh-token-keys/access-token-public.key
 RET_PRIVATE: access-refresh-token-keys/refresh-token-private.key
 RET_PUBLIC: access-refresh-token-keys/refresh-token-public.key
 
-SERVER_PORT: 8080
+SERVER_PORT: 9999
 
 MAIL_USERNAME: sokname56@gmail.com
 MAIL_PASSWORD: ehis ldbm otct hykc
