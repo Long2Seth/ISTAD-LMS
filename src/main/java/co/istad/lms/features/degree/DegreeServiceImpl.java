@@ -107,7 +107,7 @@ public class DegreeServiceImpl implements DegreeService {
         //save to database
         degreeRepository.save(degree);
 
-        //return Degree response
+        //return Degree DTO
         return degreeMapper.toDegreeResponse(degree);
     }
 

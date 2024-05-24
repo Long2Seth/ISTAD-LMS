@@ -3,7 +3,7 @@ package co.istad.lms.domain.roles;
 
 
 
-import co.istad.lms.domain.Classes;
+import co.istad.lms.domain.Class;
 import co.istad.lms.domain.Payment;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
@@ -39,6 +39,6 @@ public class Student {
             joinColumns = @JoinColumn(name = "student_id" , referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "class_id" , referencedColumnName = "id")
     )
-    private List<Classes> classes;
+    private List<Class> classes;
 
 }

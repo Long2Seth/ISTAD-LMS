@@ -12,8 +12,7 @@ public record YearOfStudyUpdateRequest(
         @Positive(message = "Semester must be a positive number")
         Integer semester,
 
-        String studyProgramAlias,
+        String studyProgramAlias
 
-        String subjectAlias
 ) {
 }
