@@ -1,13 +1,13 @@
-package co.istad.lms.features.admin.dto;
+package co.istad.lms.features.intructor.dto;
 
-import co.istad.lms.domain.User;
-import co.istad.lms.features.user.dto.UserResponse;
+
+import co.istad.lms.features.user.dto.UserRequest;
+import lombok.Builder;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public record AdminResponse(
-        String uuid,
+@Builder
+public record InstructorRequest(
         String highSchool,
 
         LocalDate highSchoolGraduationDate,
@@ -24,6 +24,11 @@ public record AdminResponse(
 
         LocalDate experienceYear, // experience compare per year
 
-        UserResponse users
+        boolean status,
+
+        boolean isDeleted,
+
+        UserRequest userRequest
+
 ) {
 }

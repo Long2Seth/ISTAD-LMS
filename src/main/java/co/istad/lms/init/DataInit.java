@@ -8,6 +8,7 @@ import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.user.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class DataInit {
 
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     void initRole() {
@@ -66,7 +68,7 @@ public class DataInit {
             user.setNameKh("Admin");
             user.setUsername("admin");
             user.setEmail("admin123@gmail.com");
-            user.setPassword("admin");
+            user.setPassword(passwordEncoder.encode("admin"));
             user.setGender("male");
             user.setProfileImage("https://newogle.com");
             user.setPhoneNumber("0123456789");
@@ -75,6 +77,10 @@ public class DataInit {
             user.setSangkatOrCommune("Dangkao");
             user.setVillageOrPhum("Dangkao");
             user.setStreet("Dangkao");
+            user.setAccountNonExpired(true);
+            user.setAccountNonLocked(true);
+            user.setCredentialsNonExpired(true);
+
             user.setIsBlocked(false);
             user.setIsDeleted(false);
 

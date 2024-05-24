@@ -17,16 +17,17 @@ public class Receipt extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( nullable = false,unique = true)
+    @Column(name = "receipt_uuid", nullable = false, unique = true)
     private String uuid;
 
-    @Column( columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String remarks;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private Boolean isDeleted;
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_uuid", referencedColumnName = "uuid", nullable = false)
     private Payment payment;
+
 }

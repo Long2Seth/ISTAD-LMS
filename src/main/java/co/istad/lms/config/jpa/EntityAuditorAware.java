@@ -17,15 +17,6 @@ public class EntityAuditorAware implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-
-//        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-//        assert authentication != null;
-//        if(!authentication.isAuthenticated()){
-//            return Optional.empty();
-//        }
-//        CustomUserDetails user=(CustomUserDetails) authentication.getPrincipal();
-//        return Optional.of(user.getUsername());
-//    }
         return Optional.of("admin");
     }
 }
