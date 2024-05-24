@@ -50,7 +50,6 @@ public class DegreeServiceImpl implements DegreeService {
     @Override
     public DegreeDetailResponse getDegreeByAlias(String alias) {
 
-
         //find degree by alias
         Degree degree = degreeRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,

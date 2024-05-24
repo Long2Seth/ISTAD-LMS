@@ -10,6 +10,10 @@ public record DegreeUpdateRequest(
         @Size(max = 50, message = "Level cannot be longer than 50 characters")
         String level,
 
-        String description
+        String description,
+        String subjectLogo,
+        Integer credit,
+        Integer duration
 ) {
 }
+

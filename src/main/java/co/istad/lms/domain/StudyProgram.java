@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -38,5 +40,8 @@ public class StudyProgram extends Auditable {
     @ManyToOne
     @JoinColumn(name = "faculty_alias",nullable = false)
     private Faculty faculty;
+
+    @ManyToMany(mappedBy = "studyPrograms")
+    private List<Subject> subjects;
 
 }
