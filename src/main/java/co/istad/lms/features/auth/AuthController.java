@@ -34,8 +34,8 @@ public class AuthController {
                             examples = @ExampleObject(
                                     value = """
                                                 {
-                                                    "email": "john.doe@example.com",
-                                                    "password": "password123"
+                                                    "email": "admin@gmail.com",
+                                                    "password": "admin"
                                                 }
                                             """
                             )
