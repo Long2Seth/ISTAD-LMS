@@ -1,6 +1,5 @@
 package co.istad.lms.init;
 
-
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
@@ -24,9 +23,8 @@ public class DataInit {
 
     @PostConstruct
     void initRole() {
-
         // Auto generate role (USER, CUSTOMER, STAFF, ADMIN)
-        if (authorityRepository.count() < 1) {
+        if (authorityRepository.count() < 5) {
 
             Authority userRead = new Authority();
             userRead.setAuthorityName("user:read");
@@ -55,53 +53,54 @@ public class DataInit {
 
             authorityRepository.saveAll(List.of(userRead, userWrite, transactionRead, transactionWrite, accountRead, accountWrite, accountTypeRead, accountTypeWrite));
         }
-
     }
 
     @PostConstruct
     void initUser() {
-        // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
-        if (userRepository.count() < 1) {
-            User user = new User();
-            user.setAlias("admin");
-            user.setNameEn("Admin");
-            user.setNameKh("Admin");
-            user.setUsername("admin");
-            user.setEmail("admin123@gmail.com");
-            user.setPassword(passwordEncoder.encode("admin"));
-            user.setGender("male");
-            user.setProfileImage("https://newogle.com");
-            user.setPhoneNumber("0123456789");
-            user.setCityOrProvince("Phnom Penh");
-            user.setKhanOrDistrict("Dangkao");
-            user.setSangkatOrCommune("Dangkao");
-            user.setVillageOrPhum("Dangkao");
-            user.setStreet("Dangkao");
-            user.setAccountNonExpired(true);
-            user.setAccountNonLocked(true);
-            user.setCredentialsNonExpired(true);
+        System.setProperty("dataInit.running", "true");
+        try {
+            // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
+            if (userRepository.count() < 1) {
+                User user = new User();
+                user.setAlias("admin");
+                user.setNameEn("admin");
+                user.setNameKh("អេតមីន");
+                user.setUsername("admin");
+                user.setEmail("admin@gmail.com");
+                user.setPassword(passwordEncoder.encode("admin"));
+                user.setGender("male");
+                user.setProfileImage("https://newogle.com");
+                user.setPhoneNumber("0123456789");
+                user.setCityOrProvince("Phnom Penh");
+                user.setKhanOrDistrict("Dangkao");
+                user.setSangkatOrCommune("Dangkao");
+                user.setVillageOrPhum("Dangkao");
+                user.setStreet("Dangkao");
+                user.setIsBlocked(false);
+                user.setIsDeleted(false);
 
-            user.setIsBlocked(false);
-            user.setIsDeleted(false);
+                // BirthPlace
+                BirthPlace birthPlace = new BirthPlace();
+                birthPlace.setCityOrProvince("Phnom Penh");
+                birthPlace.setKhanOrDistrict("Dangkao");
+                birthPlace.setSangkatOrCommune("Dangkao");
+                birthPlace.setVillageOrPhum("Dangkao");
+                birthPlace.setStreet("Dangkao");
+                user.setBirthPlace(birthPlace);
 
-            // BirthPlace
-            BirthPlace birthPlace = new BirthPlace();
-            birthPlace.setCityOrProvince("Phnom Penh");
-            birthPlace.setKhanOrDistrict("Dangkao");
-            birthPlace.setSangkatOrCommune("Dangkao");
-            birthPlace.setVillageOrPhum("Dangkao");
-            birthPlace.setStreet("Dangkao");
-            user.setBirthPlace(birthPlace);
+                user.setAccountNonExpired(true);
+                user.setAccountNonLocked(true);
+                user.setCredentialsNonExpired(true);
 
-            // Authorities
-            List<Authority>  authorities=  authorityRepository.findAll();
-            System.out.println(authorities);
-            user.setAuthorities(authorities);
+                // Authorities
+                List<Authority> authorities = authorityRepository.findAll();
+                System.out.println(authorities);
+                user.setAuthorities(authorities);
 
-            userRepository.save(user);
+                userRepository.save(user);
+            }
+        } finally {
+            System.clearProperty("dataInit.running");
         }
-
-        }
-
-
+    }
 }
