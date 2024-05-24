@@ -11,7 +11,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpec
 
     Optional<Subject> findByAlias(String alias);
 
-    Optional<Subject> findBySubjectName(String level);
+    Optional<Subject> findBySubjectName(String subjectName);
 
     Boolean existsByAlias(String alias);
 

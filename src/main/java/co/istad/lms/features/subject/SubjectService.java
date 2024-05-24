@@ -29,7 +29,7 @@ public interface SubjectService {
      *
      * @param alias is the unique name of subject
      * @return {@link SubjectDetailResponse}
-     * @author Pov Soknem
+     * @author Nouth Chanraeksa
      * @since 1.0 (2024)
      */
     SubjectDetailResponse getSubjectByAlias(String alias);

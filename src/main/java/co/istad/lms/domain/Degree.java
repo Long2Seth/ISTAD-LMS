@@ -31,5 +31,4 @@ public class Degree extends Auditable {
     @Column(nullable = false)
     private Boolean isDraft = false;
 
-
 }

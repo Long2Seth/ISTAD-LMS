@@ -1,5 +1,6 @@
 package co.istad.lms.features.material.dto;
 
+
 import jakarta.persistence.Column;
 
 public record MaterialDetailResponse(
