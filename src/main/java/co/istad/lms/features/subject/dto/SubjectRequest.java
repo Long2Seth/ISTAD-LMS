@@ -16,7 +16,10 @@ public record SubjectRequest(
         String description,
         String subjectLogo,
         Integer credit,
-        Integer duration
+        Integer duration,
+
+        @NotBlank(message = "Subject Alias is required")
+        String subjectAlias
 
 ) {
 }
