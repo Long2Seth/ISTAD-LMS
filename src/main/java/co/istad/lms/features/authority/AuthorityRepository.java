@@ -11,5 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     Optional<Authority> findByAuthorityName(String authorityName);
+
+    Optional<Authority> findByUuid(String uuid);
     boolean existsByAuthorityName(String authorityName);
 }

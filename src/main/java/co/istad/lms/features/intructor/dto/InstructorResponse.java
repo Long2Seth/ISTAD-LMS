@@ -1,12 +1,13 @@
-package co.istad.lms.features.admin.dto;
+package co.istad.lms.features.intructor.dto;
 
-import co.istad.lms.domain.User;
+
 import co.istad.lms.features.user.dto.UserResponse;
+import lombok.Builder;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public record AdminResponse(
+@Builder
+public record InstructorResponse(
         String uuid,
         String highSchool,
 

@@ -16,34 +16,29 @@ public class AuthorityController {
     private final AuthorityService authorityService;
 
     @GetMapping
-    public ResponseEntity<Page<AuthorityResponse>> getPageAuthorities(
+    public Page<AuthorityResponse> getPageAuthorities(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "25") int limit) {
-        Page<AuthorityResponse> authorities = authorityService.findAll(page, limit);
-        return ResponseEntity.status(HttpStatus.OK).body(authorities);
+        return authorityService.findAll(page, limit);
     }
 
     @PostMapping
-    public ResponseEntity<AuthorityResponse> createAuthority(@RequestBody AuthorityRequest authorityRequest) {
-        AuthorityResponse authorityResponse = authorityService.create(authorityRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(authorityResponse);
+    public AuthorityResponse createAuthority(@RequestBody AuthorityRequest authorityRequest) {
+       return authorityService.create(authorityRequest);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AuthorityResponse> getAuthorityById(@PathVariable Long id) {
-        AuthorityResponse authorityResponse = authorityService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(authorityResponse);
+    @GetMapping("/{uuid}")
+    public AuthorityResponse getAuthorityById(@PathVariable String uuid) {
+        return authorityService.findById(uuid);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AuthorityResponse> updateAuthority(@PathVariable Long id, @RequestBody AuthorityRequest authorityRequest) {
-        AuthorityResponse authorityResponse = authorityService.update(id, authorityRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(authorityResponse);
+    @PutMapping("/{uuid}")
+    public AuthorityResponse updateAuthority(@PathVariable String uuid, @RequestBody AuthorityRequest authorityRequest) {
+        return authorityService.update(uuid, authorityRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<AuthorityResponse> deleteAuthority(@PathVariable Long id) {
-        AuthorityResponse authorityResponse = authorityService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(authorityResponse);
+    @DeleteMapping("/{uuid}")
+    public AuthorityResponse deleteAuthority(@PathVariable String uuid) {
+        return authorityService.delete(uuid);
     }
 }

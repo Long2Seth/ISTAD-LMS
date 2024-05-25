@@ -19,6 +19,7 @@ public class Authority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
+    @Column(unique = true)
     private String uuid;
 
     @Column(nullable = false , length = 50 , name = "authority_name")
