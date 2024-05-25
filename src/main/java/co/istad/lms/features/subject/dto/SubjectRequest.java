@@ -1,7 +1,10 @@
 package co.istad.lms.features.subject.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.Set;
 
 public record SubjectRequest(
 
@@ -18,8 +21,8 @@ public record SubjectRequest(
         Integer credit,
         Integer duration,
 
-        @NotBlank(message = "Subject Alias is required")
-        String subjectAlias
+        @NotNull(message = "Subject Alias is required")
+        Set<String> studyProgramAlias
 
 ) {
 }

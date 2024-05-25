@@ -1,7 +1,10 @@
 package co.istad.lms.features.subject.dto;
 
 
+import co.istad.lms.domain.StudyProgram;
 import jakarta.validation.constraints.Size;
+
+import java.util.Set;
 
 public record SubjectUpdateRequest(
 
@@ -12,7 +15,9 @@ public record SubjectUpdateRequest(
         String description,
         String subjectLogo,
         Integer credit,
-        Integer duration
+        Integer duration,
+
+        Set<StudyProgram> studyPrograms
 
 
 ) {

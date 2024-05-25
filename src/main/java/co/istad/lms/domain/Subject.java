@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -42,8 +43,7 @@ public class Subject extends Auditable {
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "study_program_id")
     )
-    private List<StudyProgram> studyPrograms;
-
+    private Set<StudyProgram> studyPrograms;
 
 
 }

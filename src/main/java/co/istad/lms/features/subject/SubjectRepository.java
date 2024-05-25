@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpecificationExecutor<Subject> {
 
@@ -14,6 +15,8 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpec
     Optional<Subject> findBySubjectName(String subjectName);
 
     Boolean existsByAlias(String alias);
+
+    Optional<Subject> findAllByAlias(String alias);
 
 
 }
