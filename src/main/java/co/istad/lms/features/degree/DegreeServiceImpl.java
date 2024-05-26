@@ -71,7 +71,7 @@ public class DegreeServiceImpl implements DegreeService {
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //find all degree in database
+        //find all degrees in database
         Page<Degree> degrees = degreeRepository.findAll(pageRequest);
 
         //map entity to DTO and return
@@ -84,17 +84,19 @@ public class DegreeServiceImpl implements DegreeService {
 
         //find degree by alias
         Degree degree = degreeRepository.findByAlias(alias)
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
                         String.format("Degree = %s has not been found.", alias)));
 
         //check null alias from DTO
-        if(degreeUpdateRequest.alias()!=null){
+        if (degreeUpdateRequest.alias() != null) {
 
             //validate alias from dto with original alias
-            if(!alias.equalsIgnoreCase(degreeUpdateRequest.alias())){
+            if (!alias.equalsIgnoreCase(degreeUpdateRequest.alias())) {
 
                 //validate new alias is conflict with other alias or not
-                if(degreeRepository.existsByAlias(degreeUpdateRequest.alias())){
+                if (degreeRepository.existsByAlias(degreeUpdateRequest.alias())) {
 
                     throw new ResponseStatusException(HttpStatus.CONFLICT,
                             String.format("Degree = %s already exist.", degreeUpdateRequest.alias()));
@@ -111,7 +113,6 @@ public class DegreeServiceImpl implements DegreeService {
         //return Degree DTO
         return degreeMapper.toDegreeResponse(degree);
     }
-
 
 
     @Override
@@ -174,7 +175,7 @@ public class DegreeServiceImpl implements DegreeService {
         Specification<Degree> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<Degree> degrees = degreeRepository.findAll(specification,pageRequest);
+        Page<Degree> degrees = degreeRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return degrees.map(degreeMapper::toDegreeDetailResponse);
