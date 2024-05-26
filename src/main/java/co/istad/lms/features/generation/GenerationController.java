@@ -21,7 +21,7 @@ public class GenerationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createGeneration(@Valid @PathVariable GenerationRequest generationRequest) {
+    public void createGeneration(@Valid @RequestBody GenerationRequest generationRequest) {
 
         generationService.createGeneration(generationRequest);
     }

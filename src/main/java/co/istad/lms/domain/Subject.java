@@ -37,13 +37,5 @@ public class Subject extends Auditable {
     @Column(nullable = false)
     private Integer duration;
 
-    @ManyToMany
-    @JoinTable(
-            name = "subject_study_programs",
-            joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "study_program_id")
-    )
-    private Set<StudyProgram> studyPrograms;
-
 
 }

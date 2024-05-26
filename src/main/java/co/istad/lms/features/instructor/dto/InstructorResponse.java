@@ -1,4 +1,4 @@
-package co.istad.lms.features.intructor.dto;
+package co.istad.lms.features.instructor.dto;
 
 
 import co.istad.lms.features.user.dto.UserResponse;

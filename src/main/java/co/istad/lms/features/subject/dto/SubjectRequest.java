@@ -18,11 +18,12 @@ public record SubjectRequest(
 
         String description,
         String subjectLogo,
-        Integer credit,
-        Integer duration,
 
-        @NotNull(message = "Subject Alias is required")
-        Set<String> studyProgramAlias
+        @NotNull(message = "credit is require")
+        Integer credit,
+
+        @NotNull(message = "duration is require")
+        Integer duration
 
 ) {
 }

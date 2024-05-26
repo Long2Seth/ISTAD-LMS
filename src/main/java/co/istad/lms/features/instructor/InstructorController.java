@@ -1,8 +1,8 @@
-package co.istad.lms.features.intructor;
+package co.istad.lms.features.instructor;
 
 
-import co.istad.lms.features.intructor.dto.InstructorRequest;
-import co.istad.lms.features.intructor.dto.InstructorResponse;
+import co.istad.lms.features.instructor.dto.InstructorRequest;
+import co.istad.lms.features.instructor.dto.InstructorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;

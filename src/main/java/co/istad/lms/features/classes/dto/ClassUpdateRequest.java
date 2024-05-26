@@ -1,4 +1,32 @@
 package co.istad.lms.features.classes.dto;
 
-public record ClassUpdateRequest() {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.util.Set;
+
+public record ClassUpdateRequest(
+
+
+        String alias,
+
+
+        String className,
+
+        String description,
+
+
+        String instructorUuid,
+
+
+        String studyProgramAlias,
+
+
+        String shiftAlias,
+
+
+        String generationAlias
+
+
+//        Set<String> studentAliases
+) {
 }

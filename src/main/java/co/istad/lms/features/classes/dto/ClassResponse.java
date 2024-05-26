@@ -1,4 +1,16 @@
 package co.istad.lms.features.classes.dto;
 
-public record ClassResponse() {
+import java.util.Set;
+
+public record ClassResponse(
+
+        String alias,
+        String className,
+
+        String instructorAlias,
+        String studyProgramAlias,
+        String shiftAlias,
+        String generationAlias
+//        Set<String> studentAliases
+) {
 }

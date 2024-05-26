@@ -20,7 +20,6 @@ public record StudyProgramUpdateRequest(
 
         String logo,
 
-        Boolean isDeleted,
 
         String facultyAlias,
 

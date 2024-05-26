@@ -83,5 +83,4 @@ public class DegreeController {
         return degreeService.filterDegrees(filterDto, page, size);
     }
 
-
 }

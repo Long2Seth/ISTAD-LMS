@@ -43,30 +43,10 @@ public class SubjectServiceImpl implements SubjectService {
                     String.format("Subject = %s already exists.", subjectRequest.alias()));
         }
 
-        // Fetch studyProgram by their alias from the request
-        Set<StudyProgram> studyPrograms = subjectRequest.studyProgramAlias().stream()
-
-                .map(studyProgramAlias -> studyProgramRepository.findAllByAlias(studyProgramAlias)
-
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("StudyProgram with Alias = %s has not been found.", studyProgramAlias))))
-                .collect(Collectors.toSet());
-
 
         // map DTO to entity
         Subject subject = subjectMapper.fromDegreeRequest(subjectRequest);
 
-        // Set studyPrograms to the subject entity
-        subject.setStudyPrograms(studyPrograms);
-
-        // Add the subject to each studyProgram's subjects set
-        studyPrograms.forEach(studyProgram -> {
-
-            studyProgram.getSubjects().add(subject);
-
-            // Save the updated studyProgram
-            studyProgramRepository.save(studyProgram);
-        });
 
         // Save the subject entity
         subjectRepository.save(subject);

@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface ClassRepository extends JpaRepository<Class,Long>, JpaSpecificationExecutor<Class> {
 
     Optional<Class> findByAlias(String alias);
+
+    Boolean existsByAlias(String alias);
 }

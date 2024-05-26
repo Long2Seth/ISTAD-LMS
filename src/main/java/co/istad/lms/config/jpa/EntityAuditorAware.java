@@ -8,7 +8,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,9 +30,11 @@ public class EntityAuditorAware implements AuditorAware<String> {
             return Optional.of("initializer");
         }
 
-        // Your existing authentication logic
+
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
         String requestURI = request.getRequestURI();
+
         String method = request.getMethod();
 
         //for admission that don't know username

@@ -15,9 +15,7 @@ public record SubjectUpdateRequest(
         String description,
         String subjectLogo,
         Integer credit,
-        Integer duration,
-
-        Set<StudyProgram> studyPrograms
+        Integer duration
 
 
 ) {
