@@ -6,7 +6,7 @@ import lombok.Builder;
 @Builder
 public record AttendanceRequest(
 
-        String uuid,
+
         String note,
         @NotBlank(message = "Student alias is required")
         String studentAlias,

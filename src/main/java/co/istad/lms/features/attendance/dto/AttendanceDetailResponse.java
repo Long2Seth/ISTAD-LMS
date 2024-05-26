@@ -1,5 +1,6 @@
 package co.istad.lms.features.attendance.dto;
 
+import co.istad.lms.features.lecture.dto.LectureResponse;
 import jakarta.persistence.Column;
 import lombok.Builder;
 
@@ -10,8 +11,7 @@ public record AttendanceDetailResponse(
         Boolean status,
         String note,
         String studentAlias,
-        String lectureAlias
-
+        LectureResponse lecture
 ) {
 }
 
