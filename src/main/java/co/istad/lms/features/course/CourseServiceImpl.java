@@ -39,7 +39,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void createCourse(CourseRequest courseRequest) {
 
-        //validate course fromn DTO
+        //validate course from DTO
         if (courseRepository.existsByAlias(courseRequest.alias())) {
 
             throw new ResponseStatusException(HttpStatus.NO_CONTENT,
@@ -52,7 +52,6 @@ public class CourseServiceImpl implements CourseService {
 
         //set to enable
         course.setIsDeleted(false);
-        I
 
         //save to database
         courseRepository.save(course);

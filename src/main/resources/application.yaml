@@ -42,11 +42,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-<<<<<<< HEAD
-      ddl-auto: update   # or update
-=======
-      ddl-auto: update # or update
->>>>>>> ba2c46ebe8f392141edf1857841bdfef6752116a
+      ddl-auto: update
     generate-ddl: true
     properties:
       hibernate:
