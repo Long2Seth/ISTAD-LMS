@@ -22,7 +22,7 @@ public record UserResponse(
         String khanOrDistrict,
         String sangkatOrCommune,
         String street,
-        Boolean isBlocked,
+        boolean status,
 
         JsonBirthPlace birthPlace,
         List<AuthorityResponseToUser> authorities

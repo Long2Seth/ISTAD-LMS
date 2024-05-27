@@ -17,35 +17,32 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping
-    public ResponseEntity<Page<PaymentResponse>> getPayments(
+    public Page<PaymentResponse> getPayments(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "25") int limit
     ) {
         Page<PaymentResponse> payments = paymentService.getPayments(page, limit);
-        return ResponseEntity.ok(payments);
+        return payments;
+
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable String uuid) {
-        PaymentResponse paymentResponse = paymentService.getPaymentById(uuid);
-        return ResponseEntity.status(HttpStatus.OK).body(paymentResponse);
+    public PaymentResponse getPaymentById(@PathVariable String uuid) {
+        return paymentService.getPaymentById(uuid);
     }
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
-        PaymentResponse paymentResponse = paymentService.createPayment(paymentRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(paymentResponse);
+    public PaymentResponse createPayment( @RequestBody PaymentRequest paymentRequest) {
+        return paymentService.createPayment(paymentRequest);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable String uuid, @Valid @RequestBody PaymentRequest paymentRequest) {
-        PaymentResponse paymentResponse = paymentService.updatePayment(uuid, paymentRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(paymentResponse);
+    public PaymentResponse updatePayment(@PathVariable String uuid, @Valid @RequestBody PaymentRequest paymentRequest) {
+        return paymentService.updatePayment(uuid, paymentRequest);
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<PaymentResponse> deletePayment(@PathVariable String uuid) {
-        PaymentResponse paymentResponse = paymentService.deletePayment(uuid);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(paymentResponse);
+    public PaymentResponse deletePayment(@PathVariable String uuid) {
+        return paymentService.deletePayment(uuid);
     }
 }

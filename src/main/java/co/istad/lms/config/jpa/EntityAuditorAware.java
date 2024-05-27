@@ -58,7 +58,7 @@ public class EntityAuditorAware implements AuditorAware<String> {
         if (principal instanceof CustomUserDetails user) {
             return Optional.of(user.getUsername());
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user details");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user ");
         }
     }
 }

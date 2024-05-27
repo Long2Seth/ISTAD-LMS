@@ -22,6 +22,12 @@ public class Staff {
     @Column(unique = true)
     String uuid;
 
+    String position;
+
+    boolean status;
+
+    boolean isDeleted;
+
     @OneToOne
     private User user;
 }

@@ -27,6 +27,10 @@ public class Student {
     @Column(unique = true)
     String uuid;
 
+    boolean status;
+
+    boolean isDeleted;
+
     @OneToOne
     private User user;
 

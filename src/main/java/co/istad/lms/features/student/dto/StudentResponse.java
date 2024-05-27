@@ -1,4 +1,9 @@
 package co.istad.lms.features.student.dto;
 
-public record StudentResponse() {
+import co.istad.lms.features.user.dto.UserResponse;
+
+public record StudentResponse(
+        String uuid,
+        UserResponse userResponse
+) {
 }

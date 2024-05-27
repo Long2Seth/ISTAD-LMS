@@ -1,6 +1,6 @@
-package co.istad.lms.features.student;
+package co.istad.lms.features.academic;
 
-import co.istad.lms.domain.roles.Student;
+import co.istad.lms.domain.roles.Academic;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,18 +11,18 @@ import java.util.Optional;
 
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface AcademicRepository extends JpaRepository<Academic, Long>{
 
-    Optional<Student> findByUuid(String uuid);
+    Optional<Academic> findByUuid(String uuid);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Student s SET s.status = :status WHERE s.uuid = :uuid")
+    @Query("UPDATE Academic as a SET a.status = :status WHERE a.uuid = :uuid")
     int updateStatusByUuid(String uuid, boolean status);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Student s SET s.isDeleted = :status WHERE s.uuid = :uuid")
-    int updateDeletedByUuid(String uuid, boolean status);
+    @Query("UPDATE Academic as a SET a.isDeleted = :status WHERE a.uuid = :uuid")
+    int updateDeletedStatusByUuid(String uuid, boolean status);
 
 }
