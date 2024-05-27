@@ -61,11 +61,6 @@ public class AdminServiceImpl implements AdminService {
             );
         }
 
-        Authority authority = authorityRepository.findByAuthorityName(adminRequest.userRequest().authorities().get(0).authorityName())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        String.format("Authority with name = %s not found", adminRequest.userRequest().authorities().get(0).authorityName())
-                ));
 
         Admin admin = adminMapper.toRequestAdmin(adminRequest);
         admin.setUuid(UUID.randomUUID().toString());
@@ -103,16 +98,29 @@ public class AdminServiceImpl implements AdminService {
         BirthPlace birthPlace = new BirthPlace();
         birthPlace.setCityOrProvince(adminRequest.userRequest().birthPlace().cityOrProvince());
         birthPlace.setKhanOrDistrict(adminRequest.userRequest().birthPlace().khanOrDistrict());
+        birthPlace.setVillageOrPhum(adminRequest.userRequest().birthPlace().villageOrPhum());
+        birthPlace.setHouseNumber(adminRequest.userRequest().birthPlace().houseNumber());
         birthPlace.setSangkatOrCommune(adminRequest.userRequest().birthPlace().sangkatOrCommune());
         birthPlace.setStreet(adminRequest.userRequest().birthPlace().street());
         user.setBirthPlace(birthPlace);
 
         // Save the Authority entity before associating it with the User entity
-        authority.setAuthorityName(adminRequest.userRequest().authorities().get(0).authorityName());
-        user.setAuthorities(List.of(authority));
+        List<Authority> authorities = new ArrayList<>();
 
-        user = userRepository.save(user);
+        adminRequest.userRequest().authorities().forEach(r -> {
+            Authority authority = authorityRepository.findByAuthorityName(r.authorityName())
+                    .orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                    String.format("Role with name = %s was not found.", r.authorityName())
+                            )
+                    );
 
+            authorities.add(authority);
+
+        });
+
+        user.setAuthorities(authorities);
+        userRepository.save(user);
         admin.setUser(user);
         Admin savedAdmin = adminRepository.save(admin);
 

@@ -100,6 +100,8 @@ public class InstructorServiceImpl implements InstructorService {
         BirthPlace birthPlace = new BirthPlace();
         birthPlace.setCityOrProvince(instructorRequest.userRequest().birthPlace().cityOrProvince());
         birthPlace.setKhanOrDistrict(instructorRequest.userRequest().birthPlace().khanOrDistrict());
+        birthPlace.setVillageOrPhum(instructorRequest.userRequest().birthPlace().villageOrPhum());
+        birthPlace.setHouseNumber(instructorRequest.userRequest().birthPlace().houseNumber());
         birthPlace.setSangkatOrCommune(instructorRequest.userRequest().birthPlace().sangkatOrCommune());
         birthPlace.setStreet(instructorRequest.userRequest().birthPlace().street());
         user.setBirthPlace(birthPlace);
@@ -108,7 +110,7 @@ public class InstructorServiceImpl implements InstructorService {
         authority.setAuthorityName(instructorRequest.userRequest().authorities().get(0).authorityName());
         user.setAuthorities(List.of(authority));
 
-        user = userRepository.save(user);
+        userRepository.save(user);
 
         instructor.setUser(user);
         Instructor savedInstructor = instructorRepository.save(instructor);

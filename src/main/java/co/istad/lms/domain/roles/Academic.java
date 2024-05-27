@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Academic {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)

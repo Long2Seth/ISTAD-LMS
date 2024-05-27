@@ -15,4 +15,6 @@ public class BirthPlace {
     private String villageOrPhum;
     private String street;
     private String houseNumber;
+
+
 }
