@@ -151,7 +151,9 @@ public class DegreeServiceImpl implements DegreeService {
 
         //validate degree from dto by alias
         Degree degree = degreeRepository.findByAlias(alias)
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
                         String.format("Degree = %s has not been found ! ", alias)));
 
         //set isDeleted to true(disable)

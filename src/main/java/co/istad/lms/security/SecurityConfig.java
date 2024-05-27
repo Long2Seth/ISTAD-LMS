@@ -64,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admins/**").permitAll()
                         .requestMatchers("/api/v1/payments/**").permitAll()
                         .requestMatchers("/api/v1/instructors/**").permitAll()
+                        .requestMatchers("api/v1/admissions").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

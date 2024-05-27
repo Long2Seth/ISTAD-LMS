@@ -15,9 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,6 +34,8 @@ public class CourseServiceImpl implements CourseService {
     private final InstructorRepository instructorRepository;
 
     private final ClassRepository classRepository;
+
+    private final BaseSpecification<Course> baseSpecification;
 
     @Override
     public void createCourse(CourseRequest courseRequest) {
@@ -63,9 +64,9 @@ public class CourseServiceImpl implements CourseService {
         //validate course from DTO
         Course course = courseRepository.findByAlias(alias)
 
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
 
-                        String.format("Course = %s has not been found",alias)));
+                        String.format("Course = %s has not been found", alias)));
 
         //map to dto and return
         return courseMapper.toCourseDetailResponse(course);
@@ -125,20 +126,67 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteCourseByAlias(String alias) {
 
+        //find course in database by alias
+        Course course = courseRepository.findByAlias(alias)
+
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
+                        String.format("Course = %s has not been found.", alias)));
+
+        //delete course in database
+        courseRepository.delete(course);
     }
 
     @Override
     public void enableCourseByAlias(String alias) {
 
+        //validate degree from dto by alias
+        Course course= courseRepository.findByAlias(alias)
+
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
+                        String.format("Course = %s has not been found ! ", alias)));
+
+        //set isDeleted to false(enable)
+        course.setIsDeleted(false);
+
+        //save to database
+        courseRepository.save(course);
     }
 
     @Override
     public void disableCourseByAlias(String alias) {
 
+        //validate course from dto by alias
+        Course course =courseRepository.findByAlias(alias)
+
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
+                        String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDeleted to true(disable)
+        course.setIsDeleted(true);
+
+        //save to database
+        courseRepository.save(course);
     }
 
     @Override
     public Page<CourseDetailResponse> filterCourses(BaseSpecification.FilterDto filterDto, int page, int size) {
-        return null;
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current page and size of page
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        //create a dynamic query specification for filtering course entities based on the criteria provided
+        Specification<Course> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<Course> courses = courseRepository.findAll(specification, pageRequest);
+
+        //map to DTO and return
+        return courses.map(courseMapper::toCourseDetailResponse);
     }
 }

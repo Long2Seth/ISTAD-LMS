@@ -19,5 +19,5 @@ public interface DegreeRepository extends JpaRepository<Degree, Long>, JpaSpecif
 
     Boolean existsByAlias(String alias);
 
-    Boolean existsByLevel(String level);
+
 }

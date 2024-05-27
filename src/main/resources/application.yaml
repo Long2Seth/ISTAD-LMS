@@ -27,6 +27,12 @@ minio:
   bucket-name: ${MINIO_BUCKET}
   access-key: ${MINIO_ACCESS_KEY}
 
+telegram:
+  bot:
+    token: ${TELEGRAM_TOKEN}
+    username: ${TELEGRAM_USERNAME}
+    id: ${TELEGRAM_ID}
+
 spring:
   application:
     name: "ISTAD-LMS"
