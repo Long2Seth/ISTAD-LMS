@@ -17,7 +17,7 @@ public interface StudyProgramMapper {
 
     @Mapping(target = "degree",ignore = true)
     @Mapping(target = "faculty",ignore = true)
-    @Mapping(target = "subjects",ignore = true)
+//    @Mapping(target = "subjects",ignore = true)
     StudyProgram fromStudyProgramRequest(StudyProgramRequest studyProgramRequest);
 
     StudyProgramDetailResponse toStudyProgramDetailResponse(StudyProgram studyProgram);
@@ -27,7 +27,7 @@ public interface StudyProgramMapper {
 
     @Mapping(target = "degree", ignore = true)
     @Mapping(target = "faculty", ignore = true)
-    @Mapping(target = "subjects",ignore = true)
+//    @Mapping(target = "subjects",ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateStudyProgramFromRequest(@MappingTarget StudyProgram studyProgram, StudyProgramUpdateRequest studyProgramUpdateRequest);
 }

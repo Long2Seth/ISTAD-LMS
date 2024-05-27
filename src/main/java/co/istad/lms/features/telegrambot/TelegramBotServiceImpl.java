@@ -1,5 +1,6 @@
 package co.istad.lms.features.telegrambot;
 
+import co.istad.lms.domain.Admission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,50 @@ public class TelegramBotServiceImpl implements TelegramBotService{
     private final RestTemplate restTemplate;
 
     @Override
-    public void sendAdmissionResponse(String messageText) {
+    public void sendAdmissionResponse(Admission admission) {
+
+        //get field that need to send to bot and format as string
+        String sendMessage = String.format("""
+                        New Student Enrolled..!
+                        _______________________________
+                                                
+                        Full Name     : %s
+                        Gender        : %s
+                        Generation    : %s
+                        Degree        : %s
+                        Study Program : %s
+                        Shift         : %s | %s - %s
+                        Contact       : %s
+                        BacII Grade   : %s
+                        Place Of Birth: %s
+                        Date Of  Birth: %s
+                        """,
+                admission.getNameEn(),
+
+                admission.getGender(),
+
+                "gen",
+
+                admission.getDegree().getAlias(),
+
+                admission.getStudyProgram().getAlias(),
+
+                admission.getShift().getAlias(), admission.getShift().getEndTime(), admission.getShift().getEndTime(),
+
+                admission.getPhoneNumber(),
+
+                admission.getBacIiGrade(),
+
+                admission.getPob(),
+
+                admission.getDob().toString());
+
         String url = String.format("https://api.telegram.org/bot%s/sendMessage", botToken);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        String requestJson = String.format("{\"chat_id\":\"%s\",\"text\":\"%s\"}", chatId, messageText);
+        String requestJson = String.format("{\"chat_id\":\"%s\",\"text\":\"%s\"}", chatId, sendMessage);
 
         HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
 

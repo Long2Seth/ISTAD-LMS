@@ -25,6 +25,9 @@ public record StudyProgramUpdateRequest(
 
         String degreeAlias,
 
-        Set<String> subjectAlias
+        Set<String> yearOfStudiesUuid
+
+
+//        Set<String> subjectAlias
 ) {
 }

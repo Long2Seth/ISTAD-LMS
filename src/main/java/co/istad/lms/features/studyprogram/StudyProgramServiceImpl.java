@@ -12,7 +12,9 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
 import co.istad.lms.features.subject.SubjectRepository;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.StudyProgramMapper;
+import co.istad.lms.mapper.YearOfStudyMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +41,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
 
     private final FacultyRepository facultyRepository;
 
-    private final SubjectRepository subjectRepository;
+    private final YearOfStudyRepository yearOfStudyRepository;
 
     @Override
     public void createStudyProgram(StudyProgramRequest studyProgramRequest) {
@@ -63,12 +65,12 @@ public class StudyProgramServiceImpl implements StudyProgramService{
                         String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
 
         // Fetch subjects by their IDs from the request
-        Set<Subject> subjects = studyProgramRequest.subjectAlias().stream()
+        Set<YearOfStudy> yearOfStudies = studyProgramRequest.yearOfStudiesUuid().stream()
 
-                .map(subjectAlias -> subjectRepository.findAllByAlias(subjectAlias)
+                .map(yearOfStudyUuid -> yearOfStudyRepository.findByUuid(yearOfStudyUuid)
 
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("Subject with Alias = %s has not been found.", subjectAlias))))
+                                String.format("YearOfStudy with uuid = %s has not been found.",yearOfStudyUuid))))
                 .collect(Collectors.toSet());
 
         //map from DTO to entity
@@ -84,7 +86,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         studyProgram.setFaculty(faculty);
 
         //set all subjects
-        studyProgram.setSubjects(subjects);
+        studyProgram.setYearOfStudies(yearOfStudies);
 
         //save to database
         studyProgramRepository.save(studyProgram);

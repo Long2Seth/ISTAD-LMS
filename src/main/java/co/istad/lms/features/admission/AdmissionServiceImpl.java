@@ -77,26 +77,8 @@ public class AdmissionServiceImpl implements AdmissionService {
         admissionRepository.save(admission);
 
         // Send a notification to Telegram
-        String admissionResponse = String.format("""
-                        Full Name     : %s
-                        Generation    : %s
-                        Degree        : %s
-                        Study Program : %s
-                        Contact       : %s
-                        BacII Grade   : %s
-                        Place Of Birth: %s
-                        Date Of  Birth: %s
-                        """,
-                admission.getNameEn(),
-                "gen1",
-                admission.getDegree().getAlias(),
-                admission.getStudyProgram().getAlias(),
-                admission.getPhoneNumber(),
-                admission.getBacIiGrade(),
-                admission.getPob(),
-                admission.getDob().toString());
 
-        telegramBotService.sendAdmissionResponse(admissionResponse);
+        telegramBotService.sendAdmissionResponse(admission);
     }
 
     @Override

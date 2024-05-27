@@ -21,10 +21,10 @@ public record ShiftRequest(
         String name,
 
         @NotNull(message = "Start time is required")
-        LocalDateTime startTime,
+        LocalTime startTime,
 
         @NotNull(message = "End time is required")
-        LocalDateTime endTime,
+        LocalTime endTime,
 
         @NotNull(message = "Weekday is required")
         Boolean weekday,
