@@ -9,10 +9,10 @@ import java.util.List;
 public interface AuthorityService {
 
     Page<AuthorityResponse> findAll(int page, int limit);
-    AuthorityResponse findById(Long id);
-    AuthorityResponse update(Long id, AuthorityRequest authorityRequest);
+    AuthorityResponse findById(String uuid);
+    AuthorityResponse update(String uuid, AuthorityRequest authorityRequest);
     AuthorityResponse create(AuthorityRequest authorityRequest);
-    AuthorityResponse delete(Long id);
+    AuthorityResponse delete(String uuid);
 
 
 }

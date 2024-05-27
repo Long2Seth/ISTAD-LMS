@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -56,7 +57,7 @@ public class Payment extends Auditable {
     @ManyToOne
     private Student student;
 
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
-    private Receipt receipt;
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
+    private List <Receipt> receipt;
 
 }

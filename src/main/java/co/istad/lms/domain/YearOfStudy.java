@@ -36,9 +36,5 @@ public class YearOfStudy extends Auditable {
     @JoinColumn(name = "study_program_id")
     private StudyProgram studyProgram;
 
-    @Column(  nullable = false)
-    private String subjectAlias;
-
-
 
 }

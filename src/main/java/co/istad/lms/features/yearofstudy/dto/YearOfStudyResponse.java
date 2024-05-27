@@ -7,7 +7,7 @@ public record YearOfStudyResponse(
         String uuid,
         Integer year,
         Integer semester,
-        StudyProgramDetailResponse studyProgram,
-        String subjectAlias
+        StudyProgramDetailResponse studyProgram
+
 ) {
 }

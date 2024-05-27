@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record ReceiptResponse(
-
+        String uuid,
         String remarks,
         Boolean isDeleted,
         PaymentResponse payment

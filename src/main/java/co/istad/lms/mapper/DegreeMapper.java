@@ -13,7 +13,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface DegreeMapper {
 
-    Degree fromDegreeRequest(DegreeRequest degreeCreateRequest);
+    Degree fromDegreeRequest(DegreeRequest degreeRequest);
 
     DegreeDetailResponse toDegreeDetailResponse(Degree degree);
 

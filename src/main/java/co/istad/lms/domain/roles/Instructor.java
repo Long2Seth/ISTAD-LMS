@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -23,6 +26,31 @@ public class Instructor {
 
     @Column(unique = true)
     String uuid;
+
+    @Column(length = 50)
+    String highSchool;
+
+    LocalDate highSchoolGraduationDate;
+
+    @Column(length = 50)
+    String degree; // Bachelor, Master, Doctor
+
+    LocalDate degreeGraduationDate;
+
+    @Column(length = 50)
+    String major;
+
+    @Column(length = 50)
+    String studyAtUniversityOrInstitution;
+
+    @Column(length = 50)
+    String experienceAtWorkingPlace;
+
+    LocalDate experienceYear; // experience compare per year
+
+    private boolean status;
+
+    private boolean isDeleted;
 
     @OneToOne
     private User user;

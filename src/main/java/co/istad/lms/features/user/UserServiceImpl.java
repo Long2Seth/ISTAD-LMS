@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(
                         () -> new ResponseStatusException(
                                 HttpStatus.NOT_FOUND,
-                                "User has not been found ! "
+                                String.format("User with alias = %s was not found.", alias)
                         ));
 
         return userMapper.toUserResponse(user);
@@ -69,18 +69,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
+
         if (userRepository.existsByEmail(userRequest.email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format("User email = %s has already been existed!", userRequest.email())
             );
         }
+
         if (userRepository.existsByPhoneNumber(userRequest.phoneNumber())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format("User phone number = %s has already been existed!", userRequest.phoneNumber())
             );
         }
+
+
         User user = userMapper.fromUserRequest(userRequest);
 
         // Set additional properties
@@ -108,9 +112,11 @@ public class UserServiceImpl implements UserService {
 
         userRequest.authorities().forEach(r -> {
             Authority authority = authorityRepository.findByAuthorityName(r.authorityName())
-                    .orElseThrow(() ->
-                            new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                    "Role USER has not been found!"));
+                    .orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                    String.format("Role with name = %s was not found.", r.authorityName())
+                            )
+                    );
 
             authorities.add(authority);
 
@@ -124,10 +130,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(String alias, UserRequest userRequest) {
+
         User user = userRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "User not found"
+                        String.format("User with alias = %s was not found.", alias)
                 ));
 
         // Update user fields
@@ -149,11 +156,14 @@ public class UserServiceImpl implements UserService {
         List<Authority> authorities = new ArrayList<>();
         userRequest.authorities().forEach(r -> {
             Authority newAuthority = authorityRepository.findByAuthorityName(r.authorityName())
-                    .orElseThrow(() ->
-                            new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                    "Role not found"));
+                    .orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                    String.format("Role with name = %s was not found.", r.authorityName())
+                            )
+                    );
             authorities.add(newAuthority);
         });
+
         user.setAuthorities(authorities);
 
         User updatedUser = userRepository.save(user);
@@ -163,6 +173,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse deleteUser(String alias) {
+
         User user = userRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,

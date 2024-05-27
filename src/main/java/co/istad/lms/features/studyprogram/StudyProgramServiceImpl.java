@@ -1,10 +1,7 @@
 package co.istad.lms.features.studyprogram;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Degree;
-import co.istad.lms.domain.Faculty;
-import co.istad.lms.domain.Shift;
-import co.istad.lms.domain.StudyProgram;
+import co.istad.lms.domain.*;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.faculties.FacultyRepository;
@@ -14,6 +11,7 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
+import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.StudyProgramMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +21,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,8 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     private final DegreeRepository degreeRepository;
 
     private final FacultyRepository facultyRepository;
+
+    private final SubjectRepository subjectRepository;
 
     @Override
     public void createStudyProgram(StudyProgramRequest studyProgramRequest) {
@@ -59,6 +62,15 @@ public class StudyProgramServiceImpl implements StudyProgramService{
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
 
+        // Fetch subjects by their IDs from the request
+        Set<Subject> subjects = studyProgramRequest.subjectAlias().stream()
+
+                .map(subjectAlias -> subjectRepository.findAllByAlias(subjectAlias)
+
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Subject with Alias = %s has not been found.", subjectAlias))))
+                .collect(Collectors.toSet());
+
         //map from DTO to entity
         StudyProgram studyProgram=studyProgramMapper.fromStudyProgramRequest(studyProgramRequest);
 
@@ -70,6 +82,9 @@ public class StudyProgramServiceImpl implements StudyProgramService{
 
         //set faculty
         studyProgram.setFaculty(faculty);
+
+        //set all subjects
+        studyProgram.setSubjects(subjects);
 
         //save to database
         studyProgramRepository.save(studyProgram);

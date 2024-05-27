@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -30,7 +33,7 @@ public class StudyProgram extends Auditable {
 
     private String logo;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @ManyToOne
@@ -41,7 +44,12 @@ public class StudyProgram extends Auditable {
     @JoinColumn(name = "faculty_alias",nullable = false)
     private Faculty faculty;
 
-    @ManyToMany(mappedBy = "studyPrograms")
-    private List<Subject> subjects;
+    @ManyToMany
+    @JoinTable(
+            name = "study_programs_subjects",
+            joinColumns = @JoinColumn(name = "study_program_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private Set<Subject> subjects;
 
 }
