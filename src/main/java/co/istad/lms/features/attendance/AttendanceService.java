@@ -9,7 +9,7 @@ import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
 import org.springframework.data.domain.Page;
 
 /**
- * Business logic interface which contains to manage degrees
+ * Business logic interface which contains to manage attendance.
  *
  * @author Nouth Chanraksa
  * @since 1.0 (2024)
@@ -47,10 +47,10 @@ public interface AttendanceService {
     Page<AttendanceDetailResponse> getAllAttendances(int page, int size);
 
     /**
-     * Updates an existing degree by its uuid.
+     * Updates an existing attendance by its uuid.
      *
      * @param uuid               is the unique name of attendance
-     * @param attendanceUpdateRequest is the request object containing the updated degree details
+     * @param attendanceUpdateRequest is the request object containing the updated attendance details
      * @return {@link AttendanceResponse}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
@@ -95,5 +95,6 @@ public interface AttendanceService {
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    Page<AttendanceDetailResponse> filterAttendance(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<AttendanceDetailResponse> filterAttendances(BaseSpecification.FilterDto filterDto, int page, int size);
+
 }

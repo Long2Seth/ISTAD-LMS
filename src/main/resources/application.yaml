@@ -42,7 +42,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update    # or update
+      ddl-auto: update   # or update
     generate-ddl: true
   security:
     user:

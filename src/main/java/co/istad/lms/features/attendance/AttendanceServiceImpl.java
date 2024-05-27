@@ -3,11 +3,13 @@ package co.istad.lms.features.attendance;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Attendance;
 
-import co.istad.lms.domain.Degree;
+import co.istad.lms.domain.Lecture;
+import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.attendance.dto.AttendanceDetailResponse;
 import co.istad.lms.features.attendance.dto.AttendanceRequest;
 import co.istad.lms.features.attendance.dto.AttendanceResponse;
 import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
+import co.istad.lms.features.lecture.LectureRepository;
 import co.istad.lms.mapper.AttendanceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
@@ -25,22 +29,30 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceMapper attendanceMapper;
     private final AttendanceRepository attendanceRepository;
     private final BaseSpecification<Attendance> baseSpecification;
+    private final LectureRepository lectureRepository;
+
 
     @Override
     public void createAttendance(AttendanceRequest attendanceRequest) {
 
-        //validate attendance by uuid
-        if (attendanceRepository.existsByUuid(attendanceRequest.uuid())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Attendance = %s already exists.", attendanceRequest.uuid()));
-        }
+        Lecture lecture = lectureRepository.findByAlias(attendanceRequest.lectureAlias())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Lecture = %s has not been found", attendanceRequest.lectureAlias())));
+
 
         // map DTO to entity
         Attendance attendance = attendanceMapper.fromAttendanceRequest(attendanceRequest);
 
+        attendance.setUuid(UUID.randomUUID().toString());
+        attendance.setStatus(true);
+        attendance.setLecture(lecture);
 
         //save to database
         attendanceRepository.save(attendance);
+
+        /*Student student = studentRepository.findByAlias(attendanceRequest.studentAlias())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student = %s has not been found", attendanceRequest.studentAlias())));*/
 
     }
 
@@ -150,7 +162,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Page<AttendanceDetailResponse> filterAttendance(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<AttendanceDetailResponse> filterAttendances(BaseSpecification.FilterDto filterDto, int page, int size) {
 
 
         //create sort order
