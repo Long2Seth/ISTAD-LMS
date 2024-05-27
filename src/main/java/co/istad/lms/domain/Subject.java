@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,15 +36,6 @@ public class Subject extends Auditable {
 
     @Column(nullable = false)
     private Integer duration;
-
-    @ManyToMany
-    @JoinTable(
-            name = "subject_study_programs",
-            joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "study_program_id")
-    )
-    private List<StudyProgram> studyPrograms;
-
 
 
 }

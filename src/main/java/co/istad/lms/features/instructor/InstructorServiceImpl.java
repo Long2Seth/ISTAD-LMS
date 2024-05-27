@@ -1,4 +1,4 @@
-package co.istad.lms.features.intructor;
+package co.istad.lms.features.instructor;
 
 
 import co.istad.lms.domain.Authority;
@@ -7,8 +7,8 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
-import co.istad.lms.features.intructor.dto.InstructorRequest;
-import co.istad.lms.features.intructor.dto.InstructorResponse;
+import co.istad.lms.features.instructor.dto.InstructorRequest;
+import co.istad.lms.features.instructor.dto.InstructorResponse;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.mapper.InstructorMapper;
 import lombok.RequiredArgsConstructor;

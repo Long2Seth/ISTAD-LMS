@@ -24,7 +24,9 @@ import static org.hibernate.query.sqm.tree.SqmNode.log;
 public class DegreeServiceImpl implements DegreeService {
 
     private final DegreeMapper degreeMapper;
+
     private final DegreeRepository degreeRepository;
+
     private final BaseSpecification<Degree> baseSpecification;
 
     @Override
@@ -33,7 +35,7 @@ public class DegreeServiceImpl implements DegreeService {
         //validate degree by alias
         if (degreeRepository.existsByAlias(degreeRequest.alias())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Degree = %s already exists.", degreeRequest.alias()));
+                    String.format("Degree = %s has already existed.", degreeRequest.alias()));
         }
 
         // map DTO to entity
@@ -69,7 +71,7 @@ public class DegreeServiceImpl implements DegreeService {
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //find all degree in database
+        //find all degrees in database
         Page<Degree> degrees = degreeRepository.findAll(pageRequest);
 
         //map entity to DTO and return
@@ -82,17 +84,19 @@ public class DegreeServiceImpl implements DegreeService {
 
         //find degree by alias
         Degree degree = degreeRepository.findByAlias(alias)
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
                         String.format("Degree = %s has not been found.", alias)));
 
         //check null alias from DTO
-        if(degreeUpdateRequest.alias()!=null){
+        if (degreeUpdateRequest.alias() != null) {
 
             //validate alias from dto with original alias
-            if(!alias.equalsIgnoreCase(degreeUpdateRequest.alias())){
+            if (!alias.equalsIgnoreCase(degreeUpdateRequest.alias())) {
 
                 //validate new alias is conflict with other alias or not
-                if(degreeRepository.existsByAlias(degreeUpdateRequest.alias())){
+                if (degreeRepository.existsByAlias(degreeUpdateRequest.alias())) {
 
                     throw new ResponseStatusException(HttpStatus.CONFLICT,
                             String.format("Degree = %s already exist.", degreeUpdateRequest.alias()));
@@ -106,10 +110,9 @@ public class DegreeServiceImpl implements DegreeService {
         //save to database
         degreeRepository.save(degree);
 
-        //return Degree response
+        //return Degree DTO
         return degreeMapper.toDegreeResponse(degree);
     }
-
 
 
     @Override
@@ -117,7 +120,9 @@ public class DegreeServiceImpl implements DegreeService {
 
         //find degree in database by alias
         Degree degree = degreeRepository.findByAlias(alias)
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
                         String.format("Degree = %s has not been found.", alias)));
 
         //delete degree in database
@@ -129,7 +134,9 @@ public class DegreeServiceImpl implements DegreeService {
 
         //validate degree from dto by alias
         Degree degree = degreeRepository.findByAlias(alias)
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
                         String.format("Degree = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
@@ -168,7 +175,7 @@ public class DegreeServiceImpl implements DegreeService {
         Specification<Degree> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<Degree> degrees = degreeRepository.findAll(specification,pageRequest);
+        Page<Degree> degrees = degreeRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return degrees.map(degreeMapper::toDegreeDetailResponse);

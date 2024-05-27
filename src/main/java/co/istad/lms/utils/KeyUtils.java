@@ -1,4 +1,4 @@
-package co.istad.lms.security;
+package co.istad.lms.utils;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,21 +33,21 @@ public class KeyUtils {
     @Value("${REFRESH_TOKEN_PUBLIC_KEY_PATH}")
     private String refreshTokenPublicKey;
 
-    KeyPair _accessTokenKeyPair;
-    KeyPair _refreshTokenKeyPair;
+    KeyPair accessTokenKeyPair;
+    KeyPair refreshTokenKeyPair;
 
     private KeyPair getAccessTokenKeyPair(){
-        if(Objects.isNull(_accessTokenKeyPair)){
-            _accessTokenKeyPair = getKeyPair(accessTokenPublicKey,accessTokenPrivateKey);
+        if(Objects.isNull(accessTokenKeyPair)){
+            accessTokenKeyPair = getKeyPair(accessTokenPublicKey,accessTokenPrivateKey);
         }
-        return _accessTokenKeyPair;
+        return accessTokenKeyPair;
 
     }
     private KeyPair getRefreshTokenKeyPair(){
-        if(Objects.isNull(_refreshTokenKeyPair)){
-            _refreshTokenKeyPair = getKeyPair(refreshTokenPublicKey, refreshTokenPrivateKey);
+        if(Objects.isNull(refreshTokenKeyPair)){
+            refreshTokenKeyPair = getKeyPair(refreshTokenPublicKey, refreshTokenPrivateKey);
         }
-        return _refreshTokenKeyPair;
+        return refreshTokenKeyPair;
     }
     private KeyPair getKeyPair(String publicKeyPath , String privateKeyPath ){
         KeyPair keyPair;

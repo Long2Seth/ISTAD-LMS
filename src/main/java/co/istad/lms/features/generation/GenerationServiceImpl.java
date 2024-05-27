@@ -1,6 +1,7 @@
 package co.istad.lms.features.generation;
 
 import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Degree;
 import co.istad.lms.domain.Faculty;
 import co.istad.lms.domain.Generation;
 import co.istad.lms.features.generation.dto.GenerationDetailResponse;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,7 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class GenerationServiceImpl implements GenerationService{
 
     private final GenerationRepository generationRepository;
+
     private final GenerationMapper generationMapper;
+
+    private final BaseSpecification<Generation> baseSpecification;
 
     @Override
     public void createGeneration(GenerationRequest generationRequest) {
@@ -55,7 +60,7 @@ public class GenerationServiceImpl implements GenerationService{
     }
 
     @Override
-    public Page<GenerationDetailResponse> getAllGeneration(int page, int size) {
+    public Page<GenerationDetailResponse> getAllGenerations(int page, int size) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -93,26 +98,79 @@ public class GenerationServiceImpl implements GenerationService{
                 }
             }
         }
-        return null;
+
+        //map from DTO to entity
+        generationMapper.updateGenerationFromRequest(generation,generationUpdateRequest);
+
+        //save to database
+        generationRepository.save(generation);
+
+        //return generation to DTO
+        return generationMapper.toGenerationResponse(generation);
+
     }
 
     @Override
     public void deleteGenerationByAlias(String alias) {
 
+        //find generation in database by alias
+        Generation generation = generationRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Generation = %s has not been found.", alias)));
+
+        //delete generation in database
+        generationRepository.delete(generation);
     }
 
     @Override
     public void disableGenerationByAlias(String alias) {
+
+        //validate generation from dto by alias
+        Generation generation = generationRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Generation = %s has not been found ! ", alias)));
+
+        //set isDeleted to true(disable)
+        generation.setIsDeleted(true);
+
+        //save to database
+        generationRepository.save(generation);
 
     }
 
     @Override
     public void enableGenerationByAlias(String alias) {
 
+        //validate generation from dto by alias
+        Generation generation = generationRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Generation = %s has not been found ! ", alias)));
+
+        //set isDeleted to false(enable)
+        generation.setIsDeleted(false);
+
+        //save to database
+        generationRepository.save(generation);
     }
 
     @Override
     public Page<GenerationDetailResponse> filterGenerations(BaseSpecification.FilterDto filterDto, int page, int size) {
-        return null;
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current page and size of page
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        //create a dynamic query specification for filtering Generation entities based on the criteria provided
+        Specification<Generation> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<Generation> generations = generationRepository.findAll(specification,pageRequest);
+
+        //map to DTO and return
+        return generations.map(generationMapper::toGenerationDetailResponse);
+
+
     }
 }

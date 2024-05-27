@@ -15,7 +15,7 @@ public record LectureRequest(
             @NotBlank(message = "Lecture date is required")
             String lectureDate,
             Boolean status,
-            Boolean isDeleted,
+
             String courseAlias
 ) {
 }

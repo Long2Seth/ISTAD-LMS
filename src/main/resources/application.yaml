@@ -1,5 +1,5 @@
 media:
-#  server-path: ${MEDIA_SERVER_PATH}
+  #  server-path: ${MEDIA_SERVER_PATH}
   #  client-path: /media/**
   base-uri: ${MEDIA_BASE_URI}
 server:
@@ -42,8 +42,11 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update    # or update
+      ddl-auto: update
     generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
   security:
     user:
       name: ${SECURITY_NAME}

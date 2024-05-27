@@ -1,5 +1,6 @@
 package co.istad.lms.security;
 
+import co.istad.lms.utils.KeyUtils;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -54,19 +55,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authz -> authz
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/v3/api-docs/**", "/swagger-ui/**", "/v2/api-docs/**", "/swagger-resources/**").permitAll()
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("api/v1/files/**", "images/**").permitAll()
-                        .requestMatchers("/api/v1/receipts/**").permitAll()
-                        .requestMatchers("/api/v1/users/**").permitAll()
-                        .requestMatchers("/api/v1/authorities/**").permitAll()
-                        .requestMatchers("/api/v1/admins/**").permitAll()
-                        .requestMatchers("/api/v1/payments/**").permitAll()
-                        .requestMatchers("/api/v1/instructors/**").permitAll()
-                        .requestMatchers("/api/v1/academics/**").permitAll()
-                        .requestMatchers("/api/v1/students/**").permitAll()
-                        .requestMatchers("/api/v1/staffs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

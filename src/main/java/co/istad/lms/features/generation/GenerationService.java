@@ -44,7 +44,7 @@ public interface GenerationService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<GenerationDetailResponse> getAllGeneration(int page, int size);
+    Page<GenerationDetailResponse> getAllGenerations(int page, int size);
 
     /**
      * Update generation by alias

@@ -2,7 +2,9 @@ package co.istad.lms.features.subject;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Degree;
+import co.istad.lms.domain.StudyProgram;
 import co.istad.lms.domain.Subject;
+import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.subject.dto.SubjectDetailResponse;
 import co.istad.lms.features.subject.dto.SubjectRequest;
 import co.istad.lms.features.subject.dto.SubjectResponse;
@@ -17,13 +19,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectMapper subjectMapper;
+
     private final SubjectRepository subjectRepository;
+
     private final BaseSpecification<Subject> baseSpecification;
+
+    private final StudyProgramRepository studyProgramRepository;
 
     @Override
     public void createSubject(SubjectRequest subjectRequest) {
@@ -34,10 +43,12 @@ public class SubjectServiceImpl implements SubjectService {
                     String.format("Subject = %s already exists.", subjectRequest.alias()));
         }
 
+
         // map DTO to entity
         Subject subject = subjectMapper.fromDegreeRequest(subjectRequest);
 
-        //save to database
+
+        // Save the subject entity
         subjectRepository.save(subject);
 
 
@@ -82,13 +93,13 @@ public class SubjectServiceImpl implements SubjectService {
                         String.format("Subject = %s has not been found.", alias)));
 
         //check null alias from DTO
-        if(subjectUpdateRequest.alias()!=null){
+        if (subjectUpdateRequest.alias() != null) {
 
             //validate alias from dto with original alias
-            if(!alias.equalsIgnoreCase(subjectUpdateRequest.alias())){
+            if (!alias.equalsIgnoreCase(subjectUpdateRequest.alias())) {
 
                 //validate new alias is conflict with other alias or not
-                if(subjectRepository.existsByAlias(subjectUpdateRequest.alias())){
+                if (subjectRepository.existsByAlias(subjectUpdateRequest.alias())) {
 
                     throw new ResponseStatusException(HttpStatus.CONFLICT,
                             String.format("Subject = %s already exist.", subjectUpdateRequest.alias()));
@@ -159,7 +170,7 @@ public class SubjectServiceImpl implements SubjectService {
         Specification<Subject> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<Subject> subjects = subjectRepository.findAll(specification,pageRequest);
+        Page<Subject> subjects = subjectRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return subjects.map(subjectMapper::toSubjectDetailResponse);

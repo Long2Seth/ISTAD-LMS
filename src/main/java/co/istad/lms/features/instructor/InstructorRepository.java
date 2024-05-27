@@ -1,4 +1,4 @@
-package co.istad.lms.features.intructor;
+package co.istad.lms.features.instructor;
 
 import co.istad.lms.domain.roles.Instructor;
 import jakarta.transaction.Transactional;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface InstructorRepository extends JpaRepository<Instructor, Long> {
+public interface InstructorRepository extends JpaRepository<Instructor,Long> {
 
     Optional<Instructor> findByUuid(String uuid);
 
@@ -24,6 +24,5 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
     @Transactional
     @Query("UPDATE Instructor as i SET i.isDeleted = :status WHERE i.uuid = :uuid")
     int updateDeletedStatusByUuid(String uuid, boolean status);
-
 
 }
