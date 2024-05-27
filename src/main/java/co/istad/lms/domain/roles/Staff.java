@@ -1,6 +1,7 @@
 package co.istad.lms.domain.roles;
 
 
+
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,6 +18,9 @@ public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    String uuid;
 
     @OneToOne
     private User user;

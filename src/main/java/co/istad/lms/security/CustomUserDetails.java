@@ -4,7 +4,6 @@ import co.istad.lms.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,26 +12,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
-
     private User user;
 
+    // make the proper format for the authorities
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-            role.getAuthorities().forEach(authority -> {
-                authorities.add(new SimpleGrantedAuthority(authority.getAuthorityName()));
-            });
-        });
-
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        user.getAuthorities().forEach(
+                role -> {
+                    authorities.add(new SimpleGrantedAuthority(role.getAuthorityName()));
+                }
+        );
         return authorities;
     }
 
@@ -43,9 +37,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getPhoneNumber();
+        return user.getEmail();
     }
 
+    // will add it tmr!
     @Override
     public boolean isAccountNonExpired() {
         return user.isAccountNonExpired();
@@ -63,6 +58,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !user.getIsDeleted();
+        return !user.getIsBlocked();
     }
 }

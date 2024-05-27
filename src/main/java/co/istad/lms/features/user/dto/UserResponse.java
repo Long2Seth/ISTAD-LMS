@@ -1,19 +1,30 @@
 package co.istad.lms.features.user.dto;
 
-import co.istad.lms.domain.Role;
+
+
+
+import co.istad.lms.features.authority.dto.AuthorityResponse;
+import co.istad.lms.features.authority.dto.AuthorityResponseToUser;
+import lombok.Builder;
+
 import java.util.List;
 
+@Builder
 public record UserResponse(
-        String name_en,
-        String name_kh,
+        String alias,
+        String nameEn,
+        String nameKh,
         String email,
-        String userName,
+        String username,
         String profileImage,
         String phoneNumber,
         String cityOrProvince,
         String khanOrDistrict,
         String sangkatOrCommune,
         String street,
-        List<Role> roles
+        Boolean isBlocked,
+
+        JsonBirthPlace birthPlace,
+        List<AuthorityResponseToUser> authorities
         ){
 }

@@ -17,6 +17,7 @@ public interface AdmissionMapper {
 
     AdmissionResponse toAdmissionResponse(Admission admission);
 
+
     AdmissionDetailResponse toAdmissionDetailResponse(Admission admission);
 
 

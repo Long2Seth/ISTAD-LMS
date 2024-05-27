@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   istad_lms_api:
-    container_name: 'istad_lms_image'
+    container_name: 'istad_lms_front'
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,6 +9,6 @@ services:
     environment:
       - TZ=Asia/Bangkok
     ports:
-      - '8080:8080'
+      - '7777:7777'
     volumes:
       - '/home/istad_lms/images:/home/istad/media'

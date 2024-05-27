@@ -1,10 +1,14 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,25 +21,26 @@ public class Shift extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "alias", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String alias;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "start_time", nullable = false)
-    private String startTime;
+    @Column(nullable = false)
 
-    @Column(name = "end_time", nullable = false)
-    private String endTime;
+    private LocalDateTime startTime;
 
-    @Column(name = "weekday", nullable = false)
+    @Column(nullable = false)
+
+    private LocalDateTime endTime;
+
+    @Column(nullable = false)
     private String weekday;
 
-    @Column(name = "description")
-    private String description;
+    private Boolean description;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(nullable = false)
     private Boolean isDeleted;
 
 }

@@ -2,7 +2,6 @@ package co.istad.lms.mapper;
 
 
 import co.istad.lms.domain.User;
-
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import org.mapstruct.Mapper;

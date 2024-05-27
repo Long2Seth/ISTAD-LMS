@@ -1,18 +1,32 @@
 package co.istad.lms.features.user.dto;
 
+
+
+import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import lombok.Builder;
+import java.util.List;
+
+
+@Builder
 public record UserRequest
         (
-                String name_en,
-                String name_kh,
+                String alias,
+                String nameEn,
+                String nameKh,
+                String username,
+                String gender,
                 String email,
-                String userName,
                 String password,
                 String profileImage,
                 String phoneNumber,
+
                 String cityOrProvince,
                 String khanOrDistrict,
                 String sangkatOrCommune,
                 String street,
-                Long roleId
-        ){
+
+                JsonBirthPlace birthPlace,
+
+                List<AuthorityRequestToUser> authorities
+        ) {
 }

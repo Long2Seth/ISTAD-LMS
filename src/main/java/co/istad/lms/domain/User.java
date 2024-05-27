@@ -1,71 +1,82 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.json.BirthPlace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+
+
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-public class User extends Auditable{
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    @Column(name = "alias",unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String alias;
 
-    @Column(name = "name_en",nullable = false , length = 50)
-    private String name_en;
+    @Column(nullable = false, length = 50)
+    private String nameEn;
 
-    @Column(name = "name_kh",nullable = false , length = 50)
-    private String name_kh;
+    @Column(nullable = false, length = 50)
+    private String nameKh;
 
-    @Column(nullable = false , length = 50, name = "user_name")
-    private String userName;
+    @Column(nullable = false, length = 50)
+    private String username;
 
-    @Column(nullable = false , length = 10)
+    @Column(nullable = false, length = 10)
     private String gender;
 
-    @Column(nullable = false , length = 100)
+    @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false , length = 100)
+    @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false , name = "profile_image" )
+    @Column(nullable = false)
     private String profileImage;
 
-    @Column(name = "phone_nubmer",nullable = false , length = 20)
+    @Column(length = 20)
     private String phoneNumber;
 
     private String cityOrProvince;
     private String khanOrDistrict;
     private String sangkatOrCommune;
+    private String villageOrPhum;
     private String street;
 
-    // Relationship with role
-    @ManyToMany
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<Role> roles;
+    @Column(name = "birth_place", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private BirthPlace birthPlace;
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
-    private Boolean isDeleted; // manage delete status (admin want to disable or remove an account)
-    private Boolean isBlocked; // manage block status (when there is bad action happened)
+    private Boolean isDeleted;
+    private Boolean isBlocked;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_authorities",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id")
+    )
+    private List<Authority> authorities;
 
 }
