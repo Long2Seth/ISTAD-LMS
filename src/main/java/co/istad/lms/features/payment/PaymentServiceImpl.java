@@ -38,31 +38,37 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Page<PaymentResponse> getPayments(int page, int limit) {
-
+        // get all payments sorted by id in descending order
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Payment> payments = paymentRepository.findAll(pageRequest);
+        // return payments that found
         return payments.map(paymentMapper::toPaymentResponse);
 
     }
 
     @Override
     public PaymentResponse getPaymentById(String uuid) {
+
+        // find payment by uuid
         Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String .format("Payment with uuid = %s have been not found", uuid)));
+        // return payment that found
         return paymentMapper.toPaymentResponse(payment);
-
     }
 
     @Override
     public PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest) {
+
+        // find payment by uuid
         Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Payment with uuid = %s have been not found", uuid))
                 );
 
-
+        // update payment
         payment.setPaidAmount(paymentRequest.paidAmount());
         payment.setPaymentDate(paymentRequest.paymentDate());
         payment.setDiscount(paymentRequest.discount());
@@ -71,7 +77,10 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setYear(paymentRequest.year());
         payment.setSemester(paymentRequest.semester());
         payment.setRemark(paymentRequest.remark());
+
+        // save payment
         paymentRepository.save(payment);
+
         return paymentMapper.toPaymentResponse(payment);
     }
 

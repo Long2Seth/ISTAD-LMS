@@ -5,6 +5,7 @@ import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.student.dto.StudentRequest;
 import co.istad.lms.features.student.dto.StudentResponse;
 import co.istad.lms.features.user.UserRepository;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,9 +76,11 @@ public class StudentServiceImpl implements StudentService {
         student.setUuid(UUID.randomUUID().toString());
         student.setStatus(false);
         student.setDeleted(false);
-        getDefaultAuthorities();
+
         // Map user request to user
         User user = setUpNewUser(studentRequest);
+        user.setAuthorities(getDefaultAuthorities());
+        // Save user
         student.setUser(userRepository.save(user));
 
         return studentMapper.toResponse(studentRepository.save(student));
@@ -85,12 +89,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponse updateStudentByUuid(String uuid, StudentRequest studentRequest) {
 
-
         if (userRepository.existsByEmail(studentRequest.userRequest().email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.userRequest().email()));
         }
 
-        if (userRepository.existsByPhoneNumber( studentRequest.userRequest().phoneNumber())) {
+        if (userRepository.existsByPhoneNumber(studentRequest.userRequest().phoneNumber())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with phone number = %s already exists", studentRequest.userRequest().phoneNumber()));
         }
 
@@ -98,16 +101,12 @@ public class StudentServiceImpl implements StudentService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with username = %s already exists", studentRequest.userRequest().username()));
         }
 
-
         Student student = studentRepository.findByUuid(uuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid))
-                );
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
 
         User user = userRepository.findById(student.getUser().getId())
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id = %s not found", student.getUser().getId()))
-                );
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id = %s not found", student.getUser().getId())));
+
         // Update user
         user.setAlias(studentRequest.userRequest().alias());
         user.setNameEn(studentRequest.userRequest().nameEn());
@@ -124,6 +123,7 @@ public class StudentServiceImpl implements StudentService {
         user.setPassword(passwordEncoder.encode(studentRequest.userRequest().password()));
         user.setBirthPlace(toBirthPlace(studentRequest.userRequest().birthPlace()));
         user.setAuthorities(getDefaultAuthorities());
+
         // Save user
         student.setUser(userRepository.save(user));
 
@@ -132,9 +132,20 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteStudentByUuid(String uuid) {
+
+        // find student by uuid
         Student student = findStudentByUuid(uuid);
-        userRepository.delete(student.getUser());
+
+        // fine user by alias and assign to string alias
+        String alias = student.getUser().getAlias();
+        // delete student that found by uuid
         studentRepository.delete(student);
+        // fine user by alias and assign to string alias
+        User user  = userRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with alias = %s not found", alias)));
+        // delete user that found by alias
+        userRepository.delete(user);
+
     }
 
     @Override
@@ -144,17 +155,23 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse disableStudentByUuid(String uuid) {
-        return updateStudentStatus(uuid, false);
+        Student student = findStudentByUuid(uuid);
+        student.setStatus(false);
+        return studentMapper.toResponse(studentRepository.save(student));
     }
 
     @Override
     public StudentResponse enableStudentByUuid(String uuid) {
-        return updateStudentStatus(uuid, true);
+        Student student = findStudentByUuid(uuid);
+        student.setStatus(true);
+        return studentMapper.toResponse(studentRepository.save(student));
     }
 
     @Override
     public StudentResponse blockStudentByUuid(String uuid) {
-        return updateStudentDeletionStatus(uuid, true);
+        Student student = findStudentByUuid(uuid);
+        student.setDeleted(true);
+        return studentMapper.toResponse(studentRepository.save(student));
     }
 
 
@@ -196,24 +213,6 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
     }
 
-    private StudentResponse updateStudentStatus(String uuid, boolean status) {
-        return updateStudentAttribute(uuid, status, studentRepository::updateStatusByUuid);
-    }
 
-    private StudentResponse updateStudentDeletionStatus(String uuid, boolean isDeleted) {
-        return updateStudentAttribute(uuid, isDeleted, studentRepository::updateDeletedByUuid);
-    }
 
-    private StudentResponse updateStudentAttribute(String uuid, boolean value, UpdateFunction updateFunction) {
-        int updatedRows = updateFunction.update(uuid, value);
-        if (updatedRows > 0) {
-            return studentMapper.toResponse(findStudentByUuid(uuid));
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid));
-        }
-    }
-
-    private interface UpdateFunction {
-        int update(String uuid, boolean value);
-    }
 }

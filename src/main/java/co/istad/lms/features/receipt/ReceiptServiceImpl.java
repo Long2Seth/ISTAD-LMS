@@ -43,7 +43,9 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         PaymentReceipt paymentReceipt = receiptRequest.payments().get(0);
         Payment payment = paymentRepository.findByUuid(paymentReceipt.uuid())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment has not been found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Payment with uuid = %s has not been found!", paymentReceipt.uuid())
+                ));
         receipt.setPayment(payment);
 
         Receipt savedReceipt = receiptRepository.save(receipt);
@@ -53,20 +55,23 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public ReceiptResponse getReceipt(String uuid) {
         Receipt receipt = receiptRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receipt has not been found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Receipt with uuid = %s has not been found!", uuid)));
         return receiptMapper.toReceiptResponse(receipt);
     }
 
     @Override
     public ReceiptResponse updateReceipt(String uuid, ReceiptRequest receiptRequest) {
         Receipt receipt = receiptRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receipt has not been found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Receipt with uuid = %s has not been found!", uuid)));
         receipt.setRemarks(receiptRequest.remarks());
         receipt.setIsDeleted(false);
 
         PaymentReceipt paymentReceipt = receiptRequest.payments().get(0);
         Payment payment = paymentRepository.findByUuid(paymentReceipt.uuid())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment has not been found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Payment with uuid = %s has not been found!", paymentReceipt.uuid())));
         receipt.setPayment(payment);
 
         return receiptMapper.toReceiptResponse(receiptRepository.save(receipt));
@@ -76,7 +81,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     public void deleteReceipt(String uuid) {
         Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Receipt with uuid = %s has not been found!", uuid) )
+                        String.format("Receipt with uuid = %s has not been found!", uuid))
                 );
         receiptRepository.delete(receipt);
     }

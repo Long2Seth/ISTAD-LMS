@@ -21,34 +21,30 @@ public class ReceiptController {
 
 
     @GetMapping
-    public ResponseEntity<Page<ReceiptResponse>> getReceipts(
+    public Page<ReceiptResponse> getReceipts(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "25") int limit
     ){
         Page<ReceiptResponse> receipts = receiptService.getReceipts(page, limit);
-        return ResponseEntity.ok().body(receipts);
+        return receipts;
     }
     @PostMapping
-    public ResponseEntity<ReceiptResponse> createReceipt(@Valid @RequestBody ReceiptRequest receiptRequest){
-        ReceiptResponse receiptResponse = receiptService.createReceipt(receiptRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(receiptResponse);
+    public ReceiptResponse createReceipt(@Valid @RequestBody ReceiptRequest receiptRequest){
+        return  receiptService.createReceipt(receiptRequest);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ReceiptResponse> getReceipt(@PathVariable String uuid){
-        ReceiptResponse receiptResponse = receiptService.getReceipt(uuid);
-        return ResponseEntity.status(HttpStatus.OK).body(receiptResponse);
+    public ReceiptResponse getReceipt(@PathVariable String uuid){
+        return receiptService.getReceipt(uuid);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<ReceiptResponse> updateReceipt(@PathVariable String uuid, @Valid @RequestBody ReceiptRequest receiptRequest){
-        ReceiptResponse receiptResponse = receiptService.updateReceipt(uuid, receiptRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(receiptResponse);
+    public ReceiptResponse updateReceipt(@PathVariable String uuid, @Valid @RequestBody ReceiptRequest receiptRequest){
+        return receiptService.updateReceipt(uuid, receiptRequest);
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteReceipt(@PathVariable String uuid){
+    public void deleteReceipt(@PathVariable String uuid){
         receiptService.deleteReceipt(uuid);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
