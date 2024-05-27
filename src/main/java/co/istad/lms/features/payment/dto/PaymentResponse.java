@@ -15,9 +15,7 @@ public record PaymentResponse(
         Double totalAmount,
         Integer year,
         Integer semester,
-        String remark,
-        Boolean status,
-        Boolean isDeleted
+        String remark
 
 ) {
 }

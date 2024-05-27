@@ -30,14 +30,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment payment = paymentMapper.toPayment(paymentRequest);
         payment.setUuid(UUID.randomUUID().toString());
-        payment.setPaidAmount(paymentRequest.paidAmount());
-        payment.setPaymentDate(paymentRequest.paymentDate());
-        payment.setDiscount(paymentRequest.discount());
-        payment.setDueAmount(paymentRequest.dueAmount());
-        payment.setTotalAmount(paymentRequest.totalAmount());
-        payment.setYear(paymentRequest.year());
-        payment.setSemester(paymentRequest.semester());
-        payment.setRemark(paymentRequest.remark());
         payment.setStatus(false);
         payment.setIsDeleted(false);
         paymentRepository.save(payment);

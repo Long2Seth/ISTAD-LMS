@@ -18,7 +18,6 @@ public record PaymentRequest(
         Double dueAmount,
         Double totalAmount,
         Integer year,
-
         Integer semester,
         String remark
 ) {
