@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -64,8 +65,9 @@ public class StaffController {
                     )
             )
     )
-    public StaffResponse createStaff(@RequestBody StaffRequest staffRequest) {
-        return staffService.createStaff(staffRequest);
+    public StaffResponse createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
+//        return staffService.createStaff(staffRequest);
+        return null;
     }
 
     @GetMapping

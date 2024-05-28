@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record StudentRequest(
 
         @NotNull(message = "User request is mandatory")
+        @Valid
         UserRequest userRequest
 ) {
 }
