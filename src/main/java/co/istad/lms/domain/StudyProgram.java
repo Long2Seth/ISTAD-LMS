@@ -47,5 +47,4 @@ public class StudyProgram extends Auditable {
     @OneToMany(mappedBy = "studyProgram")
     private Set<YearOfStudy> yearOfStudies;
 
-
 }
