@@ -54,7 +54,6 @@ public record UserRequest(
         @NotNull(message = "Birth place is required")
         JsonBirthPlace birthPlace,
 
-        @NotNull(message = "Authorities are required    ")
         List<AuthorityRequestToUser> authorities
 ) {
 }

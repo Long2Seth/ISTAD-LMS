@@ -19,46 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EntityAuditorAware implements AuditorAware<String> {
 
-    private final HttpServletRequest request;
 
     @NotNull
     @Override
     public Optional<String> getCurrentAuditor() {
 
-        // Skip authentication if the initialization is running
-        if ("true".equals(System.getProperty("dataInit.running"))) {
-            return Optional.of("initializer");
-        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-
-        String requestURI = request.getRequestURI();
-
-        String method = request.getMethod();
-
-        //for admission that don't know username
-        if ("POST".equalsIgnoreCase(method) && requestURI.equals("/api/v1/admissions")) {
-            return Optional.of("unknown");
-        }
-
-        //for user to login
-        if ("POST".equalsIgnoreCase(method) && requestURI.equals("/api/v1/auth/login")) {
-            return Optional.of("user");
-        }
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please authorize");
-        }
-
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof CustomUserDetails user) {
+        if (auth.getPrincipal() instanceof CustomUserDetails user) {
             return Optional.of(user.getUsername());
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user ");
+            return Optional.of("lms");
         }
     }
 }

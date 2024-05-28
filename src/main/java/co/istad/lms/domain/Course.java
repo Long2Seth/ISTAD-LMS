@@ -2,6 +2,7 @@ package co.istad.lms.domain;
 
 
 import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.roles.Instructor;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,14 +28,17 @@ public class Course extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
-    @Column(nullable = false)
-    private String subjectAlias;
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 
-    @Column(nullable = false)
-    private String instructorAlias;
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private Instructor instructor;
 
-    @Column(nullable = false)
-    private String classAlias;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Class aClass;
 
 
 }
