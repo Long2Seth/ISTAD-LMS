@@ -81,7 +81,7 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public FacultyResponse updateFacultyByAlias(String alias, FacultyUpdateRequest facultyUpdateRequest) {
+    public FacultyDetailResponse updateFacultyByAlias(String alias, FacultyUpdateRequest facultyUpdateRequest) {
 
         //validate faculty from DTO with alias
         Faculty faculty = facultyRepository.findByAlias(alias)
@@ -111,7 +111,7 @@ public class FacultyServiceImpl implements FacultyService{
         facultyRepository.save(faculty);
 
         //return faculty detail
-        return facultyMapper.toFacultyResponse(faculty);
+        return facultyMapper.toFacultyDetailResponse(faculty);
     }
 
     @Override

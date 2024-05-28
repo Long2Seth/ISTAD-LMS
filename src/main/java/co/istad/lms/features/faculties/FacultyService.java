@@ -59,7 +59,7 @@ public interface FacultyService {
      * @since 1.0 (2024)
      */
 
-    FacultyResponse updateFacultyByAlias(String alias, FacultyUpdateRequest facultyUpdateRequest);
+    FacultyDetailResponse updateFacultyByAlias(String alias, FacultyUpdateRequest facultyUpdateRequest);
 
     /**
      * Delete faculty by alias

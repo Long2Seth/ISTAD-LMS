@@ -50,7 +50,7 @@ public class FacultyController {
     }
 
     @PutMapping("/{alias}")
-    public FacultyResponse updateDegree(@PathVariable String alias,
+    public FacultyDetailResponse updateDegree(@PathVariable String alias,
                                         @Valid @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
 
         return facultyService.updateFacultyByAlias(alias, facultyUpdateRequest);

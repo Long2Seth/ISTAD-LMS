@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 public record ShiftDetailResponse(
         String alias,
         String name,
-        LocalDateTime startTime,
-        LocalDateTime endTime,
+        LocalTime startTime,
+        LocalTime endTime,
         Boolean weekday,
         String description,
         Boolean isDeleted

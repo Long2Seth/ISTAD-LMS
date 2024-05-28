@@ -33,7 +33,7 @@ public class ValidationException {
                     errors.add(error);
                 });
 
-        basedError.setCode(HttpStatus.BAD_GATEWAY.getReasonPhrase());
+        basedError.setCode(HttpStatus.BAD_REQUEST.getReasonPhrase());
         basedError.setDescription(errors);
 
         return new BasedErrorResponse(basedError);

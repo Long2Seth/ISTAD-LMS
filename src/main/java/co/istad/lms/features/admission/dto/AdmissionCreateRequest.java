@@ -1,5 +1,6 @@
 package co.istad.lms.features.admission.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,8 +22,16 @@ public record AdmissionCreateRequest(
         @Size(max = 50, message = "Email cannot be longer than 50 characters")
         String email,
 
+        @Size(max = 50, message = "phoneNumber cannot be longer than 50 characters")
+        String phoneNumber,
+
         @NotNull(message = "Date of Birth is required")
         LocalDate dob,
+
+        String pob,
+
+        @Size(max = 10)
+        String bacIiGrade,
 
         @NotBlank(message = "Gender is required")
         @Size(max = 20, message = "Gender cannot be longer than 20 characters")

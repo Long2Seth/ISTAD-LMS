@@ -33,8 +33,16 @@ public class Admission extends Auditable {
     @Column(nullable = false, length = 50)
     private String email;
 
+    @Column(length = 50)
+    private String phoneNumber;
+
     @Column(nullable = false)
     private LocalDate dob;
+
+    private String pob;
+
+    @Column(length = 10)
+    private String BacIiGrade;
 
     @Column(nullable = false, length = 20)
     private String gender;

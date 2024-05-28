@@ -3,6 +3,7 @@ package co.istad.lms.features.yearofstudy;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
@@ -17,17 +18,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class YearOfStudyServiceImpl implements YearOfStudyService{
+public class YearOfStudyServiceImpl implements YearOfStudyService {
 
     private final YearOfStudyRepository yearOfStudyRepository;
 
-    private  final YearOfStudyMapper yearOfStudyMapper;
+    private final YearOfStudyMapper yearOfStudyMapper;
 
     private final StudyProgramRepository studyProgramRepository;
+
+    private final SubjectRepository subjectRepository;
 
     private final BaseSpecification<YearOfStudy> baseSpecification;
 
@@ -37,8 +42,31 @@ public class YearOfStudyServiceImpl implements YearOfStudyService{
 
         //validate studyProgram from DTO by alias
         StudyProgram studyProgram = studyProgramRepository.findByAlias(yearOfStudyRequest.studyProgramAlias())
+
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+
                         String.format("studyProgram = %s has not been found", yearOfStudyRequest.studyProgramAlias())));
+
+        //check year/semester/studyProgram for each yearOfStudy
+        //example year:1,semester:1,studyProgram:dev-op, it can not the same all three field of other request
+        boolean exists = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(
+                yearOfStudyRequest.year(), yearOfStudyRequest.semester(), studyProgram).isPresent();
+
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    String.format("YearOfStudy that studyProgramAlias = %s, year = %d, semester = %d has already existed",
+                            yearOfStudyRequest.studyProgramAlias(),yearOfStudyRequest.year(), yearOfStudyRequest.semester()));
+        }
+
+
+        // Fetch subjects by their IDs from the request
+        Set<Subject> subjects = yearOfStudyRequest.subjectAlias().stream()
+
+                .map(subjectAlias -> subjectRepository.findAllByAlias(subjectAlias)
+
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Subject with Alias = %s has not been found.", subjectAlias))))
+                .collect(Collectors.toSet());
 
         //map from DTO to entity
         YearOfStudy yearOfStudy = yearOfStudyMapper.fromYearOfStudyRequest(yearOfStudyRequest);
@@ -49,8 +77,14 @@ public class YearOfStudyServiceImpl implements YearOfStudyService{
         //set studyProgram to yearOfStudy
         yearOfStudy.setStudyProgram(studyProgram);
 
+        //set subject to year of study
+        yearOfStudy.setSubjects(subjects);
+
         //save to database
         yearOfStudyRepository.save(yearOfStudy);
+
+        //update year of study in studyProgram
+        studyProgram.getYearOfStudies().add(yearOfStudy);
     }
 
     @Override
@@ -103,7 +137,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService{
     public void deleteYearOfStudyByUuid(String uuid) {
 
         //validate yearOfStudy from DTO by alias
-        YearOfStudy yearOfStudy=yearOfStudyRepository.findByUuid(uuid)
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Study program = %s was not found.", uuid)));
 
@@ -124,7 +158,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService{
         Specification<YearOfStudy> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<YearOfStudy> yearOfStudies = yearOfStudyRepository.findAll(specification,pageRequest);
+        Page<YearOfStudy> yearOfStudies = yearOfStudyRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return yearOfStudies.map(yearOfStudyMapper::toYearOfStudyDetailResponse);

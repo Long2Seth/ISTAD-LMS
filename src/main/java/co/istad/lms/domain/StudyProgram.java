@@ -44,12 +44,8 @@ public class StudyProgram extends Auditable {
     @JoinColumn(name = "faculty_alias",nullable = false)
     private Faculty faculty;
 
-    @ManyToMany
-    @JoinTable(
-            name = "study_programs_subjects",
-            joinColumns = @JoinColumn(name = "study_program_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    private Set<Subject> subjects;
+    @OneToMany(mappedBy = "studyProgram")
+    private Set<YearOfStudy> yearOfStudies;
+
 
 }

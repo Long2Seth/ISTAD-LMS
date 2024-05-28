@@ -14,7 +14,9 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@Table(name = "year_of_studies")
+@Table(name = "year_of_studies", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"year", "semester", "study_program_id"})
+})
 @Entity
 public class YearOfStudy extends Auditable {
 
@@ -35,6 +37,14 @@ public class YearOfStudy extends Auditable {
     @ManyToOne
     @JoinColumn(name = "study_program_id")
     private StudyProgram studyProgram;
+
+    @ManyToMany
+    @JoinTable(
+            name = "study_programs_subjects",
+            joinColumns = @JoinColumn(name = "study_program_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private Set<Subject> subjects;
 
 
 }

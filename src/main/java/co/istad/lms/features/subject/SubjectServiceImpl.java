@@ -121,7 +121,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public void deleteSubjectByAlias(String alias) {
 
-        //find degree in database by alias
+        //find subject in database by alias
         Subject subject = subjectRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Subject = %s has not been found.", alias)));
@@ -147,7 +147,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public void disableSubjectByAlias(String alias) {
 
-        //validate degree from dto by alias
+        //validate subject from dto by alias
         Subject subject = subjectRepository.findByAlias(alias)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Subject = %s has not been found ! ", alias)));
@@ -166,7 +166,7 @@ public class SubjectServiceImpl implements SubjectService {
         //create pagination with current page and size of page
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
-        //create a dynamic query specification for filtering Degree entities based on the criteria provided
+        //create a dynamic query specification for filtering Subject entities based on the criteria provided
         Specification<Subject> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition

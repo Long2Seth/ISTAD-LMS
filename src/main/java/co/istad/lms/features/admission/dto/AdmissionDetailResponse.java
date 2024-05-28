@@ -12,6 +12,9 @@ public record AdmissionDetailResponse(
         String nameEn,
         String nameKh,
         String email,
+
+        String phoneNumber,
+
         LocalDate dob,
         String gender,
         String avatar,

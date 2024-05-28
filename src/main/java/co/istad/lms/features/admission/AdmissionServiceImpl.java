@@ -11,8 +11,10 @@ import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.telegrambot.TelegramBotService;
 import co.istad.lms.mapper.AdmissionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -33,7 +35,10 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final ShiftRepository shiftRepository;
     private final StudyProgramRepository studyProgramRepository;
     private final BaseSpecification<Admission> baseSpecification;
+    private final TelegramBotService telegramBotService;
 
+    @Value("${telegram.bot.id}")
+    private String chatId;
 
     @Override
     public void createAdmission(AdmissionCreateRequest admissionCreateRequest) {
@@ -70,6 +75,10 @@ public class AdmissionServiceImpl implements AdmissionService {
 
         //save to database
         admissionRepository.save(admission);
+
+        // Send a notification to Telegram
+
+        telegramBotService.sendAdmissionResponse(admission);
     }
 
     @Override
@@ -151,7 +160,7 @@ public class AdmissionServiceImpl implements AdmissionService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                             String.format("studyProgram = %s has not been found", admissionUpdateRequest.studyProgramAlias())));
 
-           //set new studyProgram
+            //set new studyProgram
             admission.setStudyProgram(studyProgram);
         }
 
