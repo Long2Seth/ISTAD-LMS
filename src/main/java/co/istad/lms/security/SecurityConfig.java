@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/api/v1/admissions").permitAll()
                         .requestMatchers("api/v1/files/**", "images/**").permitAll()
+                        .requestMatchers("api/v1/webhook/springboot").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
