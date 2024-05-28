@@ -54,6 +54,7 @@ public class Admission extends Auditable {
     @Column(length = 50)
     private String familyPhoneNumber;
 
+    @Column(columnDefinition = "TEXT")
     private String biography;
 
     @ManyToOne

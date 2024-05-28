@@ -13,8 +13,8 @@ public record ClassRequest(
 
         String description,
 
-//        @NotBlank(message = "Instructor uuid cannot be null")
-//        String instructorUuid,
+        @NotBlank(message = "Instructor uuid cannot be null")
+        String instructorUuid,
 
         @NotBlank(message = "Study Program alias cannot be null")
         String studyProgramAlias,
@@ -23,9 +23,8 @@ public record ClassRequest(
         String shiftAlias,
 
         @NotBlank(message = "Generation alias cannot be null")
-        String generationAlias
+        String generationAlias,
 
-//        @NotNull(message = "Students cannot be null")
-//        Set<String> studentAliases
+        Set<String> studentUuid
 ) {
 }

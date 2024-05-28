@@ -27,6 +27,7 @@ public class Subject extends Auditable {
     @Column( nullable = false )
     private String subjectName;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String subjectLogo;

@@ -26,7 +26,5 @@ public record ClassUpdateRequest(
 
         String generationAlias
 
-
-//        Set<String> studentAliases
 ) {
 }

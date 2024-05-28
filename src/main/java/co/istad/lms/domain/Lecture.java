@@ -30,6 +30,7 @@ public class Lecture extends Auditable {
     @Column(nullable = false)
     private String endTime;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)

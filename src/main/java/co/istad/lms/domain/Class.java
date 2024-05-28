@@ -30,14 +30,15 @@ public class Class extends Auditable {
     @Column(nullable = false)
     private String className;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
     private Boolean isDeleted;
 
-//    @ManyToOne
-//    @JoinColumn(nullable = false)
-//    private Instructor instructor;
+    @ManyToOne
+    @JoinColumn(name = "instuctor_id")
+    private Instructor instructor;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -52,9 +53,9 @@ public class Class extends Auditable {
     private Generation generation;
 
 
-//    @ManyToMany
-//    @JoinColumn(nullable = false)
-//    private Set<Student> students;
+    @OneToMany
+    @JoinColumn(name = "student_id")
+    private Set<Student> students;
 
 
 }

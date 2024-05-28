@@ -39,7 +39,8 @@ public class Shift extends Auditable {
     @Column(nullable = false)
     private String weekday;
 
-    private Boolean description;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Column(nullable = false)
     private Boolean isDeleted;

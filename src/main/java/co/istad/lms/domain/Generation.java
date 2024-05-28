@@ -24,6 +24,7 @@ public class Generation extends Auditable {
     @Column(nullable = false , length = 50)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)

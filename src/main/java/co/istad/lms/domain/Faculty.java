@@ -26,8 +26,10 @@ public class Faculty extends Auditable {
 
     String logo;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String address;
 
     @Column( nullable = false)

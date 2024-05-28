@@ -30,11 +30,12 @@ public class Material extends Auditable {
 
     private Long size;
 
-    @Column( nullable = false )
+    @Column(columnDefinition = "TEXT",nullable = false)
     private String fileUrl;
 
     private String thumbnail;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column (nullable = false)

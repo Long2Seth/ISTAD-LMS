@@ -17,7 +17,8 @@ public record ClassDetailResponse(
         InstructorResponse instructor,
         StudyProgramResponse studyProgram,
         ShiftResponse shift,
-        GenerationResponse generation
-//        Set<StudentResponse> students
+        GenerationResponse generation,
+
+        Set<StudentResponse> students
 ) {
 }

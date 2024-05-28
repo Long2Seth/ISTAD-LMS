@@ -4,6 +4,7 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.classes.dto.ClassDetailResponse;
 import co.istad.lms.features.classes.dto.ClassRequest;
 import co.istad.lms.features.classes.dto.ClassResponse;
@@ -11,6 +12,7 @@ import co.istad.lms.features.classes.dto.ClassUpdateRequest;
 import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.instructor.InstructorRepository;
 import co.istad.lms.features.shift.ShiftRepository;
+import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.mapper.ClassMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -41,6 +46,8 @@ public class ClassServiceImpl implements ClassService {
 
     private final InstructorRepository instructorRepository;
 
+    private final StudentRepository studentRepository;
+
     @Override
     public void createClass(ClassRequest classRequest) {
 
@@ -59,32 +66,41 @@ public class ClassServiceImpl implements ClassService {
 
                         String.format("StudyProgram = %s has not been found", classRequest.studyProgramAlias())));
 
-        //find instructor by instructorUuid in classRequest
-//        Instructor instructor = instructorRepository.findByUuid(classRequest.instructorUuid())
-//
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-//
-//                        String.format("Instructor = %s has not been found", classRequest.instructorUuid())));
+        //map from DTO to entity
+        Class aClass = classMapper.fromClassRequest(classRequest);
+
+//        find instructor by instructorUuid in classRequest
+        if (classRequest.instructorUuid() != null) {
+
+            Instructor instructor = instructorRepository.findByUuid(classRequest.instructorUuid())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Instructor = %s has not been found", classRequest.instructorUuid())));
+
+            //set instructor to class
+            aClass.setInstructor(instructor);
+        }
 
         //find shift by shiftAlias in classRequest
         Shift shift = shiftRepository.findByAlias(classRequest.shiftAlias())
-
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
                         String.format("Shift = %s has not been found", classRequest.shiftAlias())));
 
         //find generation by generationAlias in classRequest
         Generation generation = generationRepository.findByAlias(classRequest.generationAlias())
-
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
                         String.format("Generation = %s has not been found", classRequest.generationAlias())));
+        //find student by studentUuid from dto
+        if (classRequest.studentUuid() != null) {
 
-        //map from DTO to entity
-        Class aClass = classMapper.fromClassRequest(classRequest);
+            Set<Student> students = classRequest.studentUuid().stream()
+                    .map(studentUui -> studentRepository.findByUuid(studentUui)
+                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                    String.format("Student with uuid = %s has not been found.", studentUui))))
+                    .collect(Collectors.toSet());
 
-        //set instructor to entity
-//        aClass.setInstructor(instructor);
+            //set student to class
+            aClass.setStudents(students);
+        }
 
         //set shift to entity
         aClass.setShift(shift);

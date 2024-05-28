@@ -29,6 +29,7 @@ public class StudyProgram extends Auditable {
     @Column( length = 50,nullable = false)
     private String studyProgramName;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String logo;

@@ -23,6 +23,7 @@ public class Degree extends Auditable {
     @Column(nullable = false, length = 50)
     private String level;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
