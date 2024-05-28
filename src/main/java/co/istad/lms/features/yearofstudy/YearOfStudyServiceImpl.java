@@ -90,6 +90,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     @Override
     public YearOfStudyDetailResponse getYearOfStudyByUuid(String uuid) {
 
+
         //validate yearOfStudy from DTO by uuid
         YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
