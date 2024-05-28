@@ -12,10 +12,8 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/webhook")
+@RequestMapping("api/v1/webhook")
 public class WebhookController {
-
-
 
     private final TelegramService telegramService;
 
