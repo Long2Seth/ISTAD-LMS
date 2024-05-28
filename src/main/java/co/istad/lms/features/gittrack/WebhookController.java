@@ -27,6 +27,7 @@ public class WebhookController {
         processWebhookPayload(payload, "Next.js");
     }
 
+
     private void processWebhookPayload(Map<String, Object> payload, String projectName) {
         String ref = (String) payload.get("ref");
         String branch = ref.replace("refs/heads/", "");
