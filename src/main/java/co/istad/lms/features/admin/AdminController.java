@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -74,7 +75,7 @@ public class AdminController {
                     )
             )
     )
-    public AdminResponse createAdmin(@RequestBody AdminRequest adminRequest) {
+    public AdminResponse createAdmin(@Valid @RequestBody AdminRequest adminRequest) {
         return adminService.createAdmin(adminRequest);
     }
 
@@ -155,17 +156,17 @@ public class AdminController {
         adminService.deleteAdminByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/disable")
+    @PatchMapping("/{uuid}/disable")
     public AdminResponse disableByUuid(@PathVariable String uuid) {
         return adminService.disableAdminByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/enable")
+    @PatchMapping("/{uuid}/enable")
     public AdminResponse enableByUuid(@PathVariable String uuid) {
         return adminService.enableAdminByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/block")
+    @PatchMapping("/{uuid}/block")
     public AdminResponse blockByUuid(@PathVariable String uuid) {
         return adminService.blockAdminByUuid(uuid);
     }

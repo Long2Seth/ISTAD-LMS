@@ -42,26 +42,8 @@ public class StaffServiceImpl implements StaffService {
 
     private User setUpNewUser(StaffRequest studentRequest) {
         var userReq = studentRequest.userRequest();
-        User user = new User();
-
-        user.setAlias(userReq.alias());
-        user.setEmail(userReq.email());
-        user.setPhoneNumber(userReq.phoneNumber());
+        User user = userMapper.fromUserRequest(userReq);
         user.setPassword(passwordEncoder.encode(userReq.password()));
-        user.setIsBlocked(false);
-        user.setIsDeleted(false);
-        user.setGender(userReq.gender());
-        user.setNameEn(userReq.nameEn());
-        user.setNameKh(userReq.nameKh());
-        user.setUsername(userReq.username());
-        user.setProfileImage(userReq.profileImage());
-        user.setCityOrProvince(userReq.cityOrProvince());
-        user.setKhanOrDistrict(userReq.khanOrDistrict());
-        user.setSangkatOrCommune(userReq.sangkatOrCommune());
-        user.setStreet(userReq.street());
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
         user.setBirthPlace(toBirthPlace(userReq.birthPlace()));
 
         List<Authority> authorities = new ArrayList<>();
@@ -255,36 +237,29 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffResponse disableByUuid(String uuid) {
 
-        int updated = staffRepository.updateStatusById(uuid, false);
-        if (updated > 0)
-        {
-            return staffRepository.findByUuid(uuid)
-                    .map(staffMapper::toResponse)
-                    .orElseThrow(
-                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                    String.format("Staff with uuid = %s was not found.", uuid)
-                            )
-                    );
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Staff with uuid = %s not found", uuid));
-        }
+        Staff staff = staffRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Staff with uuid = %s was not found.", uuid)
+                        )
+                );
+        staff.setStatus(false);
+        staffRepository.save(staff);
+        return staffMapper.toResponse(staff);
     }
 
     @Override
     public StaffResponse enableByUuid(String uuid) {
-        int updated = staffRepository.updateStatusById(uuid, true);
-        if (updated > 0)
-        {
-            return staffRepository.findByUuid(uuid)
-                    .map(staffMapper::toResponse)
-                    .orElseThrow(
-                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                    String.format("Staff with uuid = %s was not found.", uuid)
-                            )
-                    );
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Staff with uuid = %s not found", uuid));
-        }
+
+        Staff staff = staffRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Staff with uuid = %s was not found.", uuid)
+                        )
+                );
+        staff.setStatus(true);
+        staffRepository.save(staff);
+        return staffMapper.toResponse(staff);
 
 
     }

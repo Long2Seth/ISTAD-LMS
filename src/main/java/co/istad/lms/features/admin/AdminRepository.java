@@ -14,15 +14,5 @@ public interface AdminRepository extends JpaRepository<Admin, Long>{
 
     Optional<Admin> findByUuid(String uuid);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Admin as a SET a.status = :status WHERE a.uuid = :uuid")
-    int updateStatusByUuid(String uuid, boolean status);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Admin as a SET a.isDeleted = :status WHERE a.uuid = :uuid")
-    int updateDeletedStatusByUuid(String uuid, boolean status);
-
 
 }

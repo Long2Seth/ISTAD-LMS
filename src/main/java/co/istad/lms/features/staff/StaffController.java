@@ -91,17 +91,17 @@ public class StaffController {
         staffService.deleteStaffByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/disable")
+    @PatchMapping("/{uuid}/disable")
     public StaffResponse disableByUuid(@PathVariable String uuid) {
         return staffService.disableByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/enable")
+    @PatchMapping("/{uuid}/enable")
     public StaffResponse enableByUuid(@PathVariable String uuid) {
         return staffService.enableByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/block")
+    @PatchMapping("/{uuid}/block")
     public StaffResponse updateDeletedStatus(@PathVariable String uuid) {
         return staffService.updateDeletedStatus(uuid);
     }

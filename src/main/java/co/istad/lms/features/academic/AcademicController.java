@@ -3,6 +3,7 @@ package co.istad.lms.features.academic;
 
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicResponse;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class AcademicController {
     }
 
     @PostMapping
-    public AcademicResponse createAcademic(@RequestBody AcademicRequest academicRequest){
+    public AcademicResponse createAcademic(@Valid @RequestBody AcademicRequest academicRequest){
         return academicService.createAcademic(academicRequest);
     }
 

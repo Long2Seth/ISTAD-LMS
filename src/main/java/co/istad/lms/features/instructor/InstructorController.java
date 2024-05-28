@@ -3,6 +3,7 @@ package co.istad.lms.features.instructor;
 
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class InstructorController {
     private final InstructorService instructorService;
     
     @PostMapping
-    public InstructorResponse createInstructor(@RequestBody InstructorRequest instructorRequest){
+    public InstructorResponse createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
         return instructorService.createInstructor(instructorRequest);
     }
 
@@ -34,17 +35,17 @@ public class InstructorController {
         instructorService.deleteInstructorByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/disable")
+    @PatchMapping("/{uuid}/disable")
     public InstructorResponse disableInstructorByUuid(@PathVariable String uuid){
         return instructorService.disableInstructorByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/enable")
+    @PatchMapping("/{uuid}/enable")
     public InstructorResponse enableInstructorByUuid(@PathVariable String uuid){
         return instructorService.enableInstructorByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/block")
+    @PatchMapping("/{uuid}/block")
     public InstructorResponse blockInstructorByUuid(@PathVariable String uuid){
         return instructorService.blockInstructorByUuid(uuid);
     }

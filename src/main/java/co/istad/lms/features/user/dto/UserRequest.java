@@ -1,32 +1,60 @@
 package co.istad.lms.features.user.dto;
 
-
-
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
+
 import java.util.List;
 
-
 @Builder
-public record UserRequest
-        (
-                String alias,
-                String nameEn,
-                String nameKh,
-                String username,
-                String gender,
-                String email,
-                String password,
-                String profileImage,
-                String phoneNumber,
+public record UserRequest(
+        @NotBlank(message = "Alias is required")
+        String alias,
 
-                String cityOrProvince,
-                String khanOrDistrict,
-                String sangkatOrCommune,
-                String street,
+        @NotBlank(message = "English name is required")
+        @Size(max = 50, message = "English name must be less than or equal to 50 characters")
+        String nameEn,
 
-                JsonBirthPlace birthPlace,
+        @NotBlank(message = "Khmer name is required")
+        @Size(max = 50, message = "Khmer name must be less than or equal to 50 characters")
+        String nameKh,
 
-                List<AuthorityRequestToUser> authorities
-        ) {
+        @NotBlank(message = "Username is required")
+        @Size(max = 50, message = "Username must be less than or equal to 50 characters")
+        String username,
+
+        @NotBlank(message = "Gender is required")
+        @Size(max = 10, message = "Gender must be less than or equal to 10 characters")
+        String gender,
+
+        @NotBlank(message = "Email is required")
+        @Email(message = "Email should be valid")
+        @Size(max = 100, message = "Email must be less than or equal to 100 characters")
+        String email,
+
+        @NotBlank(message = "Password is required")
+        @Size(min = 6, message = "Password must be at least 6 characters")
+        String password,
+
+        @NotBlank(message = "Profile image is required")
+        @Size(max = 255, message = "Profile image must be less than or equal to 255 characters")
+        String profileImage,
+
+        @Size(max = 20, message = "Phone number must be less than or equal to 20 characters")
+        String phoneNumber,
+
+        String cityOrProvince,
+        String khanOrDistrict,
+        String sangkatOrCommune,
+        String street,
+
+        @NotNull(message = "Birth place is required")
+        JsonBirthPlace birthPlace,
+
+        @NotNull(message = "Authorities are required    ")
+        List<AuthorityRequestToUser> authorities
+) {
 }

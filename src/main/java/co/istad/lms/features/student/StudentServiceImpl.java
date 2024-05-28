@@ -122,7 +122,7 @@ public class StudentServiceImpl implements StudentService {
         user.setStreet(studentRequest.userRequest().street());
         user.setPassword(passwordEncoder.encode(studentRequest.userRequest().password()));
         user.setBirthPlace(toBirthPlace(studentRequest.userRequest().birthPlace()));
-        user.setAuthorities(getDefaultAuthorities());
+
 
         // Save user
         student.setUser(userRepository.save(user));
@@ -135,16 +135,10 @@ public class StudentServiceImpl implements StudentService {
 
         // find student by uuid
         Student student = findStudentByUuid(uuid);
-
         // fine user by alias and assign to string alias
         String alias = student.getUser().getAlias();
         // delete student that found by uuid
         studentRepository.delete(student);
-        // fine user by alias and assign to string alias
-        User user  = userRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with alias = %s not found", alias)));
-        // delete user that found by alias
-        userRepository.delete(user);
 
     }
 
@@ -212,7 +206,5 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
     }
-
-
 
 }
