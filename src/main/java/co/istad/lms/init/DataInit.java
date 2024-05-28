@@ -22,37 +22,64 @@ public class DataInit {
     private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
-    void initRole() {
-        // Auto generate role (USER, CUSTOMER, STAFF, ADMIN)
-        if (authorityRepository.count() < 5) {
+    public void initializeAuthorities() {
+        if (authorityRepository.count() < 44) {  // Total number of authorities to be initialized
+            List<String> authorityNames = List.of(
+                    "faculty:read",
+                    "faculty:write",
+                    "faculty:update",
+                    "faculty:delete",
+                    "generation:read",
+                    "generation:write",
+                    "generation:update",
+                    "generation:delete",
+                    "assessment:read",
+                    "assessment:write",
+                    "assessment:update",
+                    "assessment:delete",
+                    "class:read",
+                    "class:write",
+                    "class:update",
+                    "class:delete",
+                    "course:read",
+                    "course:write",
+                    "course:update",
+                    "course:delete",
+                    "session:read",
+                    "session:write",
+                    "session:update",
+                    "session:delete",
+                    "material:read",
+                    "material:write",
+                    "material:update",
+                    "material:delete",
+                    "admission:read",
+                    "admission:write",
+                    "admission:update",
+                    "admission:delete",
+                    "payment:read",
+                    "payment:write",
+                    "payment:update",
+                    "payment:delete",
+                    "user:read",
+                    "user:write",
+                    "user:update",
+                    "user:delete"
+            );
 
-            Authority userRead = new Authority();
-            userRead.setAuthorityName("user:read");
-            userRead.setUuid(UUID.randomUUID().toString());
-            Authority userWrite = new Authority();
-            userWrite.setAuthorityName("user:write");
-            userWrite.setUuid(UUID.randomUUID().toString());
-            Authority transactionRead = new Authority();
-            transactionRead.setAuthorityName("transaction:read");
-            transactionRead.setUuid(UUID.randomUUID().toString());
-            Authority transactionWrite = new Authority();
-            transactionWrite.setAuthorityName("transaction:write");
-            transactionWrite.setUuid(UUID.randomUUID().toString());
-            Authority accountRead = new Authority();
-            accountRead.setAuthorityName("account:read");
-            accountRead.setUuid(UUID.randomUUID().toString());
-            Authority accountWrite = new Authority();
-            accountWrite.setAuthorityName("account:write");
-            accountWrite.setUuid(UUID.randomUUID().toString());
-            Authority accountTypeRead = new Authority();
-            accountTypeRead.setAuthorityName("accountType:read");
-            accountTypeRead.setUuid(UUID.randomUUID().toString());
-            Authority accountTypeWrite = new Authority();
-            accountTypeWrite.setAuthorityName("accountType:write");
-            accountTypeWrite.setUuid(UUID.randomUUID().toString());
+            List<Authority> authorities = authorityNames.stream()
+                    .map(this::createAuthority)
+                    .toList();
 
-            authorityRepository.saveAll(List.of(userRead, userWrite, transactionRead, transactionWrite, accountRead, accountWrite, accountTypeRead, accountTypeWrite));
+            authorityRepository.saveAll(authorities);
         }
+    }
+
+    private Authority createAuthority(String authorityName) {
+        Authority authority = new Authority();
+        authority.setAuthorityName(authorityName);
+        authority.setUuid(UUID.randomUUID().toString());
+        return authority;
     }
 
     @PostConstruct

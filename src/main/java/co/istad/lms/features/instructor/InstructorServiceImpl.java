@@ -10,7 +10,9 @@ import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorResponse;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.InstructorMapper;
+import co.istad.lms.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,7 +35,37 @@ public class InstructorServiceImpl implements InstructorService {
     private final InstructorMapper instructorMapper;
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
+
+
+
+    private List<Authority> getAuthorities(List<AuthorityRequestToUser> authorityRequests) {
+        List<Authority> authorities = new ArrayList<>();
+        for (AuthorityRequestToUser request : authorityRequests) {
+            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Role with name = %s was not found.", request.authorityName())));
+            authorities.add(authority);
+        }
+        return authorities;
+    }
+
+
+    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
+        BirthPlace birthPlace = new BirthPlace();
+        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
+        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
+        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
+        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
+        birthPlace.setStreet(birthPlaceRequest.street());
+        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
+        return birthPlace;
+    }
+
+
+
     @Override
     public InstructorResponse createInstructor(InstructorRequest instructorRequest) {
 
@@ -66,49 +98,19 @@ public class InstructorServiceImpl implements InstructorService {
 
         Instructor instructor = instructorMapper.toRequest(instructorRequest);
         instructor.setUuid(UUID.randomUUID().toString());
-        instructor.setDegree(instructorRequest.degree());
-        instructor.setMajor(instructorRequest.major());
-        instructor.setHighSchool(instructorRequest.highSchool());
-        instructor.setStudyAtUniversityOrInstitution(instructorRequest.studyAtUniversityOrInstitution());
-        instructor.setExperienceAtWorkingPlace(instructorRequest.experienceAtWorkingPlace());
-        instructor.setExperienceYear(instructorRequest.experienceYear());
-        instructor.setDegreeGraduationDate(instructorRequest.degreeGraduationDate());
-        instructor.setHighSchoolGraduationDate(instructorRequest.highSchoolGraduationDate());
         instructor.setDeleted(false);
         instructor.setStatus(false);
 
-        User user = new User();
-        user.setAlias(instructorRequest.userRequest().alias());
-        user.setEmail(instructorRequest.userRequest().email());
-        user.setPhoneNumber(instructorRequest.userRequest().phoneNumber());
+        User user = userMapper.fromUserRequest(instructorRequest.userRequest());
         user.setPassword(passwordEncoder.encode(instructorRequest.userRequest().password()));
-        user.setIsBlocked(false);
-        user.setIsDeleted(false);
-        user.setGender(instructorRequest.userRequest().gender());
-        user.setNameEn(instructorRequest.userRequest().nameEn());
-        user.setNameKh(instructorRequest.userRequest().nameKh());
-        user.setUsername(instructorRequest.userRequest().username());
-        user.setProfileImage(instructorRequest.userRequest().profileImage());
-        user.setCityOrProvince(instructorRequest.userRequest().cityOrProvince());
-        user.setKhanOrDistrict(instructorRequest.userRequest().khanOrDistrict());
-        user.setSangkatOrCommune(instructorRequest.userRequest().sangkatOrCommune());
-        user.setStreet(instructorRequest.userRequest().street());
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
+        user.setBirthPlace(toBirthPlace(instructorRequest.userRequest().birthPlace()));
 
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(instructorRequest.userRequest().birthPlace().cityOrProvince());
-        birthPlace.setKhanOrDistrict(instructorRequest.userRequest().birthPlace().khanOrDistrict());
-        birthPlace.setVillageOrPhum(instructorRequest.userRequest().birthPlace().villageOrPhum());
-        birthPlace.setHouseNumber(instructorRequest.userRequest().birthPlace().houseNumber());
-        birthPlace.setSangkatOrCommune(instructorRequest.userRequest().birthPlace().sangkatOrCommune());
-        birthPlace.setStreet(instructorRequest.userRequest().birthPlace().street());
-        user.setBirthPlace(birthPlace);
-
+        List<Authority> authorities = getAuthorities(instructorRequest.userRequest().authorities());
         // Save the Authority entity before associating it with the User entity
-        authority.setAuthorityName(instructorRequest.userRequest().authorities().get(0).authorityName());
-        user.setAuthorities(List.of(authority));
+        user.setAuthorities(authorities);
 
         userRepository.save(user);
 
@@ -181,24 +183,10 @@ public class InstructorServiceImpl implements InstructorService {
         user.setCredentialsNonExpired(true);
 
         // Update birth place
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(instructorRequest.userRequest().birthPlace().cityOrProvince());
-        birthPlace.setKhanOrDistrict(instructorRequest.userRequest().birthPlace().khanOrDistrict());
-        birthPlace.setSangkatOrCommune(instructorRequest.userRequest().birthPlace().sangkatOrCommune());
-        birthPlace.setVillageOrPhum(instructorRequest.userRequest().birthPlace().villageOrPhum());
-        birthPlace.setStreet(instructorRequest.userRequest().birthPlace().street());
-        user.setBirthPlace(birthPlace);
-
+        user.setBirthPlace(toBirthPlace(instructorRequest.userRequest().birthPlace()));
         // Update authorities
-        List<Authority> authorities = new ArrayList<>();
-        for (AuthorityRequestToUser authorityRequest : instructorRequest.userRequest().authorities()) {
-            Authority authority = authorityRepository.findByAuthorityName(authorityRequest.authorityName())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Authority with name = %s not found", authorityRequest.authorityName())
-                    ));
-            authorities.add(authority);
-        }
+        List<Authority> authorities = getAuthorities(instructorRequest.userRequest().authorities());
+        // Save the Authority entity before associating it with the User entity
         user.setAuthorities(authorities);
 
         // Save the updated user and instructor
@@ -235,58 +223,39 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public InstructorResponse disableInstructorByUuid(String uuid) {
-        int updated = instructorRepository.updateStatusByUuid(uuid, true);
-        if(updated > 0){
-            Instructor instructor = instructorRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Instructor with uuid = %s not found", uuid)
-                    ));
-            return instructorMapper.toResponse(instructor);
-        }else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Instructor with uuid = %s not found", uuid)
-            );
-        }
+        Instructor instructor = instructorRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with uuid = %s not found", uuid)
+                ));
+        instructor.setStatus(false);
+        return instructorMapper.toResponse(instructorRepository.save(instructor));
     }
 
     @Override
     public InstructorResponse enableInstructorByUuid(String uuid) {
 
-        int updated = instructorRepository.updateStatusByUuid(uuid, false);
-        if(updated > 0) {
-            Instructor instructor = instructorRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Instructor with uuid = %s not found", uuid)
-                    ));
-            return instructorMapper.toResponse(instructor);
-        }else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Instructor with uuid = %s not found", uuid)
-            );
-        }
+        Instructor instructor = instructorRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with uuid = %s not found", uuid)
+                ));
+        instructor.setStatus(true);
+        return instructorMapper.toResponse(instructorRepository.save(instructor));
+
     }
 
     @Override
     public InstructorResponse blockInstructorByUuid(String uuid) {
 
-        int updatedBlock = instructorRepository.updateDeletedStatusByUuid(uuid, true);
-        if(updatedBlock > 0) {
-            Instructor instructor = instructorRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Instructor with uuid = %s not found", uuid)
-                    ));
-            return instructorMapper.toResponse(instructor);
-        }else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Instructor with uuid = %s not found", uuid)
-            );
-        }
+        Instructor instructor = instructorRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with uuid = %s not found", uuid)
+                ));
+        instructor.setDeleted(true);
+        return instructorMapper.toResponse(instructorRepository.save(instructor));
+        
     }
 
     @Override

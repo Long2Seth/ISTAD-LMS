@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -64,8 +65,9 @@ public class StaffController {
                     )
             )
     )
-    public StaffResponse createStaff(@RequestBody StaffRequest staffRequest) {
-        return staffService.createStaff(staffRequest);
+    public StaffResponse createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
+//        return staffService.createStaff(staffRequest);
+        return null;
     }
 
     @GetMapping
@@ -91,17 +93,17 @@ public class StaffController {
         staffService.deleteStaffByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/disable")
+    @PatchMapping("/{uuid}/disable")
     public StaffResponse disableByUuid(@PathVariable String uuid) {
         return staffService.disableByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/enable")
+    @PatchMapping("/{uuid}/enable")
     public StaffResponse enableByUuid(@PathVariable String uuid) {
         return staffService.enableByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/block")
+    @PatchMapping("/{uuid}/block")
     public StaffResponse updateDeletedStatus(@PathVariable String uuid) {
         return staffService.updateDeletedStatus(uuid);
     }

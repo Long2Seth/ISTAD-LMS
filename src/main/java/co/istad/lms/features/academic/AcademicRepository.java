@@ -15,14 +15,5 @@ public interface AcademicRepository extends JpaRepository<Academic, Long>{
 
     Optional<Academic> findByUuid(String uuid);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Academic as a SET a.status = :status WHERE a.uuid = :uuid")
-    int updateStatusByUuid(String uuid, boolean status);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Academic as a SET a.isDeleted = :status WHERE a.uuid = :uuid")
-    int updateDeletedStatusByUuid(String uuid, boolean status);
 
 }

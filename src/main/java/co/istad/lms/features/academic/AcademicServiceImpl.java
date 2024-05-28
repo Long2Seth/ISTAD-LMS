@@ -10,6 +10,7 @@ import co.istad.lms.features.academic.dto.AcademicResponse;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.AcademicMapper;
 import co.istad.lms.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,34 @@ public class AcademicServiceImpl implements AcademicService{
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+
+
+
+    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
+        BirthPlace birthPlace = new BirthPlace();
+        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
+        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
+        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
+        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
+        birthPlace.setStreet(birthPlaceRequest.street());
+        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
+        return birthPlace;
+    }
+
+
+    // This method is used get list of authorities from the authorityRequests
+    private List<Authority> getAuthorities(List<AuthorityRequestToUser> authorityRequests) {
+        List<Authority> authorities = new ArrayList<>();
+        for (AuthorityRequestToUser request : authorityRequests) {
+            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Role with name = %s was not found.", request.authorityName())));
+            authorities.add(authority);
+        }
+        return authorities;
+    }
+
+
 
     @Override
     public AcademicResponse createAcademic(AcademicRequest academicRequest) {
@@ -64,60 +93,18 @@ public class AcademicServiceImpl implements AcademicService{
 
         Academic academic = academicMapper.toRequest(academicRequest);
         academic.setUuid(UUID.randomUUID().toString());
-        academic.setDegree(academicRequest.degree());
-        academic.setMajor(academicRequest.major());
-        academic.setHighSchool(academicRequest.highSchool());
-        academic.setStudyAtUniversityOrInstitution(academicRequest.studyAtUniversityOrInstitution());
-        academic.setExperienceAtWorkingPlace(academicRequest.experienceAtWorkingPlace());
-        academic.setExperienceYear(academicRequest.experienceYear());
-        academic.setDegreeGraduationDate(academicRequest.degreeGraduationDate());
-        academic.setHighSchoolGraduationDate(academicRequest.highSchoolGraduationDate());
         academic.setDeleted(false);
         academic.setStatus(false);
 
-        User user = new User();
-        user.setAlias(academicRequest.userRequest().alias());
-        user.setEmail(academicRequest.userRequest().email());
-        user.setPhoneNumber(academicRequest.userRequest().phoneNumber());
+        User user = userMapper.fromUserRequest(academicRequest.userRequest());
         user.setPassword(passwordEncoder.encode(academicRequest.userRequest().password()));
         user.setIsBlocked(false);
         user.setIsDeleted(false);
-        user.setGender(academicRequest.userRequest().gender());
-        user.setNameEn(academicRequest.userRequest().nameEn());
-        user.setNameKh(academicRequest.userRequest().nameKh());
-        user.setUsername(academicRequest.userRequest().username());
-        user.setProfileImage(academicRequest.userRequest().profileImage());
-        user.setCityOrProvince(academicRequest.userRequest().cityOrProvince());
-        user.setKhanOrDistrict(academicRequest.userRequest().khanOrDistrict());
-        user.setSangkatOrCommune(academicRequest.userRequest().sangkatOrCommune());
-        user.setStreet(academicRequest.userRequest().street());
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(academicRequest.userRequest().birthPlace().cityOrProvince());
-        birthPlace.setKhanOrDistrict(academicRequest.userRequest().birthPlace().khanOrDistrict());
-        birthPlace.setVillageOrPhum(academicRequest.userRequest().birthPlace().villageOrPhum());
-        birthPlace.setHouseNumber(academicRequest.userRequest().birthPlace().houseNumber());
-        birthPlace.setSangkatOrCommune(academicRequest.userRequest().birthPlace().sangkatOrCommune());
-        birthPlace.setStreet(academicRequest.userRequest().birthPlace().street());
-        user.setBirthPlace(birthPlace);
-
-        List<Authority> authorities = new ArrayList<>();
-
-        academicRequest.userRequest().authorities().forEach(r -> {
-            Authority authority = authorityRepository.findByAuthorityName(r.authorityName())
-                    .orElseThrow(
-                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                    String.format("Role with name = %s was not found.", r.authorityName())
-                            )
-                    );
-
-            authorities.add(authority);
-
-        });
-
+        user.setBirthPlace(toBirthPlace(academicRequest.userRequest().birthPlace()));
+        List<Authority> authorities = getAuthorities(academicRequest.userRequest().authorities());
         user.setAuthorities(authorities);
         userRepository.save(user);
         academic.setUser(user);
@@ -128,6 +115,7 @@ public class AcademicServiceImpl implements AcademicService{
 
     @Override
     public AcademicResponse updateAcademicByUuid(String uuid, AcademicRequest academicRequest) {
+
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -187,27 +175,11 @@ public class AcademicServiceImpl implements AcademicService{
         user.setCredentialsNonExpired(true);
 
         // Update birth place
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(academicRequest.userRequest().birthPlace().cityOrProvince());
-        birthPlace.setKhanOrDistrict(academicRequest.userRequest().birthPlace().khanOrDistrict());
-        birthPlace.setSangkatOrCommune(academicRequest.userRequest().birthPlace().sangkatOrCommune());
-        birthPlace.setVillageOrPhum(academicRequest.userRequest().birthPlace().villageOrPhum());
-        birthPlace.setHouseNumber(academicRequest.userRequest().birthPlace().houseNumber());
-        birthPlace.setStreet(academicRequest.userRequest().birthPlace().street());
-        user.setBirthPlace(birthPlace);
+        user.setBirthPlace(toBirthPlace(academicRequest.userRequest().birthPlace()));
 
         // Update authorities
-        List<Authority> authorities = new ArrayList<>();
-        for (AuthorityRequestToUser authorityRequest : academicRequest.userRequest().authorities()) {
-            Authority authority = authorityRepository.findByAuthorityName(authorityRequest.authorityName())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Authority with name = %s not found", authorityRequest.authorityName())
-                    ));
-            authorities.add(authority);
-        }
+        List<Authority> authorities = getAuthorities(academicRequest.userRequest().authorities());
         user.setAuthorities(authorities);
-
         // Save the updated user and academic
         userRepository.save(user);
         academic.setUser(user);
@@ -242,60 +214,39 @@ public class AcademicServiceImpl implements AcademicService{
     @Override
     public AcademicResponse updateDisableAcademicByUuid(String uuid) {
 
-        int updateStatus = academicRepository.updateStatusByUuid(uuid, false);
-        if(updateStatus>0){
-            Academic academic = academicRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Academic with uuid = %s not found", uuid)
-                    ));
-            return academicMapper.toResponse(academic);
-        }else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Academic with uuid = %s not found", uuid)
-            );
-        }
+        Academic academic = academicRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Academic with uuid = %s not found", uuid)
+                ));
+        academic.setStatus(false);
+        return academicMapper.toResponse(academicRepository.save(academic));
 
     }
 
     @Override
     public AcademicResponse updateEnableAcademicByUuid(String uuid) {
 
-        int updateStatus = academicRepository.updateStatusByUuid(uuid, true);
-        if(updateStatus>0){
-            Academic academic = academicRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Academic with uuid = %s not found", uuid)
-                    ));
-            return academicMapper.toResponse(academic);
-        }else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Academic with uuid = %s not found", uuid)
-            );
-        }
+        Academic academic = academicRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Academic with uuid = %s not found", uuid)
+                ));
+        academic.setStatus(true);
+        return academicMapper.toResponse(academicRepository.save(academic));
 
     }
 
     @Override
     public AcademicResponse updateDeletedAcademicByUuid(String uuid) {
 
-        int updateDeleted = academicRepository.updateDeletedStatusByUuid(uuid, true);
-        if(updateDeleted>0){
-            Academic academic = academicRepository.findByUuid(uuid)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("Academic with uuid = %s not found", uuid)
-                    ));
-            return academicMapper.toResponse(academic);
-        }else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Academic with uuid = %s not found", uuid)
-            );
-        }
+        Academic academic = academicRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Academic with uuid = %s not found", uuid)
+                ));
+        academic.setDeleted(true);
+        return academicMapper.toResponse(academicRepository.save(academic));
 
     }
 
@@ -313,4 +264,6 @@ public class AcademicServiceImpl implements AcademicService{
         Page<Academic> academicResponses = new PageImpl<>(academicList , pageRequest, academicList.size());
         return academicResponses.map(academicMapper::toResponse);
     }
+
+
 }

@@ -15,14 +15,5 @@ public interface InstructorRepository extends JpaRepository<Instructor,Long> {
 
     Optional<Instructor> findByUuid(String uuid);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Instructor as i SET i.status = :status WHERE i.uuid = :uuid")
-    int updateStatusByUuid(String uuid, boolean status);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Instructor as i SET i.isDeleted = :status WHERE i.uuid = :uuid")
-    int updateDeletedStatusByUuid(String uuid, boolean status);
 
 }

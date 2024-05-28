@@ -17,14 +17,4 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     Optional<Staff> findByUuid(String uuid);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Staff s SET s.isDeleted = :status WHERE s.uuid = :uuid")
-    int updateDeletedStatusById(String uuid, boolean status);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Staff s SET s.status = :status WHERE s.uuid = :uuid")
-    int updateStatusById(String uuid , boolean status);
-
 }

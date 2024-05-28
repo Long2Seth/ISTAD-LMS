@@ -15,14 +15,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Optional<Student> findByUuid(String uuid);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Student s SET s.status = :status WHERE s.uuid = :uuid")
-    int updateStatusByUuid(String uuid, boolean status);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Student s SET s.isDeleted = :status WHERE s.uuid = :uuid")
-    int updateDeletedByUuid(String uuid, boolean status);
-
 }
