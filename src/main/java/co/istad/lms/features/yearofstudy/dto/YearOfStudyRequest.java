@@ -17,9 +17,8 @@ public record YearOfStudyRequest(
         Integer semester,
 
         @NotBlank(message = "Study Program ID is required")
-        String studyProgramAlias,
+        String studyProgramAlias
 
-        Set<String> subjectAlias
 
 ) {
 }

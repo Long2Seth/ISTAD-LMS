@@ -78,7 +78,7 @@ public class AdmissionServiceImpl implements AdmissionService {
 
         // Send a notification to Telegram
 
-        telegramBotService.sendAdmissionResponse(admission);
+//        telegramBotService.sendAdmissionResponse(admission);
     }
 
     @Override

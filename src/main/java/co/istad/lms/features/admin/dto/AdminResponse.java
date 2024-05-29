@@ -8,22 +8,7 @@ import java.util.List;
 
 public record AdminResponse(
         String uuid,
-        String highSchool,
-
-        LocalDate highSchoolGraduationDate,
-
-        String degree, // Bachelor, Master, Doctor
-
-        LocalDate degreeGraduationDate,
-
-        String major,
-
-        String studyAtUniversityOrInstitution,
-
-        String experienceAtWorkingPlace,
-
-        LocalDate experienceYear,
-
-        UserResponse users
+        boolean status ,
+        UserResponse user
 ) {
 }

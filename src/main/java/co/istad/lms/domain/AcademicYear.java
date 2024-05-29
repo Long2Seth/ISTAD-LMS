@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,16 @@ public class AcademicYear {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
+    @Column(nullable = false)
+    private String uuid;
+
     @Column(nullable = false , length = 50)
     private String year;
+
+    @Column(nullable = false)
+    private LocalDate startYear;
+
+    @Column(nullable = false)
+    private LocalDate endYear;
 
 }

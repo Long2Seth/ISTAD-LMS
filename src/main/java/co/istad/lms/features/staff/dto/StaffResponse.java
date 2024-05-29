@@ -8,8 +8,8 @@ import lombok.Builder;
 public record StaffResponse(
 
         String uuid,
-        String position,
-        UserResponse userResponse
+        boolean status ,
+        UserResponse user
 
 ) {
 }

@@ -70,35 +70,27 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public InstructorResponse createInstructor(InstructorRequest instructorRequest) {
 
-
-
-        if (userRepository.existsByEmailOrUsername(instructorRequest.userRequest().email() , instructorRequest.userRequest().username())) {
+        // validate if the user already exists
+        // Check if the username or email already exists from database
+        if (userRepository.existsByEmailOrUsername(instructorRequest.user().email() , instructorRequest.user().username())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", instructorRequest.userRequest().email())
+                    String.format("User with email = %s or username = %s have already exists", instructorRequest.user().email() , instructorRequest.user().username())
             );
         }
-
-
-        Authority authority = authorityRepository.findByAuthorityName(instructorRequest.userRequest().authorities().get(0).authorityName())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        String.format("Authority with name = %s not found", instructorRequest.userRequest().authorities().get(0).authorityName())
-                ));
 
         Instructor instructor = instructorMapper.toRequest(instructorRequest);
         instructor.setUuid(UUID.randomUUID().toString());
         instructor.setDeleted(false);
         instructor.setStatus(false);
 
-        User user = userMapper.fromUserRequest(instructorRequest.userRequest());
-        user.setPassword(passwordEncoder.encode(instructorRequest.userRequest().password()));
+        User user = userMapper.fromUserRequest(instructorRequest.user());
+        user.setPassword(passwordEncoder.encode(instructorRequest.user().password()));
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-//        user.setBirthPlace(toBirthPlace(instructorRequest.userRequest().birthPlace()));
 
-        List<Authority> authorities = getAuthorities(instructorRequest.userRequest().authorities());
+        List<Authority> authorities = getAuthorities(instructorRequest.user().authorities());
         // Save the Authority entity before associating it with the User entity
         user.setAuthorities(authorities);
 

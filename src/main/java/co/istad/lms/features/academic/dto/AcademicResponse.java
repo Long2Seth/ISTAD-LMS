@@ -6,9 +6,7 @@ import java.time.LocalDate;
 
 public record AcademicResponse(
         String uuid,
-
-        boolean status,
-
-        UserResponse users
+        boolean status ,
+        UserResponse user
 ) {
 }

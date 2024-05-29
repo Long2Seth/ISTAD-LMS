@@ -66,30 +66,18 @@ public class AcademicServiceImpl implements AcademicService {
         return authorities;
     }
 
-    private void validateUser( AcademicRequest academicRequest) {
-
-        if (userRepository.existsByEmailOrUsername(academicRequest.user().email() , academicRequest.user().username())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", academicRequest.user().email())
-            );
-        }
-
-        if (userRepository.existsByUsername(academicRequest.user().username())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with alias = %s already exists", academicRequest.user().username())
-            );
-        }
-
-    }
-
 
     @Override
     public AcademicResponse createAcademic(AcademicRequest academicRequest) {
 
         // validation user
-        validateUser(academicRequest);
+        // check if user with email or username already exists in the database
+        if (userRepository.existsByEmailOrUsername(academicRequest.user().email(), academicRequest.user().username())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with email = %s and username = %s already exists", academicRequest.user().email(), academicRequest.user().username())
+            );
+        }
 
         // Create academic by mapping
         Academic academic = academicMapper.toRequest(academicRequest);
@@ -109,7 +97,12 @@ public class AcademicServiceImpl implements AcademicService {
         user.setCredentialsNonExpired(true);
 
         // set authorities to user that we get from the getAuthorities method
-        List<Authority> authorities = getAuthorities(academicRequest.user().authorities());
+        List<Authority> authorities = new ArrayList<>();
+        Authority authority = authorityRepository.findByAuthorityName(academicRequest.user().authorities().get(0).authorityName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Role with name = %s was not found.", academicRequest.user().authorities().get(0).authorityName())));
+        authorities.add(authority);
+
         user.setAuthorities(authorities);
 
         //save user and academic
@@ -137,17 +130,10 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("User with alias = %s not found", academicRequestDetail.user().uuid())
                 ));
 
-        if (userRepository.existsByEmailOrUsername(academicRequestDetail.user().email() , academicRequestDetail.user().username())) {
+        if (userRepository.existsByEmailOrUsername(academicRequestDetail.user().email(), academicRequestDetail.user().username())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s already exists", academicRequestDetail.user().email())
-            );
-        }
-
-        if (userRepository.existsByUsername(academicRequestDetail.user().username())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with user name = %S already exists ", academicRequestDetail.user().username())
             );
         }
 

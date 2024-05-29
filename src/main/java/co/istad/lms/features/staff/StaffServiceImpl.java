@@ -82,18 +82,19 @@ public class StaffServiceImpl implements StaffService {
     public StaffResponse createStaff(StaffRequest staffRequest) {
 
 
-        if (userRepository.existsByUsername(staffRequest.userRequest().username())) {
+        if (userRepository.existsByUsername(staffRequest.user().username())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with username = %s already exists", staffRequest.userRequest().username())
+                    String.format("User with username = %s already exists", staffRequest.user().username())
             );
         }
 
         // Save the user first
-        User user = userMapper.fromUserRequest(staffRequest.userRequest());
-        user.setPassword(passwordEncoder.encode(staffRequest.userRequest().password()));
-//        user.setBirthPlace(toBirthPlace(staffRequest.userRequest().birthPlace()));
-        List<Authority> authorities = getAuthorities(staffRequest.userRequest().authorities());
+        User user = userMapper.fromUserRequest(staffRequest.user());
+        user.setPassword(passwordEncoder.encode(staffRequest.user().password()));
+        user.setUuid(UUID.randomUUID().toString());
+
+        List<Authority> authorities = getAuthorities(staffRequest.user().authorities());
         user.setAuthorities(authorities);
         // Save the user
         userRepository.save(user);

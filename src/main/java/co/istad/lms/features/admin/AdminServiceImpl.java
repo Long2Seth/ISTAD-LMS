@@ -59,16 +59,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-
-
     @Override
     public AdminResponse createAdmin( @Valid AdminRequest adminRequest) {
 
-        // Validate the user request
         // Check if the user with the email already exists
         if (userRepository.existsByEmailOrUsername(adminRequest.user().email() , adminRequest.user().username() )) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", adminRequest.user().email()));
+                    String.format("User with email = %s and username = %s already exists", adminRequest.user().email() , adminRequest.user().username()));
         }
 
         // Create a new admin by mapper that maps the AdminRequest to Admin
@@ -89,12 +86,12 @@ public class AdminServiceImpl implements AdminService {
 
         // Set the authorities of the user from the authorities of the adminRequest
         List<Authority> authorities = new ArrayList<>();
-        for (AuthorityRequestToUser request : adminRequest.user().authorities()) {
-            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
+            Authority authority = authorityRepository.findByAuthorityName(adminRequest.user().authorities().get(0).authorityName())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Role with name = %s was not found.", request.authorityName())));
+                            String.format("Role with name = %s was not found.", adminRequest.user().authorities().get(0).authorityName())));
+        System.out.println( " Authority : " + authority.getAuthorityName() );
             authorities.add(authority);
-        }
+
         user.setAuthorities(authorities);
 
         // Set the data of field the user by the userRequest

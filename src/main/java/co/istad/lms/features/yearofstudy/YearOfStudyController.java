@@ -44,14 +44,23 @@ public class YearOfStudyController {
 
     }
 
-    @PutMapping("/{alias}")
+    @PutMapping("/{uuid}")
     public YearOfStudyResponse updateYearOfStudy(
             @PathVariable String uuid,
             @Valid @RequestBody YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
 
         return yearOfStudyService.updateYearOfStudyByUuid(uuid, yearOfStudyUpdateRequest);
 
+    }    @PutMapping("/{uuid}/subjects")
+    public YearOfStudyResponse updateYearOfStudySubject(
+            @PathVariable String uuid,
+            @Valid @RequestBody YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
+
+        return yearOfStudyService.updateYearOfStudyByUuid(uuid, yearOfStudyUpdateRequest);
+
     }
+
+
 
     @DeleteMapping("/{uuid}")
     public void deleteYearOfStudy(@PathVariable String uuid) {

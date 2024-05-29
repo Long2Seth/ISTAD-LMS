@@ -11,6 +11,6 @@ public interface InstructorMapper {
 
     Instructor toRequest(InstructorRequest request);
 
-    @Mapping(source = "user", target = "users")
+    @Mapping(source = "user", target = "user")
     InstructorResponse toResponse(Instructor instructor);
 }

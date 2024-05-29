@@ -10,8 +10,9 @@ import lombok.Builder;
 @Builder
 public record StaffRequest(
         String position,
-        @NotNull(message = "User is required")
+
+        @NotNull(message = "UserRequest is required")
         @Valid
-        UserRequest userRequest
+        UserRequest user
 ) {
 }

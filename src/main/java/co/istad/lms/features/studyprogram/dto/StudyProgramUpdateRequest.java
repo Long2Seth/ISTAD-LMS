@@ -18,16 +18,8 @@ public record StudyProgramUpdateRequest(
 
         String description,
 
-        String logo,
+        String logo
 
 
-        String facultyAlias,
-
-        String degreeAlias,
-
-        Set<String> yearOfStudiesUuid
-
-
-//        Set<String> subjectAlias
 ) {
 }

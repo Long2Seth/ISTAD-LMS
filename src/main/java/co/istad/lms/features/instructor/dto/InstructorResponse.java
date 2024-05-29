@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 public record InstructorResponse(
         String uuid,
-        boolean status,
-        UserResponse users
+        boolean status ,
+        UserResponse user
 ) {
 }

@@ -20,7 +20,7 @@ public record AcademicResponseDetail(
 
         String experienceAtWorkingPlace,
 
-        LocalDate experienceYear, // experience compare per year
+        LocalDate experienceYear,
 
         UserResponse users
 ) {

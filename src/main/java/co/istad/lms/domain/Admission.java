@@ -42,7 +42,7 @@ public class Admission extends Auditable {
     private String pob;
 
     @Column(length = 10)
-    private String BacIiGrade;
+    private String bacIiGrade;
 
     @Column(nullable = false, length = 20)
     private String gender;

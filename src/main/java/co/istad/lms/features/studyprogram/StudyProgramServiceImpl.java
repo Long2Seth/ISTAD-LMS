@@ -64,14 +64,6 @@ public class StudyProgramServiceImpl implements StudyProgramService{
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
 
-        // Fetch subjects by their IDs from the request
-        Set<YearOfStudy> yearOfStudies = studyProgramRequest.yearOfStudiesUuid().stream()
-
-                .map(yearOfStudyUuid -> yearOfStudyRepository.findByUuid(yearOfStudyUuid)
-
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("YearOfStudy with uuid = %s has not been found.",yearOfStudyUuid))))
-                .collect(Collectors.toSet());
 
         //map from DTO to entity
         StudyProgram studyProgram=studyProgramMapper.fromStudyProgramRequest(studyProgramRequest);
@@ -85,8 +77,6 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         //set faculty
         studyProgram.setFaculty(faculty);
 
-        //set all subjects
-        studyProgram.setYearOfStudies(yearOfStudies);
 
         //save to database
         studyProgramRepository.save(studyProgram);
@@ -144,33 +134,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
             }
         }
 
-        //validate degree from dto with entity
-        //if the same, don't update
-        if (studyProgramUpdateRequest.degreeAlias() != null &&
-                !studyProgramUpdateRequest.degreeAlias().equals(studyProgram.getDegree().getAlias())) {
 
-            //find degree in database with uuid
-            Degree degree = degreeRepository.findByAlias(studyProgramUpdateRequest.degreeAlias())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Degree = %s has not been found", studyProgramUpdateRequest.degreeAlias())));
-
-            //set new degree
-            studyProgram.setDegree(degree);
-        }
-
-        //validate faculty from dto with entity
-        //if the same, don't update
-        if (studyProgramUpdateRequest.degreeAlias() != null &&
-                !studyProgramUpdateRequest.facultyAlias().equals(studyProgram.getFaculty().getAlias())) {
-
-            //find degree in database with uuid
-            Faculty faculty = facultyRepository.findByAlias(studyProgramUpdateRequest.facultyAlias())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Faculty = %s has not been found", studyProgramUpdateRequest.facultyAlias())));
-
-            //set new faculty
-            studyProgram.setFaculty(faculty);
-        }
 
         //map from DTO to entity
         studyProgramMapper.updateStudyProgramFromRequest(studyProgram, studyProgramUpdateRequest);

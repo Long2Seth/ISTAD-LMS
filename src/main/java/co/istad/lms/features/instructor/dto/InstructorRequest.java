@@ -15,7 +15,7 @@ public record InstructorRequest(
 
         @NotNull(message = "UserRequest is required")
         @Valid
-        UserRequest userRequest
+        UserRequest user
 
 ) {
 }
