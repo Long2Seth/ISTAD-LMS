@@ -9,7 +9,7 @@ public interface InstructorService {
 
     InstructorResponse createInstructor( InstructorRequest instructorRequest);
 
-    InstructorResponse updateInstructorByUuid(String uuid, InstructorRequestDetail instructorRequestDetail);
+    InstructorRequestDetail updateInstructorByUuid(String uuid, InstructorRequestDetail instructorRequestDetail);
 
     InstructorResponse getInstructorByUuid( String uuid);
 

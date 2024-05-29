@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -67,8 +66,7 @@ public class StaffController {
             )
     )
     public StaffResponse createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
-//        return staffService.createStaff(staffRequest);
-        return null;
+        return staffService.createStaff(staffRequest);
     }
 
     @GetMapping
@@ -85,7 +83,7 @@ public class StaffController {
     }
 
     @PutMapping("/{uuid}")
-    public StaffResponse updateStaffByUuid(@PathVariable String uuid, @RequestBody StaffRequestDetail staffRequestDetail) {
+    public StaffRequestDetail updateStaffByUuid(@PathVariable String uuid, @RequestBody StaffRequestDetail staffRequestDetail) {
         return staffService.updateStaffByUuid(uuid, staffRequestDetail);
     }
 

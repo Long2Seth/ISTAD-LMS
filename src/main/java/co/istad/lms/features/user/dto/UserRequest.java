@@ -10,6 +10,7 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 public record UserRequest(
@@ -50,8 +51,7 @@ public record UserRequest(
         @Size(max = 20, message = "Phone number must be less than or equal to 20 characters")
         String phoneNumber,
 
-        @NotNull(message = "Authorities is required")
         @Valid
-        List<AuthorityRequestToUser> authorities
+        Set<AuthorityRequestToUser> authorities
 ) {
 }

@@ -3,6 +3,7 @@ package co.istad.lms.features.admin;
 import co.istad.lms.features.admin.dto.AdminRequest;
 import co.istad.lms.features.admin.dto.AdminRequestDetail;
 import co.istad.lms.features.admin.dto.AdminResponse;
+import co.istad.lms.features.admin.dto.AdminResponseDetail;
 import co.istad.lms.features.auth.dto.AuthRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -149,7 +150,7 @@ public class AdminController {
                     )
             )
     )
-    public AdminResponse updateByUuid(@PathVariable String uuid, @RequestBody AdminRequestDetail adminRequestDetail) {
+    public AdminResponseDetail updateByUuid(@PathVariable String uuid, @RequestBody AdminRequestDetail adminRequestDetail) {
         return adminService.updateAdminByUuid(uuid, adminRequestDetail);
     }
 

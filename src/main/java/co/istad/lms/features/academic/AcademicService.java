@@ -9,7 +9,7 @@ public interface AcademicService {
 
     AcademicResponse createAcademic(AcademicRequest academicRequest);
 
-    AcademicResponse updateAcademicByUuid(String uuid , AcademicRequestDetail academicRequestDetail);
+    AcademicRequestDetail updateAcademicByUuid(String uuid , AcademicRequestDetail academicRequestDetail);
 
     AcademicResponse getAcademicByUuid(String uuid);
 

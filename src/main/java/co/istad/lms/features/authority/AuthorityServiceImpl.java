@@ -69,7 +69,6 @@ public class AuthorityServiceImpl implements AuthorityService {
             );
         }
         Authority authority = authorityMapper.toAuthorityRequest(authorityRequest);
-        authority.setUuid(java.util.UUID.randomUUID().toString());
         authority.setAuthorityName(authorityRequest.authorityName());
         authority.setDescription(authorityRequest.description());
         authorityRepository.save(authority);

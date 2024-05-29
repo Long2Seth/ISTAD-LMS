@@ -9,7 +9,7 @@ public interface StaffService {
 
     StaffResponse createStaff(StaffRequest staffRequest);
 
-    StaffResponse updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail);
+    StaffRequestDetail updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail);
 
     StaffResponse getStaffByUuid(String uuid);
 

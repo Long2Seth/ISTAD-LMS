@@ -22,8 +22,8 @@ public record AdminResponseDetail(
 
         String experienceAtWorkingPlace,
 
-        LocalDate experienceYear,
+        String experienceYear,
 
-        UserResponse users
+        UserResponse user
 ) {
 }

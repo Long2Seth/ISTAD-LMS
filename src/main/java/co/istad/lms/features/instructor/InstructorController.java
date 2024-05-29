@@ -27,7 +27,7 @@ public class InstructorController {
     }
 
     @PutMapping("/{uuid}")
-    public InstructorResponse updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequestDetail instructorRequestDetail){
+    public InstructorRequestDetail updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequestDetail instructorRequestDetail){
         return instructorService.updateInstructorByUuid(uuid, instructorRequestDetail);
     }
 

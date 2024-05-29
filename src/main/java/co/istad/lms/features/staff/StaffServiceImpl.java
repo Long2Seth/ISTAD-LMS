@@ -25,9 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,17 +40,6 @@ public class StaffServiceImpl implements StaffService {
     private final PasswordEncoder passwordEncoder;
 
 
-    private List<Authority> getAuthorities(List<AuthorityRequestToUser> authorityRequests) {
-        List<Authority> authorities = new ArrayList<>();
-        for (AuthorityRequestToUser request : authorityRequests) {
-            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Role with name = %s was not found.", request.authorityName())));
-            authorities.add(authority);
-        }
-        return authorities;
-    }
-
 
     private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
         BirthPlace birthPlace = new BirthPlace();
@@ -65,17 +52,6 @@ public class StaffServiceImpl implements StaffService {
         return birthPlace;
     }
 
-    public void validateStaffRequest(StaffRequestDetail staffRequest) {
-        if (userRepository.existsByEmailOrUsername(staffRequest.user().email() , staffRequest.user().username())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", staffRequest.user().email())
-            );
-        }
-
-
-
-    }
 
 
     @Override
@@ -94,8 +70,13 @@ public class StaffServiceImpl implements StaffService {
         user.setPassword(passwordEncoder.encode(staffRequest.user().password()));
         user.setUuid(UUID.randomUUID().toString());
 
-        List<Authority> authorities = getAuthorities(staffRequest.user().authorities());
-        user.setAuthorities(authorities);
+        Set<Authority> allAuthorities = new HashSet<>();
+        for (AuthorityRequestToUser request : staffRequest.user().authorities()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+            System.out.println("foundAuthorities = " + foundAuthorities);
+            allAuthorities.addAll(foundAuthorities);
+        }
+        user.setAuthorities(allAuthorities);
         // Save the user
         userRepository.save(user);
 
@@ -111,7 +92,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffResponse updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail) {
+    public StaffRequestDetail updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail) {
 
         // Check if the staff exists
         Staff staff = staffRepository.findByUuid(uuid)
@@ -122,15 +103,20 @@ public class StaffServiceImpl implements StaffService {
                 );
 
         // Check if the user exists
-        User user = userRepository.findByUuid(staffRequestDetail.user().uuid())
+        User user = userRepository.findByUuid(staff.getUser().getUuid())
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("User with alias = %s was not found.", staffRequestDetail.user().uuid())
+                                String.format("User with uuid = %s was not found.", staff.getUser().getUuid())
                         )
                 );
 
         // Check if the user exists
-        validateStaffRequest(staffRequestDetail);
+        if (userRepository.existsByEmailOrUsername(staffRequestDetail.user().email() , staffRequestDetail.user().username())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with email = %s or username = %s already exists", staffRequestDetail.user().email() , staffRequestDetail.user().username())
+            );
+        }
 
         // Update the user
         staff.setPosition(staffRequestDetail.position());
@@ -139,25 +125,27 @@ public class StaffServiceImpl implements StaffService {
         user.setEmail(staffRequestDetail.user().email());
         user.setPhoneNumber(staffRequestDetail.user().phoneNumber());
         user.setGender(staffRequestDetail.user().gender());
-//        user.setCityOrProvince(staffRequestDetail.user()().cityOrProvince());
-//        user.setKhanOrDistrict(staffRequestDetail.user()().khanOrDistrict());
-//        user.setSangkatOrCommune(staffRequestDetail.user()().sangkatOrCommune());
-//        user.setStreet(staffRequestDetail.user()().street());
-//        user.setProfileImage(staffRequestDetail.user()().profileImage());
-//        user.setBirthPlace(toBirthPlace(staffRequestDetail.user()().birthPlace()));
+        user.setCityOrProvince(staffRequestDetail.user().cityOrProvince());
+        user.setKhanOrDistrict(staffRequestDetail.user().khanOrDistrict());
+        user.setSangkatOrCommune(staffRequestDetail.user().sangkatOrCommune());
+        user.setStreet(staffRequestDetail.user().street());
+        user.setProfileImage(staffRequestDetail.user().profileImage());
+        user.setBirthPlace(toBirthPlace(staffRequestDetail.user().birthPlace()));
 
         // Update the authorities
-        List<Authority> authorities = getAuthorities(staffRequestDetail.user().authorities());
-        user.setAuthorities(authorities);
-
-        // Assign authorities to the user
-        user.setAuthorities(authorities);
+        Set<Authority> allAuthorities = new HashSet<>();
+        for (AuthorityRequestToUser request : staffRequestDetail.user().authorities()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+            System.out.println("foundAuthorities = " + foundAuthorities);
+            allAuthorities.addAll(foundAuthorities);
+        }
+        user.setAuthorities(allAuthorities);
         // Save the user
         userRepository.save(user);
         // Save the staff
         staffRepository.save(staff);
 
-        return staffMapper.toResponse(staff);
+        return staffMapper.toResponseDetail(staff);
 
     }
 
@@ -211,7 +199,7 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
-        staff.setStatus(false);
+        staff.setStatus(true);
         staffRepository.save(staff);
         return staffMapper.toResponse(staff);
     }
@@ -225,7 +213,7 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
-        staff.setStatus(true);
+        staff.setStatus(false);
         staffRepository.save(staff);
         return staffMapper.toResponse(staff);
 
@@ -241,7 +229,7 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
-        staff.setDeleted(!staff.isDeleted());
+        staff.setDeleted(true);
         staffRepository.save(staff);
         return staffMapper.toResponse(staff);
 

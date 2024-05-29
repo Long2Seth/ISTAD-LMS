@@ -4,9 +4,9 @@ import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public record UserRequestDetail(
-        String uuid,
         String nameEn,
         String nameKh,
         String username,
@@ -21,7 +21,7 @@ public record UserRequestDetail(
         String sangkatOrCommune,
         String street,
         JsonBirthPlace birthPlace,
-        List<AuthorityRequestToUser> authorities
+        Set<AuthorityRequestToUser> authorities
 
 ) {
 }

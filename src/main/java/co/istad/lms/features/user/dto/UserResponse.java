@@ -8,6 +8,7 @@ import co.istad.lms.features.authority.dto.AuthorityResponseToUser;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.Set;
 
 @Builder
 public record UserResponse(
@@ -19,6 +20,6 @@ public record UserResponse(
         String email,
         String profileImage,
         String phoneNumber,
-        List<AuthorityResponseToUser> authorities
+        Set<AuthorityResponseToUser> authorities
         ){
 }

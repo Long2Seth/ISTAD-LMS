@@ -5,10 +5,8 @@ import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestDetail;
 import co.istad.lms.features.academic.dto.AcademicResponse;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,7 +35,7 @@ public class AcademicController {
     }
 
     @PutMapping("/{uuid}")
-    public AcademicResponse updateAcademicByUuid(@PathVariable String uuid , @RequestBody AcademicRequestDetail academicRequest){
+    public AcademicRequestDetail updateAcademicByUuid(@PathVariable String uuid , @RequestBody AcademicRequestDetail academicRequest){
         return academicService.updateAcademicByUuid(uuid, academicRequest);
     }
 
@@ -46,17 +44,17 @@ public class AcademicController {
         return academicService.deleteAcademicByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/disable")
+    @PatchMapping("/{uuid}/disable")
     public AcademicResponse updateDisableAcademicByUuid(@PathVariable String uuid){
         return academicService.updateDisableAcademicByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/enable")
+    @PatchMapping("/{uuid}/enable")
     public AcademicResponse updateEnableAcademicByUuid(@PathVariable String uuid){
         return academicService.updateEnableAcademicByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}/block")
+    @PatchMapping("/{uuid}/block")
     public AcademicResponse updateDeletedAcademicByUuid(@PathVariable String uuid){
         return academicService.updateDeletedAcademicByUuid(uuid);
     }
