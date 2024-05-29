@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,7 @@ public class StudentController {
             )
     )
     @PostMapping
-    public StudentResponse createStudent(@RequestBody StudentRequest studentRequest) {
+    public StudentResponse createStudent(@Valid  @RequestBody StudentRequest studentRequest) {
         return studentService.createStudent(studentRequest);
     }
 

@@ -5,6 +5,7 @@ import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Admin;
 import co.istad.lms.features.admin.dto.AdminRequest;
+import co.istad.lms.features.admin.dto.AdminRequestDetail;
 import co.istad.lms.features.admin.dto.AdminResponse;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
@@ -45,6 +46,7 @@ public class AdminServiceImpl implements AdminService {
 
     // This method is used to convert the JsonBirthPlace object to BirthPlace object
     private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
+        // Create a new BirthPlace object
         BirthPlace birthPlace = new BirthPlace();
         birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
         birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
@@ -53,130 +55,129 @@ public class AdminServiceImpl implements AdminService {
         birthPlace.setStreet(birthPlaceRequest.street());
         birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
         return birthPlace;
+
     }
 
 
-    // This method is used get list of authorities from the authorityRequests
-    private List<Authority> getAuthorities(List<AuthorityRequestToUser> authorityRequests) {
-        List<Authority> authorities = new ArrayList<>();
-        for (AuthorityRequestToUser request : authorityRequests) {
-            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Role with name = %s was not found.", request.authorityName())));
-            authorities.add(authority);
-        }
-        return authorities;
-    }
 
-    private void validateUserRequest(UserRequest userRequest) {
-        if (userRepository.existsByEmail(userRequest.email())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", userRequest.email()));
-        }
-        if (userRepository.existsByAlias(userRequest.alias())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with alias = %s already exists", userRequest.alias()));
-        }
-        if (userRepository.existsByPhoneNumber(userRequest.phoneNumber())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with phone number = %s already exists", userRequest.phoneNumber()));
-        }
-    }
 
     @Override
     public AdminResponse createAdmin( @Valid AdminRequest adminRequest) {
-        validateUserRequest(adminRequest.userRequest());
 
+        // Validate the user request
+        // Check if the user with the email already exists
+        if (userRepository.existsByEmailOrUsername(adminRequest.user().email() , adminRequest.user().username() )) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    String.format("User with email = %s already exists", adminRequest.user().email()));
+        }
+
+        // Create a new admin by mapper that maps the AdminRequest to Admin
         Admin admin = adminMapper.toRequestAdmin(adminRequest);
         admin.setUuid(UUID.randomUUID().toString());
         admin.setDeleted(false);
         admin.setStatus(false);
 
-        User user = userMapper.fromUserRequest(adminRequest.userRequest());
-        user.setPassword(passwordEncoder.encode(adminRequest.userRequest().password()));
+        // Create a new user by mapper that maps the UserRequest to User
+        User user = userMapper.fromUserRequest(adminRequest.user());
+        user.setUuid(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(adminRequest.user().password()));
         user.setIsBlocked(false);
         user.setIsDeleted(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-        user.setBirthPlace(toBirthPlace(adminRequest.userRequest().birthPlace()));
 
-        List<Authority> authorities = getAuthorities(adminRequest.userRequest().authorities());
+        // Set the authorities of the user from the authorities of the adminRequest
+        List<Authority> authorities = new ArrayList<>();
+        for (AuthorityRequestToUser request : adminRequest.user().authorities()) {
+            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Role with name = %s was not found.", request.authorityName())));
+            authorities.add(authority);
+        }
         user.setAuthorities(authorities);
+
+        // Set the data of field the user by the userRequest
         userRepository.save(user);
 
+        // Set the user of the admin
         admin.setUser(user);
+
+        // Save the admin to the database
         Admin savedAdmin = adminRepository.save(admin);
 
         return adminMapper.toAdminResponse(savedAdmin);
-    }
 
-    private void updateAdminDetails(Admin admin, AdminRequest adminRequest) {
-        admin.setDegree(adminRequest.degree());
-        admin.setMajor(adminRequest.major());
-        admin.setHighSchool(adminRequest.highSchool());
-        admin.setStudyAtUniversityOrInstitution(adminRequest.studyAtUniversityOrInstitution());
-        admin.setExperienceAtWorkingPlace(adminRequest.experienceAtWorkingPlace());
-        admin.setExperienceYear(adminRequest.experienceYear());
-        admin.setDegreeGraduationDate(adminRequest.degreeGraduationDate());
-        admin.setHighSchoolGraduationDate(adminRequest.highSchoolGraduationDate());
-        admin.setDeleted(false);
-        admin.setStatus(false);
-    }
-
-    private void updateUserDetails(User user, AdminRequest adminRequest) {
-        user.setAlias(adminRequest.userRequest().alias());
-        user.setEmail(adminRequest.userRequest().email());
-        user.setPhoneNumber(adminRequest.userRequest().phoneNumber());
-        user.setPassword(passwordEncoder.encode(adminRequest.userRequest().password()));
-        user.setIsBlocked(false);
-        user.setIsDeleted(false);
-        user.setGender(adminRequest.userRequest().gender());
-        user.setNameEn(adminRequest.userRequest().nameEn());
-        user.setNameKh(adminRequest.userRequest().nameKh());
-        user.setUsername(adminRequest.userRequest().username());
-        user.setProfileImage(adminRequest.userRequest().profileImage());
-        user.setCityOrProvince(adminRequest.userRequest().cityOrProvince());
-        user.setKhanOrDistrict(adminRequest.userRequest().khanOrDistrict());
-        user.setSangkatOrCommune(adminRequest.userRequest().sangkatOrCommune());
-        user.setStreet(adminRequest.userRequest().street());
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        user.setBirthPlace(toBirthPlace(adminRequest.userRequest().birthPlace()));
     }
 
     @Override
-    public AdminResponse updateAdminByUuid ( @Valid String uuid, AdminRequest adminRequest) {
-        Admin admin = adminRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
-
-        User user = userRepository.findByAlias(adminRequest.userRequest().alias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s not found", adminRequest.userRequest().alias())));
-
-        if (userRepository.existsByEmail(adminRequest.userRequest().email())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", adminRequest.userRequest().email()));
-        }
-
-        if (userRepository.existsByPhoneNumber(adminRequest.userRequest()   .phoneNumber())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with phone number = %s already exists", adminRequest.userRequest().phoneNumber()));
-        }
-
-        updateAdminDetails(admin, adminRequest);
-        updateUserDetails(user, adminRequest);
-
-        List<Authority> authorities = getAuthorities(adminRequest.userRequest().authorities());
-        user.setAuthorities(authorities);
-
-        userRepository.save(user);
-        admin.setUser(user);
-        Admin savedAdmin = adminRepository.save(admin);
-
-        return adminMapper.toAdminResponse(savedAdmin);
+    public AdminResponse updateAdminByUuid ( String uuid, AdminRequestDetail adminRequestDetail) {
+//
+//        // Find the admin by the uuid
+//        Admin admin = adminRepository.findByUuid(uuid)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+//                        String.format("Admin with uuid = %s not found", uuid)));
+//
+//        // Find the user by the uuid
+//        User user = userRepository.findByUuid(adminRequestDetail.user().uuid())
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+//                        String.format("User with alias = %s not found", adminRequestDetail.user().uuid())));
+//
+//        // Check if the user with the email already exists
+//        if (userRepository.existsByEmail(adminRequestDetail.user().email())) {
+//            throw new ResponseStatusException(HttpStatus.CONFLICT,
+//                    String.format("User with email = %s already exists", adminRequestDetail.user().email()));
+//        }
+//
+//        // Check if the user with the phone number already exists
+//        if (userRepository.existsByPhoneNumber(adminRequestDetail.user()   .phoneNumber())) {
+//            throw new ResponseStatusException(HttpStatus.CONFLICT,
+//                    String.format("User with phone number = %s already exists", adminRequestDetail.user().phoneNumber()));
+//        }
+//
+//        //update the admin that found by the uuid
+//        admin.setHighSchool(adminRequestDetail.highSchool());
+//        admin.setHighSchoolGraduationDate(adminRequestDetail.highSchoolGraduationDate());
+//        admin.setDegree(adminRequestDetail.degree());
+//        admin.setDegreeGraduationDate(adminRequestDetail.degreeGraduationDate());
+//        admin.setMajor(adminRequestDetail.major());
+//        admin.setStudyAtUniversityOrInstitution(adminRequestDetail.studyAtUniversityOrInstitution());
+//        admin.setExperienceAtWorkingPlace(adminRequestDetail.experienceAtWorkingPlace());
+//        admin.setExperienceYear(adminRequestDetail.experienceYear());
+//
+//        //update the user that found by the uuid
+//        user.setNameEn(adminRequestDetail.user().nameEn());
+//        user.setNameKh(adminRequestDetail.user().nameKh());
+//        user.setUsername(adminRequestDetail.user().username());
+//        user.setGender(adminRequestDetail.user().gender());
+//        user.setDob(adminRequestDetail.user().dob());
+//        user.setEmail(adminRequestDetail.user().email());
+//        user.setPassword(passwordEncoder.encode(adminRequestDetail.user().password()));
+//        user.setProfileImage(adminRequestDetail.user().profileImage());
+//        user.setPhoneNumber(adminRequestDetail.user().phoneNumber());
+//        user.setCityOrProvince(adminRequestDetail.user().cityOrProvince());
+//        user.setKhanOrDistrict(adminRequestDetail.user().khanOrDistrict());
+//        user.setSangkatOrCommune(adminRequestDetail.user().sangkatOrCommune());
+//        user.setStreet(adminRequestDetail.user().street());
+//        user.setBirthPlace(toBirthPlace(adminRequestDetail.user().birthPlace()));
+//
+//        // Set the authorities of the user from the authorities of the adminRequest
+//        List<Authority> authorities = new ArrayList<>();
+//        for (AuthorityRequestToUser request : adminRequestDetail.user().authorities()) {
+//            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
+//                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+//                            String.format("Role with name = %s was not found.", request.authorityName())));
+//            authorities.add(authority);
+//        }
+//        user.setAuthorities(authorities);
+//
+//        // Set the data of field the user by the userRequest
+//        userRepository.save(user);
+//        admin.setUser(user);
+//        Admin savedAdmin = adminRepository.save(admin);
+//
+//        return adminMapper.toAdminResponse(savedAdmin);
+        return null;
     }
 
 
@@ -198,39 +199,57 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminResponse getAdminByUuid(String uuid) {
+
+        // Find the admin by the uuid
         Admin admin = adminRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admin with uuid = %s not found", uuid)));
+
         return adminMapper.toAdminResponse(admin);
     }
 
     @Override
     public void deleteAdminByUuid(String uuid) {
+
+        // Find the admin by the uuid
         Admin admin = adminRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admin with uuid = %s not found", uuid)));
+
+        // Delete the admin that found by the uuid
         adminRepository.delete(admin);
     }
 
     @Override
     public AdminResponse disableAdminByUuid(String uuid) {
 
+        // Find the admin by the uuid
         Admin admin = adminRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admin with uuid = %s not found", uuid)));
+
+        // Set the status of the admin to true
         admin.setStatus(true);
+        // Save the admin to the database that found by the uuid
         Admin savedAdmin = adminRepository.save(admin);
+
         return adminMapper.toAdminResponse(savedAdmin);
+
     }
 
     @Override
     public AdminResponse enableAdminByUuid(String uuid) {
 
+        // Find the admin by the uuid
         Admin admin = adminRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admin with uuid = %s not found", uuid)));
+
+        // Set the status of the admin to false
         admin.setStatus(false);
+        // Save the admin to the database that found by the uuid
         Admin savedAdmin = adminRepository.save(admin);
+
         return adminMapper.toAdminResponse(savedAdmin);
 
     }
@@ -238,13 +257,18 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminResponse blockAdminByUuid(String uuid) {
 
+        // Find the admin by the uuid
         Admin admin = adminRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admin with uuid = %s not found", uuid)));
+
+        // Set the deleted(is boolean) of the admin to true , don't delete from the database just set the deleted(disable on the user account)
         admin.setDeleted(true);
+        // Save the admin to the database that found by the uuid
         Admin savedAdmin = adminRepository.save(admin);
 
         return adminMapper.toAdminResponse(savedAdmin);
+
     }
 
 

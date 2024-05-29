@@ -4,6 +4,6 @@ import co.istad.lms.features.user.dto.UserResponse;
 
 public record StudentResponse(
         String uuid,
-        UserResponse userResponse
+        UserResponse user
 ) {
 }

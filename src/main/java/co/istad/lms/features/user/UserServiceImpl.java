@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,47 +35,20 @@ public class UserServiceImpl implements UserService {
     private final AuthorityRepository authorityRepository;
 
 
-
-
-
+    // Validate if user exists by email or phone number
     private void validateUserExists(UserRequest userRequest) {
-        if (userRepository.existsByEmail(userRequest.email())) {
+
+        // Check if user exists by email
+        if (userRepository.existsByEmailOrUsername(userRequest.email() , userRequest.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format("User email = %s has already been existed!", userRequest.email()));
         }
 
-        if (userRepository.existsByPhoneNumber(userRequest.phoneNumber())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User phone number = %s has already been existed!", userRequest.phoneNumber()));
-        }
+
     }
 
 
-
-    private void setUserDetails(User user, UserRequest userRequest) {
-        user.setAlias(userRequest.alias());
-        user.setUsername(userRequest.username());
-        user.setNameEn(userRequest.nameEn());
-        user.setNameKh(userRequest.nameKh());
-        user.setEmail(userRequest.email());
-        user.setPassword(passwordEncoder.encode(userRequest.password()));
-        user.setPhoneNumber(userRequest.phoneNumber());
-        user.setGender(userRequest.gender());
-        user.setProfileImage(userRequest.profileImage());
-        user.setCityOrProvince(userRequest.cityOrProvince());
-        user.setKhanOrDistrict(userRequest.khanOrDistrict());
-        user.setSangkatOrCommune(userRequest.sangkatOrCommune());
-        user.setStreet(userRequest.street());
-        user.setBirthPlace(toBirthPlace(userRequest.birthPlace()));
-        user.setIsBlocked(false);
-        user.setIsDeleted(false);
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-    }
-
-
-
+    // Convert BirthPlace
     private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
         BirthPlace birthPlace = new BirthPlace();
         birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
@@ -86,49 +60,25 @@ public class UserServiceImpl implements UserService {
         return birthPlace;
     }
 
-
-
+    // Set user authorities
     private void setUserAuthorities(User user, UserRequest userRequest) {
+
+        // Get authorities
         List<Authority> authorities = new ArrayList<>();
+        // Loop through authorities
         userRequest.authorities().forEach(r -> {
             Authority authority = authorityRepository.findByAuthorityName(r.authorityName())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Role with name = %s was not found.", r.authorityName())));
+                    .orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                    String.format("Role with name = %s was not found.", r.authorityName())
+                            )
+                    );
+
+            //
             authorities.add(authority);
         });
         user.setAuthorities(authorities);
     }
-
-
-
-    private UserResponse updateUserBlockedStatus(String alias, boolean isBlocked) {
-        int affectedRows = userRepository.updateBlockedStatusById(alias, isBlocked);
-        return getUserResponseIfAffected(alias, affectedRows);
-    }
-
-
-
-    private User findUserByAlias(String alias) {
-        return userRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s was not found.", alias)));
-    }
-
-
-
-
-    private UserResponse getUserResponseIfAffected(String alias, int affectedRows) {
-        if (affectedRows > 0) {
-            return userMapper.toUserResponse(findUserByAlias(alias));
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("User with alias = %s doesn't exist!", alias));
-        }
-    }
-
-
-
-
 
 
     @Override
@@ -137,72 +87,95 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(pageRequest);
 
         List<User> filteredUsers = users.stream()
-                .filter(user -> !user.getIsDeleted() || !user.getIsBlocked())
+                .filter(user -> !user.getIsDeleted())
+                .filter(user -> !user.getIsBlocked())
                 .toList();
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponse);
     }
 
     @Override
-    public UserResponse getUserById(String alias) {
-        User user = userRepository.findByAlias(alias)
+    public UserResponse getUserById(String uuid) {
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s was not found.", alias)));
+                        String.format("User with alias = %s was not found.", uuid)));
 
         return userMapper.toUserResponse(user);
     }
 
     @Override
-    @Transactional
     public UserResponse createUser(UserRequest userRequest) {
         validateUserExists(userRequest);
 
         User user = userMapper.fromUserRequest(userRequest);
-        setUserDetails(user, userRequest);
+        user.setUuid(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(userRequest.password()));
+//        user.setBirthPlace(toBirthPlace(userRequest.birthPlace()));
         setUserAuthorities(user, userRequest);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
-    @Transactional
-    public UserResponse updateUser(String alias, UserRequest userRequest) {
-        User user = userRepository.findByAlias(alias)
+    public UserResponse updateUser(String uuid, UserRequest userRequest) {
+
+        // Check if user exists by email
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s was not found.", alias)));
+                        String.format("User with alias = %s was not found.", uuid)));
 
-        setUserDetails(user, userRequest);
         setUserAuthorities(user, userRequest);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
-    public UserResponse deleteUser(String alias) {
-        User user = findUserByAlias(alias);
+    public UserResponse deleteUser(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with alias = %s was not found.", uuid)));
+
         userRepository.delete(user);
+
         return userMapper.toUserResponse(user);
     }
 
     @Override
     @Transactional
     public UserResponse disableUser(String alias) {
-        return updateUserBlockedStatus(alias, true);
+
+        User user = userRepository.findByUuid(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with alias = %s was not found.", alias)));
+        user.setIsBlocked(true);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
     @Transactional
     public UserResponse enableUser(String alias) {
-        return updateUserBlockedStatus(alias, false);
+
+        User user = userRepository.findByUuid(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with alias = %s was not found.", alias)));
+
+        user.setIsBlocked(false);
+
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
-    @Transactional
     public UserResponse isDeleted(String alias) {
-        int affectedRows = userRepository.updateDeletedStatusById(alias, true);
-        return getUserResponseIfAffected(alias, affectedRows);
-    }
 
+        User user = userRepository.findByUuid(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with alias = %s was not found.", alias)));
+
+        user.setIsDeleted(true);
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
 
 
 }

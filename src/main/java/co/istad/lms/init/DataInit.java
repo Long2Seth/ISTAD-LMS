@@ -64,7 +64,8 @@ public class DataInit {
                     "user:read",
                     "user:write",
                     "user:update",
-                    "user:delete"
+                    "user:delete",
+                    "admin:control"
             );
 
             List<Authority> authorities = authorityNames.stream()
@@ -89,7 +90,7 @@ public class DataInit {
             // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
             if (userRepository.count() < 1) {
                 User user = new User();
-                user.setAlias("admin");
+                user.setUuid(UUID.randomUUID().toString());
                 user.setNameEn("admin");
                 user.setNameKh("អេតមីន");
                 user.setUsername("admin");

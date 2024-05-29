@@ -1,6 +1,7 @@
 package co.istad.lms.features.academic;
 
 import co.istad.lms.features.academic.dto.AcademicRequest;
+import co.istad.lms.features.academic.dto.AcademicRequestDetail;
 import co.istad.lms.features.academic.dto.AcademicResponse;
 import org.springframework.data.domain.Page;
 
@@ -8,7 +9,7 @@ public interface AcademicService {
 
     AcademicResponse createAcademic(AcademicRequest academicRequest);
 
-    AcademicResponse updateAcademicByUuid(String uuid , AcademicRequest academicRequest);
+    AcademicResponse updateAcademicByUuid(String uuid , AcademicRequestDetail academicRequestDetail);
 
     AcademicResponse getAcademicByUuid(String uuid);
 

@@ -2,6 +2,7 @@ package co.istad.lms.features.academic;
 
 
 import co.istad.lms.features.academic.dto.AcademicRequest;
+import co.istad.lms.features.academic.dto.AcademicRequestDetail;
 import co.istad.lms.features.academic.dto.AcademicResponse;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class AcademicController {
     }
 
     @PutMapping("/{uuid}")
-    public AcademicResponse updateAcademicByUuid(@PathVariable String uuid , @RequestBody AcademicRequest academicRequest){
+    public AcademicResponse updateAcademicByUuid(@PathVariable String uuid , @RequestBody AcademicRequestDetail academicRequest){
         return academicService.updateAcademicByUuid(uuid, academicRequest);
     }
 

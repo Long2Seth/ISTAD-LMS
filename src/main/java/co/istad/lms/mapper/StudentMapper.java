@@ -11,7 +11,7 @@ public interface StudentMapper {
 
     Student toRequest(StudentRequest studentRequest);
 
-    @Mapping(source = "user", target = "userResponse")
+    @Mapping(source = "user", target = "user")
     StudentResponse toResponse(Student student);
 
 }

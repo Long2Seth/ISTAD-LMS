@@ -8,6 +8,7 @@ import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.instructor.dto.InstructorRequest;
+import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
 import co.istad.lms.features.instructor.dto.InstructorResponse;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
@@ -69,26 +70,15 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public InstructorResponse createInstructor(InstructorRequest instructorRequest) {
 
-        if (userRepository.existsByAlias(instructorRequest.userRequest().alias())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with alias = %s already exists", instructorRequest.userRequest().alias())
-            );
-        }
 
-        if (userRepository.existsByEmail(instructorRequest.userRequest().email())) {
+
+        if (userRepository.existsByEmailOrUsername(instructorRequest.userRequest().email() , instructorRequest.userRequest().username())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s already exists", instructorRequest.userRequest().email())
             );
         }
 
-        if (userRepository.existsByPhoneNumber(instructorRequest.userRequest().phoneNumber())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with phone number = %s already exists", instructorRequest.userRequest().phoneNumber())
-            );
-        }
 
         Authority authority = authorityRepository.findByAuthorityName(instructorRequest.userRequest().authorities().get(0).authorityName())
                 .orElseThrow(() -> new ResponseStatusException(
@@ -106,7 +96,7 @@ public class InstructorServiceImpl implements InstructorService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-        user.setBirthPlace(toBirthPlace(instructorRequest.userRequest().birthPlace()));
+//        user.setBirthPlace(toBirthPlace(instructorRequest.userRequest().birthPlace()));
 
         List<Authority> authorities = getAuthorities(instructorRequest.userRequest().authorities());
         // Save the Authority entity before associating it with the User entity
@@ -122,7 +112,7 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     @Override
-    public InstructorResponse updateInstructorByUuid(String uuid, InstructorRequest instructorRequest) {
+    public InstructorResponse updateInstructorByUuid(String uuid, InstructorRequestDetail instructorRequestDetail) {
 
         Instructor instructor = instructorRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -130,62 +120,56 @@ public class InstructorServiceImpl implements InstructorService {
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
 
-        User user = userRepository.findByAlias(instructorRequest.userRequest().alias())
+        User user = userRepository.findByUuid(instructorRequestDetail.user().uuid())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s not found", instructorRequest.userRequest().alias())
+                        String.format("User with alias = %s not found", instructorRequestDetail.user().uuid())
                 ));
 
-        if (userRepository.existsByEmail(instructorRequest.userRequest().email())) {
+        if (userRepository.existsByEmailOrUsername(instructorRequestDetail.user().username() , instructorRequestDetail.user().email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", instructorRequest.userRequest().email())
+                    String.format("User with email = %s already exists", instructorRequestDetail.user().email())
             );
         }
 
-        if (userRepository.existsByPhoneNumber(instructorRequest.userRequest().phoneNumber())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with phone number = %s already exists", instructorRequest.userRequest().phoneNumber())
-            );
-        }
 
         // Update instructor details
-        instructor.setDegree(instructorRequest.degree());
-        instructor.setMajor(instructorRequest.major());
-        instructor.setHighSchool(instructorRequest.highSchool());
-        instructor.setStudyAtUniversityOrInstitution(instructorRequest.studyAtUniversityOrInstitution());
-        instructor.setExperienceAtWorkingPlace(instructorRequest.experienceAtWorkingPlace());
-        instructor.setExperienceYear(instructorRequest.experienceYear());
-        instructor.setDegreeGraduationDate(instructorRequest.degreeGraduationDate());
-        instructor.setHighSchoolGraduationDate(instructorRequest.highSchoolGraduationDate());
+        instructor.setDegree(instructorRequestDetail.degree());
+        instructor.setMajor(instructorRequestDetail.major());
+        instructor.setHighSchool(instructorRequestDetail.highSchool());
+        instructor.setStudyAtUniversityOrInstitution(instructorRequestDetail.studyAtUniversityOrInstitution());
+        instructor.setExperienceAtWorkingPlace(instructorRequestDetail.experienceAtWorkingPlace());
+        instructor.setExperienceYear(instructorRequestDetail.experienceYear());
+        instructor.setDegreeGraduationDate(instructorRequestDetail.degreeGraduationDate());
+        instructor.setHighSchoolGraduationDate(instructorRequestDetail.highSchoolGraduationDate());
         instructor.setDeleted(false);
         instructor.setStatus(false);
 
         // Update user details
-        user.setAlias(instructorRequest.userRequest().alias());
-        user.setEmail(instructorRequest.userRequest().email());
-        user.setPhoneNumber(instructorRequest.userRequest().phoneNumber());
-        user.setPassword(passwordEncoder.encode(instructorRequest.userRequest().password()));
+
+        user.setEmail(instructorRequestDetail.user().email());
+        user.setPhoneNumber(instructorRequestDetail.user().phoneNumber());
+        user.setPassword(passwordEncoder.encode(instructorRequestDetail.user().password()));
         user.setIsBlocked(false);
         user.setIsDeleted(false);
-        user.setGender(instructorRequest.userRequest().gender());
-        user.setNameEn(instructorRequest.userRequest().nameEn());
-        user.setNameKh(instructorRequest.userRequest().nameKh());
-        user.setUsername(instructorRequest.userRequest().username());
-        user.setProfileImage(instructorRequest.userRequest().profileImage());
-        user.setCityOrProvince(instructorRequest.userRequest().cityOrProvince());
-        user.setKhanOrDistrict(instructorRequest.userRequest().khanOrDistrict());
-        user.setSangkatOrCommune(instructorRequest.userRequest().sangkatOrCommune());
-        user.setStreet(instructorRequest.userRequest().street());
+        user.setGender(instructorRequestDetail.user().gender());
+        user.setNameEn(instructorRequestDetail.user().nameEn());
+        user.setNameKh(instructorRequestDetail.user().nameKh());
+        user.setUsername(instructorRequestDetail.user().username());
+        user.setProfileImage(instructorRequestDetail.user().profileImage());
+//        user.setCityOrProvince(instructorRequestDetail.user().cityOrProvince());
+//        user.setKhanOrDistrict(instructorRequestDetail.user().khanOrDistrict());
+//        user.setSangkatOrCommune(instructorRequestDetail.user().sangkatOrCommune());
+//        user.setStreet(instructorRequestDetail.user().street());
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
 
         // Update birth place
-        user.setBirthPlace(toBirthPlace(instructorRequest.userRequest().birthPlace()));
+//        user.setBirthPlace(toBirthPlace(instructorRequestDetail.user().birthPlace()));
         // Update authorities
-        List<Authority> authorities = getAuthorities(instructorRequest.userRequest().authorities());
+        List<Authority> authorities = getAuthorities(instructorRequestDetail.user().authorities());
         // Save the Authority entity before associating it with the User entity
         user.setAuthorities(authorities);
 

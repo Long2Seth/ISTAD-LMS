@@ -1,6 +1,7 @@
 package co.istad.lms.features.admin;
 
 import co.istad.lms.features.admin.dto.AdminRequest;
+import co.istad.lms.features.admin.dto.AdminRequestDetail;
 import co.istad.lms.features.admin.dto.AdminResponse;
 import co.istad.lms.features.auth.dto.AuthRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -147,10 +149,11 @@ public class AdminController {
                     )
             )
     )
-    public AdminResponse updateByUuid(@PathVariable String uuid, @RequestBody AdminRequest adminRequest) {
-        return adminService.updateAdminByUuid(uuid, adminRequest);
+    public AdminResponse updateByUuid(@PathVariable String uuid, @RequestBody AdminRequestDetail adminRequestDetail) {
+        return adminService.updateAdminByUuid(uuid, adminRequestDetail);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     @DeleteMapping("/{uuid}")
     public void deleteByUuid(@PathVariable String uuid) {
         adminService.deleteAdminByUuid(uuid);

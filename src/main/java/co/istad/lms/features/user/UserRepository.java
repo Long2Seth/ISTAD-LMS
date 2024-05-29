@@ -17,29 +17,14 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailOrUsername(String email, String username);
 
-    boolean existsByAlias(String alias);
-
-    boolean existsByPhoneNumber(String phoneNumber);
 
     boolean existsByUsername(String username);
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUuid(String uuid);
 
-    Optional<User> findByAlias(String alias);
-
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.isBlocked = :status WHERE u.alias = :alias")
-    int updateBlockedStatusById(String alias, boolean status);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.isDeleted = :status WHERE u.alias = :alias")
-    int updateDeletedStatusById(String alias, boolean status);
 
 }

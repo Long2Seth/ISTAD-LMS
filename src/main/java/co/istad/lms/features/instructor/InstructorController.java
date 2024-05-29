@@ -2,6 +2,7 @@ package co.istad.lms.features.instructor;
 
 
 import co.istad.lms.features.instructor.dto.InstructorRequest;
+import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
 import co.istad.lms.features.instructor.dto.InstructorResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ public class InstructorController {
     }
 
     @PutMapping("/{uuid}")
-    public InstructorResponse updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequest instructorRequest){
-        return instructorService.updateInstructorByUuid(uuid, instructorRequest);
+    public InstructorResponse updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequestDetail instructorRequestDetail){
+        return instructorService.updateInstructorByUuid(uuid, instructorRequestDetail);
     }
 
     @DeleteMapping("/{uuid}")

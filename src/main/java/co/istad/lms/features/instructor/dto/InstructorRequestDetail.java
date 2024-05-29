@@ -1,29 +1,19 @@
-package co.istad.lms.features.admin.dto;
+package co.istad.lms.features.instructor.dto;
 
-import co.istad.lms.domain.User;
-import co.istad.lms.features.user.dto.UserResponse;
+import co.istad.lms.features.user.dto.UserRequestDetail;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public record AdminResponse(
-        String uuid,
+public record InstructorRequestDetail(
         String highSchool,
-
         LocalDate highSchoolGraduationDate,
-
-        String degree, // Bachelor, Master, Doctor
-
+        String degree,
         LocalDate degreeGraduationDate,
-
         String major,
-
         String studyAtUniversityOrInstitution,
-
         String experienceAtWorkingPlace,
-
         LocalDate experienceYear,
+        UserRequestDetail user
 
-        UserResponse users
 ) {
 }
