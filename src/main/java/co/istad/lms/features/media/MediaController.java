@@ -38,6 +38,7 @@ public class MediaController {
     }
 
     @DeleteMapping("/{mediaName}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     MediaResponse deleteMediaByName(@PathVariable String mediaName) {
         return mediaService.deleteMediaByName(mediaName);
     }

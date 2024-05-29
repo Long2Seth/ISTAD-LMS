@@ -56,19 +56,22 @@ public class AdmissionController {
         return admissionService.updateAdmission(uuid, admissionRequest);
     }
 
-    @PatchMapping("/{uuid}/enable")
-    void enableAdmission(@PathVariable String uuid){
+    @PutMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableAdmission(@PathVariable String uuid) {
 
         admissionService.enableAdmissionByUuid(uuid);
     }
 
-    @PatchMapping("/{uuid}/disable")
-    void disableAdmission(@PathVariable String uuid){
+    @PutMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableAdmission(@PathVariable String uuid) {
 
         admissionService.disableAdmissionByUuid(uuid);
     }
 
     @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAdmission(@PathVariable String uuid) {
 
         admissionService.deleteAdmission(uuid);

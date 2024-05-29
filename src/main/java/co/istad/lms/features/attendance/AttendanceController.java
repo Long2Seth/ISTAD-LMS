@@ -20,14 +20,14 @@ public class AttendanceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void creatDegree(@Valid @RequestBody AttendanceRequest attendanceRequest) {
+    void creatAttendance(@Valid @RequestBody AttendanceRequest attendanceRequest) {
 
         attendanceService.createAttendance(attendanceRequest);
 
     }
 
     @GetMapping("/{uuid}")
-    AttendanceDetailResponse getDegreeByUuid(@PathVariable String uuid) {
+    AttendanceDetailResponse getAttendanceByUuid(@PathVariable String uuid) {
 
         return attendanceService.getAttendanceByUuid(uuid);
 
@@ -51,18 +51,21 @@ public class AttendanceController {
     }
 
     @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAttendance(@PathVariable String uuid) {
 
         attendanceService.deleteAttendanceByUuid(uuid);
     }
 
-    @PatchMapping("/{uuid}/enable")
+    @PutMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void enableAttendance(@PathVariable String uuid){
 
         attendanceService.enableAttendanceByUuid(uuid);
     }
 
-    @PatchMapping("/{uuid}/disable")
+    @PutMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void disableAttendance(@PathVariable String uuid){
 
         attendanceService.disableAttendanceByUuid(uuid);

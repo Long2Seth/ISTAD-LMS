@@ -35,7 +35,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public Page<CourseDetailResponse> getAllDegrees(
+    public Page<CourseDetailResponse> getAllCourses(
 
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") int size
@@ -52,19 +52,22 @@ public class CourseController {
     }
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCourse(@PathVariable String alias) {
 
         courseService.deleteCourseByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableCourse(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableCourse(@PathVariable String alias) {
 
         courseService.enableCourseByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableCourse(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableCourse(@PathVariable String alias) {
 
         courseService.disableCourseByAlias(alias);
     }

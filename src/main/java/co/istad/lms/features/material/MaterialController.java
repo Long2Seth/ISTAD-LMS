@@ -45,27 +45,30 @@ public class MaterialController {
 
 
     @PutMapping("/{alias}")
-    public MaterialResponse updateDegree(@PathVariable String alias,
-                                         @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {
+    public MaterialResponse updateMaterial(@PathVariable String alias,
+                                           @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {
 
         return materialService.updateMaterialByAlias(alias, materialUpdateRequest);
     }
 
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMaterial(@PathVariable String alias) {
 
         materialService.deleteMaterialByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableMaterial(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableMaterial(@PathVariable String alias) {
 
         materialService.enableMaterialByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableMaterial(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableMaterial(@PathVariable String alias) {
 
         materialService.disableMaterialByAlias(alias);
     }
@@ -80,7 +83,6 @@ public class MaterialController {
 
         return materialService.filterMaterials(filterDto, page, size);
     }
-
 
 
 }

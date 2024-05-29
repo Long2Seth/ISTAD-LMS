@@ -55,19 +55,22 @@ public class DegreeController {
 
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDegree(@PathVariable String alias) {
 
         degreeService.deleteDegreeByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableDegree(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableDegree(@PathVariable String alias) {
 
         degreeService.enableDegreeByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableDegree(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableDegree(@PathVariable String alias) {
 
         degreeService.disableDegreeByAlias(alias);
     }

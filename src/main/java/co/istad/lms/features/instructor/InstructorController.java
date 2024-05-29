@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/instructors")
 public class InstructorController {
-    
+
     private final InstructorService instructorService;
-    
+
     @PostMapping
     public InstructorResponse createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
         return instructorService.createInstructor(instructorRequest);
