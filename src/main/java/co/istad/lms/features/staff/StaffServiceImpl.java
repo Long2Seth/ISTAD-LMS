@@ -8,6 +8,7 @@ import co.istad.lms.domain.roles.Staff;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.staff.dto.StaffRequest;
+import co.istad.lms.features.staff.dto.StaffRequestDetail;
 import co.istad.lms.features.staff.dto.StaffResponse;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
@@ -64,11 +65,11 @@ public class StaffServiceImpl implements StaffService {
         return birthPlace;
     }
 
-    public void validateStaffRequest(StaffRequest staffRequest) {
-        if (userRepository.existsByEmail(staffRequest.userRequest().email())) {
+    public void validateStaffRequest(StaffRequestDetail staffRequest) {
+        if (userRepository.existsByEmailOrUsername(staffRequest.user().email() , staffRequest.user().username())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with email = %s already exists", staffRequest.userRequest().email())
+                    String.format("User with email = %s already exists", staffRequest.user().email())
             );
         }
 
@@ -80,25 +81,20 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffResponse createStaff(StaffRequest staffRequest) {
 
-        if (userRepository.existsByAlias(staffRequest.userRequest().alias())) {
+
+        if (userRepository.existsByUsername(staffRequest.user().username())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with alias = %s already exists", staffRequest.userRequest().alias())
+                    String.format("User with username = %s already exists", staffRequest.user().username())
             );
         }
-        if (userRepository.existsByUsername(staffRequest.userRequest().username())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format("User with username = %s already exists", staffRequest.userRequest().username())
-            );
-        }
-        validateStaffRequest(staffRequest);
 
         // Save the user first
-        User user = userMapper.fromUserRequest(staffRequest.userRequest());
-        user.setPassword(passwordEncoder.encode(staffRequest.userRequest().password()));
-        user.setBirthPlace(toBirthPlace(staffRequest.userRequest().birthPlace()));
-        List<Authority> authorities = getAuthorities(staffRequest.userRequest().authorities());
+        User user = userMapper.fromUserRequest(staffRequest.user());
+        user.setPassword(passwordEncoder.encode(staffRequest.user().password()));
+        user.setUuid(UUID.randomUUID().toString());
+
+        List<Authority> authorities = getAuthorities(staffRequest.user().authorities());
         user.setAuthorities(authorities);
         // Save the user
         userRepository.save(user);
@@ -115,7 +111,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffResponse updateStaffByUuid(String uuid, StaffRequest staffRequest) {
+    public StaffResponse updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail) {
 
         // Check if the staff exists
         Staff staff = staffRepository.findByUuid(uuid)
@@ -126,32 +122,32 @@ public class StaffServiceImpl implements StaffService {
                 );
 
         // Check if the user exists
-        User user = userRepository.findByAlias(staffRequest.userRequest().alias())
+        User user = userRepository.findByUuid(staffRequestDetail.user().uuid())
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("User with alias = %s was not found.", staffRequest.userRequest().alias())
+                                String.format("User with alias = %s was not found.", staffRequestDetail.user().uuid())
                         )
                 );
 
         // Check if the user exists
-        validateStaffRequest(staffRequest);
+        validateStaffRequest(staffRequestDetail);
 
         // Update the user
-        staff.setPosition(staffRequest.position());
-        user.setNameEn(staffRequest.userRequest().nameEn());
-        user.setNameKh(staffRequest.userRequest().nameKh());
-        user.setEmail(staffRequest.userRequest().email());
-        user.setPhoneNumber(staffRequest.userRequest().phoneNumber());
-        user.setGender(staffRequest.userRequest().gender());
-        user.setCityOrProvince(staffRequest.userRequest().cityOrProvince());
-        user.setKhanOrDistrict(staffRequest.userRequest().khanOrDistrict());
-        user.setSangkatOrCommune(staffRequest.userRequest().sangkatOrCommune());
-        user.setStreet(staffRequest.userRequest().street());
-        user.setProfileImage(staffRequest.userRequest().profileImage());
-        user.setBirthPlace(toBirthPlace(staffRequest.userRequest().birthPlace()));
+        staff.setPosition(staffRequestDetail.position());
+        user.setNameEn(staffRequestDetail.user().nameEn());
+        user.setNameKh(staffRequestDetail.user().nameKh());
+        user.setEmail(staffRequestDetail.user().email());
+        user.setPhoneNumber(staffRequestDetail.user().phoneNumber());
+        user.setGender(staffRequestDetail.user().gender());
+//        user.setCityOrProvince(staffRequestDetail.user()().cityOrProvince());
+//        user.setKhanOrDistrict(staffRequestDetail.user()().khanOrDistrict());
+//        user.setSangkatOrCommune(staffRequestDetail.user()().sangkatOrCommune());
+//        user.setStreet(staffRequestDetail.user()().street());
+//        user.setProfileImage(staffRequestDetail.user()().profileImage());
+//        user.setBirthPlace(toBirthPlace(staffRequestDetail.user()().birthPlace()));
 
         // Update the authorities
-        List<Authority> authorities = getAuthorities(staffRequest.userRequest().authorities());
+        List<Authority> authorities = getAuthorities(staffRequestDetail.user().authorities());
         user.setAuthorities(authorities);
 
         // Assign authorities to the user

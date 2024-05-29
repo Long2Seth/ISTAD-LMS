@@ -1,6 +1,7 @@
 package co.istad.lms.features.staff;
 
 import co.istad.lms.features.staff.dto.StaffRequest;
+import co.istad.lms.features.staff.dto.StaffRequestDetail;
 import co.istad.lms.features.staff.dto.StaffResponse;
 import org.springframework.data.domain.Page;
 
@@ -8,7 +9,7 @@ public interface StaffService {
 
     StaffResponse createStaff(StaffRequest staffRequest);
 
-    StaffResponse updateStaffByUuid(String uuid, StaffRequest staffRequest);
+    StaffResponse updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail);
 
     StaffResponse getStaffByUuid(String uuid);
 

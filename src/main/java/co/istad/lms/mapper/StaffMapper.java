@@ -12,6 +12,6 @@ public interface StaffMapper {
 
     Staff toRequest(StaffRequest staffRequest);
 
-    @Mapping(target = "userResponse", source = "user")
+    @Mapping(target = "user", source = "user")
     StaffResponse toResponse(Staff staff);
 }

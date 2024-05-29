@@ -13,7 +13,7 @@ public interface AcademicMapper {
     Academic toRequest(AcademicRequest academicRequest);
 
 
-    @Mapping(source = "user", target = "users")
+    @Mapping(source = "user", target = "user")
     AcademicResponse toResponse(Academic academic);
 
 }

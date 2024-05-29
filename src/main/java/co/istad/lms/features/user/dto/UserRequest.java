@@ -1,18 +1,19 @@
 package co.istad.lms.features.user.dto;
 
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
 public record UserRequest(
-        @NotBlank(message = "Alias is required")
-        String alias,
+
 
         @NotBlank(message = "English name is required")
         @Size(max = 50, message = "English name must be less than or equal to 50 characters")
@@ -30,6 +31,9 @@ public record UserRequest(
         @Size(max = 10, message = "Gender must be less than or equal to 10 characters")
         String gender,
 
+        @NotNull(message = "Date of birth is required")
+        LocalDate dob,
+
         @NotBlank(message = "Email is required")
         @Email(message = "Email should be valid")
         @Size(max = 100, message = "Email must be less than or equal to 100 characters")
@@ -46,14 +50,8 @@ public record UserRequest(
         @Size(max = 20, message = "Phone number must be less than or equal to 20 characters")
         String phoneNumber,
 
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
-
-        @NotNull(message = "Birth place is required")
-        JsonBirthPlace birthPlace,
-
+        @NotNull(message = "Authorities is required")
+        @Valid
         List<AuthorityRequestToUser> authorities
 ) {
 }

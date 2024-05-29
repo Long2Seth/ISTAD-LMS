@@ -11,6 +11,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class User extends Auditable {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String alias;
+    private String uuid;
 
     @Column(nullable = false, length = 50)
     private String nameEn;
@@ -42,13 +43,15 @@ public class User extends Auditable {
     @Column(nullable = false, length = 10)
     private String gender;
 
+    @Column(name = "birth_of_date")
+    private LocalDate dob;
+
     @Column(nullable = false, length = 100)
     private String email;
 
     @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false)
     private String profileImage;
 
     @Column(length = 20)

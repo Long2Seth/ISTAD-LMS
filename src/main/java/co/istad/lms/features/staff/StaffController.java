@@ -2,6 +2,7 @@ package co.istad.lms.features.staff;
 
 
 import co.istad.lms.features.staff.dto.StaffRequest;
+import co.istad.lms.features.staff.dto.StaffRequestDetail;
 import co.istad.lms.features.staff.dto.StaffResponse;
 import co.istad.lms.features.student.dto.StudentRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,8 +85,8 @@ public class StaffController {
     }
 
     @PutMapping("/{uuid}")
-    public StaffResponse updateStaffByUuid(@PathVariable String uuid, @RequestBody StaffRequest staffRequest) {
-        return staffService.updateStaffByUuid(uuid, staffRequest);
+    public StaffResponse updateStaffByUuid(@PathVariable String uuid, @RequestBody StaffRequestDetail staffRequestDetail) {
+        return staffService.updateStaffByUuid(uuid, staffRequestDetail);
     }
 
     @DeleteMapping("/{uuid}")

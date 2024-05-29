@@ -18,53 +18,45 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<Page<UserResponse>> getAllUsers(
+    public Page<UserResponse> getAllUsers(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "25") int limit
     ){
-        Page<UserResponse> users = userService.getAllUsers(page, limit);
-        return ResponseEntity.ok(users);
+        return userService.getAllUsers(page,limit);
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest){
-        UserResponse userResponse = userService.createUser(userRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+    public UserResponse createUser(@Valid @RequestBody UserRequest userRequest){
+        return  userService.createUser(userRequest);
     }
 
-    @PutMapping("/{alias}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable String alias, @Valid @RequestBody UserRequest userRequest){
-        UserResponse userResponse = userService.updateUser(alias, userRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    @PutMapping("/{uuid}")
+    public UserResponse updateUser(@PathVariable String uuid, @Valid @RequestBody UserRequest userRequest){
+        return userService.updateUser(uuid,userRequest);
     }
 
-    @DeleteMapping("/{alias}")
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable String alias){
-        UserResponse userResponse = userService.deleteUser(alias);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(userResponse);
+    @DeleteMapping("/{uuid}")
+    public UserResponse deleteUser(@PathVariable String uuid){
+        return userService.deleteUser(uuid);
     }
 
-    @GetMapping("/{alias}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable String alias){
-        UserResponse userResponse = userService.getUserById(alias);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    @GetMapping("/{uuid}")
+    public UserResponse getUserById(@PathVariable String uuid){
+        return userService.getUserById(uuid);
     }
 
-    @PatchMapping("/{alias}/disable")
-    public ResponseEntity<UserResponse> disableUser(@PathVariable String alias){
-        UserResponse userResponse = userService.disableUser(alias);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    @PatchMapping("/{uuid}/disable")
+    public UserResponse disableUser(@PathVariable String uuid){
+        return userService.disableUser(uuid);
     }
 
-    @PatchMapping("/{alias}/enable")
-    public ResponseEntity<UserResponse> enableUser(@PathVariable String alias){
-        UserResponse userResponse = userService.enableUser(alias);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    @PatchMapping("/{uuid}/enable")
+    public UserResponse enableUser(@PathVariable String uuid){
+        return userService.enableUser(uuid);
     }
 
-    @PatchMapping("/{alias}/block")
-    public ResponseEntity<UserResponse> blockUser(@PathVariable String alias){
-        UserResponse userResponse = userService.isDeleted(alias);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    @PatchMapping("/{uuid}/block")
+    public UserResponse blockUser(@PathVariable String uuid){
+        return userService.isDeleted(uuid);
     }
 }

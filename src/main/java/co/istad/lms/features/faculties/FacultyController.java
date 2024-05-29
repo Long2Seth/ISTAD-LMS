@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,7 @@ public class FacultyController {
     private final FacultyService facultyService;
 
 
+    @PreAuthorize("hasAnyAuthority('faculty:write', 'faculty:update')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     void createDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
@@ -32,12 +34,15 @@ public class FacultyController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     @GetMapping("/{alias}")
     FacultyDetailResponse getFacultyByAlias(@PathVariable String alias) {
 
         return facultyService.getFacultyByAlias(alias);
     }
 
+
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     @GetMapping
     public Page<FacultyDetailResponse> getAllFaculties(
 

@@ -13,6 +13,6 @@ public interface AdminMapper {
 
     Admin toRequestAdmin(AdminRequest adminRequest);
 
-    @Mapping(source = "user", target = "users")
+    @Mapping(source = "user", target = "user")
     AdminResponse toAdminResponse(Admin admin);
 }
