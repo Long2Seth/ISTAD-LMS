@@ -30,7 +30,7 @@ minio:
 telegram:
   bot:
     token: ${TELEGRAM_TOKEN}
-    username: ${TELEGRAM_USERNAME}
+#    username: ${TELEGRAM_USERNAME}
     id: ${TELEGRAM_ID}
 
 spring:

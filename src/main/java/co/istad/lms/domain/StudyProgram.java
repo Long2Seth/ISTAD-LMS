@@ -32,6 +32,7 @@ public class StudyProgram extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String logo;
 
     @Column(nullable = false)
@@ -45,7 +46,5 @@ public class StudyProgram extends Auditable {
     @JoinColumn(name = "faculty_alias",nullable = false)
     private Faculty faculty;
 
-    @OneToMany(mappedBy = "studyProgram")
-    private Set<YearOfStudy> yearOfStudies;
 
 }

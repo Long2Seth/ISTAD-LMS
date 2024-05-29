@@ -25,6 +25,7 @@ public class Authority {
     @Column(nullable = false , length = 50 , name = "authority_name")
     private String authorityName;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToMany(mappedBy = "authorities")

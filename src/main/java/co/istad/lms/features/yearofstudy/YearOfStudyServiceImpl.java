@@ -59,14 +59,6 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         }
 
 
-        // Fetch subjects by their IDs from the request
-        Set<Subject> subjects = yearOfStudyRequest.subjectAlias().stream()
-
-                .map(subjectAlias -> subjectRepository.findAllByAlias(subjectAlias)
-
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("Subject with Alias = %s has not been found.", subjectAlias))))
-                .collect(Collectors.toSet());
 
         //map from DTO to entity
         YearOfStudy yearOfStudy = yearOfStudyMapper.fromYearOfStudyRequest(yearOfStudyRequest);
@@ -77,14 +69,10 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         //set studyProgram to yearOfStudy
         yearOfStudy.setStudyProgram(studyProgram);
 
-        //set subject to year of study
-        yearOfStudy.setSubjects(subjects);
 
         //save to database
         yearOfStudyRepository.save(yearOfStudy);
 
-        //update year of study in studyProgram
-        studyProgram.getYearOfStudies().add(yearOfStudy);
     }
 
     @Override

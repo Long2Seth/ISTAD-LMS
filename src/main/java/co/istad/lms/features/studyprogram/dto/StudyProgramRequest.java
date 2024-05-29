@@ -25,10 +25,7 @@ public record StudyProgramRequest(
         String facultyAlias,
 
         @NotBlank(message = "degreeAlias is require")
-        String degreeAlias,
+        String degreeAlias
 
-        Set<String> yearOfStudiesUuid
-
-//        Set<String> subjectAlias
 ) {
 }

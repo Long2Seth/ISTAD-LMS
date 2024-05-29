@@ -25,6 +25,7 @@ public class Attendance extends Auditable {
     @Column(nullable = false)
     private Boolean status;
 
+    @Column(columnDefinition = "TEXT")
     private String note;
 
     @Column(nullable = false)

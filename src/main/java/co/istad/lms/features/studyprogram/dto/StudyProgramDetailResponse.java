@@ -18,11 +18,8 @@ public record StudyProgramDetailResponse(
 
         DegreeResponse degree,
 
-        FacultyResponse faculty,
+        FacultyResponse faculty
 
-        Set<YearOfStudyResponse> yearOfStudies
-
-//        Set<SubjectResponse> subjects
 
 ) {
 }

@@ -21,37 +21,37 @@ public class Payment extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", nullable = false,unique = true)
+    @Column(nullable = false,unique = true)
     private String uuid;
 
-    @Column(name = "paid_amount", nullable = false)
+    @Column(nullable = false)
     private Double paidAmount;
 
-    @Column(name = "payment_date", nullable = false)
+    @Column( nullable = false)
     private LocalDate paymentDate;
 
-    @Column(name = "discount", nullable = false)
+    @Column( nullable = false)
     private Double discount;
 
-    @Column(name = "due_amount", nullable = false)
+    @Column( nullable = false)
     private Double dueAmount;
 
-    @Column(name = "total_amount", nullable = false)
+    @Column(nullable = false)
     private Double totalAmount;
 
-    @Column(name = "year", nullable = false)
+    @Column( nullable = false)
     private Integer year;
 
-    @Column(name = "semester", nullable = false)
+    @Column(nullable = false)
     private Integer semester;
 
-    @Column(name = "remark", columnDefinition = "TEXT")
+    @Column( columnDefinition = "TEXT")
     private String remark;
 
-    @Column(name = "status", nullable = false)
+    @Column( nullable = false)
     private Boolean status;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column( nullable = false)
     private Boolean isDeleted;
 
     @ManyToOne
