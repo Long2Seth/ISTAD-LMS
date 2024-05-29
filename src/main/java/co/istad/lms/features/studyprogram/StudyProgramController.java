@@ -59,20 +59,23 @@ public class StudyProgramController {
     }
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteStudyProgram(@PathVariable String alias) {
 
         studyProgramService.deleteStudyProgramByAlias(alias);
 
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableStudyProgram(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableStudyProgram(@PathVariable String alias) {
 
         studyProgramService.enableStudyProgramByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableStudyProgram(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableStudyProgram(@PathVariable String alias) {
 
         studyProgramService.disableStudyProgramByAlias(alias);
     }

@@ -26,7 +26,7 @@ public class FacultyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void createNewDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
+    void createDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
 
         facultyService.createFaculty(facultyRequest);
 
@@ -51,41 +51,44 @@ public class FacultyController {
 
     @PutMapping("/{alias}")
     public FacultyDetailResponse updateDegree(@PathVariable String alias,
-                                        @Valid @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
+                                              @Valid @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
 
         return facultyService.updateFacultyByAlias(alias, facultyUpdateRequest);
 
     }
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFaculty(@PathVariable String alias) {
 
         facultyService.deleteFacultyByAlias(alias);
 
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableFaculty(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableFaculty(@PathVariable String alias) {
 
         facultyService.enableFacultyByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableFaculty(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableFaculty(@PathVariable String alias) {
 
         facultyService.disableFacultyByAlias(alias);
     }
 
 
     @GetMapping("/filter")
-    public Page<FacultyDetailResponse> filterDegrees(
+    public Page<FacultyDetailResponse> filterFaculties(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") int size
     ) {
 
-        return facultyService.filterFaculties(filterDto,page,size);
+        return facultyService.filterFaculties(filterDto, page, size);
     }
 
 }

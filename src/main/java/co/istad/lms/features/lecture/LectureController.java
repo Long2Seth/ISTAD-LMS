@@ -47,26 +47,29 @@ public class LectureController {
 
     @PutMapping("/{alias}")
     public LectureResponse updateLecture(@PathVariable String alias,
-                                        @Valid @RequestBody LectureUpdateRequest lectureUpdateRequest) {
+                                         @Valid @RequestBody LectureUpdateRequest lectureUpdateRequest) {
 
         return lectureService.updateLectureByAlias(alias, lectureUpdateRequest);
     }
 
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteLecture(@PathVariable String alias) {
 
         lectureService.deleteLectureByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableLecture(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableLecture(@PathVariable String alias) {
 
         lectureService.enableLectureByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableLecture(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableLecture(@PathVariable String alias) {
 
         lectureService.disableLectureByAlias(alias);
     }

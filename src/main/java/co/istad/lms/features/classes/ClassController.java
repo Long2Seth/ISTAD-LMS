@@ -46,25 +46,28 @@ public class ClassController {
 
     @PutMapping("/{alias}")
     public ClassResponse updateClass(@PathVariable String alias,
-                                      @Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
+                                     @Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
 
         return classService.updateClassByAlias(alias, classUpdateRequest);
     }
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClass(@PathVariable String alias) {
 
         classService.deleteClassByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableClass(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableClass(@PathVariable String alias) {
 
         classService.enableClassByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableClass(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableClass(@PathVariable String alias) {
 
         classService.disableClassByAlias(alias);
     }

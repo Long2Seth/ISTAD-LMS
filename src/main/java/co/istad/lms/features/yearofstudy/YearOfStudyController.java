@@ -51,7 +51,9 @@ public class YearOfStudyController {
 
         return yearOfStudyService.updateYearOfStudyByUuid(uuid, yearOfStudyUpdateRequest);
 
-    }    @PutMapping("/{uuid}/subjects")
+    }
+
+    @PutMapping("/{uuid}/subjects")
     public YearOfStudyResponse updateYearOfStudySubject(
             @PathVariable String uuid,
             @Valid @RequestBody YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
@@ -61,8 +63,8 @@ public class YearOfStudyController {
     }
 
 
-
     @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteYearOfStudy(@PathVariable String uuid) {
 
         yearOfStudyService.deleteYearOfStudyByUuid(uuid);

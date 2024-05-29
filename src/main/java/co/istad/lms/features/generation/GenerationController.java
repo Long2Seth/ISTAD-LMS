@@ -46,18 +46,20 @@ public class GenerationController {
             @PathVariable String alias,
             @Valid @RequestBody GenerationUpdateRequest generationUpdateRequest
     ) {
-        return generationService.updateGenerationByAlias(alias,generationUpdateRequest);
+        return generationService.updateGenerationByAlias(alias, generationUpdateRequest);
 
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableGeneration(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableGeneration(@PathVariable String alias) {
 
         generationService.enableGenerationByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableGeneration(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableGeneration(@PathVariable String alias) {
 
         generationService.disableGenerationByAlias(alias);
     }

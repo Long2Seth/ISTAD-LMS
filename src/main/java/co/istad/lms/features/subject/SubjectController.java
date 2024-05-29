@@ -51,20 +51,23 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSubject(@PathVariable String alias) {
 
         subjectService.deleteSubjectByAlias(alias);
 
     }
 
-    @PatchMapping("/{alias}/enable")
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void enableSubject(@PathVariable String alias){
 
         subjectService.enableSubjectByAlias(alias);
 
     }
 
-    @PatchMapping("/{alias}/disable")
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void disableSubject(@PathVariable String alias){
 
         subjectService.disableSubjectByAlias(alias);

@@ -56,20 +56,23 @@ public class ShiftController {
 
 
     @DeleteMapping("/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteShift(@PathVariable String alias) {
 
         shiftService.deleteShiftByAlias(alias);
 
     }
 
-    @PatchMapping("/{alias}/enable")
-    void enableShift(@PathVariable String alias){
+    @PutMapping("/{alias}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void enableShift(@PathVariable String alias) {
 
         shiftService.enableShiftByAlias(alias);
     }
 
-    @PatchMapping("/{alias}/disable")
-    void disableShift(@PathVariable String alias){
+    @PutMapping("/{alias}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disableShift(@PathVariable String alias) {
 
         shiftService.disableShiftByAlias(alias);
     }
