@@ -60,17 +60,20 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminResponseDetail createAdmin(@Valid AdminRequest adminRequest) {
+        // Check if the user already exists
         if (userRepository.existsByEmailOrUsername(adminRequest.user().email(), adminRequest.user().username())) {
             log.error("User with email = {} or username = {} already exists", adminRequest.user().email(), adminRequest.user().username());
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format("User with email = %s or username = %s already exists", adminRequest.user().email(), adminRequest.user().username()));
         }
 
+        // Map adminRequest to Admin entity
         Admin admin = adminMapper.toRequestAdmin(adminRequest);
         admin.setUuid(UUID.randomUUID().toString());
         admin.setDeleted(false);
         admin.setStatus(false);
 
+        // Map user part of the request to User entity
         User user = userMapper.fromUserRequest(adminRequest.user());
         user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(adminRequest.user().password()));
@@ -80,14 +83,20 @@ public class AdminServiceImpl implements AdminService {
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
 
+        // Fetch and assign authorities
         Set<Authority> allAuthorities = new HashSet<>();
         for (AuthorityRequestToUser request : adminRequest.user().authorities()) {
             Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-            System.out.println("foundAuthorities = " + foundAuthorities);
+            if (foundAuthorities.isEmpty()) {
+                // Handle the case where no authorities are found
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Authority %s not found", request.authorityName()));
+            }
             allAuthorities.addAll(foundAuthorities);
         }
         user.setAuthorities(allAuthorities);
 
+        // Set user to admin and save
         admin.setUser(user);
         Admin savedAdmin = adminRepository.save(admin);
         return adminMapper.toAdminResponseDetail(savedAdmin);

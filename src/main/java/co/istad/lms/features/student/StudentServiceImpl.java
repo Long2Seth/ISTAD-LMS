@@ -99,6 +99,8 @@ public class StudentServiceImpl implements StudentService {
         User user = userMapper.fromUserRequest(studentRequest.user());
         user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
+        user.setIsDeleted(false);
+        user.setIsBlocked(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);

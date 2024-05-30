@@ -70,6 +70,11 @@ public class StaffServiceImpl implements StaffService {
         User user = userMapper.fromUserRequest(staffRequest.user());
         user.setPassword(passwordEncoder.encode(staffRequest.user().password()));
         user.setUuid(UUID.randomUUID().toString());
+        user.setIsDeleted(false);
+        user.setIsBlocked(false);
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
 
         Set<Authority> allAuthorities = new HashSet<>();
         for (AuthorityRequestToUser request : staffRequest.user().authorities()) {

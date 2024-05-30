@@ -72,6 +72,8 @@ public class InstructorServiceImpl implements InstructorService {
         User user = userMapper.fromUserRequest(instructorRequest.user());
         user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(instructorRequest.user().password()));
+        user.setIsDeleted(false);
+        user.setIsBlocked(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
