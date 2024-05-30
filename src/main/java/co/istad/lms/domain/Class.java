@@ -36,6 +36,9 @@ public class Class extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
+
     @ManyToOne
     @JoinColumn(name = "instuctor_id")
     private Instructor instructor;

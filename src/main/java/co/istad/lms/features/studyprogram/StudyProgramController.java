@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +27,7 @@ public class StudyProgramController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     public void createStudyProgram(@Valid @RequestBody StudyProgramRequest studyProgramRequest) {
 
         studyProgramService.createStudyProgram(studyProgramRequest);
@@ -33,6 +35,7 @@ public class StudyProgramController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     StudyProgramDetailResponse getStudyProgramByAlias(@PathVariable String alias) {
 
         return studyProgramService.getStudyProgramByAlias(alias);
@@ -40,6 +43,7 @@ public class StudyProgramController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     public Page<StudyProgramDetailResponse> getAllStudyPrograms(
 
             @RequestParam(defaultValue = "0") int page,
@@ -51,7 +55,8 @@ public class StudyProgramController {
     }
 
     @PutMapping("/{alias}")
-    public StudyProgramResponse updateStudyProgram(@PathVariable String alias,
+    @PreAuthorize("hasAnyAuthority('admin:control')")
+    public StudyProgramDetailResponse updateStudyProgram(@PathVariable String alias,
                                                    @Valid @RequestBody StudyProgramUpdateRequest studyProgramUpdateRequest) {
 
         return studyProgramService.updateStudyProgramByAlias(alias, studyProgramUpdateRequest);
@@ -60,6 +65,7 @@ public class StudyProgramController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     public void deleteStudyProgram(@PathVariable String alias) {
 
         studyProgramService.deleteStudyProgramByAlias(alias);
@@ -68,6 +74,7 @@ public class StudyProgramController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     void enableStudyProgram(@PathVariable String alias) {
 
         studyProgramService.enableStudyProgramByAlias(alias);
@@ -75,6 +82,7 @@ public class StudyProgramController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     void disableStudyProgram(@PathVariable String alias) {
 
         studyProgramService.disableStudyProgramByAlias(alias);
@@ -82,6 +90,7 @@ public class StudyProgramController {
 
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     public Page<StudyProgramDetailResponse> filterStudyPrograms(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

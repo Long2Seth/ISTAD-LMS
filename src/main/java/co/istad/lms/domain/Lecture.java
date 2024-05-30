@@ -43,6 +43,9 @@ public class Lecture extends Auditable {
     private Boolean isDeleted;
 
     @Column(nullable = false)
+    private Boolean isDraft;
+
+    @Column(nullable = false)
     private String courseAlias;
 
 

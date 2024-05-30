@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class MaterialController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('material:write')")
     void creatMaterial(@Valid @RequestBody MaterialRequest materialRequest) {
 
         materialService.createMaterial(materialRequest);
@@ -27,6 +29,7 @@ public class MaterialController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('material:read')")
     MaterialDetailResponse getMaterialByAlias(@PathVariable String alias) {
 
         return materialService.getMaterialByAlias(alias);
@@ -34,6 +37,7 @@ public class MaterialController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('material:read')")
     public Page<MaterialDetailResponse> getAllMaterials(
 
             @RequestParam(defaultValue = "0") int page,
@@ -45,8 +49,9 @@ public class MaterialController {
 
 
     @PutMapping("/{alias}")
-    public MaterialResponse updateMaterial(@PathVariable String alias,
-                                           @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {
+    @PreAuthorize("hasAnyAuthority('material:update')")
+    public MaterialDetailResponse updateMaterial(@PathVariable String alias,
+                                                 @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {
 
         return materialService.updateMaterialByAlias(alias, materialUpdateRequest);
     }
@@ -54,6 +59,7 @@ public class MaterialController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('material:delete')")
     public void deleteMaterial(@PathVariable String alias) {
 
         materialService.deleteMaterialByAlias(alias);
@@ -61,6 +67,7 @@ public class MaterialController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('material:update')")
     void enableMaterial(@PathVariable String alias) {
 
         materialService.enableMaterialByAlias(alias);
@@ -68,12 +75,14 @@ public class MaterialController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('material:update')")
     void disableMaterial(@PathVariable String alias) {
 
         materialService.disableMaterialByAlias(alias);
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('material:read')")
     public Page<MaterialDetailResponse> filterMaterials(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

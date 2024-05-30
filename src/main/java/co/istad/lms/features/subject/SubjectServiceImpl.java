@@ -85,7 +85,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public SubjectResponse updateSubjectByAlias(String alias, SubjectUpdateRequest subjectUpdateRequest) {
+    public SubjectDetailResponse updateSubjectByAlias(String alias, SubjectUpdateRequest subjectUpdateRequest) {
 
         //find subject by alias
         Subject subject = subjectRepository.findByAlias(alias)
@@ -114,7 +114,7 @@ public class SubjectServiceImpl implements SubjectService {
         subjectRepository.save(subject);
 
         //return Subject response
-        return subjectMapper.toSubjectResponse(subject);
+        return subjectMapper.toSubjectDetailResponse(subject);
 
     }
 

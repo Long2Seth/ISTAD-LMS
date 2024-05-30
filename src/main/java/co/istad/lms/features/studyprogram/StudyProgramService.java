@@ -53,11 +53,11 @@ public interface StudyProgramService {
      *
      * @param alias is the unique name of studyProgram
      * @param studyProgramUpdateRequest the request object containing the updated details of the study program
-     * @return {@link StudyProgramResponse}
+     * @return {@link StudyProgramDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    StudyProgramResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest);
+    StudyProgramDetailResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest);
 
     /**
      * Deletes a study program by its alias.

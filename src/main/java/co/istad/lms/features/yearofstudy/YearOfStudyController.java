@@ -4,14 +4,12 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,17 +21,20 @@ public class YearOfStudyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('faculty:write')")
     public void createYearOfStudy(@Valid @RequestBody YearOfStudyRequest yearOfStudyRequest) {
 
         yearOfStudyService.createYearOfStudy(yearOfStudyRequest);
     }
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public YearOfStudyDetailResponse getYearOfStudyByAlias(@PathVariable String uuid) {
         return yearOfStudyService.getYearOfStudyByUuid(uuid);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<YearOfStudyDetailResponse> getAllYearOfStudies(
 
             @RequestParam(defaultValue = "0") int page,
@@ -45,16 +46,8 @@ public class YearOfStudyController {
     }
 
     @PutMapping("/{uuid}")
-    public YearOfStudyResponse updateYearOfStudy(
-            @PathVariable String uuid,
-            @Valid @RequestBody YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
-
-        return yearOfStudyService.updateYearOfStudyByUuid(uuid, yearOfStudyUpdateRequest);
-
-    }
-
-    @PutMapping("/{uuid}/subjects")
-    public YearOfStudyResponse updateYearOfStudySubject(
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public YearOfStudyDetailResponse updateYearOfStudy(
             @PathVariable String uuid,
             @Valid @RequestBody YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
 
@@ -65,6 +58,7 @@ public class YearOfStudyController {
 
     @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:delete')")
     public void deleteYearOfStudy(@PathVariable String uuid) {
 
         yearOfStudyService.deleteYearOfStudyByUuid(uuid);
@@ -72,6 +66,7 @@ public class YearOfStudyController {
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<YearOfStudyDetailResponse> filterYearOfStudies(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
@@ -80,5 +75,26 @@ public class YearOfStudyController {
     ) {
 
         return yearOfStudyService.filterYearOfStudy(filterDto, page, size);
+    }
+
+    @PostMapping("/{uuid}/subjects")
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public YearOfStudyDetailResponse updateYearOfStudySubject(
+            @PathVariable String uuid,
+            @Valid @RequestBody YearOfStudySubjectRequest yearOfStudySubjectRequest) {
+
+        return yearOfStudyService.adSubject(uuid, yearOfStudySubjectRequest);
+
+    }
+
+    @DeleteMapping("/{uuid}/subjects/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:delete')")
+    public void deleteYearOfStudySubject(
+            @PathVariable String uuid,
+            @PathVariable String alias) {
+
+        yearOfStudyService.deleteSubject(uuid, alias);
+
     }
 }

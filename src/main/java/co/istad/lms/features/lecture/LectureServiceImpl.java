@@ -76,7 +76,7 @@ public class LectureServiceImpl implements LectureService {
 
 
     @Override
-    public LectureResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest) {
+    public LectureDetailResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest) {
 
         //find lecture by alias
         Lecture lecture = lectureRepository.findByAlias(alias)
@@ -105,7 +105,7 @@ public class LectureServiceImpl implements LectureService {
         lectureRepository.save(lecture);
 
         //return Lecture response
-        return lectureMapper.toLectureResponse(lecture);
+        return lectureMapper.toLectureDetailResponse(lecture);
     }
 
 

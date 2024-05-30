@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class CourseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('course:write')")
     void creatCourse(@Valid @RequestBody CourseRequest courseRequest) {
 
         courseService.createCourse(courseRequest);
@@ -28,6 +30,7 @@ public class CourseController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('course:read')")
     CourseDetailResponse getCourseByAlias(@PathVariable String alias) {
 
         return courseService.getCourseByAlias(alias);
@@ -35,6 +38,7 @@ public class CourseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('course:read')")
     public Page<CourseDetailResponse> getAllCourses(
 
             @RequestParam(defaultValue = "0") int page,
@@ -45,13 +49,15 @@ public class CourseController {
     }
 
     @PutMapping("/{alias}")
-    public CourseResponse updateCourse(@PathVariable String alias,
-                                       @Valid @RequestBody CourseUpdateRequest courseUpdateRequest) {
+    @PreAuthorize("hasAnyAuthority('course:update')")
+    public CourseDetailResponse updateCourse(@PathVariable String alias,
+                                             @Valid @RequestBody CourseUpdateRequest courseUpdateRequest) {
 
         return courseService.updateCourseByAlias(alias, courseUpdateRequest);
     }
 
     @DeleteMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('course:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCourse(@PathVariable String alias) {
 
@@ -60,6 +66,7 @@ public class CourseController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('course:delete')")
     void enableCourse(@PathVariable String alias) {
 
         courseService.enableCourseByAlias(alias);
@@ -67,12 +74,14 @@ public class CourseController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('course:delete')")
     void disableCourse(@PathVariable String alias) {
 
         courseService.disableCourseByAlias(alias);
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('course:read')")
     public Page<CourseDetailResponse> filterCourses(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

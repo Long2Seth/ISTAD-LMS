@@ -147,7 +147,7 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest) {
+    public ClassDetailResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest) {
 
         //validate class from DTO
         Class aClass = classRepository.findByAlias(alias)
@@ -222,7 +222,7 @@ public class ClassServiceImpl implements ClassService {
         //save to entity
         classRepository.save(aClass);
 
-        return classMapper.toClassResponse(aClass);
+        return classMapper.toClassDetailResponse(aClass);
 
     }
 

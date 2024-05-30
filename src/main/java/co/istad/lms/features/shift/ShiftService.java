@@ -45,11 +45,11 @@ public interface ShiftService {
      *
      * @param alias              is the unique name of shift
      * @param shiftUpdateRequest the request object containing updated details for the shift
-     * @return {@link ShiftResponse}
+     * @return {@link ShiftDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    ShiftResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest);
+    ShiftDetailResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest);
 
     /**
      * Deletes a shift by alias

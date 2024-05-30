@@ -53,11 +53,11 @@ public interface ClassService {
      *
      * @param alias               is the unique name of class
      * @param classUpdateRequest is the request object containing the updated class details
-     * @return {@link ClassResponse}
+     * @return {@link ClassDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    ClassResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest);
+    ClassDetailResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest);
 
 
     /**

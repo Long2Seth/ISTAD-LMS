@@ -77,7 +77,7 @@ public class GenerationServiceImpl implements GenerationService{
     }
 
     @Override
-    public GenerationResponse updateGenerationByAlias(String alias, GenerationUpdateRequest generationUpdateRequest) {
+    public GenerationDetailResponse updateGenerationByAlias(String alias, GenerationUpdateRequest generationUpdateRequest) {
 
         //validate generation from DTO with alias
         Generation generation = generationRepository.findByAlias(alias)
@@ -106,7 +106,7 @@ public class GenerationServiceImpl implements GenerationService{
         generationRepository.save(generation);
 
         //return generation to DTO
-        return generationMapper.toGenerationResponse(generation);
+        return generationMapper.toGenerationDetailResponse(generation);
 
     }
 

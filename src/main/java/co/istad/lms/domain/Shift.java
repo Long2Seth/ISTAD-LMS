@@ -45,4 +45,7 @@ public class Shift extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
+
 }

@@ -1,6 +1,5 @@
-package co.istad.lms.features.admission.dto;
+package co.istad.lms.features.studentadmisson.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record AdmissionCreateRequest(
+public record StudentAdmissionUpdateRequest(
         @NotBlank(message = "Name (English) is required")
         @Size(max = 50, message = "Name (English) cannot be longer than 50 characters")
         String nameEn,
@@ -22,7 +21,10 @@ public record AdmissionCreateRequest(
         @Size(max = 50, message = "Email cannot be longer than 50 characters")
         String email,
 
-        @Size(max = 50, message = "phoneNumber cannot be longer than 50 characters")
+        @NotBlank(message = "High School is required")
+        String highSchool,
+
+        @Size(max = 50, message = "Phone Number cannot be longer than 50 characters")
         String phoneNumber,
 
         @NotNull(message = "Date of Birth is required")
@@ -30,7 +32,7 @@ public record AdmissionCreateRequest(
 
         String pob,
 
-        @Size(max = 10)
+        @Size(max = 10, message = "Bac II Grade cannot be longer than 10 characters")
         String bacIiGrade,
 
         @NotBlank(message = "Gender is required")
@@ -41,18 +43,25 @@ public record AdmissionCreateRequest(
 
         String address,
 
-        @Size(max = 50, message = "Family Phone Number cannot be longer than 50 characters")
-        String familyPhoneNumber,
+        @Size(max = 50, message = "Guardian Contact cannot be longer than 50 characters")
+        String guardianContact,
+
+        @Size(max = 50, message = "Guardian Relationship cannot be longer than 50 characters")
+        String guardianRelationShip,
+
+        String knownIstad,
+
+        String identity,
 
         String biography,
 
-        @NotBlank(message = "Shift  alias required")
+        @NotBlank(message = "Shift alias is required")
         String shiftAlias,
 
         @NotBlank(message = "Study Program alias is required")
         String studyProgramAlias,
 
-        @NotBlank(message = "Degree alias is required")
+        @NotBlank
         String degreeAlias
 ) {
 }

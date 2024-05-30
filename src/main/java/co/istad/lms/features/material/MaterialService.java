@@ -42,11 +42,11 @@ public interface MaterialService {
      *
      * @param alias               is the unique name of material
      * @param materialUpdateRequest is the request object containing the updated subject details
-     * @return {@link MaterialResponse}
+     * @return {@link MaterialDetailResponse}
      * @author Nouth Chanreaksa
      * @since 1.0 (2024)
      */
-    MaterialResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest);
+    MaterialDetailResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest);
 
     Page<MaterialDetailResponse> getAllMaterials(int page, int size);
 

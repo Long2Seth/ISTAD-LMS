@@ -46,5 +46,11 @@ public class YearOfStudy extends Auditable {
     )
     private Set<Subject> subjects;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
+
+    @Column(nullable = false)
+    private Boolean isDraft;
+
 
 }

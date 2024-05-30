@@ -23,7 +23,6 @@ public record ClassUpdateRequest(
 
         String shiftAlias,
 
-
         String generationAlias
 
 ) {

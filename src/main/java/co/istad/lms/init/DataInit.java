@@ -28,7 +28,7 @@ public class DataInit {
     @PostConstruct
     void initRole() {
         // Auto generate role (USER, CUSTOMER, STAFF, ADMIN)
-        if (authorityRepository.count() < 44) {
+        if (authorityRepository.count() !=45) {
             List<String> authorityNames = List.of(
                     "faculty:read",
                     "faculty:write",
@@ -92,6 +92,7 @@ public class DataInit {
         return authority;
     }
 
+
     @PostConstruct
     void initUser() {
         // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
@@ -130,9 +131,8 @@ public class DataInit {
 
             // Authorities
             Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
-            System.out.println(authorities);
+            System.out.println(authorityRepository.findAll());
             user.setAuthorities(authorities);
-
             userRepository.save(user);
         }
     }

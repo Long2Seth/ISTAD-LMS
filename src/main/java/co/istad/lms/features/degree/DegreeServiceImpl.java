@@ -1,7 +1,6 @@
 package co.istad.lms.features.degree;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Admission;
 import co.istad.lms.domain.Degree;
 import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
@@ -16,8 +15,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Service
 @RequiredArgsConstructor
@@ -80,7 +77,7 @@ public class DegreeServiceImpl implements DegreeService {
 
 
     @Override
-    public DegreeResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
+    public DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
 
         //find degree by alias
         Degree degree = degreeRepository.findByAlias(alias)
@@ -111,7 +108,7 @@ public class DegreeServiceImpl implements DegreeService {
         degreeRepository.save(degree);
 
         //return Degree DTO
-        return degreeMapper.toDegreeResponse(degree);
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
 
 

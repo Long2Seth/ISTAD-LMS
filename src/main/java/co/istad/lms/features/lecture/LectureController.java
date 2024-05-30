@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class LectureController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('session:write')")
     void createLecture(@Valid @RequestBody LectureRequest lectureRequest) {
 
         lectureService.createLecture(lectureRequest);
@@ -28,6 +30,7 @@ public class LectureController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('session:read')")
     LectureDetailResponse getLectureByAlias(@PathVariable String alias) {
 
         return lectureService.getLectureByAlias(alias);
@@ -35,6 +38,7 @@ public class LectureController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('session:read')")
     public Page<LectureDetailResponse> getAllLectures(
 
             @RequestParam(defaultValue = "0") int page,
@@ -46,8 +50,9 @@ public class LectureController {
 
 
     @PutMapping("/{alias}")
-    public LectureResponse updateLecture(@PathVariable String alias,
-                                         @Valid @RequestBody LectureUpdateRequest lectureUpdateRequest) {
+    @PreAuthorize("hasAnyAuthority('session:update')")
+    public LectureDetailResponse updateLecture(@PathVariable String alias,
+                                               @Valid @RequestBody LectureUpdateRequest lectureUpdateRequest) {
 
         return lectureService.updateLectureByAlias(alias, lectureUpdateRequest);
     }
@@ -55,6 +60,7 @@ public class LectureController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('session:delete')")
     public void deleteLecture(@PathVariable String alias) {
 
         lectureService.deleteLectureByAlias(alias);
@@ -62,6 +68,7 @@ public class LectureController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('session:update')")
     void enableLecture(@PathVariable String alias) {
 
         lectureService.enableLectureByAlias(alias);
@@ -69,12 +76,14 @@ public class LectureController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('session:update')")
     void disableLecture(@PathVariable String alias) {
 
         lectureService.disableLectureByAlias(alias);
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('session:read')")
     public Page<LectureDetailResponse> filterLectures(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

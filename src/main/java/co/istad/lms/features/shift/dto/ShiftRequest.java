@@ -3,6 +3,7 @@ package co.istad.lms.features.shift.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.security.Timestamp;
 import java.sql.Time;
@@ -21,17 +22,16 @@ public record ShiftRequest(
         String name,
 
         @NotNull(message = "Start time is required")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
         LocalTime startTime,
 
         @NotNull(message = "End time is required")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
         LocalTime endTime,
 
         @NotNull(message = "Weekday is required")
         Boolean weekday,
 
-        String description,
-
-        @NotNull(message = "isDeleted is required")
-        Boolean isDeleted
+        String description
 ) {
 }

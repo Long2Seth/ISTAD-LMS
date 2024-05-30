@@ -24,53 +24,20 @@ public class Admission extends Auditable {
     @Column(nullable = false, unique = true)
     private String uuid;
 
-    @Column(nullable = false, length = 50)
-    private String nameEn;
-
-    @Column(nullable = false, length = 50)
-    private String nameKh;
-
-    @Column(nullable = false, length = 50)
-    private String email;
-
-    @Column(length = 50)
-    private String phoneNumber;
-
     @Column(nullable = false)
-    private LocalDate dob;
-
-    private String pob;
-
-    @Column(length = 10)
-    private String bacIiGrade;
-
-    @Column(nullable = false, length = 20)
-    private String gender;
-
-    private String avatar;
-
-    private String address;
-
-    @Column(length = 50)
-    private String familyPhoneNumber;
+    private Integer status;
 
     @Column(columnDefinition = "TEXT")
-    private String biography;
-
-    @ManyToOne
-    @JoinColumn(name = "shift_id",nullable = false)
-    private Shift shift;
-
-    @ManyToOne
-    @JoinColumn(name = "study_program_id",nullable = false)
-    private StudyProgram studyProgram;
-
-    @ManyToOne
-    @JoinColumn(name = "degree_id",nullable = false)
-    private Degree degree;
+    private String remark;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private LocalDate openDate;
+    
+    private LocalDate endDate;
 
+    private String telegramLink;
+
+    @Column(nullable = false)
+    private Boolean isDeleted;
 
 }

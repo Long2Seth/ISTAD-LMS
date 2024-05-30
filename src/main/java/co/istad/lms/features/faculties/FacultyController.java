@@ -25,7 +25,7 @@ public class FacultyController {
     private final FacultyService facultyService;
 
 
-    @PreAuthorize("hasAnyAuthority('admin:write')")
+    @PreAuthorize("hasAnyAuthority('faculty:write')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     void createDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
@@ -55,6 +55,7 @@ public class FacultyController {
     }
 
     @PutMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     public FacultyDetailResponse updateDegree(@PathVariable String alias,
                                               @Valid @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
 
@@ -64,6 +65,7 @@ public class FacultyController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:delete')")
     public void deleteFaculty(@PathVariable String alias) {
 
         facultyService.deleteFacultyByAlias(alias);
@@ -72,6 +74,7 @@ public class FacultyController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     void enableFaculty(@PathVariable String alias) {
 
         facultyService.enableFacultyByAlias(alias);
@@ -79,6 +82,7 @@ public class FacultyController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     void disableFaculty(@PathVariable String alias) {
 
         facultyService.disableFacultyByAlias(alias);
@@ -86,6 +90,7 @@ public class FacultyController {
 
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<FacultyDetailResponse> filterFaculties(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

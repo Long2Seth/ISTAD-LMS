@@ -75,7 +75,7 @@ public class ShiftServiceImpl implements ShiftService{
     }
 
     @Override
-    public ShiftResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest) {
+    public ShiftDetailResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest) {
 
         //validate shift from DTO by alias
         Shift shift = shiftRepository.findByAlias(alias)
@@ -104,7 +104,7 @@ public class ShiftServiceImpl implements ShiftService{
         shiftRepository.save(shift);
 
         //return shift detail
-        return shiftMapper.toShiftResponse(shift);
+        return shiftMapper.toShiftDetailResponse(shift);
     }
 
     @Override
