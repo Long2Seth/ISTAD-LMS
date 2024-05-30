@@ -39,5 +39,8 @@ public class Subject extends Auditable {
     @Column(nullable = false)
     private Integer duration;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
+
 
 }

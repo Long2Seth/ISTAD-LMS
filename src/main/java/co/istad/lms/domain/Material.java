@@ -42,4 +42,7 @@ public class Material extends Auditable {
     @Column (nullable = false)
     private String subjectAlias;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
+
 }

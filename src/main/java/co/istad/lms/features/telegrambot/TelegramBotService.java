@@ -1,9 +1,8 @@
 package co.istad.lms.features.telegrambot;
 
 
-import co.istad.lms.domain.Admission;
-import co.istad.lms.features.admission.dto.AdmissionResponse;
+import co.istad.lms.domain.StudentAdmission;
 
 public interface TelegramBotService {
-    public void sendAdmissionResponse(Admission admission);
+    public void sendAdmissionResponse(StudentAdmission admission);
 }

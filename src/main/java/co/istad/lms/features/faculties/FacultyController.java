@@ -25,7 +25,7 @@ public class FacultyController {
     private final FacultyService facultyService;
 
 
-    @PreAuthorize("hasAnyAuthority('faculty:write', 'faculty:update')")
+//    @PreAuthorize("hasAnyAuthority('faculty:write')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     void createDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
@@ -34,7 +34,7 @@ public class FacultyController {
 
     }
 
-    @PreAuthorize("hasAnyAuthority('faculty:read')")
+//    @PreAuthorize("hasAnyAuthority('faculty:read')")
     @GetMapping("/{alias}")
     FacultyDetailResponse getFacultyByAlias(@PathVariable String alias) {
 
@@ -42,7 +42,7 @@ public class FacultyController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('faculty:read')")
+//    @PreAuthorize("hasAnyAuthority('faculty:read')")
     @GetMapping
     public Page<FacultyDetailResponse> getAllFaculties(
 

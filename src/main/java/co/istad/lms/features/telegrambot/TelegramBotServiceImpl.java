@@ -1,6 +1,6 @@
 package co.istad.lms.features.telegrambot;
 
-import co.istad.lms.domain.Admission;
+import co.istad.lms.domain.StudentAdmission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class TelegramBotServiceImpl implements TelegramBotService{
     private final RestTemplate restTemplate;
 
     @Override
-    public void sendAdmissionResponse(Admission admission) {
+    public void sendAdmissionResponse(StudentAdmission admission) {
 
 
         //get field that need to send to bot and format as string

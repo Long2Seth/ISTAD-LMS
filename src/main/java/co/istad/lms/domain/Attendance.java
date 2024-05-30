@@ -42,4 +42,7 @@ public class Attendance extends Auditable {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
+
 }

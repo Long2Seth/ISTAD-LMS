@@ -1,12 +1,10 @@
 package co.istad.lms.features.admission;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Admission;
 import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
 import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.admission.dto.AdmissionResponse;
 import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
-import co.istad.lms.features.faculties.dto.FacultyDetailResponse;
 import org.springframework.data.domain.Page;
 
 

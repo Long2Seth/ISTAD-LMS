@@ -4,12 +4,10 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.subject.SubjectRepository;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.*;
 import co.istad.lms.mapper.YearOfStudyMapper;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.jaxb.hbm.spi.SubEntityInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -41,11 +39,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     public void createYearOfStudy(YearOfStudyRequest yearOfStudyRequest) {
 
         //validate studyProgram from DTO by alias
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(yearOfStudyRequest.studyProgramAlias())
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("studyProgram = %s has not been found", yearOfStudyRequest.studyProgramAlias())));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(yearOfStudyRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("studyProgram = %s has not been found", yearOfStudyRequest.studyProgramAlias())));
 
         //check year/semester/studyProgram for each yearOfStudy
         //example year:1,semester:1,studyProgram:dev-op, it can not the same all three field of other request
@@ -53,11 +47,8 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
                 yearOfStudyRequest.year(), yearOfStudyRequest.semester(), studyProgram).isPresent();
 
         if (exists) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("YearOfStudy that studyProgramAlias = %s, year = %d, semester = %d has already existed",
-                            yearOfStudyRequest.studyProgramAlias(),yearOfStudyRequest.year(), yearOfStudyRequest.semester()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("YearOfStudy that studyProgramAlias = %s, year = %d, semester = %d has already existed", yearOfStudyRequest.studyProgramAlias(), yearOfStudyRequest.year(), yearOfStudyRequest.semester()));
         }
-
 
 
         //map from DTO to entity
@@ -80,9 +71,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
 
 
         //validate yearOfStudy from DTO by uuid
-        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("YearOfStudy = %s has not been found.", uuid)));
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("YearOfStudy = %s has not been found.", uuid)));
 
         //map to DTO and return
         return yearOfStudyMapper.toYearOfStudyDetailResponse(yearOfStudy);
@@ -108,9 +97,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     public YearOfStudyResponse updateYearOfStudyByUuid(String uuid, YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
 
         //validate yearOfStudy from DTO by alias
-        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("yearOfStudy = %s was not found.", uuid)));
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("yearOfStudy = %s was not found.", uuid)));
 
         //map from DTO to entity
         yearOfStudyMapper.updateYearOfStudyFromRequest(yearOfStudy, yearOfStudyUpdateRequest);
@@ -126,9 +113,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     public void deleteYearOfStudyByUuid(String uuid) {
 
         //validate yearOfStudy from DTO by alias
-        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Study program = %s was not found.", uuid)));
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", uuid)));
 
         //delete from database
         yearOfStudyRepository.delete(yearOfStudy);
@@ -151,6 +136,64 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
 
         //map to DTO and return
         return yearOfStudies.map(yearOfStudyMapper::toYearOfStudyDetailResponse);
+
+    }
+
+    @Override
+    public YearOfStudyDetailResponse adSubject(String uuid, YearOfStudySubjectRequest yearOfStudySubjectRequest) {
+
+        //validate year of study from dto by uuid
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study = %s has been not found", uuid)));
+
+        //validate subject from dto by alias
+        Set<Subject> requestedSubjects = yearOfStudySubjectRequest.aliasOfSubjects().stream()
+                .map(subjectAlias -> subjectRepository.findByAlias(subjectAlias)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Subject = %s has not been found", subjectAlias))))
+                .collect(Collectors.toSet());
+
+        // Set the updated subjects to the year of study
+        Set<Subject> allSubjects = yearOfStudy.getSubjects();
+
+        // If the existing subjects set is modifiable, directly add all requested subjects
+        allSubjects.addAll(requestedSubjects);
+
+        //set subject to yearOfStudy
+        yearOfStudy.setSubjects(allSubjects);
+
+        //save to database
+        yearOfStudyRepository.save(yearOfStudy);
+
+        return yearOfStudyMapper.toYearOfStudyDetailResponse(yearOfStudy);
+    }
+
+    @Override
+    public void deleteSubject(String uuid, String alias) {
+
+        //validate year of study from dto by uuid
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study = %s has been not found", uuid)));
+
+        //find subject by alias from dto
+        Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                , String.format("Subject  = %s has not been found", alias)));
+
+        //get all subject from yearOfStudy
+        Set<Subject> allSubjects = yearOfStudy.getSubjects();
+
+        // Check if the subject exists in the yearOfStudy
+        if (!allSubjects.contains(subject)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not " +
+                    "existed in YearOfStudy = %s", alias, uuid));
+        }
+
+        //remove a subject
+        allSubjects.remove(subject);
+
+        //set new Set of subject to entity after remove
+        yearOfStudy.setSubjects(allSubjects);
+
+        //save to database
+        yearOfStudyRepository.save(yearOfStudy);
 
     }
 }

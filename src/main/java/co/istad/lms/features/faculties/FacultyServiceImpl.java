@@ -1,12 +1,9 @@
 package co.istad.lms.features.faculties;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Admission;
-import co.istad.lms.domain.Degree;
 import co.istad.lms.domain.Faculty;
 import co.istad.lms.features.faculties.dto.FacultyDetailResponse;
 import co.istad.lms.features.faculties.dto.FacultyRequest;
-import co.istad.lms.features.faculties.dto.FacultyResponse;
 import co.istad.lms.features.faculties.dto.FacultyUpdateRequest;
 import co.istad.lms.mapper.FacultyMapper;
 import lombok.RequiredArgsConstructor;

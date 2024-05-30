@@ -4,10 +4,7 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -53,15 +50,6 @@ public class YearOfStudyController {
 
     }
 
-    @PutMapping("/{uuid}/subjects")
-    public YearOfStudyResponse updateYearOfStudySubject(
-            @PathVariable String uuid,
-            @Valid @RequestBody YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
-
-        return yearOfStudyService.updateYearOfStudyByUuid(uuid, yearOfStudyUpdateRequest);
-
-    }
-
 
     @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -80,5 +68,24 @@ public class YearOfStudyController {
     ) {
 
         return yearOfStudyService.filterYearOfStudy(filterDto, page, size);
+    }
+
+    @PostMapping("/{uuid}/subjects")
+    public YearOfStudyDetailResponse updateYearOfStudySubject(
+            @PathVariable String uuid,
+            @Valid @RequestBody YearOfStudySubjectRequest yearOfStudySubjectRequest) {
+
+        return yearOfStudyService.adSubject(uuid, yearOfStudySubjectRequest);
+
+    }
+
+    @DeleteMapping("/{uuid}/subjects/{alias}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteYearOfStudySubject(
+            @PathVariable String uuid,
+            @PathVariable String alias) {
+
+        yearOfStudyService.deleteSubject(uuid, alias);
+
     }
 }

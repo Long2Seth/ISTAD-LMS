@@ -1,10 +1,7 @@
 package co.istad.lms.features.yearofstudy;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.*;
 import org.springframework.data.domain.Page;
 
 /**
@@ -78,4 +75,22 @@ public interface YearOfStudyService {
      * @since 1.0 (2024)
      */
     Page<YearOfStudyDetailResponse> filterYearOfStudy(BaseSpecification.FilterDto filterDto, int page, int size);
+
+
+    /**
+     * add subject to year of study
+     *
+     * @param uuid is the unique identity of yearOfStudy
+     * @param yearOfStudySubjectRequest is the Set of subject alias to add
+     * @return {@link YearOfStudyDetailResponse}
+     */
+    YearOfStudyDetailResponse adSubject(String uuid, YearOfStudySubjectRequest yearOfStudySubjectRequest);
+
+    /**
+     * delete a subject from yearOfStudy
+     *
+     * @param uuid is the uniq identity of yearOfStudy
+     * @param alias is the alias of subject to delete
+     */
+    void deleteSubject(String uuid, String alias);
 }

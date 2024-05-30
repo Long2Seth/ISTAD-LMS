@@ -34,7 +34,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final DegreeRepository degreeRepository;
     private final ShiftRepository shiftRepository;
     private final StudyProgramRepository studyProgramRepository;
-    private final BaseSpecification<Admission> baseSpecification;
+    private final BaseSpecification<StudentAdmission> baseSpecification;
     private final TelegramBotService telegramBotService;
 
     @Value("${telegram.bot.id}")
@@ -59,7 +59,7 @@ public class AdmissionServiceImpl implements AdmissionService {
                         String.format("studyProgram = %s has not been found", admissionCreateRequest.studyProgramAlias())));
 
         //map from DTO to entity
-        Admission admission = admissionMapper.fromAdmissionRequest(admissionCreateRequest);
+        StudentAdmission admission = admissionMapper.fromAdmissionRequest(admissionCreateRequest);
 
         //generate uuid for admission
         admission.setUuid(UUID.randomUUID().toString());
@@ -85,7 +85,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     public AdmissionDetailResponse getAdmissionByUuid(String uuid) {
 
         //find admission in database by uuid
-        Admission admission = admissionRepository.findByUuid(uuid)
+        StudentAdmission admission = admissionRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Admission = %s has not been found ", uuid)));
@@ -104,7 +104,7 @@ public class AdmissionServiceImpl implements AdmissionService {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
 
         //find all admission in database
-        Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
+        Page<StudentAdmission> admissionsPage = admissionRepository.findAll(pageRequest);
 
         //map entity to database and return AdmissionDetail
         return admissionsPage.map(admissionMapper::toAdmissionResponse);
@@ -114,7 +114,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     public AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionUpdateRequest) {
 
         //find admission by uuid in database
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
+        StudentAdmission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Admission  = %s has not been found ! ", admissionUuid)));
@@ -175,7 +175,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     public void deleteAdmission(String admissionUuid) {
 
         //validate admission by uuid
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
+        StudentAdmission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Admission = %s has not been found ! ", admissionUuid)));
@@ -188,7 +188,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     public void disableAdmissionByUuid(String admissionUuid) {
 
         //validate from dto with uuid
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
+        StudentAdmission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admission = %s has not been found ! ", admissionUuid)));
 
@@ -203,7 +203,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     public void enableAdmissionByUuid(String admissionUuid) {
 
         //validate from dto by uuid
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
+        StudentAdmission admission = admissionRepository.findByUuid(admissionUuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Admission = %s has not been found ! ", admissionUuid)));
 
@@ -225,10 +225,10 @@ public class AdmissionServiceImpl implements AdmissionService {
         PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
         //create a dynamic query specification for filtering Admission entities based on the criteria provided
-        Specification<Admission> specification = baseSpecification.filter(filterDto);
+        Specification<StudentAdmission> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<Admission> admissionsPage = admissionRepository.findAll(specification, pageRequest);
+        Page<StudentAdmission> admissionsPage = admissionRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
