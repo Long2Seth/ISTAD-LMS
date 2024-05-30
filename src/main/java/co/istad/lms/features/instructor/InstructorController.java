@@ -3,6 +3,7 @@ package co.istad.lms.features.instructor;
 
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
+import co.istad.lms.features.instructor.dto.InstructorResponse;
 import co.istad.lms.features.instructor.dto.InstructorResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +21,19 @@ public class InstructorController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public InstructorResponse createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
+    public InstructorResponseDetail createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
         return instructorService.createInstructor(instructorRequest);
     }
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public InstructorResponse getInstructorByUuid(@PathVariable String uuid){
+    public InstructorResponseDetail getInstructorByUuid(@PathVariable String uuid){
         return instructorService.getInstructorByUuid(uuid);
     }
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public InstructorRequestDetail updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequestDetail instructorRequestDetail){
+    public InstructorResponseDetail updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequestDetail instructorRequestDetail){
         return instructorService.updateInstructorByUuid(uuid, instructorRequestDetail);
     }
 
@@ -44,25 +45,25 @@ public class InstructorController {
 
     @PatchMapping("/{uuid}/disable")
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public InstructorResponse disableInstructorByUuid(@PathVariable String uuid){
+    public InstructorResponseDetail disableInstructorByUuid(@PathVariable String uuid){
         return instructorService.disableInstructorByUuid(uuid);
     }
 
     @PatchMapping("/{uuid}/enable")
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public InstructorResponse enableInstructorByUuid(@PathVariable String uuid){
+    public InstructorResponseDetail enableInstructorByUuid(@PathVariable String uuid){
         return instructorService.enableInstructorByUuid(uuid);
     }
 
     @PatchMapping("/{uuid}/block")
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public InstructorResponse blockInstructorByUuid(@PathVariable String uuid){
+    public InstructorResponseDetail blockInstructorByUuid(@PathVariable String uuid){
         return instructorService.blockInstructorByUuid(uuid);
     }
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    public Page<InstructorResponse> getAllInstructor(
+    public Page<InstructorResponseDetail> getAllInstructor(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") int limit
     ){

@@ -45,7 +45,7 @@ public interface StudentAdmissionService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<StudentAdmissionResponse> getAllStudentAdmissions(int page, int size);
+    Page<StudentAdmissionDetailResponse> getAllStudentAdmissions(int page, int size);
 
     /**
      * Updates an existing student admission.

@@ -33,20 +33,19 @@ public class TelegramBotServiceImpl implements TelegramBotService{
                                                 
                         Full Name     : %s
                         Gender        : %s
-                        Generation    : %s
                         Degree        : %s
                         Study Program : %s
                         Shift         : %s | %s - %s
                         Contact       : %s
                         BacII Grade   : %s
+                        High School   : %s
                         Place Of Birth: %s
                         Date Of  Birth: %s
+                        Known Istad By: %s
                         """,
                 admission.getNameEn(),
 
                 admission.getGender(),
-
-                "gen",
 
                 admission.getDegree().getAlias(),
 
@@ -58,9 +57,14 @@ public class TelegramBotServiceImpl implements TelegramBotService{
 
                 admission.getBacIiGrade(),
 
+                admission.getHighSchool(),
+
                 admission.getPob(),
 
-                admission.getDob().toString());
+                admission.getDob().toString(),
+
+                admission.getKnownIstad());
+
 
         String url = String.format("https://api.telegram.org/bot%s/sendMessage", botToken);
 

@@ -1,10 +1,7 @@
 package co.istad.lms.features.admission;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.admission.dto.AdmissionRequest;
-import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
-import co.istad.lms.features.admission.dto.AdmissionResponse;
-import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
+import co.istad.lms.features.admission.dto.*;
 import org.springframework.data.domain.Page;
 
 
@@ -44,7 +41,7 @@ public interface AdmissionService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<AdmissionResponse> getAllAdmissions(int page, int size);
+    Page<AdmissionDetailResponse> getAllAdmissions(int page, int size);
 
     /**
      * Updates an existing admission.
@@ -83,6 +80,13 @@ public interface AdmissionService {
      * @since 1.0 (2024)
      */
     void enableAdmissionByUuid(String uuid);
+
+    /**
+     *
+     * @param uuid is the unique identify of admission
+     * @param admissionUpdateStatusRequest is the status of admission(0=close, 1=open,2=archive)
+     */
+    void updateAdmissionStatus(String uuid, AdmissionUpdateStatusRequest admissionUpdateStatusRequest);
 
     /**
      * Filters admissions based on the provided criteria.

@@ -2,6 +2,7 @@ package co.istad.lms.features.studentadmisson;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
+import co.istad.lms.features.admission.AdmissionRepository;
 import co.istad.lms.features.admission.AdmissionService;
 import co.istad.lms.features.admission.dto.AdmissionRequest;
 import co.istad.lms.features.degree.DegreeRepository;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,9 +46,17 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
     private final BaseSpecification<StudentAdmission> baseSpecification;
 
+    private final AdmissionRepository admissionRepository;
+
 
     @Override
     public void createStudentAdmission(StudentAdmissionRequest studentAdmissionRequest) {
+
+        //find admission that open
+        List<Admission> admissions=admissionRepository.findByStatus(1);
+        if(admissions.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("admission is close"));
+        }
 
         //validate degree by degree alias
         Degree degree = degreeRepository.findByAlias(studentAdmissionRequest.degreeAlias())
@@ -64,25 +74,28 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
                         String.format("studyProgram = %s has not been found", studentAdmissionRequest.studyProgramAlias())));
 
         //map from DTO to entity
-        StudentAdmission admission = studentAdmissionMapper.fromStudentAdmissionRequest(studentAdmissionRequest);
+        StudentAdmission studentAdmission = studentAdmissionMapper.fromStudentAdmissionRequest(studentAdmissionRequest);
 
         //generate uuid for admission
-        admission.setUuid(UUID.randomUUID().toString());
+        studentAdmission.setUuid(UUID.randomUUID().toString());
 
         //set shift to entity
-        admission.setShift(shift);
+        studentAdmission.setShift(shift);
 
         //set degree to entity
-        admission.setDegree(degree);
+        studentAdmission.setDegree(degree);
 
         // studyProgram to entity
-        admission.setStudyProgram(studyProgram);
+        studentAdmission.setStudyProgram(studyProgram);
+
+        //set admission to student admission
+        studentAdmission.setAdmission(admissions.get(0));
 
         //save to database
-        studentAdmissionRepository.save(admission);
+        studentAdmissionRepository.save(studentAdmission);
 
 //         Send a notification to Telegram
-        telegramBotService.sendAdmissionResponse(admission);
+        telegramBotService.sendAdmissionResponse(studentAdmission);
     }
 
     @Override
@@ -96,7 +109,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
     }
 
     @Override
-    public Page<StudentAdmissionResponse> getAllStudentAdmissions(int page, int size) {
+    public Page<StudentAdmissionDetailResponse> getAllStudentAdmissions(int page, int size) {
 
         //create sort order
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -108,7 +121,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         Page<StudentAdmission> admissionsPage = studentAdmissionRepository.findAll(pageRequest);
 
         //map entity to database and return student AdmissionDetail
-        return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionResponse);
+        return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
     }
 
     @Override

@@ -63,9 +63,6 @@ public record StudentAdmissionRequest(
         String studyProgramAlias,
 
         @NotBlank(message = "Degree alias is required")
-        String degreeAlias,
-
-        @NotBlank
-        String admissionAlias
+        String degreeAlias
 ) {
 }

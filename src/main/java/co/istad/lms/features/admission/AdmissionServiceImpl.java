@@ -4,10 +4,7 @@ package co.istad.lms.features.admission;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
-import co.istad.lms.features.admission.dto.AdmissionRequest;
-import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
-import co.istad.lms.features.admission.dto.AdmissionResponse;
-import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
+import co.istad.lms.features.admission.dto.*;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
@@ -39,8 +36,13 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public void createAdmission(AdmissionRequest admissionRequest) {
 
-       Admission admission=admissionMapper.fromAdmissionRequest(admissionRequest);
+        //map form DTO to entity
+        Admission admission=admissionMapper.fromAdmissionRequest(admissionRequest);
 
+        //set uuid to admission
+        admission.setUuid(UUID.randomUUID().toString());
+
+        //save to database
        admissionRepository.save(admission);
     }
 
@@ -55,7 +57,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
-    public Page<AdmissionResponse> getAllAdmissions(int page, int size) {
+    public Page<AdmissionDetailResponse> getAllAdmissions(int page, int size) {
 
         //create sort order
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -67,7 +69,7 @@ public class AdmissionServiceImpl implements AdmissionService {
         Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
 
         //map entity to database and return AdmissionDetail
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
+        return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
     }
 
     @Override
@@ -124,6 +126,16 @@ public class AdmissionServiceImpl implements AdmissionService {
         //save to database
         admissionRepository.save(admission);
 
+    }
+
+    @Override
+    public void updateAdmissionStatus(String uuid, AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
+
+        Admission admission=
+                admissionRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND
+                        ,String.format("Admission = %s has not been found",uuid)));
+
+        admission.setStatus(admissionUpdateStatusRequest.status());
     }
 
     @Override
