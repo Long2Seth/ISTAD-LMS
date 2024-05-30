@@ -32,31 +32,41 @@ public class AcademicController {
         return academicService.getAcademics(page, limit);
     }
 
+
+    @PreAuthorize("hasAnyAuthority('admin:control' )")
     @PostMapping
     public AcademicResponseDetail createAcademic(@Valid @RequestBody AcademicRequest academicRequest){
         return academicService.createAcademic(academicRequest);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     @PutMapping("/{uuid}")
     public AcademicResponseDetail updateAcademicByUuid(@PathVariable String uuid , @RequestBody AcademicRequestDetail academicRequest){
         return academicService.updateAcademicByUuid(uuid, academicRequest);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     @DeleteMapping("/{uuid}")
     public AcademicResponseDetail deleteAcademicByUuid(@PathVariable String uuid){
         return academicService.deleteAcademicByUuid(uuid);
     }
 
+
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/disable")
     public AcademicResponseDetail updateDisableAcademicByUuid(@PathVariable String uuid){
         return academicService.updateDisableAcademicByUuid(uuid);
     }
 
+
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/enable")
     public AcademicResponseDetail updateEnableAcademicByUuid(@PathVariable String uuid){
         return academicService.updateEnableAcademicByUuid(uuid);
     }
 
+
+    @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/block")
     public AcademicResponseDetail updateDeletedAcademicByUuid(@PathVariable String uuid){
         return academicService.updateDeletedAcademicByUuid(uuid);

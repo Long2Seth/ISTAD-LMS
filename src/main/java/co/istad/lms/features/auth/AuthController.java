@@ -26,42 +26,11 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    @Operation(summary = "User login",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = AuthRequest.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                                {
-                                                    "email": "admin@gmail.com",
-                                                    "password": "admin"
-                                                }
-                                            """
-                            )
-                    )
-            )
-    )
     public AuthResponse login(@RequestBody AuthRequest request) {
         return authService.login(request);
     }
 
     @PostMapping("/refresh")
-    @Operation(summary = "Refresh token",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = RefreshTokenRequest.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                                {
-                                                    "refreshToken": "sample_refresh_token"
-                                                }
-                                            """
-                            )
-                    )
-            )
-    )
     public AuthResponse refresh(@RequestBody RefreshTokenRequest request) {
         return authService.refreshToken(request);
     }
