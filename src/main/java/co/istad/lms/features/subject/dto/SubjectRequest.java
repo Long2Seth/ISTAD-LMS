@@ -23,7 +23,9 @@ public record SubjectRequest(
         Integer credit,
 
         @NotNull(message = "duration is require")
-        Integer duration
+        Integer duration,
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft
 
 ) {
 }

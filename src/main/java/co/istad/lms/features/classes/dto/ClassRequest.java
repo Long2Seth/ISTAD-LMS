@@ -2,6 +2,8 @@ package co.istad.lms.features.classes.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import javax.swing.text.StyledEditorKit;
 import java.util.Set;
 
 public record ClassRequest(
@@ -25,6 +27,9 @@ public record ClassRequest(
         @NotBlank(message = "Generation alias cannot be null")
         String generationAlias,
 
-        Set<String> studentUuid
+        Set<String> studentUuid,
+
+        @NotNull(message = "isDraft is require")
+        Boolean isDraft
 ) {
 }

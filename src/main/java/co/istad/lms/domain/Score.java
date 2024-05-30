@@ -41,7 +41,7 @@ public class Score extends Auditable {
     private String courseAlias;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean isDeleted ;
 
 
 }

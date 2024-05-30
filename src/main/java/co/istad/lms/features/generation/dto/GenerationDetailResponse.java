@@ -13,6 +13,10 @@ public record GenerationDetailResponse (
 
         Integer startYear,
 
-        Integer endYear
+        Integer endYear,
+
+        Boolean isDeleted,
+
+        Boolean isDraft
 ){
 }

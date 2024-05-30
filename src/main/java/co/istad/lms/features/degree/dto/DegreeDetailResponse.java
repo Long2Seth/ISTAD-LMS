@@ -8,6 +8,8 @@ public record DegreeDetailResponse(
         String description,
         String modifiedBy,
         Boolean isDeleted,
+
+        Boolean isDfraft,
         LocalDateTime createdAt,
         LocalDateTime lastModifiedAt
 ) {

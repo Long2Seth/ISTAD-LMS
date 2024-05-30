@@ -16,6 +16,8 @@ public record StudyProgramDetailResponse(
         String logo,
         Boolean isDeleted,
 
+        Boolean isDraft,
+
         DegreeResponse degree,
 
         FacultyResponse faculty

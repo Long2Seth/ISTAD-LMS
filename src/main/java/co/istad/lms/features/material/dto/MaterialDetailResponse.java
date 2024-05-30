@@ -13,8 +13,10 @@ public record MaterialDetailResponse(
         String fileUrl,
         String thumbnail,
         String description,
-        String subjectAlias
+        String subjectAlias,
 
+        Boolean isDeleted,
+        Boolean isDraft
 ) {
 }
 
