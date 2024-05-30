@@ -25,7 +25,7 @@ public record AcademicRequestDetail
 
                 String experienceAtWorkingPlace,
 
-                LocalDate experienceYear,
+                Integer experienceYear,
 
                 UserRequestDetail user
         ) {

@@ -43,7 +43,7 @@ public class Academic {
     @Column(length = 50)
     String experienceAtWorkingPlace;
 
-    LocalDate experienceYear; // experience compare per year
+    Integer experienceYear; // experience compare per year
 
     private boolean status;
 

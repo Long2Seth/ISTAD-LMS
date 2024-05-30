@@ -5,6 +5,7 @@ import co.istad.lms.domain.roles.Staff;
 import co.istad.lms.features.staff.dto.StaffRequest;
 import co.istad.lms.features.staff.dto.StaffRequestDetail;
 import co.istad.lms.features.staff.dto.StaffResponse;
+import co.istad.lms.features.staff.dto.StaffResponseDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,6 +17,8 @@ public interface StaffMapper {
     @Mapping(target = "user", source = "user")
     StaffResponse toResponse(Staff staff);
 
+    Staff toRequestDetail(StaffRequestDetail staffRequestDetail);
+
     @Mapping(target = "user", source = "user")
-    StaffRequestDetail toResponseDetail(Staff staff);
+    StaffResponseDetail toResponseDetail(Staff staff);
 }

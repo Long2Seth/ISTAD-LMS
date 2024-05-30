@@ -10,6 +10,7 @@ import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.staff.dto.StaffRequest;
 import co.istad.lms.features.staff.dto.StaffRequestDetail;
 import co.istad.lms.features.staff.dto.StaffResponse;
+import co.istad.lms.features.staff.dto.StaffResponseDetail;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.StaffMapper;
@@ -55,7 +56,7 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public StaffResponse createStaff(StaffRequest staffRequest) {
+    public StaffResponseDetail createStaff(StaffRequest staffRequest) {
 
 
         if (userRepository.existsByUsername(staffRequest.user().username())) {
@@ -87,12 +88,12 @@ public class StaffServiceImpl implements StaffService {
         staff.setUser(user);
         staffRepository.save(staff);
 
-        return staffMapper.toResponse(staff);
+        return staffMapper.toResponseDetail(staff);
 
     }
 
     @Override
-    public StaffRequestDetail updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail) {
+    public StaffResponseDetail updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail) {
 
         // Check if the staff exists
         Staff staff = staffRepository.findByUuid(uuid)
@@ -152,15 +153,15 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public StaffResponse getStaffByUuid(String uuid) {
+    public StaffResponseDetail getStaffByUuid(String uuid) {
 
-        return staffRepository.findByUuid(uuid)
-                .map(staffMapper::toResponse)
+        Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
+        return staffMapper.toResponseDetail(staff);
 
     }
 
@@ -177,7 +178,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Page<StaffResponse> getStaffs(int page, int limit) {
+    public Page<StaffResponseDetail> getStaffs(int page, int limit) {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Staff> staff = staffRepository.findAll(pageRequest);
@@ -186,12 +187,12 @@ public class StaffServiceImpl implements StaffService {
                 .filter(s -> !s.isStatus())
                 .toList();
 
-        return new PageImpl<>(staffs, pageRequest, staffs.size()).map(staffMapper::toResponse);
+        return new PageImpl<>(staffs, pageRequest, staffs.size()).map(staffMapper::toResponseDetail);
 
     }
 
     @Override
-    public StaffResponse disableByUuid(String uuid) {
+    public StaffResponseDetail disableByUuid(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -201,11 +202,11 @@ public class StaffServiceImpl implements StaffService {
                 );
         staff.setStatus(true);
         staffRepository.save(staff);
-        return staffMapper.toResponse(staff);
+        return staffMapper.toResponseDetail(staff);
     }
 
     @Override
-    public StaffResponse enableByUuid(String uuid) {
+    public StaffResponseDetail enableByUuid(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -215,13 +216,13 @@ public class StaffServiceImpl implements StaffService {
                 );
         staff.setStatus(false);
         staffRepository.save(staff);
-        return staffMapper.toResponse(staff);
+        return staffMapper.toResponseDetail(staff);
 
 
     }
 
     @Override
-    public StaffResponse updateDeletedStatus(String uuid) {
+    public StaffResponseDetail updateDeletedStatus(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -231,7 +232,7 @@ public class StaffServiceImpl implements StaffService {
                 );
         staff.setDeleted(true);
         staffRepository.save(staff);
-        return staffMapper.toResponse(staff);
+        return staffMapper.toResponseDetail(staff);
 
     }
 

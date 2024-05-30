@@ -9,19 +9,21 @@ import org.springframework.data.domain.Page;
 
 public interface AdminService {
 
-    AdminResponse createAdmin(@Valid AdminRequest adminRequest);
+    AdminResponseDetail createAdmin(@Valid AdminRequest adminRequest);
 
     AdminResponseDetail updateAdminByUuid (String uuid, AdminRequestDetail adminRequestDetail);
 
-    Page<AdminResponse> getAdmins(int page, int limit);
+//    Page<AdminResponseDetail> getAdmins(int page, int limit);
 
-    AdminResponse getAdminByUuid(String uuid);
+    Page<AdminResponseDetail> getAdminsDetail(int page, int limit);
+
+    AdminResponseDetail getAdminByUuid(String uuid);
 
     void deleteAdminByUuid(String uuid);
 
-    AdminResponse disableAdminByUuid(String uuid);
+    AdminResponseDetail disableAdminByUuid(String uuid);
 
-    AdminResponse enableAdminByUuid(String uuid);
+    AdminResponseDetail enableAdminByUuid(String uuid);
 
-    AdminResponse blockAdminByUuid(String uuid);
+    AdminResponseDetail blockAdminByUuid(String uuid);
 }

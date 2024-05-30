@@ -20,8 +20,8 @@ public record AcademicResponseDetail(
 
         String experienceAtWorkingPlace,
 
-        LocalDate experienceYear,
+        Integer experienceYear,
 
-        UserResponse users
+        UserResponse user
 ) {
 }

@@ -15,7 +15,7 @@ public record AdminRequestDetail(
         String major,
         String studyAtUniversityOrInstitution,
         String experienceAtWorkingPlace,
-        String experienceYear,
+        Integer experienceYear,
         UserRequestDetail user
 ) {
 }

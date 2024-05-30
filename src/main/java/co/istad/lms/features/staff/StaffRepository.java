@@ -13,8 +13,6 @@ import java.util.Optional;
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Long> {
 
-    boolean existsByUuid(String uuid);
-
     Optional<Staff> findByUuid(String uuid);
 
 }

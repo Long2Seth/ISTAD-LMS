@@ -8,6 +8,7 @@ import co.istad.lms.domain.roles.Academic;
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestDetail;
 import co.istad.lms.features.academic.dto.AcademicResponse;
+import co.istad.lms.features.academic.dto.AcademicResponseDetail;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.user.UserRepository;
@@ -50,23 +51,10 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
 
-    // This method is used get list of authorities from the authorityRequests
-    private List<Authority> getAuthorities(List<AuthorityRequestToUser> authorityRequests) {
-
-        List<Authority> authorities = new ArrayList<>();
-        for (AuthorityRequestToUser request : authorityRequests) {
-            Authority authority = authorityRepository.findByAuthorityName(request.authorityName())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Role with name = %s was not found.", request.authorityName())));
-            authorities.add(authority);
-        }
-
-        return authorities;
-    }
 
 
     @Override
-    public AcademicResponse createAcademic(AcademicRequest academicRequest) {
+    public AcademicResponseDetail createAcademic(AcademicRequest academicRequest) {
 
         // validation user
         // check if user with email or username already exists in the database
@@ -111,11 +99,11 @@ public class AcademicServiceImpl implements AcademicService {
         // save information to academic
         Academic savedAcademic = academicRepository.save(academic);
 
-        return academicMapper.toResponse(savedAcademic);
+        return academicMapper.toResponseDetail(savedAcademic);
     }
 
     @Override
-    public AcademicRequestDetail updateAcademicByUuid(String uuid, AcademicRequestDetail academicRequestDetail) {
+    public AcademicResponseDetail updateAcademicByUuid(String uuid, AcademicRequestDetail academicRequestDetail) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -189,7 +177,7 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
     @Override
-    public AcademicResponse getAcademicByUuid(String uuid) {
+    public AcademicResponseDetail getAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -197,12 +185,12 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
 
-        return academicMapper.toResponse(academic);
+        return academicMapper.toResponseDetail(academic);
 
     }
 
     @Override
-    public AcademicResponse deleteAcademicByUuid(String uuid) {
+    public AcademicResponseDetail deleteAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -210,12 +198,13 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
         academicRepository.delete(academic);
-        return academicMapper.toResponse(academic);
+
+        return academicMapper.toResponseDetail(academic);
 
     }
 
     @Override
-    public AcademicResponse updateDisableAcademicByUuid(String uuid) {
+    public AcademicResponseDetail updateDisableAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -223,12 +212,12 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
         academic.setStatus(true);
-        return academicMapper.toResponse(academicRepository.save(academic));
+        return academicMapper.toResponseDetail(academicRepository.save(academic));
 
     }
 
     @Override
-    public AcademicResponse updateEnableAcademicByUuid(String uuid) {
+    public AcademicResponseDetail updateEnableAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -236,12 +225,12 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
         academic.setStatus(false);
-        return academicMapper.toResponse(academicRepository.save(academic));
+        return academicMapper.toResponseDetail(academicRepository.save(academic));
 
     }
 
     @Override
-    public AcademicResponse updateDeletedAcademicByUuid(String uuid) {
+    public AcademicResponseDetail updateDeletedAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -249,12 +238,12 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
         academic.setDeleted(true);
-        return academicMapper.toResponse(academicRepository.save(academic));
+        return academicMapper.toResponseDetail(academicRepository.save(academic));
 
     }
 
     @Override
-    public Page<AcademicResponse> getAcademics(int page, int limit) {
+    public Page<AcademicResponseDetail> getAcademics(int page, int limit) {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Academic> academics = academicRepository.findAll(pageRequest);
@@ -265,7 +254,7 @@ public class AcademicServiceImpl implements AcademicService {
                 .toList();
 
         Page<Academic> academicResponses = new PageImpl<>(academicList, pageRequest, academicList.size());
-        return academicResponses.map(academicMapper::toResponse);
+        return academicResponses.map(academicMapper::toResponseDetail);
     }
 
 

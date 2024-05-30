@@ -3,7 +3,7 @@ package co.istad.lms.features.instructor;
 
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
-import co.istad.lms.features.instructor.dto.InstructorResponse;
+import co.istad.lms.features.instructor.dto.InstructorResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

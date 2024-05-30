@@ -2,24 +2,24 @@ package co.istad.lms.features.academic;
 
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestDetail;
-import co.istad.lms.features.academic.dto.AcademicResponse;
+import co.istad.lms.features.academic.dto.AcademicResponseDetail;
 import org.springframework.data.domain.Page;
 
 public interface AcademicService {
 
-    AcademicResponse createAcademic(AcademicRequest academicRequest);
+    AcademicResponseDetail createAcademic(AcademicRequest academicRequest);
 
-    AcademicRequestDetail updateAcademicByUuid(String uuid , AcademicRequestDetail academicRequestDetail);
+    AcademicResponseDetail updateAcademicByUuid(String uuid , AcademicRequestDetail academicRequestDetail);
 
-    AcademicResponse getAcademicByUuid(String uuid);
+    AcademicResponseDetail getAcademicByUuid(String uuid);
 
-    AcademicResponse deleteAcademicByUuid(String uuid);
+    AcademicResponseDetail deleteAcademicByUuid(String uuid);
 
-    AcademicResponse updateDisableAcademicByUuid(String uuid);
+    AcademicResponseDetail updateDisableAcademicByUuid(String uuid);
 
-    AcademicResponse updateEnableAcademicByUuid(String uuid);
+    AcademicResponseDetail updateEnableAcademicByUuid(String uuid);
 
-    AcademicResponse updateDeletedAcademicByUuid(String uuid);
+    AcademicResponseDetail updateDeletedAcademicByUuid(String uuid);
 
-    Page<AcademicResponse> getAcademics(int page, int limit);
+    Page<AcademicResponseDetail> getAcademics(int page, int limit);
 }

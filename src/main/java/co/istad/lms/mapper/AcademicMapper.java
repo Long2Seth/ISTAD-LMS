@@ -5,6 +5,7 @@ import co.istad.lms.domain.roles.Academic;
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestDetail;
 import co.istad.lms.features.academic.dto.AcademicResponse;
+import co.istad.lms.features.academic.dto.AcademicResponseDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,6 +19,6 @@ public interface AcademicMapper {
     AcademicResponse toResponse(Academic academic);
 
     @Mapping(source = "user", target = "user")
-    AcademicRequestDetail toResponseDetail(Academic academic);
+    AcademicResponseDetail toResponseDetail(Academic academic);
 
 }
