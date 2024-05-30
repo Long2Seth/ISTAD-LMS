@@ -24,9 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -97,13 +95,14 @@ public class AcademicServiceImpl implements AcademicService {
         user.setCredentialsNonExpired(true);
 
         // set authorities to user that we get from the getAuthorities method
-        List<Authority> authorities = new ArrayList<>();
-        Authority authority = authorityRepository.findByAuthorityName(academicRequest.user().authorities().get(0).authorityName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Role with name = %s was not found.", academicRequest.user().authorities().get(0).authorityName())));
-        authorities.add(authority);
-
-        user.setAuthorities(authorities);
+        Set<Authority> allAuthorities = new HashSet<>();
+        for (AuthorityRequestToUser request : academicRequest.user().authorities()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+            System.out.println("foundAuthorities = " + foundAuthorities);
+            allAuthorities.addAll(foundAuthorities);
+        }
+        // set user to academic
+        user.setAuthorities(allAuthorities);
 
         //save user and academic
         userRepository.save(user);
@@ -116,7 +115,7 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
     @Override
-    public AcademicResponse updateAcademicByUuid(String uuid, AcademicRequestDetail academicRequestDetail) {
+    public AcademicRequestDetail updateAcademicByUuid(String uuid, AcademicRequestDetail academicRequestDetail) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -124,10 +123,10 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
 
-        User user = userRepository.findByUuid(academicRequestDetail.user().uuid())
+        User user = userRepository.findByUuid(academic.getUser().getUuid())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s not found", academicRequestDetail.user().uuid())
+                        String.format("User with uuid = %s not found", academic.getUser().getUuid())
                 ));
 
         if (userRepository.existsByEmailOrUsername(academicRequestDetail.user().email(), academicRequestDetail.user().username())) {
@@ -168,19 +167,25 @@ public class AcademicServiceImpl implements AcademicService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-
-        // Update birth place
         user.setBirthPlace(toBirthPlace(academicRequestDetail.user().birthPlace()));
 
-        // Update authorities
-        List<Authority> authorities = getAuthorities(academicRequestDetail.user().authorities());
-        user.setAuthorities(authorities);
+        Set<Authority> allAuthorities = new HashSet<>();
+        for (AuthorityRequestToUser request : academicRequestDetail.user().authorities()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+            System.out.println("foundAuthorities = " + foundAuthorities);
+            allAuthorities.addAll(foundAuthorities);
+        }
+        // set user to academic
+        user.setAuthorities(allAuthorities);
+
         // Save the updated user and academic
         userRepository.save(user);
+
         academic.setUser(user);
+
         Academic saveAcademic = academicRepository.save(academic);
 
-        return academicMapper.toResponse(saveAcademic);
+        return academicMapper.toResponseDetail(saveAcademic);
     }
 
     @Override
@@ -217,7 +222,7 @@ public class AcademicServiceImpl implements AcademicService {
                         HttpStatus.NOT_FOUND,
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
-        academic.setStatus(false);
+        academic.setStatus(true);
         return academicMapper.toResponse(academicRepository.save(academic));
 
     }
@@ -230,7 +235,7 @@ public class AcademicServiceImpl implements AcademicService {
                         HttpStatus.NOT_FOUND,
                         String.format("Academic with uuid = %s not found", uuid)
                 ));
-        academic.setStatus(true);
+        academic.setStatus(false);
         return academicMapper.toResponse(academicRepository.save(academic));
 
     }

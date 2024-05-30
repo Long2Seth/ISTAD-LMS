@@ -1,6 +1,5 @@
 package co.istad.lms.domain;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +16,12 @@ public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String uuid;
 
-    @Column(nullable = false , length = 50 , name = "authority_name")
+    @Column(nullable = false, length = 50)
     private String authorityName;
 
     @Column(columnDefinition = "TEXT")
@@ -30,7 +29,4 @@ public class Authority {
 
     @ManyToMany(mappedBy = "authorities")
     private List<User> users;
-
-
-
 }

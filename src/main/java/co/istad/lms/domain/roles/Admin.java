@@ -42,7 +42,7 @@ public class Admin {
     @Column(length = 50)
     private String experienceAtWorkingPlace;
 
-    private LocalDate experienceYear; // experience compare per year
+    private String experienceYear;
 
     private boolean status;
 

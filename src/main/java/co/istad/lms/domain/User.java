@@ -13,8 +13,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.util.List;
-
-
+import java.util.Set;
 
 
 @Getter
@@ -80,6 +79,6 @@ public class User extends Auditable {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id")
     )
-    private List<Authority> authorities;
+    private Set<Authority> authorities;
 
 }

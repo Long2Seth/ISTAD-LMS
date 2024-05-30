@@ -24,9 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -85,14 +83,19 @@ public class InstructorServiceImpl implements InstructorService {
         instructor.setStatus(false);
 
         User user = userMapper.fromUserRequest(instructorRequest.user());
+        user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(instructorRequest.user().password()));
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
 
-        List<Authority> authorities = getAuthorities(instructorRequest.user().authorities());
-        // Save the Authority entity before associating it with the User entity
-        user.setAuthorities(authorities);
+        Set<Authority> allAuthorities = new HashSet<>();
+        for (AuthorityRequestToUser request : instructorRequest.user().authorities()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+            System.out.println("foundAuthorities = " + foundAuthorities);
+            allAuthorities.addAll(foundAuthorities);
+        }
+        user.setAuthorities(allAuthorities);
 
         userRepository.save(user);
 
@@ -104,7 +107,7 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     @Override
-    public InstructorResponse updateInstructorByUuid(String uuid, InstructorRequestDetail instructorRequestDetail) {
+    public InstructorRequestDetail updateInstructorByUuid(String uuid, InstructorRequestDetail instructorRequestDetail) {
 
         Instructor instructor = instructorRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -112,10 +115,10 @@ public class InstructorServiceImpl implements InstructorService {
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
 
-        User user = userRepository.findByUuid(instructorRequestDetail.user().uuid())
+        User user = userRepository.findByUuid(instructor.getUser().getUuid())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s not found", instructorRequestDetail.user().uuid())
+                        String.format("User with uuid = %s not found", instructor.getUser().getUuid())
                 ));
 
         if (userRepository.existsByEmailOrUsername(instructorRequestDetail.user().username() , instructorRequestDetail.user().email())) {
@@ -150,27 +153,30 @@ public class InstructorServiceImpl implements InstructorService {
         user.setNameKh(instructorRequestDetail.user().nameKh());
         user.setUsername(instructorRequestDetail.user().username());
         user.setProfileImage(instructorRequestDetail.user().profileImage());
-//        user.setCityOrProvince(instructorRequestDetail.user().cityOrProvince());
-//        user.setKhanOrDistrict(instructorRequestDetail.user().khanOrDistrict());
-//        user.setSangkatOrCommune(instructorRequestDetail.user().sangkatOrCommune());
-//        user.setStreet(instructorRequestDetail.user().street());
+        user.setCityOrProvince(instructorRequestDetail.user().cityOrProvince());
+        user.setKhanOrDistrict(instructorRequestDetail.user().khanOrDistrict());
+        user.setSangkatOrCommune(instructorRequestDetail.user().sangkatOrCommune());
+        user.setStreet(instructorRequestDetail.user().street());
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-
         // Update birth place
-//        user.setBirthPlace(toBirthPlace(instructorRequestDetail.user().birthPlace()));
+        user.setBirthPlace(toBirthPlace(instructorRequestDetail.user().birthPlace()));
         // Update authorities
-        List<Authority> authorities = getAuthorities(instructorRequestDetail.user().authorities());
-        // Save the Authority entity before associating it with the User entity
-        user.setAuthorities(authorities);
+        Set<Authority> allAuthorities = new HashSet<>();
+        for (AuthorityRequestToUser request : instructorRequestDetail.user().authorities()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+            System.out.println("foundAuthorities = " + foundAuthorities);
+            allAuthorities.addAll(foundAuthorities);
+        }
+        user.setAuthorities(allAuthorities);
 
         // Save the updated user and instructor
         userRepository.save(user);
         instructor.setUser(user);
         Instructor savedAdmin = instructorRepository.save(instructor);
 
-        return instructorMapper.toResponse(savedAdmin);
+        return instructorMapper.toResponseDetail(savedAdmin);
     }
 
     @Override
@@ -204,7 +210,7 @@ public class InstructorServiceImpl implements InstructorService {
                         HttpStatus.NOT_FOUND,
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
-        instructor.setStatus(false);
+        instructor.setStatus(true);
         return instructorMapper.toResponse(instructorRepository.save(instructor));
     }
 
@@ -216,7 +222,7 @@ public class InstructorServiceImpl implements InstructorService {
                         HttpStatus.NOT_FOUND,
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
-        instructor.setStatus(true);
+        instructor.setStatus(false);
         return instructorMapper.toResponse(instructorRepository.save(instructor));
 
     }

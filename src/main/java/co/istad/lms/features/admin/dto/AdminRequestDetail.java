@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record AdminRequestDetail(
-        String uuid,
         String highSchool,
         LocalDate highSchoolGraduationDate,
         String degree,
@@ -16,7 +15,7 @@ public record AdminRequestDetail(
         String major,
         String studyAtUniversityOrInstitution,
         String experienceAtWorkingPlace,
-        LocalDate experienceYear,
+        String experienceYear,
         UserRequestDetail user
 ) {
 }

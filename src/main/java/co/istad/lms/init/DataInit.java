@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -22,8 +23,9 @@ public class DataInit {
     private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
-    public void initializeAuthorities() {
-        if (authorityRepository.count() < 44) {  // Total number of authorities to be initialized
+    void initRole() {
+        // Auto generate role (USER, CUSTOMER, STAFF, ADMIN)
+        if (authorityRepository.count() < 44) {
             List<String> authorityNames = List.of(
                     "faculty:read",
                     "faculty:write",
@@ -121,8 +123,7 @@ public class DataInit {
                 user.setCredentialsNonExpired(true);
 
                 // Authorities
-                List<Authority> authorities = authorityRepository.findAll();
-                System.out.println(authorities);
+                Set<Authority> authorities = authorityRepository.findAllByAuthorityName("admin:control");
                 user.setAuthorities(authorities);
 
                 userRepository.save(user);

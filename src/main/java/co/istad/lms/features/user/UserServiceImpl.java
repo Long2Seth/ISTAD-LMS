@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
             //
             authorities.add(authority);
         });
-        user.setAuthorities(authorities);
+//        user.setAuthorities(authorities);
     }
 
 

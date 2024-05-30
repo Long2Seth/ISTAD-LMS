@@ -6,7 +6,9 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.student.dto.StudentRequest;
+import co.istad.lms.features.student.dto.StudentRequestDetail;
 import co.istad.lms.features.student.dto.StudentResponse;
+import co.istad.lms.features.student.dto.StudentResponseDetail;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.StudentMapper;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -35,27 +38,15 @@ public class StudentServiceImpl implements StudentService {
     private final UserMapper userMapper;
 
 
-    private List<Authority> getDefaultAuthorities() {
+    private Set<Authority> getDefaultAuthorities() {
         Authority userReadAuthority = authorityRepository.findByAuthorityName("user:read")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Authority with name = user:read not found"));
         Authority userWriteAuthority = authorityRepository.findByAuthorityName("user:write")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Authority with name = user:write not found"));
 
-        return List.of(userReadAuthority, userWriteAuthority);
+        return Set.of(userReadAuthority, userWriteAuthority);
     }
 
-
-    private User setUpNewUser(StudentRequest studentRequest) {
-        var userReq = studentRequest.user();
-        User user = userMapper.fromUserRequest(userReq);
-
-        user.setPassword(passwordEncoder.encode(userReq.password()));
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-
-        return user;
-    }
 
 
     private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
@@ -97,11 +88,6 @@ public class StudentServiceImpl implements StudentService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.user().email()));
         }
 
-
-        if (userRepository.existsByUsername(studentRequest.user().username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with username = %s already exists", studentRequest.user().username()));
-        }
-
         // Map student request to student
         Student student = studentMapper.toRequest(studentRequest);
         student.setUuid(UUID.randomUUID().toString());
@@ -109,9 +95,13 @@ public class StudentServiceImpl implements StudentService {
         student.setDeleted(false);
 
         // Map user request to user
-        User user = setUpNewUser(studentRequest);
-//        user.setBirthPlace(toBirthPlace(studentRequest.user().birthPlace()));
-        user.setAuthorities(getDefaultAuthorities());
+        User user = userMapper.fromUserRequest(studentRequest.user());
+        user.setUuid(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
+//        user.setAuthorities(getDefaultAuthorities());
         // Save user
         student.setUser(userRepository.save(user));
 
@@ -122,16 +112,12 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public StudentResponse updateStudentByUuid(String uuid, StudentRequest studentRequest) {
+    public StudentResponseDetail updateStudentByUuid(String uuid, StudentRequestDetail studentRequest) {
 
         if (userRepository.existsByEmailOrUsername(studentRequest.user().email() , studentRequest.user().username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.user().email()));
         }
 
-
-        if (userRepository.existsByUsername(studentRequest.user().username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with username = %s already exists", studentRequest.user().username()));
-        }
 
         Student student = studentRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
@@ -148,18 +134,17 @@ public class StudentServiceImpl implements StudentService {
         user.setEmail(studentRequest.user().email());
         user.setProfileImage(studentRequest.user().profileImage());
         user.setPhoneNumber(studentRequest.user().phoneNumber());
-//        user.setCityOrProvince(studentRequest.user().cityOrProvince());
-//        user.setKhanOrDistrict(studentRequest.user().khanOrDistrict());
-//        user.setSangkatOrCommune(studentRequest.user().sangkatOrCommune());
-//        user.setStreet(studentRequest.user().street());
-//        user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
-//        user.setBirthPlace(toBirthPlace(studentRequest.user().birthPlace()));
-
+        user.setCityOrProvince(studentRequest.user().cityOrProvince());
+        user.setKhanOrDistrict(studentRequest.user().khanOrDistrict());
+        user.setSangkatOrCommune(studentRequest.user().sangkatOrCommune());
+        user.setStreet(studentRequest.user().street());
+        user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
+        user.setBirthPlace(toBirthPlace(studentRequest.user().birthPlace()));
 
         // Save user
         student.setUser(userRepository.save(user));
 
-        return studentMapper.toResponse(studentRepository.save(student));
+        return studentMapper.toResponseDetail(studentRepository.save(student));
     }
 
     @Override
@@ -179,22 +164,31 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse disableStudentByUuid(String uuid) {
+
         Student student = findStudentByUuid(uuid);
-        student.setStatus(false);
+
+        student.setStatus(true);
+
         return studentMapper.toResponse(studentRepository.save(student));
     }
 
     @Override
     public StudentResponse enableStudentByUuid(String uuid) {
+
         Student student = findStudentByUuid(uuid);
-        student.setStatus(true);
+
+        student.setStatus(false);
+
         return studentMapper.toResponse(studentRepository.save(student));
     }
 
     @Override
     public StudentResponse blockStudentByUuid(String uuid) {
+
         Student student = findStudentByUuid(uuid);
+
         student.setDeleted(true);
+
         return studentMapper.toResponse(studentRepository.save(student));
     }
 

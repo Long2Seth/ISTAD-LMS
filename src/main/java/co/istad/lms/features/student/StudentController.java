@@ -1,7 +1,9 @@
 package co.istad.lms.features.student;
 
 import co.istad.lms.features.student.dto.StudentRequest;
+import co.istad.lms.features.student.dto.StudentRequestDetail;
 import co.istad.lms.features.student.dto.StudentResponse;
+import co.istad.lms.features.student.dto.StudentResponseDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -111,7 +113,7 @@ public class StudentController {
                     )
             )
     )
-    public StudentResponse updateStudent(@PathVariable String uuid, @RequestBody StudentRequest studentRequest) {
+    public StudentResponseDetail updateStudent(@PathVariable String uuid, @RequestBody StudentRequestDetail studentRequest) {
         return studentService.updateStudentByUuid(uuid, studentRequest);
     }
 
