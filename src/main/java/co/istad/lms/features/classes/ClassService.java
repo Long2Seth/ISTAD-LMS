@@ -1,10 +1,7 @@
 package co.istad.lms.features.classes;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.classes.dto.ClassDetailResponse;
-import co.istad.lms.features.classes.dto.ClassRequest;
-import co.istad.lms.features.classes.dto.ClassResponse;
-import co.istad.lms.features.classes.dto.ClassUpdateRequest;
+import co.istad.lms.features.classes.dto.*;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
@@ -98,5 +95,20 @@ public interface ClassService {
      * @since 1.0 (2024)
      */
     Page<ClassDetailResponse> filterClasses(BaseSpecification.FilterDto filterDto, int page, int size);
+
+    /**
+     *
+     * @param alias is the unique name of class
+     * @param classAddSubjectRequest contain information of student to add
+     * @return {@link ClassDetailResponse}
+     */
+    ClassDetailResponse addStudent(String alias, ClassAddStudentRequest classAddSubjectRequest);
+
+    /**
+     *
+     * @param alias is the unique name of class
+     * @param uuid is the unique identify of student
+     */
+    void deleteStudent(String alias,String uuid);
 
 }

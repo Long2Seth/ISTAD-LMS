@@ -2,10 +2,8 @@ package co.istad.lms.features.classes;
 
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.classes.dto.ClassDetailResponse;
-import co.istad.lms.features.classes.dto.ClassRequest;
-import co.istad.lms.features.classes.dto.ClassResponse;
-import co.istad.lms.features.classes.dto.ClassUpdateRequest;
+import co.istad.lms.features.classes.dto.*;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,7 +49,7 @@ public class ClassController {
     @PutMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('class:update')")
     public ClassDetailResponse updateClass(@PathVariable String alias,
-                                     @Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
+                                           @Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
 
         return classService.updateClassByAlias(alias, classUpdateRequest);
     }
@@ -91,4 +89,20 @@ public class ClassController {
 
         return classService.filterClasses(filterDto, page, size);
     }
+
+    @PostMapping("/{alias}/students")
+    @PreAuthorize("hasAnyAuthority('class:update')")
+    public ClassDetailResponse addStudentToClass(@PathVariable String alias,
+                                                 @Valid @RequestBody ClassAddStudentRequest classAddStudentRequest){
+        return classService.addStudent(alias,classAddStudentRequest);
+    }
+
+    @DeleteMapping("/{alias}/students/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:delete')")
+    public void deleteStudentInClass(@PathVariable String alias,@PathVariable String uuid){
+
+        classService.deleteStudent(alias,uuid);
+    }
+
 }

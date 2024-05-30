@@ -1,12 +1,16 @@
 package co.istad.lms.features.course.dto;
 
+import co.istad.lms.features.classes.dto.ClassResponse;
+import co.istad.lms.features.instructor.dto.InstructorResponse;
+import co.istad.lms.features.subject.dto.SubjectResponse;
+
 public record CourseDetailResponse(
 
         String alias,
         Integer status,
         Boolean isDeleted,
-        String subjectAlias,
-        String instructorAlias,
-        String classAlias
+        SubjectResponse subject,
+        InstructorResponse instructor,
+        ClassResponse aClass
 ) {
 }

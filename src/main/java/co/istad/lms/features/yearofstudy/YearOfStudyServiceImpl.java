@@ -1,13 +1,17 @@
 package co.istad.lms.features.yearofstudy;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.*;
+import co.istad.lms.domain.StudyProgram;
+import co.istad.lms.domain.Subject;
+import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.subject.SubjectRepository;
-import co.istad.lms.features.yearofstudy.dto.*;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudySubjectRequest;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
 import co.istad.lms.mapper.YearOfStudyMapper;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.jaxb.hbm.spi.SubEntityInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -146,13 +150,9 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study = %s has been not found", uuid)));
 
         //validate subject from dto by alias
-        Set<Subject> requestedSubjects = yearOfStudySubjectRequest.aliasOfSubjects().stream()
-                .map(subjectAlias -> subjectRepository.findByAlias(subjectAlias)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("Subject = %s has not been found", subjectAlias))))
-                .collect(Collectors.toSet());
+        Set<Subject> requestedSubjects = yearOfStudySubjectRequest.aliasOfSubjects().stream().map(subjectAlias -> subjectRepository.findByAlias(subjectAlias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found", subjectAlias)))).collect(Collectors.toSet());
 
-        // Set the updated subjects to the year of study
+        // get all subject in yearOfStudy
         Set<Subject> allSubjects = yearOfStudy.getSubjects();
 
         // If the existing subjects set is modifiable, directly add all requested subjects
@@ -181,10 +181,10 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         Set<Subject> allSubjects = yearOfStudy.getSubjects();
 
         // Check if the subject exists in the yearOfStudy
-        if (!allSubjects.contains(subject)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not " +
-                    "existed in YearOfStudy = %s", alias, uuid));
+        if (allSubjects == null || !allSubjects.contains(subject)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not existed in YearOfStudy = %s", alias, uuid));
         }
+
 
         //remove a subject
         allSubjects.remove(subject);

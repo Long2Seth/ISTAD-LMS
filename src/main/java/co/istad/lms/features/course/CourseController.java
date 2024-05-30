@@ -6,6 +6,8 @@ import co.istad.lms.features.course.dto.CourseDetailResponse;
 import co.istad.lms.features.course.dto.CourseRequest;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.course.dto.CourseUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudySubjectRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -90,5 +92,26 @@ public class CourseController {
     ) {
 
         return courseService.filterCourses(filterDto, page, size);
+    }
+
+    @PostMapping("/{alias}/instructors/{uuid}")
+    @PreAuthorize("hasAnyAuthority('course:update')")
+    public CourseDetailResponse addSubjectToCourse(
+            @PathVariable String alias,
+            @Valid @RequestBody String uuid) {
+
+        return courseService.addInstructorToCourse(alias,uuid );
+
+    }
+
+    @DeleteMapping("/{alias}/instructor/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:delete')")
+    public void deleteInstructorFromCourse(
+            @PathVariable String alias,
+            @PathVariable String uuid) {
+
+        courseService.deleteCourseByAlias(uuid);
+
     }
 }

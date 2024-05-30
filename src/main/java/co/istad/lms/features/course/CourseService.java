@@ -2,10 +2,7 @@ package co.istad.lms.features.course;
 
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.course.dto.CourseDetailResponse;
-import co.istad.lms.features.course.dto.CourseRequest;
-import co.istad.lms.features.course.dto.CourseResponse;
-import co.istad.lms.features.course.dto.CourseUpdateRequest;
+import co.istad.lms.features.course.dto.*;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeResponse;
@@ -99,4 +96,19 @@ public interface CourseService {
      * @since 1.0 (2024)
      */
     Page<CourseDetailResponse> filterCourses(BaseSpecification.FilterDto filterDto, int page, int size);
+
+    /**
+     * add instructor to course
+     *
+     * @param alias is the unique name of course
+     * @param uuid is the uuid of instructor to add to course
+     * @return {@link CourseDetailResponse}
+     */
+    CourseDetailResponse addInstructorToCourse(String alias, String uuid);
+
+    /**
+     * @param alias is the unique name of course
+     * @param uuid is the uuid of instructor to delete
+     */
+    void deleteInstructorFromCourse(String alias, String uuid);
 }

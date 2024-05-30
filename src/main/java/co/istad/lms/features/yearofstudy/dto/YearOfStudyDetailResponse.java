@@ -19,7 +19,6 @@ public record YearOfStudyDetailResponse(
         StudyProgramResponse studyProgram,
         Boolean isDeleted,
         Boolean isDraft,
-
         Set<SubjectResponse> subjects
 
 ) {
