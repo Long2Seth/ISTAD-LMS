@@ -13,6 +13,7 @@ public record LectureDetailResponse(
         LocalDate lectureDate,
         Boolean status,
         Boolean isDeleted,
+        Boolean isDraft,
         String courseAlias
 
 ) {}

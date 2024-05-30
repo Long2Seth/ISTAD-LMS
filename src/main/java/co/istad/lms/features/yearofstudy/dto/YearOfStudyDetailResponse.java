@@ -17,6 +17,8 @@ public record YearOfStudyDetailResponse(
         Integer year,
         Integer semester,
         StudyProgramResponse studyProgram,
+        Boolean isDeleted,
+        Boolean isDraft,
 
         Set<SubjectResponse> subjects
 

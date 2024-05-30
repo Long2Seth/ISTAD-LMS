@@ -43,7 +43,7 @@ public class Material extends Auditable {
     private String subjectAlias;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
     @Column(nullable = false)
     private Boolean isDraft;

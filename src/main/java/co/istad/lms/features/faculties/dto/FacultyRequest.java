@@ -1,6 +1,7 @@
 package co.istad.lms.features.faculties.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record FacultyRequest(
@@ -17,6 +18,9 @@ public record FacultyRequest(
 
         String logo,
 
-        String address
+        String address,
+
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft
 ) {
 }

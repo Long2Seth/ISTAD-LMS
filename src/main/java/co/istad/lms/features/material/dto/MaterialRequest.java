@@ -2,6 +2,7 @@ package co.istad.lms.features.material.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record MaterialRequest(
@@ -20,7 +21,9 @@ public record MaterialRequest(
         String thumbnail,
         String description,
         @NotBlank(message = "Subject alias is required")
-        String subjectAlias
+        String subjectAlias,
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft
 
 ) {
 }

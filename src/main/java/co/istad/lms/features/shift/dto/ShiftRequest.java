@@ -32,6 +32,10 @@ public record ShiftRequest(
         @NotNull(message = "Weekday is required")
         Boolean weekday,
 
+
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft,
+
         String description
 ) {
 }

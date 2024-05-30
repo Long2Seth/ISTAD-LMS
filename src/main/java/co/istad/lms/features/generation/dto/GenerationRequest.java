@@ -18,6 +18,8 @@ public record GenerationRequest(
         Integer startYear,
 
         @NotNull(message = "End year cannot be null")
-        Integer endYear
+        Integer endYear,
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft
 ) {
 }

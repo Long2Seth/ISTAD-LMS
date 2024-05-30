@@ -6,6 +6,7 @@ public record FacultyDetailResponse(
         String description,
         String address,
         String logo,
-        Boolean isDeleted
+        Boolean isDeleted,
+        Boolean isDraft
 ) {
 }

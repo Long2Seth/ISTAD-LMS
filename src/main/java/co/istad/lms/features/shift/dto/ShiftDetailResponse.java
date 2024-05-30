@@ -11,6 +11,7 @@ public record ShiftDetailResponse(
         LocalTime endTime,
         Boolean weekday,
         String description,
-        Boolean isDeleted
+        Boolean isDeleted,
+        Boolean isDraft
 ) {
 }

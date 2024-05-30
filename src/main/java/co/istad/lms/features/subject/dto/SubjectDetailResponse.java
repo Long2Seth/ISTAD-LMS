@@ -9,7 +9,9 @@ public record SubjectDetailResponse(
         String description,
         String subjectLogo,
         Integer credit,
-        Integer duration
+        Integer duration,
+
+        Boolean isDraft
 
 ) {
 }

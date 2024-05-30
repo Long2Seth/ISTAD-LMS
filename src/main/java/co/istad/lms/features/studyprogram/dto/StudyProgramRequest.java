@@ -25,7 +25,9 @@ public record StudyProgramRequest(
         String facultyAlias,
 
         @NotBlank(message = "degreeAlias is require")
-        String degreeAlias
+        String degreeAlias,
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft
 
 ) {
 }
