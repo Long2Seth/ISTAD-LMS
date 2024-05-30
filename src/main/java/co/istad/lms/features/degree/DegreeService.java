@@ -50,11 +50,11 @@ public interface DegreeService {
      *
      * @param alias               is the unique name of degree
      * @param degreeUpdateRequest is the request object containing the updated degree details
-     * @return {@link DegreeResponse}
+     * @return {@link DegreeDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    DegreeResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest);
+    DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest);
 
     /**
      * Deletes a degree by its alias.

@@ -54,7 +54,7 @@ public interface FacultyService {
      *
      * @param alias                is the unique name
      * @param facultyUpdateRequest is the object that contain entity information to update
-     * @return {@link FacultyResponse}
+     * @return {@link FacultyDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */

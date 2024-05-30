@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class SubjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('faculty:write')")
     void creatSubject(@Valid @RequestBody SubjectRequest subjectRequest) {
 
         subjectService.createSubject(subjectRequest);
@@ -27,6 +29,7 @@ public class SubjectController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     SubjectDetailResponse getSubjectByAlias(@PathVariable String alias) {
 
         return subjectService.getSubjectByAlias(alias);
@@ -34,6 +37,7 @@ public class SubjectController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<SubjectDetailResponse> getAllSubjects(
 
             @RequestParam(defaultValue = "0") int page,
@@ -44,7 +48,8 @@ public class SubjectController {
     }
 
     @PutMapping("/{alias}")
-    public SubjectResponse updateSubject(@PathVariable String alias,
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public SubjectDetailResponse updateSubject(@PathVariable String alias,
                                         @Valid @RequestBody SubjectUpdateRequest subjectUpdateRequest) {
 
         return subjectService.updateSubjectByAlias(alias, subjectUpdateRequest);
@@ -52,6 +57,7 @@ public class SubjectController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:delete')")
     public void deleteSubject(@PathVariable String alias) {
 
         subjectService.deleteSubjectByAlias(alias);
@@ -60,6 +66,7 @@ public class SubjectController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     void enableSubject(@PathVariable String alias){
 
         subjectService.enableSubjectByAlias(alias);
@@ -68,12 +75,14 @@ public class SubjectController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     void disableSubject(@PathVariable String alias){
 
         subjectService.disableSubjectByAlias(alias);
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<SubjectDetailResponse> filterSubjects(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

@@ -94,7 +94,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     }
 
     @Override
-    public YearOfStudyResponse updateYearOfStudyByUuid(String uuid, YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
+    public YearOfStudyDetailResponse updateYearOfStudyByUuid(String uuid, YearOfStudyUpdateRequest yearOfStudyUpdateRequest) {
 
         //validate yearOfStudy from DTO by alias
         YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("yearOfStudy = %s was not found.", uuid)));
@@ -106,7 +106,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         yearOfStudyRepository.save(yearOfStudy);
 
         //map entity to DTO and return
-        return yearOfStudyMapper.toYearOfStudyResponse(yearOfStudy);
+        return yearOfStudyMapper.toYearOfStudyDetailResponse(yearOfStudy);
     }
 
     @Override

@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class ClassController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('class:write')")
     void creatClass(@Valid @RequestBody ClassRequest classRequest) {
 
         classService.createClass(classRequest);
@@ -28,6 +30,7 @@ public class ClassController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('class:read')")
     ClassDetailResponse getClassByAlias(@PathVariable String alias) {
 
         return classService.getClassByAlias(alias);
@@ -35,6 +38,7 @@ public class ClassController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('class:read')")
     public Page<ClassDetailResponse> getAllClasses(
 
             @RequestParam(defaultValue = "0") int page,
@@ -45,7 +49,8 @@ public class ClassController {
     }
 
     @PutMapping("/{alias}")
-    public ClassResponse updateClass(@PathVariable String alias,
+    @PreAuthorize("hasAnyAuthority('class:update')")
+    public ClassDetailResponse updateClass(@PathVariable String alias,
                                      @Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
 
         return classService.updateClassByAlias(alias, classUpdateRequest);
@@ -53,6 +58,7 @@ public class ClassController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:delete')")
     public void deleteClass(@PathVariable String alias) {
 
         classService.deleteClassByAlias(alias);
@@ -60,6 +66,7 @@ public class ClassController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:delete')")
     void enableClass(@PathVariable String alias) {
 
         classService.enableClassByAlias(alias);
@@ -67,12 +74,14 @@ public class ClassController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:delete')")
     void disableClass(@PathVariable String alias) {
 
         classService.disableClassByAlias(alias);
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('class:read')")
     public Page<ClassDetailResponse> filterClasses(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class ShiftController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('shift:write')")
     void createShift(@Valid @RequestBody ShiftRequest shiftRequest) {
 
         shiftService.createShift(shiftRequest);
@@ -29,6 +31,7 @@ public class ShiftController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('shift:read')")
     ShiftDetailResponse getShiftByAlias(@PathVariable String alias) {
 
         return shiftService.getShiftByAlias(alias);
@@ -36,6 +39,7 @@ public class ShiftController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('shift:read')")
     public Page<ShiftDetailResponse> getAllShifts(
 
             @RequestParam(defaultValue = "0") int page,
@@ -47,7 +51,8 @@ public class ShiftController {
     }
 
     @PutMapping("/{alias}")
-    public ShiftResponse updateShift(@PathVariable String alias,
+    @PreAuthorize("hasAnyAuthority('shift:update')")
+    public ShiftDetailResponse updateShift(@PathVariable String alias,
                                      @Valid @RequestBody ShiftUpdateRequest shiftUpdateRequest) {
 
         return shiftService.updateByAlias(alias, shiftUpdateRequest);
@@ -57,6 +62,7 @@ public class ShiftController {
 
     @DeleteMapping("/{alias}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('shift:delete')")
     public void deleteShift(@PathVariable String alias) {
 
         shiftService.deleteShiftByAlias(alias);
@@ -65,6 +71,7 @@ public class ShiftController {
 
     @PutMapping("/{alias}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('shift:update')")
     void enableShift(@PathVariable String alias) {
 
         shiftService.enableShiftByAlias(alias);
@@ -72,12 +79,14 @@ public class ShiftController {
 
     @PutMapping("/{alias}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('shift:update')")
     void disableShift(@PathVariable String alias) {
 
         shiftService.disableShiftByAlias(alias);
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('shift:read')")
     public Page<ShiftDetailResponse> filterShifts(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

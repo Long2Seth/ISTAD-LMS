@@ -71,7 +71,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public MaterialResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest) {
+    public MaterialDetailResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest) {
 
         // Find material by alias
         Material material = materialRepository.findByAlias(alias)
@@ -100,7 +100,7 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        return materialMapper.toMaterialResponse(material);
+        return materialMapper.toMaterialDetailResponse(material);
     }
 
     @Override

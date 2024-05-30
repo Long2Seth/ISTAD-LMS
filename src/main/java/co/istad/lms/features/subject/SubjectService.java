@@ -50,11 +50,11 @@ public interface SubjectService {
      *
      * @param alias               is the unique name of subject
      * @param subjectUpdateRequest is the request object containing the updated subject details
-     * @return {@link SubjectResponse}
+     * @return {@link SubjectDetailResponse}
      * @author Nouth Chanreaksa
      * @since 1.0 (2024)
      */
-    SubjectResponse updateSubjectByAlias(String alias, SubjectUpdateRequest subjectUpdateRequest);
+    SubjectDetailResponse updateSubjectByAlias(String alias, SubjectUpdateRequest subjectUpdateRequest);
 
     /**
      * Deletes a subject by its alias.

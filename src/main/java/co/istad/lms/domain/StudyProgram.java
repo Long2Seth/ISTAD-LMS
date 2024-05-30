@@ -38,6 +38,9 @@ public class StudyProgram extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
+
     @ManyToOne
     @JoinColumn(name = "degree_alias",nullable = false)
     private Degree degree;

@@ -36,5 +36,8 @@ public class Generation extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
+
 
 }

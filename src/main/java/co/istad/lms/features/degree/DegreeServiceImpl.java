@@ -77,7 +77,7 @@ public class DegreeServiceImpl implements DegreeService {
 
 
     @Override
-    public DegreeResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
+    public DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
 
         //find degree by alias
         Degree degree = degreeRepository.findByAlias(alias)
@@ -108,7 +108,7 @@ public class DegreeServiceImpl implements DegreeService {
         degreeRepository.save(degree);
 
         //return Degree DTO
-        return degreeMapper.toDegreeResponse(degree);
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
 
 

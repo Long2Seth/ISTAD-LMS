@@ -89,7 +89,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseResponse updateCourseByAlias(String alias, CourseUpdateRequest courseUpdateRequest) {
+    public CourseDetailResponse updateCourseByAlias(String alias, CourseUpdateRequest courseUpdateRequest) {
 
         //find degree by alias
         Course course = courseRepository.findByAlias(alias)
@@ -120,7 +120,7 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.save(course);
 
         //return Degree DTO
-        return courseMapper.toCourseResponse(course);
+        return courseMapper.toCourseDetailResponse(course);
     }
 
     @Override

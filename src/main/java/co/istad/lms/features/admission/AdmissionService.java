@@ -1,7 +1,7 @@
 package co.istad.lms.features.admission;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
+import co.istad.lms.features.admission.dto.AdmissionRequest;
 import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
 import co.istad.lms.features.admission.dto.AdmissionResponse;
 import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
@@ -19,11 +19,11 @@ public interface AdmissionService {
     /**
      * Creates a new admission.
      *
-     * @param admissionCreateRequest is the request object containing admission details for create admission
+     * @param admissionRequest is the request object containing admission details for create admission
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void createAdmission(AdmissionCreateRequest admissionCreateRequest);
+    void createAdmission(AdmissionRequest admissionRequest);
 
     /**
      * Retrieves the details of an admission by its UUID.
@@ -36,11 +36,11 @@ public interface AdmissionService {
     AdmissionDetailResponse getAdmissionByUuid(String uuid);
 
     /**
-     * Retrieves a paginated list of all admissions.
+     * Retrieves a paginated list of all student admissions.
      *
      * @param page is the page number to retrieve
      * @param size is the size of the page to retrieve
-     * @return  * @return {@link Page<AdmissionResponse>}
+     * @return * @return {@link Page<AdmissionResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
@@ -49,13 +49,13 @@ public interface AdmissionService {
     /**
      * Updates an existing admission.
      *
-     * @param admissionUuid is the unique identifier of admission
+     * @param uuid    is the unique identifier of admission
      * @param admissionRequest the request object containing the updated admission details
-     * @return {@link AdmissionResponse}
+     * @return {@link AdmissionDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionRequest);
+    AdmissionDetailResponse updateAdmission(String uuid, AdmissionUpdateRequest admissionRequest);
 
     /**
      * Delete admission by  UUID.

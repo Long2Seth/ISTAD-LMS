@@ -3,6 +3,8 @@ package co.istad.lms.init;
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
+import co.istad.lms.domain.roles.Admin;
+import co.istad.lms.features.admin.AdminRepository;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.user.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -10,15 +12,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class DataInit {
 
     private final AuthorityRepository authorityRepository;
+    private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -35,6 +38,10 @@ public class DataInit {
                     "generation:write",
                     "generation:update",
                     "generation:delete",
+                    "shift:read",
+                    "shift:write",
+                    "shift:update",
+                    "shift:delete",
                     "assessment:read",
                     "assessment:write",
                     "assessment:update",
@@ -85,51 +92,72 @@ public class DataInit {
         return authority;
     }
 
+
     @PostConstruct
     void initUser() {
-        System.setProperty("dataInit.running", "true");
-        try {
-            // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
-            if (userRepository.count() < 1) {
-                User user = new User();
-                user.setUuid(UUID.randomUUID().toString());
-                user.setNameEn("admin");
-                user.setNameKh("អេតមីន");
-                user.setUsername("admin");
-                user.setEmail("admin@gmail.com");
-                user.setPassword(passwordEncoder.encode("admin"));
-                user.setGender("male");
-                user.setProfileImage("https://newogle.com");
-                user.setPhoneNumber("0123456789");
-                user.setCityOrProvince("Phnom Penh");
-                user.setKhanOrDistrict("Dangkao");
-                user.setSangkatOrCommune("Dangkao");
-                user.setVillageOrPhum("Dangkao");
-                user.setStreet("Dangkao");
-                user.setIsBlocked(false);
-                user.setIsDeleted(false);
+        // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
+        if (userRepository.count() < 1) {
+            User user = new User();
+            user.setUuid(UUID.randomUUID().toString());
+            user.setNameEn("admin");
+            user.setNameKh("អេតមីន");
+            user.setUsername("admin");
+            user.setEmail("admin@gmail.com");
+            user.setPassword(passwordEncoder.encode("admin"));
+            user.setGender("male");
+            user.setProfileImage("https://newogle.com");
+            user.setPhoneNumber("0123456789");
+            user.setCityOrProvince("Phnom Penh");
+            user.setKhanOrDistrict("Dangkao");
+            user.setSangkatOrCommune("Dangkao");
+            user.setVillageOrPhum("Dangkao");
+            user.setStreet("Dangkao");
+            user.setIsBlocked(false);
+            user.setIsDeleted(false);
 
-                // BirthPlace
-                BirthPlace birthPlace = new BirthPlace();
-                birthPlace.setCityOrProvince("Phnom Penh");
-                birthPlace.setKhanOrDistrict("Dangkao");
-                birthPlace.setSangkatOrCommune("Dangkao");
-                birthPlace.setVillageOrPhum("Dangkao");
-                birthPlace.setStreet("Dangkao");
-                user.setBirthPlace(birthPlace);
 
-                user.setAccountNonExpired(true);
-                user.setAccountNonLocked(true);
-                user.setCredentialsNonExpired(true);
+            // BirthPlace
+            BirthPlace birthPlace = new BirthPlace();
+            birthPlace.setCityOrProvince("Phnom Penh");
+            birthPlace.setKhanOrDistrict("Dangkao");
+            birthPlace.setSangkatOrCommune("Dangkao");
+            birthPlace.setVillageOrPhum("Dangkao");
+            birthPlace.setStreet("Dangkao");
+            user.setBirthPlace(birthPlace);
 
-                // Authorities
-                Set<Authority> authorities = authorityRepository.findAllByAuthorityName("admin:control");
-                user.setAuthorities(authorities);
+            user.setAccountNonExpired(true);
+            user.setAccountNonLocked(true);
+            user.setCredentialsNonExpired(true);
 
-                userRepository.save(user);
-            }
-        } finally {
-            System.clearProperty("dataInit.running");
+            // Authorities
+            Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
+            System.out.println(authorities);
+            user.setAuthorities(authorities);
+
+            userRepository.save(user);
         }
     }
+
+
+//    @PostConstruct
+//    void initAdmin() {
+//        if ( adminRepository.count()< 1) {
+//            Optional<User> user = userRepository.findByUsername("admin");
+//            Admin admin = new Admin();
+//            admin.setUuid(UUID.randomUUID().toString());
+//            admin.setHighSchool("High School");
+//            admin.setHighSchoolGraduationDate(LocalDate.parse("2022-01-01"));
+//            admin.setStudyAtUniversityOrInstitution("University");
+//            admin.setMajor("Major");
+//            admin.setDegreeGraduationDate(LocalDate.parse("2022-01-01"));
+//            admin.setDegree("Bachelor");
+//            admin.setExperienceAtWorkingPlace("ISTAD");
+//            admin.setExperienceYear(5);
+//            admin.setDeleted(false);
+//            admin.setStatus(false);
+//            admin.setUser(user.get());
+//            adminRepository.save(admin);
+//
+//        }
+//    }
 }

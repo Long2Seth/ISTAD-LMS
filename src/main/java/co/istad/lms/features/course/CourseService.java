@@ -55,11 +55,11 @@ public interface CourseService {
      *
      * @param alias               is the unique name of course
      * @param courseUpdateRequest is the request object containing the updated course details
-     * @return {@link CourseResponse}
+     * @return {@link CourseDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    CourseResponse updateCourseByAlias(String alias, CourseUpdateRequest courseUpdateRequest);
+    CourseDetailResponse updateCourseByAlias(String alias, CourseUpdateRequest courseUpdateRequest);
 
     /**
      * Deletes a course by its alias.

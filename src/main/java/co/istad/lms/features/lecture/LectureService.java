@@ -34,7 +34,7 @@ public interface LectureService {
      *
      * @param page is the current page number to retrieve
      * @param size is the size of record per page to retrieve
-     * @return {@link Page <LectureDetailResponse>}
+     * @return {@link Page<LectureDetailResponse>}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
@@ -45,11 +45,11 @@ public interface LectureService {
      *
      * @param alias               is the unique name of lecture
      * @param lectureUpdateRequest is the request object containing the updated lecture details
-     * @return {@link LectureResponse}
+     * @return {@link LectureDetailResponse}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    LectureResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest);
+    LectureDetailResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest);
 
     /**
      * Deletes a lecture by its alias.

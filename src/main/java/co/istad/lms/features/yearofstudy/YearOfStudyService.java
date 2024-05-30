@@ -48,11 +48,11 @@ public interface YearOfStudyService {
      *
      * @param uuid is the unique name of yearOfStudy
      * @param yearOfStudyUpdateRequest the request object containing the updated details of the yearOfStudy
-     * @return {@link YearOfStudyResponse}
+     * @return {@link YearOfStudyDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    YearOfStudyResponse updateYearOfStudyByUuid(String uuid, YearOfStudyUpdateRequest yearOfStudyUpdateRequest);
+    YearOfStudyDetailResponse updateYearOfStudyByUuid(String uuid, YearOfStudyUpdateRequest yearOfStudyUpdateRequest);
 
 
     /**

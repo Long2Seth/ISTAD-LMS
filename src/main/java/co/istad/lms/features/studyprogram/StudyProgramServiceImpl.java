@@ -112,7 +112,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     }
 
     @Override
-    public StudyProgramResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest) {
+    public StudyProgramDetailResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest) {
 
         //validate studyProgram from DTO by alias
         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
@@ -143,7 +143,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         studyProgramRepository.save(studyProgram);
 
         //map entity to DTO and return
-        return studyProgramMapper.toStudyProgramResponse(studyProgram);
+        return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
 
     }
 

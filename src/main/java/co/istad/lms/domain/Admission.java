@@ -35,8 +35,9 @@ public class Admission extends Auditable {
     
     private LocalDate endDate;
 
+    private String telegramLink;
+
     @Column(nullable = false)
     private Boolean isDeleted = false;
-
 
 }

@@ -42,5 +42,8 @@ public class Subject extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted = false;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
+
 
 }

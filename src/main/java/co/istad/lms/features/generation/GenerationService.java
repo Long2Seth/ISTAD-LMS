@@ -31,7 +31,7 @@ public interface GenerationService {
      * Retrieves faculty by alias
      *
      * @param alias is the alias of generation
-     * @return {@link FacultyDetailResponse}
+     * @return {@link GenerationDetailResponse}
      */
     GenerationDetailResponse getGenerationByAlias(String alias);
 
@@ -51,11 +51,10 @@ public interface GenerationService {
      *
      * @param alias                is the unique name
      * @param generationUpdateRequest is the object that contain entity information to update
-     * @return {@link GenerationResponse}
-     * @author Pov Soknem
+     * @return {@link GenerationDetailResponse
      * @since 1.0 (2024)
      */
-    GenerationResponse updateGenerationByAlias(String alias, GenerationUpdateRequest generationUpdateRequest);
+    GenerationDetailResponse updateGenerationByAlias(String alias, GenerationUpdateRequest generationUpdateRequest);
 
     /**
      * Delete generation by alias

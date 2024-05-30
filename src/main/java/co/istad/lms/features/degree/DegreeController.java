@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,7 @@ public class DegreeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('faculty:write')")
     void creatDegree(@Valid @RequestBody DegreeRequest degreeRequest) {
 
         degreeService.createDegree(degreeRequest);
@@ -29,6 +31,7 @@ public class DegreeController {
     }
 
     @GetMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     DegreeDetailResponse getDegreeByAlias(@PathVariable String alias) {
 
         return degreeService.getDegreeByAlias(alias);
@@ -36,6 +39,7 @@ public class DegreeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<DegreeDetailResponse> getAllDegrees(
 
             @RequestParam(defaultValue = "0") int page,
@@ -47,14 +51,16 @@ public class DegreeController {
 
 
     @PutMapping("/{alias}")
-    public DegreeResponse updateDegree(@PathVariable String alias,
-                                       @Valid @RequestBody DegreeUpdateRequest degreeUpdateRequest) {
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public DegreeDetailResponse updateDegree(@PathVariable String alias,
+                                             @Valid @RequestBody DegreeUpdateRequest degreeUpdateRequest) {
 
         return degreeService.updateDegreeByAlias(alias, degreeUpdateRequest);
     }
 
 
     @DeleteMapping("/{alias}")
+    @PreAuthorize("hasAnyAuthority('faculty:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDegree(@PathVariable String alias) {
 
@@ -62,6 +68,7 @@ public class DegreeController {
     }
 
     @PutMapping("/{alias}/enable")
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void enableDegree(@PathVariable String alias) {
 
@@ -69,6 +76,7 @@ public class DegreeController {
     }
 
     @PutMapping("/{alias}/disable")
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void disableDegree(@PathVariable String alias) {
 
@@ -76,6 +84,7 @@ public class DegreeController {
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<DegreeDetailResponse> filterDegrees(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

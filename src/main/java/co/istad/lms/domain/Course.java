@@ -28,6 +28,9 @@ public class Course extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
+
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private Subject subject;
