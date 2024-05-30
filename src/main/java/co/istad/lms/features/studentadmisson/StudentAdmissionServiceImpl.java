@@ -55,7 +55,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //find admission that open
         List<Admission> admissions=admissionRepository.findByStatus(1);
         if(admissions.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("admission is close"));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("admission has been closed"));
         }
 
         //validate degree by degree alias
