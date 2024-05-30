@@ -38,6 +38,6 @@ public class Admission extends Auditable {
     private String telegramLink;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
 }

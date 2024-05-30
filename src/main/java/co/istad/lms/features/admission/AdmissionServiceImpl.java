@@ -42,6 +42,8 @@ public class AdmissionServiceImpl implements AdmissionService {
         //set uuid to admission
         admission.setUuid(UUID.randomUUID().toString());
 
+        admission.setIsDeleted(false);
+
         //save to database
        admissionRepository.save(admission);
     }
