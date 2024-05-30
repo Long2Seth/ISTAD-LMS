@@ -204,7 +204,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         StudentAdmission studentAdmission =
                 studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", uuid)));
 
-        //set isDelete to true (disable)
+        //set isDeleted to true (disable)
         studentAdmission.setIsDeleted(true);
 
         //save to database
