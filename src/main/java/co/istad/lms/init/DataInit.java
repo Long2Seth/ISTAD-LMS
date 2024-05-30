@@ -28,7 +28,7 @@ public class DataInit {
     @PostConstruct
     void initRole() {
         // Auto generate role (USER, CUSTOMER, STAFF, ADMIN)
-        if (authorityRepository.count() !=45) {
+        if (authorityRepository.count() <45) {
             List<String> authorityNames = List.of(
                     "faculty:read",
                     "faculty:write",
