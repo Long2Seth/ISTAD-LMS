@@ -7,7 +7,6 @@ import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.student.dto.StudentRequest;
 import co.istad.lms.features.student.dto.StudentRequestDetail;
-import co.istad.lms.features.student.dto.StudentResponse;
 import co.istad.lms.features.student.dto.StudentResponseDetail;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
@@ -22,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -39,12 +40,10 @@ public class StudentServiceImpl implements StudentService {
 
 
     private Set<Authority> getDefaultAuthorities() {
-        Authority userReadAuthority = authorityRepository.findByAuthorityName("user:read")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Authority with name = user:read not found"));
-        Authority userWriteAuthority = authorityRepository.findByAuthorityName("user:write")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Authority with name = user:write not found"));
-
-        return Set.of(userReadAuthority, userWriteAuthority);
+        Set<Authority> authorities = new HashSet<>();
+        authorities.addAll(authorityRepository.findAllByAuthorityName("user:write"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("user:read"));
+        return authorities;
     }
 
 
@@ -71,7 +70,7 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Page<StudentResponse> getStudents(int page, int limit) {
+    public Page<StudentResponseDetail> getStudents(int page, int limit) {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> students = studentRepository.findAll(pageRequest);
         List<Student> filteredStudents = students.stream()
@@ -79,11 +78,13 @@ public class StudentServiceImpl implements StudentService {
                 .filter(student -> !student.isStatus())
                 .toList();
         return new PageImpl<>(filteredStudents, pageRequest, filteredStudents.size())
-                .map(studentMapper::toResponse);
+                .map(studentMapper::toResponseDetail);
     }
 
     @Override
-    public StudentResponse createStudent(StudentRequest studentRequest) {
+    public StudentResponseDetail createStudent(StudentRequest studentRequest) {
+
+
         if (userRepository.existsByEmailOrUsername(studentRequest.user().email() , studentRequest.user().username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.user().email()));
         }
@@ -101,11 +102,11 @@ public class StudentServiceImpl implements StudentService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-//        user.setAuthorities(getDefaultAuthorities());
+        user.setAuthorities(getDefaultAuthorities());
         // Save user
         student.setUser(userRepository.save(user));
 
-        return studentMapper.toResponse(studentRepository.save(student));
+        return studentMapper.toResponseDetail(studentRepository.save(student));
     }
 
 
@@ -140,6 +141,7 @@ public class StudentServiceImpl implements StudentService {
         user.setStreet(studentRequest.user().street());
         user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
         user.setBirthPlace(toBirthPlace(studentRequest.user().birthPlace()));
+        user.setAuthorities(getDefaultAuthorities());
 
         // Save user
         student.setUser(userRepository.save(user));
@@ -158,38 +160,38 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentResponse getStudentByUuid(String uuid) {
-        return studentMapper.toResponse(findStudentByUuid(uuid));
+    public StudentResponseDetail getStudentByUuid(String uuid) {
+        return studentMapper.toResponseDetail(findStudentByUuid(uuid));
     }
 
     @Override
-    public StudentResponse disableStudentByUuid(String uuid) {
+    public StudentResponseDetail disableStudentByUuid(String uuid) {
 
         Student student = findStudentByUuid(uuid);
 
         student.setStatus(true);
 
-        return studentMapper.toResponse(studentRepository.save(student));
+        return studentMapper.toResponseDetail(studentRepository.save(student));
     }
 
     @Override
-    public StudentResponse enableStudentByUuid(String uuid) {
+    public StudentResponseDetail enableStudentByUuid(String uuid) {
 
         Student student = findStudentByUuid(uuid);
 
         student.setStatus(false);
 
-        return studentMapper.toResponse(studentRepository.save(student));
+        return studentMapper.toResponseDetail(studentRepository.save(student));
     }
 
     @Override
-    public StudentResponse blockStudentByUuid(String uuid) {
+    public StudentResponseDetail blockStudentByUuid(String uuid) {
 
         Student student = findStudentByUuid(uuid);
 
         student.setDeleted(true);
 
-        return studentMapper.toResponse(studentRepository.save(student));
+        return studentMapper.toResponseDetail(studentRepository.save(student));
     }
 
 

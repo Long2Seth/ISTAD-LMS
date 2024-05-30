@@ -29,7 +29,7 @@ public class Admin {
     private LocalDate highSchoolGraduationDate;
 
     @Column(length = 50)
-    private String degree; // Bachelor, Master, Doctor
+    private String degree;
 
     private LocalDate degreeGraduationDate;
 
@@ -42,7 +42,7 @@ public class Admin {
     @Column(length = 50)
     private String experienceAtWorkingPlace;
 
-    private String experienceYear;
+    private Integer experienceYear;
 
     private boolean status;
 

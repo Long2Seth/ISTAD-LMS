@@ -2,7 +2,7 @@ DB_USERNAME: postgres
 DB_PASSWORD: 2002sep24
 DB_HOST: localhost
 DB_PORT: 5432
-DB_NAME: ELearning
+DB_NAME: testJVA
 
 ACT_PRIVATE: access-refresh-token-keys/access-token-private.key
 ACT_PUBLIC: access-refresh-token-keys/access-token-public.key

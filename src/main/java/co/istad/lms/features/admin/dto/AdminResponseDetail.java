@@ -22,7 +22,7 @@ public record AdminResponseDetail(
 
         String experienceAtWorkingPlace,
 
-        String experienceYear,
+        Integer experienceYear,
 
         UserResponse user
 ) {

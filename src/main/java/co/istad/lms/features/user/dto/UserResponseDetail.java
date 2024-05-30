@@ -4,6 +4,7 @@ import co.istad.lms.features.authority.dto.AuthorityResponseToUser;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public record UserResponseDetail(
         String uuid,
@@ -20,6 +21,6 @@ public record UserResponseDetail(
         String sangkatOrCommune,
         String street,
         JsonBirthPlace birthPlace,
-        List<AuthorityResponseToUser> authorities
+        Set<AuthorityResponseToUser> authorities
 ) {
 }

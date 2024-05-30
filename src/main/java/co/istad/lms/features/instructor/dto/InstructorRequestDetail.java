@@ -12,7 +12,7 @@ public record InstructorRequestDetail(
         String major,
         String studyAtUniversityOrInstitution,
         String experienceAtWorkingPlace,
-        LocalDate experienceYear,
+        Integer experienceYear,
         UserRequestDetail user
 
 ) {

@@ -4,6 +4,7 @@ import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
 import co.istad.lms.features.instructor.dto.InstructorResponse;
+import co.istad.lms.features.instructor.dto.InstructorResponseDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,5 +17,5 @@ public interface InstructorMapper {
     InstructorResponse toResponse(Instructor instructor);
 
     @Mapping(source = "user", target = "user")
-    InstructorRequestDetail toResponseDetail(Instructor instructor);
+    InstructorResponseDetail toResponseDetail(Instructor instructor);
 }
