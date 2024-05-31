@@ -27,10 +27,9 @@ import java.util.UUID;
 public class AdmissionServiceImpl implements AdmissionService {
 
     private final AdmissionRepository admissionRepository;
+
     private final AdmissionMapper admissionMapper;
-    private final DegreeRepository degreeRepository;
-    private final ShiftRepository shiftRepository;
-    private final StudyProgramRepository studyProgramRepository;
+
     private final BaseSpecification<Admission> baseSpecification;
 
     @Override
@@ -118,9 +117,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     public void enableAdmissionByUuid(String admissionUuid) {
 
         //validate from dto by uuid
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admission = %s has not been found ! ", admissionUuid)));
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
 
         //set isDeleted to false(enable)
         admission.setIsDeleted(false);
@@ -133,11 +130,14 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public void updateAdmissionStatus(String uuid, AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
 
-        Admission admission=
-                admissionRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND
-                        ,String.format("Admission = %s has not been found",uuid)));
+        Admission admission= admissionRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Admission = %s has not been found",uuid)));
 
+        //set new status
         admission.setStatus(admissionUpdateStatusRequest.status());
+
+        //save to database
+        admissionRepository.save(admission);
+
     }
 
     @Override

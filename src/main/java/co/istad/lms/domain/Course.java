@@ -23,13 +23,13 @@ public class Course extends Auditable {
     private String alias;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private Integer status;
 
     @Column(nullable = false)
     private Boolean isDeleted;
-
-    @Column(nullable = false)
-    private Boolean isDraft;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")

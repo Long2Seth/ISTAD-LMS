@@ -79,7 +79,7 @@ public class YearOfStudyController {
 
     @PostMapping("/{uuid}/subjects")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
-    public YearOfStudyDetailResponse updateYearOfStudySubject(
+    public YearOfStudyDetailResponse addSubjectToYearOfStudy(
             @PathVariable String uuid,
             @Valid @RequestBody YearOfStudySubjectRequest yearOfStudySubjectRequest) {
 

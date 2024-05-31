@@ -6,6 +6,7 @@ import co.istad.lms.domain.Shift;
 import co.istad.lms.domain.StudyProgram;
 import co.istad.lms.features.admission.dto.AdmissionResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
+import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 
 import java.time.LocalDate;
@@ -33,7 +34,7 @@ public record StudentAdmissionDetailResponse(
         String studyProgramAlias,
         String degreeAlias,
         Boolean isDeleted,
-        Shift shift,
+        ShiftResponse shift,
         StudyProgramResponse studyProgram,
         DegreeResponse degree,
         AdmissionResponse admission

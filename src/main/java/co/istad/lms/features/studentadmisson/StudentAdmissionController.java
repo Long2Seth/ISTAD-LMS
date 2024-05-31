@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/v1/admissions")
+@RestController
+@RequestMapping("/api/v1/student-admissions")
 @RequiredArgsConstructor
 public class StudentAdmissionController {
 

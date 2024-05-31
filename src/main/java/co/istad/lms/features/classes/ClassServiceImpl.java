@@ -1,13 +1,15 @@
 package co.istad.lms.features.classes;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
+import co.istad.lms.domain.Generation;
+import co.istad.lms.domain.Shift;
+import co.istad.lms.domain.StudyProgram;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.classes.dto.ClassAddStudentRequest;
 import co.istad.lms.features.classes.dto.ClassDetailResponse;
 import co.istad.lms.features.classes.dto.ClassRequest;
-import co.istad.lms.features.classes.dto.ClassResponse;
 import co.istad.lms.features.classes.dto.ClassUpdateRequest;
 import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.instructor.InstructorRepository;
@@ -54,17 +56,11 @@ public class ClassServiceImpl implements ClassService {
         //validate class by alias
         if (classRepository.existsByAlias(classRequest.alias())) {
 
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-
-                    String.format("Class = %s has already exited", classRequest.alias()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Class = %s has already existed", classRequest.alias()));
         }
 
         //find studyProgram by studyPramAlias in classRequest
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(classRequest.studyProgramAlias())
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("StudyProgram = %s has not been found", classRequest.studyProgramAlias())));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(classRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram = %s has not been found", classRequest.studyProgramAlias())));
 
         //map from DTO to entity
         Class aClass = classMapper.fromClassRequest(classRequest);
@@ -72,31 +68,23 @@ public class ClassServiceImpl implements ClassService {
 //        find instructor by instructorUuid in classRequest
         if (classRequest.instructorUuid() != null) {
 
-            Instructor instructor = instructorRepository.findByUuid(classRequest.instructorUuid())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("Instructor = %s has not been found", classRequest.instructorUuid())));
+            Instructor instructor = instructorRepository.findByUuid(classRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classRequest.instructorUuid())));
 
             //set instructor to class
             aClass.setInstructor(instructor);
         }
 
         //find shift by shiftAlias in classRequest
-        Shift shift = shiftRepository.findByAlias(classRequest.shiftAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Shift = %s has not been found", classRequest.shiftAlias())));
+        Shift shift = shiftRepository.findByAlias(classRequest.shiftAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found", classRequest.shiftAlias())));
 
         //find generation by generationAlias in classRequest
-        Generation generation = generationRepository.findByAlias(classRequest.generationAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Generation = %s has not been found", classRequest.generationAlias())));
-        //find student by studentUuid from dto
+        Generation generation = generationRepository.findByAlias(classRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found", classRequest.generationAlias())));
+
+       //check all student alias from DTO null or not
         if (classRequest.studentUuid() != null) {
 
-            Set<Student> students = classRequest.studentUuid().stream()
-                    .map(studentUui -> studentRepository.findByUuid(studentUui)
-                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                    String.format("Student with uuid = %s has not been found.", studentUui))))
-                    .collect(Collectors.toSet());
+            //find student by studentUuid from dto
+            Set<Student> students = classRequest.studentUuid().stream().map(studentUui -> studentRepository.findByUuid(studentUui).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s has not been found.", studentUui)))).collect(Collectors.toSet());
 
             //set student to class
             aClass.setStudents(students);
@@ -122,9 +110,7 @@ public class ClassServiceImpl implements ClassService {
     public ClassDetailResponse getClassByAlias(String alias) {
 
         //find class by alias
-        Class aClass = classRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Class = %s has not been found.", alias)));
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found.", alias)));
 
         //return degree detail
         return classMapper.toClassDetailResponse(aClass);
@@ -150,21 +136,13 @@ public class ClassServiceImpl implements ClassService {
     public ClassDetailResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest) {
 
         //validate class from DTO
-        Class aClass = classRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Class = %s has not been found", alias)));
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", alias)));
 
         //check studyProgram from update DTO
         if (classUpdateRequest.studyProgramAlias() != null) {
 
             //find studyProgram by studyPramAlias in classRequest
-            StudyProgram studyProgram = studyProgramRepository.findByAlias(classUpdateRequest.studyProgramAlias())
-
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                            String.format("StudyProgram = %s has not been found", classUpdateRequest.studyProgramAlias())));
+            StudyProgram studyProgram = studyProgramRepository.findByAlias(classUpdateRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram = %s has not been found", classUpdateRequest.studyProgramAlias())));
 
             //set studyProgram to entity
             aClass.setStudyProgram(studyProgram);
@@ -175,14 +153,10 @@ public class ClassServiceImpl implements ClassService {
         if (classUpdateRequest.instructorUuid() != null) {
 
             //find instructor by instructorUuid in classRequest
-            Instructor instructor = instructorRepository.findByUuid(classUpdateRequest.instructorUuid())
+            Instructor instructor = instructorRepository.findByUuid(classUpdateRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classUpdateRequest.instructorUuid())));
 
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                            String.format("Instructor = %s has not been found", classUpdateRequest.instructorUuid())));
-
-            //set instructor to entity
-//            aClass.setInstructor(instructor);
+//            set instructor to entity
+            aClass.setInstructor(instructor);
         }
 
 
@@ -190,11 +164,7 @@ public class ClassServiceImpl implements ClassService {
         if (classUpdateRequest.shiftAlias() != null) {
 
             //find shift by shiftAlias in classRequest
-            Shift shift = shiftRepository.findByAlias(classUpdateRequest.shiftAlias())
-
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                            String.format("Shift = %s has not been found", classUpdateRequest.shiftAlias())));
+            Shift shift = shiftRepository.findByAlias(classUpdateRequest.shiftAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found", classUpdateRequest.shiftAlias())));
 
             //set shift to entity
             aClass.setShift(shift);
@@ -204,12 +174,7 @@ public class ClassServiceImpl implements ClassService {
         if (classUpdateRequest.generationAlias() != null) {
 
             //find generation by generationAlias in classRequest
-            Generation generation = generationRepository.findByAlias(classUpdateRequest.generationAlias())
-
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                            String.format("Generation = %s has not been found", classUpdateRequest.generationAlias())));
-
+            Generation generation = generationRepository.findByAlias(classUpdateRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found", classUpdateRequest.generationAlias())));
 
             //set generation to entity
             aClass.setGeneration(generation);
@@ -230,11 +195,7 @@ public class ClassServiceImpl implements ClassService {
     public void deleteClassByAlias(String alias) {
 
         //find class in database by alias
-        Class aClass = classRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Class = %s has not been found.", alias)));
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found.", alias)));
 
         //delete class in database
         classRepository.delete(aClass);
@@ -244,11 +205,7 @@ public class ClassServiceImpl implements ClassService {
     public void enableClassByAlias(String alias) {
 
         //validate class from dto by alias
-        Class aClass = classRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Class = %s has not been found ! ", alias)));
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         aClass.setIsDeleted(false);
@@ -261,11 +218,7 @@ public class ClassServiceImpl implements ClassService {
     public void disableClassByAlias(String alias) {
 
         //validate class from dto by alias
-        Class aClass = classRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Class = %s has not been found ! ", alias)));
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
 
         //set isDeleted to true(disable)
         aClass.setIsDeleted(true);
@@ -293,5 +246,62 @@ public class ClassServiceImpl implements ClassService {
         //map to DTO and return
         return classes.map(classMapper::toClassDetailResponse);
 
+    }
+
+    @Override
+    public ClassDetailResponse addStudent(String alias, ClassAddStudentRequest classAddStudentRequest) {
+
+        //validate class from DTO by alias
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", alias)));
+
+        //find all student from DTO in database to add by student uuid
+        Set<Student> students =
+                classAddStudentRequest.studentUuid().stream().map(studendUuid -> studentRepository.findByUuid(studendUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studendUuid)))).collect(Collectors.toSet());
+
+        //get all student in class
+        Set<Student> allStudents=aClass.getStudents();
+
+        //add new student from request
+        allStudents.addAll(students);
+
+        //set student to class(include old and new student)
+        aClass.setStudents(allStudents);
+
+        //save to database
+        classRepository.save(aClass);
+
+        //map to DTO and return
+        return classMapper.toClassDetailResponse(aClass);
+    }
+
+    @Override
+    public void deleteStudent(String alias, String uuid) {
+
+        //validate class from DTO
+        Class aClass =
+                classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", alias)));
+
+        //find all student in database by uuid
+        Student student=
+                studentRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student = %s has not been found in database",uuid)));
+
+        //get all student from class
+        Set<Student> allStudents=aClass.getStudents();
+
+        //check for student is existed in class or not
+        if(allStudents==null||!allStudents.contains(student)){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found " +
+                    "in class %s",uuid,alias));
+        }
+        //remove student from class
+        allStudents.remove(student);
+
+        //set new Set of student after remove to class
+        aClass.setStudents(allStudents);
+
+        //save to database
+        classRepository.save(aClass);
     }
 }

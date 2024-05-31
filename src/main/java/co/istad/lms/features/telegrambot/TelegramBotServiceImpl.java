@@ -33,6 +33,7 @@ public class TelegramBotServiceImpl implements TelegramBotService{
                                                 
                         Full Name     : %s
                         Gender        : %s
+                        Date Of  Birth: %s
                         Degree        : %s
                         Study Program : %s
                         Shift         : %s | %s - %s
@@ -40,18 +41,20 @@ public class TelegramBotServiceImpl implements TelegramBotService{
                         BacII Grade   : %s
                         High School   : %s
                         Place Of Birth: %s
-                        Date Of  Birth: %s
                         Known Istad By: %s
+                        
                         """,
                 admission.getNameEn(),
 
                 admission.getGender(),
 
+                admission.getDob().toString(),
+
                 admission.getDegree().getAlias(),
 
                 admission.getStudyProgram().getAlias(),
 
-                admission.getShift().getAlias(), admission.getShift().getEndTime(), admission.getShift().getEndTime(),
+                admission.getShift().getAlias(), admission.getShift().getStartTime(), admission.getShift().getEndTime(),
 
                 admission.getPhoneNumber(),
 
@@ -61,7 +64,6 @@ public class TelegramBotServiceImpl implements TelegramBotService{
 
                 admission.getPob(),
 
-                admission.getDob().toString(),
 
                 admission.getKnownIstad());
 
