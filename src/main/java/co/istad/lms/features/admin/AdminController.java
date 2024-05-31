@@ -6,6 +6,7 @@ import co.istad.lms.features.admin.dto.AdminResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public AdminResponseDetail createAdmin(@Valid @RequestBody AdminRequest adminRequest) {
         return adminService.createAdmin(adminRequest);
@@ -48,6 +50,7 @@ public class AdminController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
     public void deleteByUuid(@PathVariable String uuid) {
         adminService.deleteAdminByUuid(uuid);

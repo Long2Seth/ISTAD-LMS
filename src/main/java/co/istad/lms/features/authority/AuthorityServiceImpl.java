@@ -77,7 +77,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public AuthorityResponse delete(String uuid) {
+    public void delete(String uuid) {
         Authority authority = authorityRepository.findByUuid(uuid).orElseThrow(
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -85,6 +85,6 @@ public class AuthorityServiceImpl implements AuthorityService {
                 )
         );
         authorityRepository.delete(authority);
-        return authorityMapper.toAuthorityResponse(authority);
+        authorityMapper.toAuthorityResponse(authority);
     }
 }

@@ -8,6 +8,7 @@ import co.istad.lms.features.staff.dto.StaffResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class StaffController {
 
 
     @PreAuthorize("hasAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public StaffResponseDetail createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
         return staffService.createStaff(staffRequest);
@@ -52,6 +54,7 @@ public class StaffController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
     public void deleteStaffByUuid(@PathVariable String uuid) {
         staffService.deleteStaffByUuid(uuid);

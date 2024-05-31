@@ -49,19 +49,19 @@ public class UserServiceImpl implements UserService {
 
 
     // Convert BirthPlace
-    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
-        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
-        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
-        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
-        birthPlace.setStreet(birthPlaceRequest.street());
-        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
-        return birthPlace;
-    }
+//    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
+//        BirthPlace birthPlace = new BirthPlace();
+//        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
+//        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
+//        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
+//        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
+//        birthPlace.setStreet(birthPlaceRequest.street());
+//        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
+//        return birthPlace;
+//    }
 
     // Set user authorities
-    private void setUserAuthorities(User user, UserRequest userRequest) {
+    private void setUserAuthorities( UserRequest userRequest) {
 
         // Get authorities
         List<Authority> authorities = new ArrayList<>();
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
 
-        setUserAuthorities(user, userRequest);
+        setUserAuthorities(userRequest);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -129,13 +129,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with alias = %s was not found.", uuid)));
 
-        setUserAuthorities(user, userRequest);
+        setUserAuthorities(userRequest);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @Override
-    public UserResponse deleteUser(String uuid) {
+    public void deleteUser(String uuid) {
 
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
 
-        return userMapper.toUserResponse(user);
+        userMapper.toUserResponse(user);
     }
 
     @Override

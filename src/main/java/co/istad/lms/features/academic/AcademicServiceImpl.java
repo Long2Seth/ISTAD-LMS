@@ -190,7 +190,7 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
     @Override
-    public AcademicResponseDetail deleteAcademicByUuid(String uuid) {
+    public void deleteAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -199,7 +199,7 @@ public class AcademicServiceImpl implements AcademicService {
                 ));
         academicRepository.delete(academic);
 
-        return academicMapper.toResponseDetail(academic);
+        academicMapper.toResponseDetail(academic);
 
     }
 

@@ -22,6 +22,7 @@ public class AuthorityController {
         return authorityService.findAll(page, limit);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public AuthorityResponse createAuthority(@RequestBody AuthorityRequest authorityRequest) {
        return authorityService.create(authorityRequest);
@@ -37,8 +38,9 @@ public class AuthorityController {
         return authorityService.update(uuid, authorityRequest);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
-    public AuthorityResponse deleteAuthority(@PathVariable String uuid) {
-        return authorityService.delete(uuid);
+    public void deleteAuthority(@PathVariable String uuid) {
+        authorityService.delete(uuid);
     }
 }

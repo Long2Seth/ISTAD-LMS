@@ -29,6 +29,7 @@ public class UserController {
         return userService.getAllUsers(page,limit);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('admin:control')")
     @PostMapping
     public UserResponse createUser(@Valid @RequestBody UserRequest userRequest){
@@ -44,9 +45,10 @@ public class UserController {
 
 
     @PreAuthorize("hasAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
-    public UserResponse deleteUser(@PathVariable String uuid){
-        return userService.deleteUser(uuid);
+    public void deleteUser(@PathVariable String uuid){
+        userService.deleteUser(uuid);
     }
 
 

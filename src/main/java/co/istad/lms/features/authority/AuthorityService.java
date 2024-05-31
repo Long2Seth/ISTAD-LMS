@@ -12,7 +12,7 @@ public interface AuthorityService {
     AuthorityResponse findById(String uuid);
     AuthorityResponse update(String uuid, AuthorityRequest authorityRequest);
     AuthorityResponse create(AuthorityRequest authorityRequest);
-    AuthorityResponse delete(String uuid);
+    void delete(String uuid);
 
 
 }

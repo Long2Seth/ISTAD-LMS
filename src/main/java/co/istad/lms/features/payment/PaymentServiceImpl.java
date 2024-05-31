@@ -85,7 +85,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponse deletePayment(String uuid) {
+    public void deletePayment(String uuid) {
         Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -93,7 +93,7 @@ public class PaymentServiceImpl implements PaymentService {
                 );
         paymentRepository.delete(payment);
         
-        return paymentMapper.toPaymentResponse(payment);
+        paymentMapper.toPaymentResponse(payment);
 
     }
 }

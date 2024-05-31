@@ -19,7 +19,7 @@ public interface UserService {
 
     UserResponse updateUser(String uuid, UserRequest userRequest);
 
-    UserResponse deleteUser(String uuid);
+    void deleteUser(String uuid);
 
     UserResponse disableUser(String uuid);
 
