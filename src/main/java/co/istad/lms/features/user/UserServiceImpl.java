@@ -110,7 +110,12 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.fromUserRequest(userRequest);
         user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(userRequest.password()));
-//        user.setBirthPlace(toBirthPlace(userRequest.birthPlace()));
+        user.setIsDeleted(false);
+        user.setIsBlocked(false);
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
+
         setUserAuthorities(user, userRequest);
 
         return userMapper.toUserResponse(userRepository.save(user));
