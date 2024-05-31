@@ -15,7 +15,6 @@ public record ClassRequest(
 
         String description,
 
-        @NotBlank(message = "Instructor uuid cannot be null")
         String instructorUuid,
 
         @NotBlank(message = "Study Program alias cannot be null")
