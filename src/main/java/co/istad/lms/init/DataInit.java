@@ -131,7 +131,6 @@ public class DataInit {
 
             // Authorities
             Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
-            System.out.println(authorityRepository.findAll());
             user.setAuthorities(authorities);
             userRepository.save(user);
         }

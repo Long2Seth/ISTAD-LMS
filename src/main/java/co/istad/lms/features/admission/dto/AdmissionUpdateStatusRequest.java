@@ -1,13 +1,12 @@
 package co.istad.lms.features.admission.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 public record AdmissionUpdateStatusRequest(
 
-        @NotBlank
-        @Pattern(regexp = "[1-3]", message = "status must be 1, 2, or 3")
+        @NotNull
+        @Min(value = 1, message = "Status must be 1, 2, or 3")
+        @Max(value = 3, message = "Status must be 1, 2, or 3")
         Integer status
 ) {
 }
