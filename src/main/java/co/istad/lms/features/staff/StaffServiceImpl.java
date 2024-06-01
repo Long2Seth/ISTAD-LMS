@@ -72,6 +72,7 @@ public class StaffServiceImpl implements StaffService {
         user.setUuid(UUID.randomUUID().toString());
         user.setIsDeleted(false);
         user.setIsBlocked(false);
+        user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);

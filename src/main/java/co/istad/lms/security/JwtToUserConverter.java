@@ -20,7 +20,7 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
     private final UserRepository userRepository;
     @Override
     public UsernamePasswordAuthenticationToken convert(Jwt source) {
-        User user = userRepository.findByEmail(source.getSubject())
+        User user = userRepository.findByEmailOrUsername(source.getSubject(), source.getSubject())
                 .orElseThrow(() -> new BadCredentialsException("Invalid Token!!! "));
         CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.setUser(user);

@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService{
         Authentication authentication = daoAuthenticationProvider
                 .authenticate(
                         new UsernamePasswordAuthenticationToken(
-                                request.email(),
+                                request.emailOrUsername(),
                                 request.password()
                         )
                 );

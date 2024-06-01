@@ -71,6 +71,7 @@ public class User extends Auditable {
     private boolean isCredentialsNonExpired;
     private Boolean isDeleted;
     private Boolean isBlocked;
+    private Boolean isChangePassword;
 
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -78,6 +78,7 @@ public class AcademicServiceImpl implements AcademicService {
         user.setPassword(passwordEncoder.encode(academicRequest.user().password()));
         user.setIsBlocked(false);
         user.setIsDeleted(false);
+        user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);

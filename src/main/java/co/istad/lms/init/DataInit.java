@@ -118,6 +118,7 @@ public class DataInit {
             user.setStreet("Dangkao");
             user.setIsBlocked(false);
             user.setIsDeleted(false);
+            user.setIsChangePassword(false);
 
 
             // BirthPlace

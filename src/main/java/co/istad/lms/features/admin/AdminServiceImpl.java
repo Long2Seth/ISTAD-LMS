@@ -79,6 +79,7 @@ public class AdminServiceImpl implements AdminService {
         user.setPassword(passwordEncoder.encode(adminRequest.user().password()));
         user.setIsBlocked(false);
         user.setIsDeleted(false);
+        user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
