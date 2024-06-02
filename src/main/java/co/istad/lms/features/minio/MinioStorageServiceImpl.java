@@ -91,7 +91,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
                             .method(Method.GET)
                             .bucket(bucketName)
                             .object(objectName)
-                            .expiry(60 * 60 * 24) // URL expiry time in seconds (e.g., 1 day)
+                            .expiry(60 * 60 * 24*7) // URL expiry time in seconds (e.g., 1 day)
                             .build()
             );
         } catch (MinioException e) {

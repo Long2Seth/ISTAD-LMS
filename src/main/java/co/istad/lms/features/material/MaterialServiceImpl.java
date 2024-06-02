@@ -7,6 +7,7 @@ import co.istad.lms.features.material.dto.MaterialDetailResponse;
 import co.istad.lms.features.material.dto.MaterialRequest;
 import co.istad.lms.features.material.dto.MaterialResponse;
 import co.istad.lms.features.material.dto.MaterialUpdateRequest;
+import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.MaterialMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import static co.istad.lms.features.media.MediaServiceImpl.getContentType;
+
 @Service
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
@@ -27,6 +30,8 @@ public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
 
     private final SubjectRepository subjectRepository;
+
+    private final MinioStorageService minioStorageService;
 
     private final BaseSpecification<Material> baseSpecification;
 
@@ -40,15 +45,13 @@ public class MaterialServiceImpl implements MaterialService {
         }
 
         //validate subject by alias
-        Subject subject =
-                subjectRepository.findByAlias(materialRequest.subjectAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found", materialRequest.subjectAlias())));
+        Subject subject = subjectRepository.findByAlias(materialRequest.subjectAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found", materialRequest.subjectAlias())));
 
         // Map DTO to entity
         Material material = materialMapper.fromMaterialRequest(materialRequest);
 
-//        String contentType,
-//        String extension,
-//        Long size,
+        //set isDelete to false
+        material.setIsDeleted(false);
 
         //set subject to material
         material.setSubject(subject);
@@ -62,8 +65,19 @@ public class MaterialServiceImpl implements MaterialService {
         // Find material by alias
         Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
+        String url="";
+        try{
+            String mediaName=material.getFileName();
+            String contentType = getContentType(mediaName);
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + mediaName;
+            url = minioStorageService.getPreSignedUrl(objectName);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         // Return material detail
-        return materialMapper.toMaterialDetailResponse(material);
+
+        return materialMapper.toMaterialDetailResponse(material, url);
     }
 
 
@@ -79,8 +93,21 @@ public class MaterialServiceImpl implements MaterialService {
         // Find all materials in database
         Page<Material> materials = materialRepository.findAll(pageRequest);
 
+
         // Map entity to DTO and return
-        return materials.map(materialMapper::toMaterialDetailResponse);
+        return materials.map(material -> {
+            String url = "";
+            try {
+                String mediaName=material.getFileName();
+                String contentType = getContentType(mediaName);
+                String folderName = contentType.split("/")[0];
+                String objectName = folderName + "/" + mediaName;
+                url = minioStorageService.getPreSignedUrl(objectName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return materialMapper.toMaterialDetailResponse(material, url);
+        });
     }
 
     @Override
@@ -111,7 +138,17 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        return materialMapper.toMaterialDetailResponse(material);
+        String url = "";
+        try {
+            String mediaName=material.getFileName();
+            String contentType = getContentType(mediaName);
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + mediaName;
+            url = minioStorageService.getPreSignedUrl(objectName);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return materialMapper.toMaterialDetailResponse(material, url);
     }
 
     @Override
@@ -162,6 +199,18 @@ public class MaterialServiceImpl implements MaterialService {
         Page<Material> materials = materialRepository.findAll(specification, pageRequest);
 
         // Map to DTO and return
-        return materials.map(materialMapper::toMaterialDetailResponse);
+        return materials.map(material -> {
+            String url = "";
+            try {
+                String mediaName=material.getFileName();
+                String contentType = getContentType(mediaName);
+                String folderName = contentType.split("/")[0];
+                String objectName = folderName + "/" + mediaName;
+                url = minioStorageService.getPreSignedUrl(objectName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return materialMapper.toMaterialDetailResponse(material, url);
+        });
     }
 }

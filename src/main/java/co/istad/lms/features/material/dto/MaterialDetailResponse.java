@@ -10,8 +10,8 @@ public record MaterialDetailResponse(
         String contentType,
         String extension,
         Long size,
+        String fileName,
         String fileUrl,
-        String thumbnail,
         String description,
         String subjectAlias,
 

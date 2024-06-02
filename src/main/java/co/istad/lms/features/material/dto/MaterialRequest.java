@@ -14,8 +14,10 @@ public record MaterialRequest(
         @Size(max = 50, message = "Title cannot be longer than 50 characters")
         String title,
         @NotBlank(message = "File URL is required")
-        String fileUrl,
-        String thumbnail,
+        String fileName,
+        String contentType,
+        String extension,
+        Long size,
         String description,
         @NotBlank(message = "Subject alias is required")
         String subjectAlias,

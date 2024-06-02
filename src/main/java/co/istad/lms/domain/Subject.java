@@ -25,13 +25,13 @@ public class Subject extends Auditable {
     private String alias;
 
     @Column( nullable = false )
-    private String subjectName;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(columnDefinition = "TEXT")
-    private String subjectLogo;
+    private String logo;
 
     @Column(nullable = false)
     private Integer credit;

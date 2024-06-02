@@ -4,7 +4,7 @@ public record MaterialResponse(
 
             String alias,
             String title,
-            String fileUrl,
-            String thumbnail
+            String fileName,
+            String fileUrl
 ) {
 }

@@ -15,7 +15,7 @@ public interface MaterialMapper {
 
     Material fromMaterialRequest(MaterialRequest materialRequest);
 
-    MaterialDetailResponse toMaterialDetailResponse(Material material);
+    MaterialDetailResponse toMaterialDetailResponse(Material material,String fileUrl);
 
     MaterialResponse toMaterialResponse(Material material);
 

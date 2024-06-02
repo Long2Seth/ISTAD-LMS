@@ -7,9 +7,11 @@ public record SubjectDetailResponse(
         String alias,
         String subjectName,
         String description,
-        String subjectLogo,
+        String logo,
         Integer credit,
         Integer duration,
+
+        Boolean isDeleted,
 
         Boolean isDraft
 

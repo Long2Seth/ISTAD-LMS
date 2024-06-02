@@ -4,8 +4,8 @@ public record MaterialUpdateRequest(
 
         String alias,
         String title,
-        String fileUrl,
-        String thumbnail,
+
+        String fileName,
         String description
 
 ) {
