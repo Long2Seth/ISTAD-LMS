@@ -7,6 +7,7 @@ import co.istad.lms.features.academic.dto.AcademicResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class AcademicController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control' )")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public AcademicResponseDetail createAcademic(@Valid @RequestBody AcademicRequest academicRequest){
         return academicService.createAcademic(academicRequest);
@@ -46,9 +48,10 @@ public class AcademicController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
-    public AcademicResponseDetail deleteAcademicByUuid(@PathVariable String uuid){
-        return academicService.deleteAcademicByUuid(uuid);
+    public void deleteAcademicByUuid(@PathVariable String uuid){
+        academicService.deleteAcademicByUuid(uuid);
     }
 
 

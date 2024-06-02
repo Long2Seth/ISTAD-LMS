@@ -14,6 +14,6 @@ public interface PaymentService {
 
     PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest);
 
-    PaymentResponse deletePayment(String uuid);
+    void deletePayment(String uuid);
 
 }

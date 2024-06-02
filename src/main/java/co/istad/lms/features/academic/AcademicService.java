@@ -13,7 +13,7 @@ public interface AcademicService {
 
     AcademicResponseDetail getAcademicByUuid(String uuid);
 
-    AcademicResponseDetail deleteAcademicByUuid(String uuid);
+    void deleteAcademicByUuid(String uuid);
 
     AcademicResponseDetail updateDisableAcademicByUuid(String uuid);
 

@@ -74,6 +74,7 @@ public class InstructorServiceImpl implements InstructorService {
         user.setPassword(passwordEncoder.encode(instructorRequest.user().password()));
         user.setIsDeleted(false);
         user.setIsBlocked(false);
+        user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);

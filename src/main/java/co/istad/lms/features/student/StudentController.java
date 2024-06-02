@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class StudentController {
 
 
     @PreAuthorize("hasAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public StudentResponseDetail createStudent(@Valid @RequestBody StudentRequest studentRequest) {
         return studentService.createStudent(studentRequest);
@@ -67,6 +69,7 @@ public class StudentController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
     public void deleteStudent(@PathVariable String uuid) {
         studentService.deleteStudentByUuid(uuid);

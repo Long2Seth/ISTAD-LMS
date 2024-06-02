@@ -2,9 +2,12 @@ package co.istad.lms.features.payment;
 
 
 import co.istad.lms.domain.Payment;
+import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.payment.dto.PaymentRequest;
 import co.istad.lms.features.payment.dto.PaymentResponse;
+import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.mapper.PaymentMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,10 +26,18 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     private final PaymentRepository paymentRepository;
+    private final StudentRepository studentRepository;
     private final PaymentMapper paymentMapper;
 
     @Override
-    public PaymentResponse createPayment(PaymentRequest paymentRequest) {
+    public PaymentResponse createPayment(@Valid PaymentRequest paymentRequest) {
+
+        //
+//        Student student = studentRepository.findByUuid(paymentRequest.)
+//                .orElseThrow(
+//                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+//                                String.format("Student with uuid = %s have been not found", paymentRequest.studentUuid()))
+//                );
 
         Payment payment = paymentMapper.toPayment(paymentRequest);
         payment.setUuid(UUID.randomUUID().toString());
@@ -85,7 +96,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponse deletePayment(String uuid) {
+    public void deletePayment(String uuid) {
         Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -93,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
                 );
         paymentRepository.delete(payment);
         
-        return paymentMapper.toPaymentResponse(payment);
+        paymentMapper.toPaymentResponse(payment);
 
     }
 }

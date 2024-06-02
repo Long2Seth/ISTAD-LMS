@@ -8,6 +8,7 @@ import co.istad.lms.features.instructor.dto.InstructorResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,10 @@ public class InstructorController {
 
     private final InstructorService instructorService;
 
-    @PostMapping
+
     @PreAuthorize("hasAnyAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
     public InstructorResponseDetail createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
         return instructorService.createInstructor(instructorRequest);
     }
@@ -39,6 +42,7 @@ public class InstructorController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
     public void deleteInstructorByUuid(@PathVariable String uuid){
         instructorService.deleteInstructorByUuid(uuid);

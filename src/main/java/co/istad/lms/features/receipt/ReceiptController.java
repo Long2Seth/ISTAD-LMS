@@ -34,6 +34,7 @@ public class ReceiptController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','adcademic:write')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ReceiptResponse createReceipt(@Valid @RequestBody ReceiptRequest receiptRequest){
         return  receiptService.createReceipt(receiptRequest);
@@ -55,6 +56,7 @@ public class ReceiptController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:delete')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
     public void deleteReceipt(@PathVariable String uuid){
         receiptService.deleteReceipt(uuid);

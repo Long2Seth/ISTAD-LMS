@@ -101,6 +101,7 @@ public class StudentServiceImpl implements StudentService {
         user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
         user.setIsDeleted(false);
         user.setIsBlocked(false);
+        user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);

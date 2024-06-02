@@ -38,23 +38,25 @@ public class PaymentController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:write')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PaymentResponse createPayment( @RequestBody PaymentRequest paymentRequest) {
+    public PaymentResponse createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
         return paymentService.createPayment(paymentRequest);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PutMapping("/{uuid}")
-    public PaymentResponse updatePayment(@PathVariable String uuid, @Valid @RequestBody PaymentRequest paymentRequest) {
+    public PaymentResponse updatePayment(@PathVariable String uuid,  @RequestBody PaymentRequest paymentRequest) {
         return paymentService.updatePayment(uuid, paymentRequest);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:delete')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
-    public PaymentResponse deletePayment(@PathVariable String uuid) {
-        return paymentService.deletePayment(uuid);
+    public void deletePayment(@PathVariable String uuid) {
+        paymentService.deletePayment(uuid);
     }
 
 

@@ -78,6 +78,7 @@ public class AcademicServiceImpl implements AcademicService {
         user.setPassword(passwordEncoder.encode(academicRequest.user().password()));
         user.setIsBlocked(false);
         user.setIsDeleted(false);
+        user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
@@ -190,7 +191,7 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
     @Override
-    public AcademicResponseDetail deleteAcademicByUuid(String uuid) {
+    public void deleteAcademicByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -199,7 +200,7 @@ public class AcademicServiceImpl implements AcademicService {
                 ));
         academicRepository.delete(academic);
 
-        return academicMapper.toResponseDetail(academic);
+        academicMapper.toResponseDetail(academic);
 
     }
 
