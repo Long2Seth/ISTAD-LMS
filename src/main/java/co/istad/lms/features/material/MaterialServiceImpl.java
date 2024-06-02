@@ -2,10 +2,12 @@ package co.istad.lms.features.material;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Material;
+import co.istad.lms.domain.Subject;
 import co.istad.lms.features.material.dto.MaterialDetailResponse;
 import co.istad.lms.features.material.dto.MaterialRequest;
 import co.istad.lms.features.material.dto.MaterialResponse;
 import co.istad.lms.features.material.dto.MaterialUpdateRequest;
+import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.MaterialMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +23,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialMapper materialMapper;
+
     private final MaterialRepository materialRepository;
+
+    private final SubjectRepository subjectRepository;
+
     private final BaseSpecification<Material> baseSpecification;
 
     @Override
@@ -29,13 +35,23 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Validate material by alias
         if (materialRepository.existsByAlias(materialRequest.alias())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Material = %s already exists.", materialRequest.alias()));
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Material = %s already exists.", materialRequest.alias()));
         }
+
+        //validate subject by alias
+        Subject subject =
+                subjectRepository.findByAlias(materialRequest.subjectAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found", materialRequest.subjectAlias())));
 
         // Map DTO to entity
         Material material = materialMapper.fromMaterialRequest(materialRequest);
 
+//        String contentType,
+//        String extension,
+//        Long size,
+
+        //set subject to material
+        material.setSubject(subject);
         // Save to database
         materialRepository.save(material);
     }
@@ -44,14 +60,11 @@ public class MaterialServiceImpl implements MaterialService {
     public MaterialDetailResponse getMaterialByAlias(String alias) {
 
         // Find material by alias
-        Material material = materialRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Material = %s has not been found.", alias)));
+        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
         // Return material detail
         return materialMapper.toMaterialDetailResponse(material);
     }
-
 
 
     @Override
@@ -74,18 +87,16 @@ public class MaterialServiceImpl implements MaterialService {
     public MaterialDetailResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest) {
 
         // Find material by alias
-        Material material = materialRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Material = %s has not been found.", alias)));
+        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
         // Check null alias from DTO
-        if(materialUpdateRequest.alias() != null) {
+        if (materialUpdateRequest.alias() != null) {
 
             // Validate alias from dto with original alias
-            if(!alias.equalsIgnoreCase(materialUpdateRequest.alias())) {
+            if (!alias.equalsIgnoreCase(materialUpdateRequest.alias())) {
 
                 // Validate new alias is conflict with other alias or not
-                if(materialRepository.existsByAlias(materialUpdateRequest.alias())) {
+                if (materialRepository.existsByAlias(materialUpdateRequest.alias())) {
 
                     throw new ResponseStatusException(HttpStatus.CONFLICT,
                             String.format("Material = %s already exist.", materialUpdateRequest.alias()));
@@ -107,9 +118,7 @@ public class MaterialServiceImpl implements MaterialService {
     public void deleteMaterialByAlias(String alias) {
 
         // Find material in database by alias
-        Material material = materialRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Material = %s has not been found.", alias)));
+        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
         // Delete material in database
         materialRepository.delete(material);
@@ -119,9 +128,7 @@ public class MaterialServiceImpl implements MaterialService {
     public void enableMaterialByAlias(String alias) {
 
         // Validate material from dto by alias
-        Material material = materialRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Material = %s has not been found ! ", alias)));
+        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found ! ", alias)));
 
         // Enable material (assuming there's a field to handle enable/disable status)
 
@@ -132,9 +139,7 @@ public class MaterialServiceImpl implements MaterialService {
     public void disableMaterialByAlias(String alias) {
 
         // Validate material from dto by alias
-        Material material = materialRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Material = %s has not been found ! ", alias)));
+        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found ! ", alias)));
 
         // Disable material (assuming there's a field to handle enable/disable status)
 

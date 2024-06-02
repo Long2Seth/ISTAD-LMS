@@ -34,8 +34,7 @@ public class GenerationServiceImpl implements GenerationService{
         //validate generation from DTO by alias
         if(generationRepository.existsByAlias(generationRequest.alias())){
 
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Generation = %s already exists.", generationRequest.alias()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Generation = %s already exists.", generationRequest.alias()));
         }
 
         //map from DTO to entity
@@ -51,10 +50,7 @@ public class GenerationServiceImpl implements GenerationService{
     @Override
     public GenerationDetailResponse getGenerationByAlias(String alias) {
 
-        Generation generation=generationRepository.findByAlias(alias)
-
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Generation = %s has not been found.", alias)));
+        Generation generation=generationRepository.findByAlias(alias).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found.", alias)));
         //return generation detail
         return generationMapper.toGenerationDetailResponse(generation);
     }
@@ -80,9 +76,7 @@ public class GenerationServiceImpl implements GenerationService{
     public GenerationDetailResponse updateGenerationByAlias(String alias, GenerationUpdateRequest generationUpdateRequest) {
 
         //validate generation from DTO with alias
-        Generation generation = generationRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Generation = %s has not been found.", alias)));
+        Generation generation = generationRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found.", alias)));
 
         //check null alias from DTO
         if(generationUpdateRequest.alias()!=null){
@@ -114,9 +108,7 @@ public class GenerationServiceImpl implements GenerationService{
     public void deleteGenerationByAlias(String alias) {
 
         //find generation in database by alias
-        Generation generation = generationRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Generation = %s has not been found.", alias)));
+        Generation generation = generationRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found.", alias)));
 
         //delete generation in database
         generationRepository.delete(generation);
@@ -126,9 +118,7 @@ public class GenerationServiceImpl implements GenerationService{
     public void disableGenerationByAlias(String alias) {
 
         //validate generation from dto by alias
-        Generation generation = generationRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Generation = %s has not been found ! ", alias)));
+        Generation generation = generationRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found ! ", alias)));
 
         //set isDeleted to true(disable)
         generation.setIsDeleted(true);
@@ -142,9 +132,7 @@ public class GenerationServiceImpl implements GenerationService{
     public void enableGenerationByAlias(String alias) {
 
         //validate generation from dto by alias
-        Generation generation = generationRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Generation = %s has not been found ! ", alias)));
+        Generation generation = generationRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         generation.setIsDeleted(false);

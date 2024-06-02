@@ -2,7 +2,9 @@ package co.istad.lms.features.lecture;
 
 
 import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Lecture;
+import co.istad.lms.features.course.CourseRepository;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureRequest;
 import co.istad.lms.features.lecture.dto.LectureResponse;
@@ -22,7 +24,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class LectureServiceImpl implements LectureService {
 
     private final LectureMapper lectureMapper;
+
     private final LectureRepository lectureRepository;
+
+    private final CourseRepository courseRepository;
+
     private final BaseSpecification<Lecture> baseSpecification;
 
     @Override
@@ -34,11 +40,18 @@ public class LectureServiceImpl implements LectureService {
                     String.format("Lecture = %s already exists.", lectureRequest.alias()));
         }
 
+        //check course from DTO by alias
+        Course course =
+                courseRepository.findByAlias(lectureRequest.courseAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",lectureRequest.courseAlias())));
+
         // map DTO to entity
         Lecture lecture = lectureMapper.fromLectureRequest(lectureRequest);
 
         //set isDeleted to false(enable)
         lecture.setIsDeleted(false);
+
+        //set course to lecture
+        lecture.setCourse(course);
 
         //save to database
         lectureRepository.save(lecture);
@@ -49,9 +62,7 @@ public class LectureServiceImpl implements LectureService {
     public LectureDetailResponse getLectureByAlias(String alias) {
 
         //find lecture by alias
-        Lecture lecture = lectureRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Lecture = %s has not been found.", alias)));
+        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found.", alias)));
 
         //return lecture detail
         return lectureMapper.toLectureDetailResponse(lecture);
@@ -79,9 +90,7 @@ public class LectureServiceImpl implements LectureService {
     public LectureDetailResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest) {
 
         //find lecture by alias
-        Lecture lecture = lectureRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Lecture = %s has not been found.", alias)));
+        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found.", alias)));
 
         //check null alias from DTO
         if (lectureUpdateRequest.alias() != null) {
@@ -92,8 +101,7 @@ public class LectureServiceImpl implements LectureService {
                 //validate new alias is conflict with other alias or not
                 if (lectureRepository.existsByAlias(lectureUpdateRequest.alias())) {
 
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,
-                            String.format("Lecture = %s already exist.", lectureUpdateRequest.alias()));
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Lecture = %s already exist.", lectureUpdateRequest.alias()));
                 }
             }
         }
@@ -113,9 +121,7 @@ public class LectureServiceImpl implements LectureService {
     public void deleteLectureByAlias(String alias) {
 
         //find lecture in database by alias
-        Lecture lecture = lectureRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Lecture = %s has not been found.", alias)));
+        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found.", alias)));
 
         //delete lecture in database
         lectureRepository.delete(lecture);
@@ -125,9 +131,7 @@ public class LectureServiceImpl implements LectureService {
     public void enableLectureByAlias(String alias) {
 
         //validate lecture from dto by alias
-        Lecture lecture = lectureRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Lecture = %s has not been found ! ", alias)));
+        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         lecture.setIsDeleted(false);
@@ -140,9 +144,7 @@ public class LectureServiceImpl implements LectureService {
     public void disableLectureByAlias(String alias) {
 
         //validate lecture from dto by alias
-        Lecture lecture = lectureRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Lecture = %s has not been found ! ", alias)));
+        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found ! ", alias)));
 
         //set isDeleted to true(disable)
         lecture.setIsDeleted(true);

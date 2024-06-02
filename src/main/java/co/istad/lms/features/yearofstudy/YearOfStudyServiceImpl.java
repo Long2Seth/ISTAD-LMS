@@ -47,8 +47,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
 
         //check year/semester/studyProgram for each yearOfStudy
         //example year:1,semester:1,studyProgram:dev-op, it can not the same all three field of other request
-        boolean exists = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(
-                yearOfStudyRequest.year(), yearOfStudyRequest.semester(), studyProgram).isPresent();
+        boolean exists = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(yearOfStudyRequest.year(), yearOfStudyRequest.semester(), studyProgram).isPresent();
 
         if (exists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("YearOfStudy that studyProgramAlias = %s, year = %d, semester = %d has already existed", yearOfStudyRequest.studyProgramAlias(), yearOfStudyRequest.year(), yearOfStudyRequest.semester()));

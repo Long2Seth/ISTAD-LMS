@@ -31,8 +31,7 @@ public class DegreeServiceImpl implements DegreeService {
 
         //validate degree by alias
         if (degreeRepository.existsByAlias(degreeRequest.alias())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Degree = %s has already existed.", degreeRequest.alias()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Degree = %s has already existed.", degreeRequest.alias()));
         }
 
         // map DTO to entity
@@ -50,9 +49,7 @@ public class DegreeServiceImpl implements DegreeService {
     public DegreeDetailResponse getDegreeByAlias(String alias) {
 
         //find degree by alias
-        Degree degree = degreeRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Degree = %s has not been found.", alias)));
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
 
         //return degree detail
         return degreeMapper.toDegreeDetailResponse(degree);
@@ -80,11 +77,7 @@ public class DegreeServiceImpl implements DegreeService {
     public DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
 
         //find degree by alias
-        Degree degree = degreeRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Degree = %s has not been found.", alias)));
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
 
         //check null alias from DTO
         if (degreeUpdateRequest.alias() != null) {
@@ -95,8 +88,7 @@ public class DegreeServiceImpl implements DegreeService {
                 //validate new alias is conflict with other alias or not
                 if (degreeRepository.existsByAlias(degreeUpdateRequest.alias())) {
 
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,
-                            String.format("Degree = %s already exist.", degreeUpdateRequest.alias()));
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Degree = %s already exist.", degreeUpdateRequest.alias()));
                 }
             }
         }
@@ -116,11 +108,7 @@ public class DegreeServiceImpl implements DegreeService {
     public void deleteDegreeByAlias(String alias) {
 
         //find degree in database by alias
-        Degree degree = degreeRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Degree = %s has not been found.", alias)));
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
 
         //delete degree in database
         degreeRepository.delete(degree);
@@ -130,11 +118,7 @@ public class DegreeServiceImpl implements DegreeService {
     public void enableDegreeByAlias(String alias) {
 
         //validate degree from dto by alias
-        Degree degree = degreeRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Degree = %s has not been found ! ", alias)));
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         degree.setIsDeleted(false);
@@ -147,11 +131,7 @@ public class DegreeServiceImpl implements DegreeService {
     public void disableDegreeByAlias(String alias) {
 
         //validate degree from dto by alias
-        Degree degree = degreeRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-
-                        String.format("Degree = %s has not been found ! ", alias)));
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
 
         //set isDeleted to true(disable)
         degree.setIsDeleted(true);
