@@ -65,18 +65,9 @@ public class MaterialServiceImpl implements MaterialService {
         // Find material by alias
         Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
-        String url="";
-        try{
-            String mediaName=material.getFileName();
-            String contentType = getContentType(mediaName);
-            String folderName = contentType.split("/")[0];
-            String objectName = folderName + "/" + mediaName;
-            url = minioStorageService.getPreSignedUrl(objectName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // Return material detail
+        String url = getUrl(material.getFileName());
 
+        // Return material detail
         return materialMapper.toMaterialDetailResponse(material, url);
     }
 
@@ -96,16 +87,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map entity to DTO and return
         return materials.map(material -> {
-            String url = "";
-            try {
-                String mediaName=material.getFileName();
-                String contentType = getContentType(mediaName);
-                String folderName = contentType.split("/")[0];
-                String objectName = folderName + "/" + mediaName;
-                url = minioStorageService.getPreSignedUrl(objectName);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            String url = getUrl(material.getFileName());
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
@@ -138,16 +120,7 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        String url = "";
-        try {
-            String mediaName=material.getFileName();
-            String contentType = getContentType(mediaName);
-            String folderName = contentType.split("/")[0];
-            String objectName = folderName + "/" + mediaName;
-            url = minioStorageService.getPreSignedUrl(objectName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String url = getUrl(material.getFileName());
         return materialMapper.toMaterialDetailResponse(material, url);
     }
 
@@ -200,17 +173,21 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map to DTO and return
         return materials.map(material -> {
-            String url = "";
-            try {
-                String mediaName=material.getFileName();
-                String contentType = getContentType(mediaName);
-                String folderName = contentType.split("/")[0];
-                String objectName = folderName + "/" + mediaName;
-                url = minioStorageService.getPreSignedUrl(objectName);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            String url = getUrl(material.getFileName());
             return materialMapper.toMaterialDetailResponse(material, url);
         });
+    }
+
+    private String getUrl(String fileName) {
+        String url = "";
+        try {
+            String contentType = getContentType(fileName);
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + fileName;
+            url = minioStorageService.getPreSignedUrl(objectName);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return url;
     }
 }
