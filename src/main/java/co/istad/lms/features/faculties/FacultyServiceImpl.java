@@ -31,8 +31,7 @@ public class FacultyServiceImpl implements FacultyService{
         //validate faculty from DTO by alias
         if(facultyRepository.existsByAlias(facultyRequest.alias())){
 
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Faculty = %s already exists.", facultyRequest.alias()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Faculty = %s already exists.", facultyRequest.alias()));
         }
 
         //map from DTO to entity
@@ -50,10 +49,7 @@ public class FacultyServiceImpl implements FacultyService{
 
 
         //find faculty in database by alias
-        Faculty faculty = facultyRepository.findByAlias(alias)
-
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found.", alias)));
+        Faculty faculty = facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Faculty = %s has not been found.", alias)));
 
 
         //return Faculty detail
@@ -81,9 +77,7 @@ public class FacultyServiceImpl implements FacultyService{
     public FacultyDetailResponse updateFacultyByAlias(String alias, FacultyUpdateRequest facultyUpdateRequest) {
 
         //validate faculty from DTO with alias
-        Faculty faculty = facultyRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found.", alias)));
+        Faculty faculty = facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Faculty = %s has not been found.", alias)));
 
         //check null alias from DTO
         if(facultyUpdateRequest.alias()!=null){
@@ -94,8 +88,7 @@ public class FacultyServiceImpl implements FacultyService{
                 //validate new alias is conflict with other alias or not
                 if(facultyRepository.existsByAlias(facultyUpdateRequest.alias())){
 
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,
-                            String.format("Faculty = %s already exist.", facultyUpdateRequest.alias()));
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Faculty = %s already exist.", facultyUpdateRequest.alias()));
                 }
             }
         }
@@ -115,9 +108,7 @@ public class FacultyServiceImpl implements FacultyService{
     public void deleteFacultyByAlias(String alias) {
 
         //validate faculty from DTO with alias
-        Faculty faculty = facultyRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found.", alias)));
+        Faculty faculty = facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", alias)));
 
         //save to database
         facultyRepository.delete(faculty);
@@ -127,9 +118,7 @@ public class FacultyServiceImpl implements FacultyService{
     public void disableFacultyByAlias(String facultyAlias) {
 
         //validate from dto with alias
-        Faculty faculty = facultyRepository.findByAlias(facultyAlias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found ! ", facultyAlias)));
+        Faculty faculty = facultyRepository.findByAlias(facultyAlias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found ! ", facultyAlias)));
 
         //set isDelete to true (disable)
         faculty.setIsDeleted(true);
@@ -142,9 +131,7 @@ public class FacultyServiceImpl implements FacultyService{
     public void enableFacultyByAlias(String facultyAlias) {
 
         //validate from dto by alias
-        Faculty faculty = facultyRepository.findByAlias(facultyAlias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found ! ", facultyAlias)));
+        Faculty faculty = facultyRepository.findByAlias(facultyAlias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found ! ", facultyAlias)));
 
         //set isDeleted to false(enable)
         faculty.setIsDeleted(false);

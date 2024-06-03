@@ -30,7 +30,7 @@ public interface LectureService {
     LectureDetailResponse getLectureByAlias(String alias);
 
     /**
-     * Retrieves a paginated list of all lecture.
+     * Retrieves a paginated list of all lectures.
      *
      * @param page is the current page number to retrieve
      * @param size is the size of record per page to retrieve
@@ -43,7 +43,7 @@ public interface LectureService {
     /**
      * Updates an existing lecture by its alias.
      *
-     * @param alias               is the unique name of lecture
+     * @param alias                is the unique name of lecture
      * @param lectureUpdateRequest is the request object containing the updated lecture details
      * @return {@link LectureDetailResponse}
      * @author Nouth Chanraksa
@@ -90,5 +90,5 @@ public interface LectureService {
      * @since 1.0 (2024)
      */
     Page<LectureDetailResponse> filterLectures(BaseSpecification.FilterDto filterDto, int page, int size);
-    
+
 }

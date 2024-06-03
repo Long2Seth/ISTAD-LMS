@@ -18,10 +18,10 @@ public class Material extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( nullable = false ,unique = true)
+    @Column(nullable = false, unique = true)
     private String alias;
 
-    @Column ( nullable = false )
+    @Column(nullable = false)
     private String title;
 
     private String contentType;
@@ -30,8 +30,8 @@ public class Material extends Auditable {
 
     private Long size;
 
-    @Column(columnDefinition = "TEXT",nullable = false)
-    private String fileUrl;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String fileName;
 
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
@@ -39,8 +39,9 @@ public class Material extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column (nullable = false)
-    private String subjectAlias;
+    @ManyToOne
+    @JoinColumn(name = "subject_id", nullable = false)
+    private Subject subject;
 
     @Column(nullable = false)
     private Boolean isDeleted;

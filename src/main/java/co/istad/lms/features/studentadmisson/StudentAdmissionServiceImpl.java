@@ -53,25 +53,19 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
     public void createStudentAdmission(StudentAdmissionRequest studentAdmissionRequest) {
 
         //find admission that open
-        List<Admission> admissions=admissionRepository.findByStatus(1);
-        if(admissions.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("admission has been closed"));
+        List<Admission> admissions = admissionRepository.findByStatus(1);
+        if (admissions.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("admission has been closed"));
         }
 
         //validate degree by degree alias
-        Degree degree = degreeRepository.findByAlias(studentAdmissionRequest.degreeAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("degree = %s has not been found", studentAdmissionRequest.degreeAlias())));
+        Degree degree = degreeRepository.findByAlias(studentAdmissionRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found", studentAdmissionRequest.degreeAlias())));
 
         //validate shift by shift alias
-        Shift shift = shiftRepository.findByAlias(studentAdmissionRequest.shiftAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("shift = %s has not been found", studentAdmissionRequest.shiftAlias())));
+        Shift shift = shiftRepository.findByAlias(studentAdmissionRequest.shiftAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("shift = %s has not been found", studentAdmissionRequest.shiftAlias())));
 
         //validate
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(studentAdmissionRequest.studyProgramAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("studyProgram = %s has not been found", studentAdmissionRequest.studyProgramAlias())));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(studentAdmissionRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("studyProgram = %s has not been found", studentAdmissionRequest.studyProgramAlias())));
 
         //map from DTO to entity
         StudentAdmission studentAdmission = studentAdmissionMapper.fromStudentAdmissionRequest(studentAdmissionRequest);
@@ -128,22 +122,17 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
     public StudentAdmissionDetailResponse updateStudentAdmission(String uuid, StudentAdmissionUpdateRequest studentAdmissionUpdateRequest) {
 
         //find student admission by uuid in database
-        StudentAdmission studentAdmission =
-                studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student Admission  = %s has not been found ! ", uuid)));
+        StudentAdmission studentAdmission = studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student Admission  = %s has not been found ! ", uuid)));
 
         //map data from DTO to entity
         studentAdmissionMapper.updateStudentAdmissionFromRequest(studentAdmission, studentAdmissionUpdateRequest);
 
         //validate degree from dto with entity
         //if the same, don't update
-        if (studentAdmissionUpdateRequest.degreeAlias() != null &&
-                !studentAdmissionUpdateRequest.degreeAlias().equals(studentAdmission.getDegree().getAlias())) {
+        if (studentAdmissionUpdateRequest.degreeAlias() != null && !studentAdmissionUpdateRequest.degreeAlias().equals(studentAdmission.getDegree().getAlias())) {
 
             //find degree in database with uuid
-            Degree degree = degreeRepository.findByAlias(studentAdmissionUpdateRequest.degreeAlias())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("degree = %s has not been found",
-                                    studentAdmissionUpdateRequest.degreeAlias())));
+            Degree degree = degreeRepository.findByAlias(studentAdmissionUpdateRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found", studentAdmissionUpdateRequest.degreeAlias())));
 
             //set new degree
             studentAdmission.setDegree(degree);
@@ -151,14 +140,10 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //validate shift from dto with entity
         //if the same, don't update
-        if (studentAdmissionUpdateRequest.shiftAlias() != null &&
-                !studentAdmissionUpdateRequest.shiftAlias().equals(studentAdmission.getShift().getAlias())) {
+        if (studentAdmissionUpdateRequest.shiftAlias() != null && !studentAdmissionUpdateRequest.shiftAlias().equals(studentAdmission.getShift().getAlias())) {
 
             //find shift in database with uuid
-            Shift shift = shiftRepository.findByAlias(studentAdmissionUpdateRequest.shiftAlias())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("shift = %s has not been found",
-                                    studentAdmissionUpdateRequest.shiftAlias())));
+            Shift shift = shiftRepository.findByAlias(studentAdmissionUpdateRequest.shiftAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("shift = %s has not been found", studentAdmissionUpdateRequest.shiftAlias())));
 
             //set new shift
             studentAdmission.setShift(shift);
@@ -166,15 +151,10 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //validate studyProgram from dto with entity
         //if the same, don't update
-        if (studentAdmissionUpdateRequest.studyProgramAlias() != null &&
-                !studentAdmissionUpdateRequest.studyProgramAlias().equals(studentAdmission.getStudyProgram().getAlias())) {
+        if (studentAdmissionUpdateRequest.studyProgramAlias() != null && !studentAdmissionUpdateRequest.studyProgramAlias().equals(studentAdmission.getStudyProgram().getAlias())) {
 
             //find studyProgram in database by uuid
-            StudyProgram studyProgram =
-                    studyProgramRepository.findByAlias(studentAdmissionUpdateRequest.studyProgramAlias())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            String.format("studyProgram = %s has not been found",
-                                    studentAdmissionUpdateRequest.studyProgramAlias())));
+            StudyProgram studyProgram = studyProgramRepository.findByAlias(studentAdmissionUpdateRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("studyProgram = %s has not been found", studentAdmissionUpdateRequest.studyProgramAlias())));
 
             //set new studyProgram
             studentAdmission.setStudyProgram(studyProgram);
@@ -201,8 +181,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
     public void disableStudentAdmissionByUuid(String uuid) {
 
         //validate from dto with uuid
-        StudentAdmission studentAdmission =
-                studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", uuid)));
+        StudentAdmission studentAdmission = studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", uuid)));
 
         //set isDeleted to true (disable)
         studentAdmission.setIsDeleted(true);
@@ -240,7 +219,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         Page<StudentAdmission> admissionsPage = studentAdmissionRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
-            return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
+        return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
 
     }
 }

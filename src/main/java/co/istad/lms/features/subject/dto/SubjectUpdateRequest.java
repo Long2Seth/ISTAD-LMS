@@ -9,11 +9,11 @@ import java.util.Set;
 public record SubjectUpdateRequest(
 
         String alias,
-        @Size(max = 50, message = "Subject name cannot be longer than 50 characters")
-        String subjectName,
+        @Size(max = 50, message = "Subject title cannot be longer than 50 characters")
+        String title,
 
         String description,
-        String subjectLogo,
+        String logo,
         Integer credit,
         Integer duration
 

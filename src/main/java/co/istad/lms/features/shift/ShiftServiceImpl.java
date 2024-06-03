@@ -21,7 +21,7 @@ import java.util.prefs.BackingStoreException;
 
 @Service
 @RequiredArgsConstructor
-public class ShiftServiceImpl implements ShiftService{
+public class ShiftServiceImpl implements ShiftService {
 
     private final ShiftRepository shiftRepository;
     private final ShiftMapper shiftMapper;
@@ -32,12 +32,11 @@ public class ShiftServiceImpl implements ShiftService{
 
         //validate shift from DTO by alias
         if (shiftRepository.existsByAlias(shiftRequest.alias())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Shift = %s already exists.", shiftRequest.alias()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Shift = %s already exists.", shiftRequest.alias()));
         }
 
         //map from DTO to entity
-        Shift shift =shiftMapper.fromShiftRequest(shiftRequest);
+        Shift shift = shiftMapper.fromShiftRequest(shiftRequest);
 
         //set isDeleted to false(enable)
         shift.setIsDeleted(false);
@@ -50,9 +49,7 @@ public class ShiftServiceImpl implements ShiftService{
     public ShiftDetailResponse getShiftByAlias(String alias) {
 
         //validate shift from DTO by alias
-        Shift shift = shiftRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Shift = %s has not been found.", alias)));
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found.", alias)));
 
         //return shift detail
         return shiftMapper.toShiftDetailResponse(shift);
@@ -78,18 +75,16 @@ public class ShiftServiceImpl implements ShiftService{
     public ShiftDetailResponse updateByAlias(String alias, ShiftUpdateRequest shiftUpdateRequest) {
 
         //validate shift from DTO by alias
-        Shift shift = shiftRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Shift = %s has not been found.", alias)));
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found.", alias)));
 
         //check null alias from DTO
-        if(shiftUpdateRequest.alias()!=null){
+        if (shiftUpdateRequest.alias() != null) {
 
             //validate alias from dto with original alias
-            if(!alias.equalsIgnoreCase(shiftUpdateRequest.alias())){
+            if (!alias.equalsIgnoreCase(shiftUpdateRequest.alias())) {
 
                 //validate new alias is conflict with other alias or not
-                if(shiftRepository.existsByAlias(shiftUpdateRequest.alias())){
+                if (shiftRepository.existsByAlias(shiftUpdateRequest.alias())) {
 
                     throw new ResponseStatusException(HttpStatus.CONFLICT,
                             String.format("Shift = %s already exist.", shiftUpdateRequest.alias()));
@@ -111,9 +106,7 @@ public class ShiftServiceImpl implements ShiftService{
     public void deleteShiftByAlias(String alias) {
 
         //validate shift from DTO by alias
-        Shift shift = shiftRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Shift = %s has not been found.", alias)));
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found.", alias)));
 
         //delete from database
         shiftRepository.delete(shift);
@@ -123,9 +116,7 @@ public class ShiftServiceImpl implements ShiftService{
     public void enableShiftByAlias(String alias) {
 
         //validate degree from dto by alias
-        Shift shift = shiftRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Shift = %s has not been found ! ", alias)));
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         shift.setIsDeleted(false);
@@ -138,9 +129,7 @@ public class ShiftServiceImpl implements ShiftService{
     public void disableShiftByAlias(String alias) {
 
         //validate shift from dto by alias
-        Shift shift = shiftRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Shift = %s has not been found ! ", alias)));
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found ! ", alias)));
 
         //set isDeleted to true(disable)
         shift.setIsDeleted(true);
@@ -163,7 +152,7 @@ public class ShiftServiceImpl implements ShiftService{
         Specification<Shift> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<Shift> shifts = shiftRepository.findAll(specification,pageRequest);
+        Page<Shift> shifts = shiftRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return shifts.map(shiftMapper::toShiftDetailResponse);

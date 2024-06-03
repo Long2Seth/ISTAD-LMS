@@ -5,11 +5,8 @@ import lombok.Builder;
 @Builder
 public record AttendanceUpdateRequest(
 
-
-        String uuid,
-        String note,
-        String studentAlias,
-        String lectureAlias
+        Integer status,
+        String note
 
 ) {
 }

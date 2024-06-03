@@ -219,8 +219,7 @@ public class CourseServiceImpl implements CourseService {
     public void deleteInstructorFromCourse(String alias, String uuid) {
         //validate course from DTO by alias
         Course course=
-                courseRepository.findByAlias(alias).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Course = %s has not been found",alias)));
+                courseRepository.findByAlias(alias).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found",alias)));
 
         //validate instructor from DTO by uuid
         Instructor instructor=

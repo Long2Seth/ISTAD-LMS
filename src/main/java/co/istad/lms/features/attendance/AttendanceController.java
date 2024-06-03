@@ -21,7 +21,7 @@ public class AttendanceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:write')")
     void creatAttendance(@Valid @RequestBody AttendanceRequest attendanceRequest) {
 
         attendanceService.createAttendance(attendanceRequest);
@@ -29,7 +29,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/{uuid}")
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
     AttendanceDetailResponse getAttendanceByUuid(@PathVariable String uuid) {
 
         return attendanceService.getAttendanceByUuid(uuid);
@@ -37,7 +37,7 @@ public class AttendanceController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
     public Page<AttendanceDetailResponse> getAllAttendances(
 
             @RequestParam(defaultValue = "0") int page,
@@ -48,7 +48,7 @@ public class AttendanceController {
     }
 
     @PutMapping("/{uuid}")
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:update')")
     public AttendanceResponse updateAttendance(@PathVariable String uuid,
                                                @Valid @RequestBody AttendanceUpdateRequest attendanceUpdateRequest) {
 
@@ -56,7 +56,7 @@ public class AttendanceController {
     }
 
     @DeleteMapping("/{uuid}")
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAttendance(@PathVariable String uuid) {
 
@@ -64,7 +64,7 @@ public class AttendanceController {
     }
 
     @PutMapping("/{uuid}/enable")
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void enableAttendance(@PathVariable String uuid) {
 
@@ -72,7 +72,7 @@ public class AttendanceController {
     }
 
     @PutMapping("/{uuid}/disable")
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void disableAttendance(@PathVariable String uuid) {
 
@@ -80,7 +80,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/filter")
-    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @PreAuthorize("hasAnyAuthority('assessment:update')")
     public Page<AttendanceDetailResponse> filterAttendances(
 
             @RequestBody BaseSpecification.FilterDto filterDto,

@@ -37,16 +37,13 @@ public class Lecture extends Auditable {
     private LocalDate lectureDate;
 
     @Column(nullable = false)
-    private Boolean status;
-
-    @Column(nullable = false)
     private Boolean isDeleted;
 
     @Column(nullable = false)
     private Boolean isDraft;
-
-    @Column(nullable = false)
-    private String courseAlias;
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
 
 
 }

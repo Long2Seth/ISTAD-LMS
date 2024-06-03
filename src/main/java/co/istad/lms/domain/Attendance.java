@@ -23,16 +23,10 @@ public class Attendance extends Auditable {
     private String uuid;
 
     @Column(nullable = false)
-    private Boolean status;
+    private Integer status;
 
     @Column(columnDefinition = "TEXT")
     private String note;
-
-    @Column(nullable = false)
-    private String studentAlias;
-
-    @Column(nullable = false)
-    private String lectureAlias;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id", nullable = false)
@@ -43,6 +37,6 @@ public class Attendance extends Auditable {
     private Student student;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
 }

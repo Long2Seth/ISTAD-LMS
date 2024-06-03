@@ -46,7 +46,7 @@ public interface DegreeService {
     Page<DegreeDetailResponse> getAllDegrees(int page, int size);
 
     /**
-     * Updates an existing degree by its alias.
+     * Update an existing degree by its alias.
      *
      * @param alias               is the unique name of degree
      * @param degreeUpdateRequest is the request object containing the updated degree details
@@ -57,7 +57,7 @@ public interface DegreeService {
     DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest);
 
     /**
-     * Deletes a degree by its alias.
+     * Delete a degree by its alias.
      *
      * @param alias is the unique name of degree
      * @author Pov Soknem

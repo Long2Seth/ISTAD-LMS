@@ -48,21 +48,15 @@ public class StudyProgramServiceImpl implements StudyProgramService{
 
         //validate studyProgram from dto by alias
         if (studyProgramRepository.existsByAlias(studyProgramRequest.alias())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Study program = %s has already existed.", studyProgramRequest.alias()));
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Study program = %s has already existed.", studyProgramRequest.alias()));
         }
 
         //validate degree by alias from DTO
-        Degree degree=degreeRepository.findByAlias(studyProgramRequest.degreeAlias())
-
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
+        Degree degree=degreeRepository.findByAlias(studyProgramRequest.degreeAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
 
         //validate faculty by alias from DTO
-        Faculty faculty=facultyRepository.findByAlias(studyProgramRequest.facultyAlias())
-
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
+        Faculty faculty=facultyRepository.findByAlias(studyProgramRequest.facultyAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
 
 
         //map from DTO to entity
@@ -87,9 +81,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     public StudyProgramDetailResponse getStudyProgramByAlias(String alias) {
 
         //validate studyProgram from DTO by alias
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Study program = %s has not been found.", alias)));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found.", alias)));
 
         //map to DTO and return
         return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
@@ -115,9 +107,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     public StudyProgramDetailResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest) {
 
         //validate studyProgram from DTO by alias
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Study program = %s was not found.", alias)));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", alias)));
 
         //check null alias from DTO
         if(studyProgramUpdateRequest.alias()!=null){
@@ -128,8 +118,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
                 //validate new alias is conflict with other alias or not
                 if(studyProgramRepository.existsByAlias(studyProgramUpdateRequest.alias())){
 
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,
-                            String.format("StudyProgram = %s already exist.", studyProgramUpdateRequest.alias()));
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("StudyProgram = %s already exist.", studyProgramUpdateRequest.alias()));
                 }
             }
         }
@@ -151,9 +140,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     public void deleteStudyProgramByAlias(String alias) {
 
         //validate studyProgram from DTO by alias
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Study program = %s was not found.", alias)));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", alias)));
 
         //delete from database
         studyProgramRepository.delete(studyProgram);
@@ -164,9 +151,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     public void enableStudyProgramByAlias(String alias) {
 
         //validate degree from dto by alias
-         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Study program = %s has not been found ! ", alias)));
+         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         studyProgram.setIsDeleted(false);
@@ -180,9 +165,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     public void disableStudyProgramByAlias(String alias) {
 
         //validate degree from dto by alias
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Study program = %s has not been found ! ", alias)));
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
 
         //set isDeleted to false(enable)
         studyProgram.setIsDeleted(true);

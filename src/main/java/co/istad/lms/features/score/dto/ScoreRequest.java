@@ -18,9 +18,6 @@ public record ScoreRequest(
         String studentAlias,
 
         @NotBlank(message = "Course alias is required")
-        String courseAlias,
-
-        @NotNull(message = "IsDeleted is required")
-        Boolean isDeleted
+        String courseAlias
 ) {
 }

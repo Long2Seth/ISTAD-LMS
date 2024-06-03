@@ -12,9 +12,9 @@ public record SubjectRequest(
         @Size(max = 50, message = "Alias cannot be longer than 50 characters")
         String alias,
 
-        @NotBlank(message = "Subject name is required")
+        @NotBlank(message = "Subject title is required")
         @Size(max = 50, message = "Subject Name cannot be longer than 50 characters")
-        String subjectName,
+        String title,
 
         String description,
         String subjectLogo,
