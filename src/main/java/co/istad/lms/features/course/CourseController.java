@@ -96,9 +96,9 @@ public class CourseController {
 
     @PostMapping("/{alias}/instructors/{uuid}")
     @PreAuthorize("hasAnyAuthority('course:update')")
-    public CourseDetailResponse addSubjectToCourse(
+    public CourseDetailResponse addInstructorToCourse(
             @PathVariable String alias,
-            @Valid @RequestBody String uuid) {
+            @PathVariable String uuid) {
 
         return courseService.addInstructorToCourse(alias,uuid );
 
