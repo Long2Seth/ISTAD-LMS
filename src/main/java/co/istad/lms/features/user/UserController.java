@@ -29,6 +29,20 @@ public class UserController {
         return userService.getAllUsers(page,limit);
     }
 
+
+    @PreAuthorize("hasAuthority('admin:control')")
+    @GetMapping("/admins")
+    public Page<UserResponse> getAllUsersWithAdminRole(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "25") int limit
+    ) {
+        return userService.getAllUsersWithAdminRole(page, limit);
+    }
+
+
+
+
+
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('admin:control')")
     @PostMapping
