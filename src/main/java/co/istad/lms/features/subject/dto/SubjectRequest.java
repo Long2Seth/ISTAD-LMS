@@ -24,6 +24,9 @@ public record SubjectRequest(
 
         @NotNull(message = "duration is require")
         Integer duration,
+
+        String curriculum,
+
         @NotNull(message = "isDraft is required")
         Boolean isDraft
 

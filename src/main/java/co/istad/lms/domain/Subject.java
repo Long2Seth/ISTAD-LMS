@@ -39,6 +39,9 @@ public class Subject extends Auditable {
     @Column(nullable = false)
     private Integer duration;
 
+    @Column(columnDefinition = "jsonb")
+    private String curriculum;
+
     @Column(nullable = false)
     private Boolean isDeleted = false;
 
