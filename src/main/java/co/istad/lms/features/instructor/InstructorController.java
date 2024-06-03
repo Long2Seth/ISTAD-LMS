@@ -73,9 +73,9 @@ public class InstructorController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
     @GetMapping
     public Page<InstructorResponseDetail> getAllInstructor(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int limit
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ){
-        return instructorService.getAllInstructor(page, limit);
+        return instructorService.getAllInstructor(pageNumber, pageSize);
     }
 }

@@ -17,9 +17,10 @@ public class AuthorityController {
 
     @GetMapping
     public Page<AuthorityResponse> getPageAuthorities(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "25") int limit) {
-        return authorityService.findAll(page, limit);
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+        return authorityService.findAll(pageNumber, pageSize);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

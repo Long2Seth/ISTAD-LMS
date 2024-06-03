@@ -21,11 +21,10 @@ public class PaymentController {
     @PreAuthorize("hasAnyAuthority('admin:control','adcademic:read')")
     @GetMapping
     public Page<PaymentResponse> getPayments(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "25") int limit
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
-        Page<PaymentResponse> payments = paymentService.getPayments(page, limit);
-        return payments;
+        return paymentService.getPayments(pageNumber, pageSize);
 
     }
 

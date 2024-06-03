@@ -23,10 +23,10 @@ public class UserController {
     @PreAuthorize("hasAuthority('admin:control')")
     @GetMapping
     public Page<UserResponse> getAllUsers(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "25") int limit
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ){
-        return userService.getAllUsers(page,limit);
+        return userService.getAllUsers(pageNumber, pageSize);
     }
 
 

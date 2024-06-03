@@ -29,9 +29,9 @@ public class AdminController {
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @GetMapping
     public Page<AdminResponseDetail> findAllDetail(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int limit) {
-        return adminService.getAdminsDetail(page, limit);
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize) {
+        return adminService.getAdminsDetail(pageNumber, pageSize);
     }
 
 

@@ -23,9 +23,9 @@ public class CurriculumController {
 
     @GetMapping
     public Page<CurriculumResponse> getAllCurriculums(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int limit) {
-        return curriculumService.getAllCurriculums(page, limit);
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize) {
+        return curriculumService.getAllCurriculums(pageNumber, pageSize);
     }
 
 

@@ -32,10 +32,10 @@ public class StaffController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
     @GetMapping
     public Page<StaffResponseDetail> getStaffs(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int limit)
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize)
     {
-        return staffService.getStaffs(page, limit);
+        return staffService.getStaffs(pageNumber, pageSize);
     }
 
 

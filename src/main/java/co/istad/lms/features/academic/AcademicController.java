@@ -27,10 +27,10 @@ public class AcademicController {
     @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read')")
     @GetMapping
     public Page<AcademicResponseDetail> getAcademics(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int limit)
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize)
     {
-        return academicService.getAcademics(page, limit);
+        return academicService.getAcademics(pageNumber, pageSize);
     }
 
 

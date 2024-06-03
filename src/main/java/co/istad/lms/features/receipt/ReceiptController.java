@@ -25,11 +25,10 @@ public class ReceiptController {
     @PreAuthorize("hasAnyAuthority('admin:control','adcademic:read')")
     @GetMapping
     public Page<ReceiptResponse> getReceipts(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "25") int limit
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ){
-        Page<ReceiptResponse> receipts = receiptService.getReceipts(page, limit);
-        return receipts;
+        return receiptService.getReceipts(pageNumber, pageSize);
     }
 
 

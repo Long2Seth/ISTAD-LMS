@@ -26,9 +26,9 @@ public class StudentController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
     @GetMapping
     public Page<StudentResponseDetail> getStudents(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int limit) {
-        return studentService.getStudents(page, limit);
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize) {
+        return studentService.getStudents(pageNumber, pageSize);
     }
 
 
