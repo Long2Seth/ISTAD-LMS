@@ -35,6 +35,8 @@ public class UserServiceImpl implements UserService {
     private final AuthorityRepository authorityRepository;
 
 
+
+
     // Validate if user exists by email or phone number
     private void validateUserExists(UserRequest userRequest) {
 
@@ -48,17 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    // Convert BirthPlace
-//    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
-//        BirthPlace birthPlace = new BirthPlace();
-//        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
-//        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
-//        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
-//        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
-//        birthPlace.setStreet(birthPlaceRequest.street());
-//        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
-//        return birthPlace;
-//    }
+
 
     // Set user authorities
     private void setUserAuthorities( UserRequest userRequest) {
@@ -81,6 +73,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+
     @Override
     public Page<UserResponse> getAllUsers(int page, int limit) {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
@@ -93,6 +87,16 @@ public class UserServiceImpl implements UserService {
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponse);
     }
+
+
+
+    @Override
+    public Page<UserResponse> getAllUsersWithAdminRole(int page, int limit) {
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        Page<User> users = userRepository.findAllUsersWithAdminRole(pageRequest);
+        return users.map(userMapper::toUserResponse);
+    }
+
 
     @Override
     public UserResponse getUserById(String uuid) {
@@ -148,7 +152,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserResponse disableUser(String alias) {
 
         User user = userRepository.findByUuid(alias)
@@ -159,7 +162,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserResponse enableUser(String alias) {
 
         User user = userRepository.findByUuid(alias)

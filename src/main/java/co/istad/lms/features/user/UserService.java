@@ -10,20 +10,30 @@ import java.util.List;
 
 public interface UserService {
 
+
     Page<UserResponse> getAllUsers(int page , int limit);
+
+
+    Page<UserResponse> getAllUsersWithAdminRole(int page, int limit);
 
 
     UserResponse getUserById(String uuid);
 
+
     UserResponse createUser(UserRequest userRequest);
+
 
     UserResponse updateUser(String uuid, UserRequest userRequest);
 
+
     void deleteUser(String uuid);
+
 
     UserResponse disableUser(String uuid);
 
+
     UserResponse enableUser(String uuid);
+
 
     UserResponse isDeleted(String uuid);
 
