@@ -39,11 +39,11 @@ public class ClassController {
     @PreAuthorize("hasAnyAuthority('class:read')")
     public Page<ClassDetailResponse> getAllClasses(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return classService.getAllClasses(page, size);
+        return classService.getAllClasses(pageNumber, pageSize);
     }
 
     @PutMapping("/{alias}")
@@ -83,11 +83,11 @@ public class ClassController {
     public Page<ClassDetailResponse> filterClasses(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return classService.filterClasses(filterDto, page, size);
+        return classService.filterClasses(filterDto, pageNumber, pageSize);
     }
 
     @PostMapping("/{alias}/students")

@@ -32,13 +32,13 @@ public interface ShiftService {
     /**
      * Retrieves a paginated list of all shifts.
      *
-     * @param page is the page number to retrieve
-     * @param size is the number of shifts per page
+     * @param pageNumber is the pageNumber number to retrieve
+     * @param pageSize is the number of shifts per pageNumber
      * @return {@link Page<ShiftDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ShiftDetailResponse> getAllShifts(int page, int size);
+    Page<ShiftDetailResponse> getAllShifts(int pageNumber, int pageSize);
 
     /**
      * Updates a shift identified by its alias.
@@ -83,11 +83,11 @@ public interface ShiftService {
      * Filters shifts based on the specified criteria and retrieves a paginated list of results.
      *
      * @param filterDto the filter criteria
-     * @param page      the page number to retrieve
-     * @param size      the number of shifts per page
+     * @param pageNumber      the pageNumber number to retrieve
+     * @param pageSize      the number of shifts per pageNumber
      * @return {@link  Page<ShiftDetailResponse> }
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 }

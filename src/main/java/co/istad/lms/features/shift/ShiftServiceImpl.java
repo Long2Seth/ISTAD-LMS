@@ -56,13 +56,13 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public Page<ShiftDetailResponse> getAllShifts(int page, int size) {
+    public Page<ShiftDetailResponse> getAllShifts(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all shift in database
         Page<Shift> shift = shiftRepository.findAll(pageRequest);
@@ -140,13 +140,13 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Shift entities based on the criteria provided
         Specification<Shift> specification = baseSpecification.filter(filterDto);

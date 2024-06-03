@@ -39,11 +39,11 @@ public class ScoreController {
     @PreAuthorize("hasAnyAuthority('assessment:read')")
     public Page<ScoreDetailResponse> getAllScores(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return scoreService.getAllScores(page, size);
+        return scoreService.getAllScores(pageNumber, pageSize);
     }
 
     @PutMapping("/{uuid}")
@@ -67,10 +67,10 @@ public class ScoreController {
     public Page<ScoreDetailResponse> filterScores(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return scoreService.filterScores(filterDto, page, size);
+        return scoreService.filterScores(filterDto, pageNumber, pageSize);
     }
 }

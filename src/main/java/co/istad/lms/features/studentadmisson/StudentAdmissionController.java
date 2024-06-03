@@ -36,11 +36,11 @@ public class StudentAdmissionController {
     @PreAuthorize("hasAnyAuthority('admission:read')")
     public Page<StudentAdmissionDetailResponse> getStudentAllAdmissions(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return studentAdmissionService.getAllStudentAdmissions(page, size);
+        return studentAdmissionService.getAllStudentAdmissions(pageNumber, pageSize);
     }
 
     @PutMapping("/{uuid}")
@@ -67,10 +67,10 @@ public class StudentAdmissionController {
     public Page<StudentAdmissionDetailResponse> filterStudentAdmissions(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return studentAdmissionService.filterStudentAdmissions(filterDto, page, size);
+        return studentAdmissionService.filterStudentAdmissions(filterDto, pageNumber, pageSize);
     }
 }

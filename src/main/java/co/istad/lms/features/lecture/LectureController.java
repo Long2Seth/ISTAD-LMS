@@ -41,11 +41,11 @@ public class LectureController {
     @PreAuthorize("hasAnyAuthority('session:read')")
     public Page<LectureDetailResponse> getAllLectures(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return lectureService.getAllLectures(page, size);
+        return lectureService.getAllLectures(pageNumber, pageSize);
     }
 
 
@@ -87,11 +87,11 @@ public class LectureController {
     public Page<LectureDetailResponse> filterLectures(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return lectureService.filterLectures(filterDto, page, size);
+        return lectureService.filterLectures(filterDto, pageNumber, pageSize);
     }
 
 }

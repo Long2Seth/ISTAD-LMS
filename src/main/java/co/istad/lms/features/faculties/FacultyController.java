@@ -46,11 +46,11 @@ public class FacultyController {
     @GetMapping
     public Page<FacultyDetailResponse> getAllFaculties(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return facultyService.getAllFaculties(page, size);
+        return facultyService.getAllFaculties(pageNumber, pageSize);
 
     }
 
@@ -94,11 +94,11 @@ public class FacultyController {
     public Page<FacultyDetailResponse> filterFaculties(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return facultyService.filterFaculties(filterDto, page, size);
+        return facultyService.filterFaculties(filterDto, pageNumber, pageSize);
     }
 
 }

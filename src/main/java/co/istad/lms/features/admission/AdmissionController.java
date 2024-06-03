@@ -37,11 +37,11 @@ public class AdmissionController {
     @PreAuthorize("hasAnyAuthority('admission:read')")
     public Page<AdmissionDetailResponse> getAllAdmissions(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return admissionService.getAllAdmissions(page, size);
+        return admissionService.getAllAdmissions(pageNumber, pageSize);
     }
 
 
@@ -93,10 +93,10 @@ public class AdmissionController {
     public Page<AdmissionDetailResponse> filterAdmissions(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return admissionService.filterAdmissions(filterDto, page, size);
+        return admissionService.filterAdmissions(filterDto, pageNumber, pageSize);
     }
 }

@@ -70,13 +70,13 @@ public class LectureServiceImpl implements LectureService {
 
 
     @Override
-    public Page<LectureDetailResponse> getAllLectures(int page, int size) {
+    public Page<LectureDetailResponse> getAllLectures(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all lecture in database
         Page<Lecture> lectures = lectureRepository.findAll(pageRequest);
@@ -155,13 +155,13 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public Page<LectureDetailResponse> filterLectures(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<LectureDetailResponse> filterLectures(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Lecture entities based on the criteria provided
         Specification<Lecture> specification = baseSpecification.filter(filterDto);

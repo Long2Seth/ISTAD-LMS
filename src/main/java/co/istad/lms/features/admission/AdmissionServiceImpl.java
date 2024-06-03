@@ -58,13 +58,13 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
-    public Page<AdmissionDetailResponse> getAllAdmissions(int page, int size) {
+    public Page<AdmissionDetailResponse> getAllAdmissions(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
 
         //find all admission in database
         Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
@@ -141,13 +141,13 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     @Override
-    public Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Admission entities based on the criteria provided
         Specification<Admission> specification = baseSpecification.filter(filterDto);

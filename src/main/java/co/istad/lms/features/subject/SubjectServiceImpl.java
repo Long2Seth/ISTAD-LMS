@@ -4,6 +4,7 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Degree;
 import co.istad.lms.domain.StudyProgram;
 import co.istad.lms.domain.Subject;
+import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.subject.dto.SubjectDetailResponse;
 import co.istad.lms.features.subject.dto.SubjectRequest;
@@ -19,8 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.MalformedInputException;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static co.istad.lms.utils.MediaUtil.getUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +34,10 @@ public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectRepository subjectRepository;
 
+    private final MinioStorageService minioStorageService;
+
     private final BaseSpecification<Subject> baseSpecification;
 
-    private final StudyProgramRepository studyProgramRepository;
 
     @Override
     public void createSubject(SubjectRequest subjectRequest) {
@@ -60,25 +65,37 @@ public class SubjectServiceImpl implements SubjectService {
         //find subject by alias
         Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found.", alias)));
 
+        //set logo url to faculty
+        if (subject.getLogo() != null) {
+            subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+        }
+
         //return subject detail
         return subjectMapper.toSubjectDetailResponse(subject);
 
     }
 
     @Override
-    public Page<SubjectDetailResponse> getAllSubject(int page, int size) {
+    public Page<SubjectDetailResponse> getAllSubject(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all subject in database
-        Page<Subject> subject = subjectRepository.findAll(pageRequest);
+        Page<Subject> subjects = subjectRepository.findAll(pageRequest);
+
+        //set logo url to faculty
+        subjects.forEach(subject -> {
+            if (subject.getLogo() != null) {
+                subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+            }
+        });
 
         //map entity to DTO and return
-        return subject.map(subjectMapper::toSubjectDetailResponse);
+        return subjects.map(subjectMapper::toSubjectDetailResponse);
 
     }
 
@@ -108,6 +125,11 @@ public class SubjectServiceImpl implements SubjectService {
 
         //save to database
         subjectRepository.save(subject);
+
+        //set logo url to faculty
+        if (subject.getLogo() != null) {
+            subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+        }
 
         //return Subject response
         return subjectMapper.toSubjectDetailResponse(subject);
@@ -148,13 +170,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Page<SubjectDetailResponse> filterSubject(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<SubjectDetailResponse> filterSubject(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Subject entities based on the criteria provided
         Specification<Subject> specification = baseSpecification.filter(filterDto);
@@ -162,6 +184,12 @@ public class SubjectServiceImpl implements SubjectService {
         //get all entity that match with filter condition
         Page<Subject> subjects = subjectRepository.findAll(specification, pageRequest);
 
+        //set logo url to faculty
+        subjects.forEach(subject -> {
+            if (subject.getLogo() != null) {
+                subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+            }
+        });
         //map to DTO and return
         return subjects.map(subjectMapper::toSubjectDetailResponse);
 

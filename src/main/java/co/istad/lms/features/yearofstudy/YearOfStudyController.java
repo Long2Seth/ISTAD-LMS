@@ -37,11 +37,11 @@ public class YearOfStudyController {
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<YearOfStudyDetailResponse> getAllYearOfStudies(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return yearOfStudyService.getAllYearOfStudies(page, size);
+        return yearOfStudyService.getAllYearOfStudies(pageNumber, pageSize);
 
     }
 
@@ -70,11 +70,11 @@ public class YearOfStudyController {
     public Page<YearOfStudyDetailResponse> filterYearOfStudies(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return yearOfStudyService.filterYearOfStudy(filterDto, page, size);
+        return yearOfStudyService.filterYearOfStudy(filterDto, pageNumber, pageSize);
     }
 
     @PostMapping("/{uuid}/subjects")

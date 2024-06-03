@@ -41,7 +41,7 @@ public class Course extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "class_id")
-    private Class aClass;
+    private Class oneClass;
 
 
 }

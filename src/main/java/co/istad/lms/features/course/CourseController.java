@@ -43,11 +43,11 @@ public class CourseController {
     @PreAuthorize("hasAnyAuthority('course:read')")
     public Page<CourseDetailResponse> getAllCourses(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return courseService.getAllCourses(page, size);
+        return courseService.getAllCourses(pageNumber, pageSize);
     }
 
     @PutMapping("/{alias}")
@@ -87,11 +87,11 @@ public class CourseController {
     public Page<CourseDetailResponse> filterCourses(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return courseService.filterCourses(filterDto, page, size);
+        return courseService.filterCourses(filterDto, pageNumber, pageSize);
     }
 
     @PostMapping("/{alias}/instructors/{uuid}")

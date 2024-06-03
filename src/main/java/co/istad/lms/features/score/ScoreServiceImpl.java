@@ -1,10 +1,15 @@
 package co.istad.lms.features.score;
 
 import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Score;
+import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.course.CourseRepository;
 import co.istad.lms.features.score.dto.ScoreDetailResponse;
 import co.istad.lms.features.score.dto.ScoreRequest;
 import co.istad.lms.features.score.dto.ScoreUpdateRequest;
+import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
 import co.istad.lms.mapper.ScoreMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,13 +30,28 @@ public class ScoreServiceImpl implements ScoreService {
 
     private final ScoreMapper scoreMapper;
 
+    private final StudentRepository studentRepository;
+
+    private final CourseRepository courseRepository;
+
     private final BaseSpecification<Score> baseSpecification;
 
     @Override
     public void createScore(ScoreRequest scoreRequest) {
 
+        Student student=
+                studentRepository.findByUuid(scoreRequest.studentUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",scoreRequest.studentUuid())));
+
+        Course course=
+                courseRepository.findByAlias(scoreRequest.courseAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",scoreRequest.courseAlias())));
         //map from DTO to entity
         Score score = scoreMapper.fromScoreRequest(scoreRequest);
+
+        //set student to score
+        score.setStudent(student);
+
+        //set course to score
+        score.setCourse(course);
 
         //set isDelete to false
         score.setIsDeleted(false);
@@ -56,13 +76,13 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Page<ScoreDetailResponse> getAllScores(int page, int size) {
+    public Page<ScoreDetailResponse> getAllScores(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all score in database
         Page<Score> scores = scorerRepository.findAll(pageRequest);
@@ -97,13 +117,13 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Page<ScoreDetailResponse> filterScores(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<ScoreDetailResponse> filterScores(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Degree entities based on the criteria provided
         Specification<Score> specification = baseSpecification.filter(filterDto);

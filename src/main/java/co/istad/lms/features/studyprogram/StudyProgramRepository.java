@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface StudyProgramRepository extends JpaRepository<StudyProgram,Long>, JpaSpecificationExecutor<StudyProgram> {
     Optional<StudyProgram> findByAlias(String alias);
+    Optional<StudyProgram> findByAliasAndIsDeletedFalse(String alias);
 
     Boolean existsByAlias(String alias);
 

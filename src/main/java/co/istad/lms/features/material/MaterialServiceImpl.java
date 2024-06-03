@@ -74,13 +74,13 @@ public class MaterialServiceImpl implements MaterialService {
 
 
     @Override
-    public Page<MaterialDetailResponse> getAllMaterials(int page, int size) {
+    public Page<MaterialDetailResponse> getAllMaterials(int pageNumber, int pageSize) {
 
         // Create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        // Create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        // Create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         // Find all materials in database
         Page<Material> materials = materialRepository.findAll(pageRequest);
@@ -158,13 +158,13 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public Page<MaterialDetailResponse> filterMaterials(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<MaterialDetailResponse> filterMaterials(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         // Create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        // Create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        // Create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         // Create a dynamic query specification for filtering Material entities based on the criteria provided
         Specification<Material> specification = baseSpecification.filter(filterDto);

@@ -38,10 +38,10 @@ public class GenerationController {
     @GetMapping()
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<GenerationDetailResponse> getAllGenerations(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
-        return generationService.getAllGenerations(page, size);
+        return generationService.getAllGenerations(pageNumber, pageSize);
     }
 
     @PutMapping("/{alias}")
@@ -76,11 +76,11 @@ public class GenerationController {
     public Page<GenerationDetailResponse> filterGenerations(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return generationService.filterGenerations(filterDto, page, size);
+        return generationService.filterGenerations(filterDto, pageNumber, pageSize);
     }
 
 }

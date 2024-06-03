@@ -1,5 +1,7 @@
 package co.istad.lms.features.subject.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,7 +27,8 @@ public record SubjectRequest(
         @NotNull(message = "duration is require")
         Integer duration,
 
-        String curriculum,
+        @JsonProperty("curriculum")
+        JsonNode curriculum,
 
         @NotNull(message = "isDraft is required")
         Boolean isDraft
