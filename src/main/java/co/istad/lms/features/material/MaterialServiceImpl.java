@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import static co.istad.lms.features.media.MediaServiceImpl.getContentType;
+import static co.istad.lms.utils.MediaUtil.getUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +66,7 @@ public class MaterialServiceImpl implements MaterialService {
         // Find material by alias
         Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
-        String url = getUrl(material.getFileName());
+        String url = getUrl(material.getFileName(),minioStorageService);
 
         // Return material detail
         return materialMapper.toMaterialDetailResponse(material, url);
@@ -87,7 +88,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map entity to DTO and return
         return materials.map(material -> {
-            String url = getUrl(material.getFileName());
+            String url = getUrl(material.getFileName(),minioStorageService);
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
@@ -120,7 +121,7 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        String url = getUrl(material.getFileName());
+        String url = getUrl(material.getFileName(),minioStorageService);
         return materialMapper.toMaterialDetailResponse(material, url);
     }
 
@@ -173,21 +174,9 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map to DTO and return
         return materials.map(material -> {
-            String url = getUrl(material.getFileName());
+            String url = getUrl(material.getFileName(),minioStorageService);
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
 
-    private String getUrl(String fileName) {
-        String url = "";
-        try {
-            String contentType = getContentType(fileName);
-            String folderName = contentType.split("/")[0];
-            String objectName = folderName + "/" + fileName;
-            url = minioStorageService.getPreSignedUrl(objectName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return url;
-    }
 }
