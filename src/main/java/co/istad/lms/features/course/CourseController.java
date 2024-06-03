@@ -106,12 +106,12 @@ public class CourseController {
 
     @DeleteMapping("/{alias}/instructor/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAnyAuthority('class:delete')")
+    @PreAuthorize("hasAnyAuthority('course:delete')")
     public void deleteInstructorFromCourse(
             @PathVariable String alias,
             @PathVariable String uuid) {
 
-        courseService.deleteCourseByAlias(uuid);
+        courseService.deleteInstructorFromCourse(alias,uuid);
 
     }
 }
