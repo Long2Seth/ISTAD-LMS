@@ -34,13 +34,11 @@ public class Student {
     @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "student")
-    private List<Payment> payments;
 
     @ManyToMany
     @JoinTable(
             name = "students_classes",
-            joinColumns = @JoinColumn(name = "student_id" , referencedColumnName = "id"),
+            joinColumns = @JoinColumn( referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "class_id" , referencedColumnName = "id")
     )
     private List<Class> classes;

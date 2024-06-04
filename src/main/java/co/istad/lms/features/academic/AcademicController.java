@@ -3,6 +3,7 @@ package co.istad.lms.features.academic;
 
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestDetail;
+import co.istad.lms.features.academic.dto.AcademicResponse;
 import co.istad.lms.features.academic.dto.AcademicResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +20,37 @@ public class AcademicController {
     private final AcademicService academicService;
 
     @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read')")
-    @GetMapping("/{uuid}")
-    public AcademicResponseDetail getAcademicByUuid(@PathVariable String uuid){
-        return academicService.getAcademicByUuid(uuid);
+    @GetMapping("/detail/{uuid}")
+    public AcademicResponseDetail getAcademicDetailByUuid(@PathVariable String uuid){
+        return academicService.getAcademicDetailByUuid(uuid);
     }
+
+
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read')")
+    @GetMapping("/{uuid}")
+    public AcademicResponse getAcademicByUuid(@PathVariable String uuid){
+        return academicService.getAcademicsByUuid(uuid);
+    }
+
+
 
     @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read')")
     @GetMapping
-    public Page<AcademicResponseDetail> getAcademics(
+    public Page<AcademicResponse> getAcademics(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize)
+    {
+        return academicService.getAcademicsDetail(pageNumber, pageSize);
+    }
+
+
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read')")
+    @GetMapping("/detail")
+    public Page<AcademicResponseDetail> getAcademicsDetail(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize)
     {
@@ -34,18 +58,26 @@ public class AcademicController {
     }
 
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control' )")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public AcademicResponseDetail createAcademic(@Valid @RequestBody AcademicRequest academicRequest){
+    public AcademicResponse createAcademic(@Valid @RequestBody AcademicRequest academicRequest){
         return academicService.createAcademic(academicRequest);
     }
+
+
+
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @PutMapping("/{uuid}")
     public AcademicResponseDetail updateAcademicByUuid(@PathVariable String uuid , @RequestBody AcademicRequestDetail academicRequest){
         return academicService.updateAcademicByUuid(uuid, academicRequest);
     }
+
+
+
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -55,11 +87,15 @@ public class AcademicController {
     }
 
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/disable")
     public AcademicResponseDetail updateDisableAcademicByUuid(@PathVariable String uuid){
         return academicService.updateDisableAcademicByUuid(uuid);
     }
+
+
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
@@ -69,9 +105,14 @@ public class AcademicController {
     }
 
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/block")
     public AcademicResponseDetail updateDeletedAcademicByUuid(@PathVariable String uuid){
         return academicService.updateDeletedAcademicByUuid(uuid);
     }
+
+
+
 }

@@ -2,6 +2,7 @@ package co.istad.lms.features.admin;
 
 import co.istad.lms.features.admin.dto.AdminRequest;
 import co.istad.lms.features.admin.dto.AdminRequestDetail;
+import co.istad.lms.features.admin.dto.AdminResponse;
 import co.istad.lms.features.admin.dto.AdminResponseDetail;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,24 +21,39 @@ public class AdminController {
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public AdminResponseDetail createAdmin(@Valid @RequestBody AdminRequest adminRequest) {
+    public AdminResponse createAdmin(@Valid @RequestBody AdminRequest adminRequest) {
         return adminService.createAdmin(adminRequest);
     }
 
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @GetMapping
+    @GetMapping("/detail")
     public Page<AdminResponseDetail> findAllDetail(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize) {
         return adminService.getAdminsDetail(pageNumber, pageSize);
     }
 
+    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @GetMapping
+    public Page<AdminResponse> findAll(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize) {
+        return adminService.getAdmins(pageNumber, pageSize);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control')")
+    @GetMapping("/detail/{uuid}")
+    public AdminResponseDetail findAdminDetailByUuid(@PathVariable String uuid) {
+        return adminService.getAdminDetailByUuid(uuid);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @GetMapping("/{uuid}")
-    public AdminResponseDetail findByUuid(@PathVariable String uuid) {
+    public AdminResponse findAdminByUuid(@PathVariable String uuid) {
         return adminService.getAdminByUuid(uuid);
     }
 

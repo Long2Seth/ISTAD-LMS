@@ -54,7 +54,7 @@ public class AcademicServiceImpl implements AcademicService {
 
 
     @Override
-    public AcademicResponseDetail createAcademic(AcademicRequest academicRequest) {
+    public AcademicResponse createAcademic(AcademicRequest academicRequest) {
 
         // validation user
         // check if user with email or username already exists in the database
@@ -100,7 +100,7 @@ public class AcademicServiceImpl implements AcademicService {
         // save information to academic
         Academic savedAcademic = academicRepository.save(academic);
 
-        return academicMapper.toResponseDetail(savedAcademic);
+        return academicMapper.toResponse(savedAcademic);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
     @Override
-    public AcademicResponseDetail getAcademicByUuid(String uuid) {
+    public AcademicResponseDetail getAcademicDetailByUuid(String uuid) {
 
         Academic academic = academicRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -187,6 +187,19 @@ public class AcademicServiceImpl implements AcademicService {
                 ));
 
         return academicMapper.toResponseDetail(academic);
+
+    }
+
+    @Override
+    public AcademicResponse getAcademicsByUuid(String uuid) {
+
+            Academic academic = academicRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            String.format("Academic with uuid = %s not found", uuid)
+                    ));
+
+            return academicMapper.toResponse(academic);
 
     }
 
@@ -256,6 +269,24 @@ public class AcademicServiceImpl implements AcademicService {
 
         Page<Academic> academicResponses = new PageImpl<>(academicList, pageRequest, academicList.size());
         return academicResponses.map(academicMapper::toResponseDetail);
+    }
+
+
+
+    @Override
+    public Page<AcademicResponse> getAcademicsDetail(int page, int limit) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Academic> academics = academicRepository.findAll(pageRequest);
+
+        List<Academic> academicList = academics.stream()
+                .filter(academic -> !academic.isDeleted())
+                .filter(academic -> !academic.isStatus())
+                .toList();
+
+        Page<Academic> academicResponses = new PageImpl<>(academicList, pageRequest, academicList.size());
+        return academicResponses.map(academicMapper::toResponse);
+
     }
 
 

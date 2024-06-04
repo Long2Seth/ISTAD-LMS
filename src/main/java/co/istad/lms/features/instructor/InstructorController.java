@@ -24,21 +24,34 @@ public class InstructorController {
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public InstructorResponseDetail createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
+    public InstructorResponse createInstructor(@Valid @RequestBody InstructorRequest instructorRequest){
         return instructorService.createInstructor(instructorRequest);
     }
 
     @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read','instructor:read')")
+    @GetMapping("/detail/{uuid}")
+    public InstructorResponseDetail getInstructorDetailByUuid(@PathVariable String uuid){
+        return instructorService.getInstructorDetailByUuid(uuid);
+    }
+
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read','instructor:read')")
     @GetMapping("/{uuid}")
-    public InstructorResponseDetail getInstructorByUuid(@PathVariable String uuid){
+    public InstructorResponse getInstructorByUuid(@PathVariable String uuid){
         return instructorService.getInstructorByUuid(uuid);
     }
+    
+
+
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PutMapping("/{uuid}")
     public InstructorResponseDetail updateInstructorByUuid(@PathVariable String uuid, @RequestBody InstructorRequestDetail instructorRequestDetail){
         return instructorService.updateInstructorByUuid(uuid, instructorRequestDetail);
     }
+
+
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
@@ -49,11 +62,15 @@ public class InstructorController {
     }
 
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/disable")
     public InstructorResponseDetail disableInstructorByUuid(@PathVariable String uuid){
         return instructorService.disableInstructorByUuid(uuid);
     }
+
+
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
@@ -63,6 +80,8 @@ public class InstructorController {
     }
 
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/block")
     public InstructorResponseDetail blockInstructorByUuid(@PathVariable String uuid){
@@ -70,12 +89,28 @@ public class InstructorController {
     }
 
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
-    @GetMapping
-    public Page<InstructorResponseDetail> getAllInstructor(
+    @GetMapping("/detail")
+    public Page<InstructorResponseDetail> getAllInstructorDetail(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize
     ){
-        return instructorService.getAllInstructor(pageNumber, pageSize);
+        return instructorService.getAllInstructorDetail(pageNumber, pageSize);
     }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
+    @GetMapping
+    public Page<InstructorResponse> getAllInstructor(
+            @RequestParam(defaultValue = "") String search,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ){
+        return instructorService.getAllInstructor(search, pageNumber, pageSize);
+    }
+
+
+
 }

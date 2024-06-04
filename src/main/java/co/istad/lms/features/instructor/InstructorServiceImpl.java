@@ -9,6 +9,7 @@ import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
+import co.istad.lms.features.instructor.dto.InstructorResponse;
 import co.istad.lms.features.instructor.dto.InstructorResponseDetail;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
@@ -53,7 +54,7 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     @Override
-    public InstructorResponseDetail createInstructor(InstructorRequest instructorRequest) {
+    public InstructorResponse createInstructor(InstructorRequest instructorRequest) {
 
         // validate if the user already exists
         // Check if the username or email already exists from database
@@ -92,7 +93,7 @@ public class InstructorServiceImpl implements InstructorService {
         instructor.setUser(user);
         Instructor savedInstructor = instructorRepository.save(instructor);
 
-        return instructorMapper.toResponseDetail(savedInstructor);
+        return instructorMapper.toResponse(savedInstructor);
     }
 
 
@@ -170,7 +171,7 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public InstructorResponseDetail getInstructorByUuid(String uuid) {
+    public InstructorResponseDetail getInstructorDetailByUuid(String uuid) {
 
         Instructor instructor = instructorRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -180,6 +181,24 @@ public class InstructorServiceImpl implements InstructorService {
 
         return instructorMapper.toResponseDetail(instructor);
     }
+
+
+    @Override
+    public InstructorResponse getInstructorByUuid(String uuid) {
+
+        Instructor instructor = instructorRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with uuid = %s not found", uuid)
+                ));
+
+        return instructorMapper.toResponse(instructor);
+    }
+
+
+
+
+
 
     @Override
     public void deleteInstructorByUuid(String uuid) {
@@ -231,7 +250,7 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public Page<InstructorResponseDetail> getAllInstructor(int page, int limit) {
+    public Page<InstructorResponseDetail> getAllInstructorDetail(int page, int limit) {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC,"id"));
         Page<Instructor> instructorsRequest = instructorRepository.findAll(pageRequest);
@@ -243,4 +262,27 @@ public class InstructorServiceImpl implements InstructorService {
 
         return filteredInstructors.map(instructorMapper::toResponseDetail);
     }
+
+
+
+
+
+    @Override
+    public Page<InstructorResponse> getAllInstructor(String search, int page, int limit) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC,"id"));
+        Page<Instructor> instructorsRequest = instructorRepository.findAll(pageRequest);
+        List<Instructor> instructors = instructorsRequest.stream()
+                .filter(instructor -> !instructor.isDeleted())
+                .filter(instructor -> !instructor.isStatus())
+                .toList();
+        Page<Instructor> filteredInstructors = new PageImpl<>(instructors, pageRequest, instructors.size());
+
+        return filteredInstructors.map(instructorMapper::toResponse);
+    }
+
+
+
+
+
 }

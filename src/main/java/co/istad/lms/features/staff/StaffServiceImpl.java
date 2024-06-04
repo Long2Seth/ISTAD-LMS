@@ -56,7 +56,7 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public StaffResponseDetail createStaff(StaffRequest staffRequest) {
+    public StaffResponse createStaff(StaffRequest staffRequest) {
 
 
         if (userRepository.existsByUsername(staffRequest.user().username())) {
@@ -94,7 +94,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setUser(user);
         staffRepository.save(staff);
 
-        return staffMapper.toResponseDetail(staff);
+        return staffMapper.toResponse(staff);
 
     }
 
@@ -159,7 +159,7 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public StaffResponseDetail getStaffByUuid(String uuid) {
+    public StaffResponseDetail getStaffDetailByUuid(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -169,6 +169,18 @@ public class StaffServiceImpl implements StaffService {
                 );
         return staffMapper.toResponseDetail(staff);
 
+    }
+
+    @Override
+    public StaffResponse getStaffByUuid(String uuid) {
+
+            Staff staff = staffRepository.findByUuid(uuid)
+                    .orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                    String.format("Staff with uuid = %s was not found.", uuid)
+                            )
+                    );
+            return staffMapper.toResponse(staff);
     }
 
     @Override
@@ -184,7 +196,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Page<StaffResponseDetail> getStaffs(int page, int limit) {
+    public Page<StaffResponseDetail> getStaffDetail(int page, int limit) {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Staff> staff = staffRepository.findAll(pageRequest);
@@ -194,6 +206,20 @@ public class StaffServiceImpl implements StaffService {
                 .toList();
 
         return new PageImpl<>(staffs, pageRequest, staffs.size()).map(staffMapper::toResponseDetail);
+
+    }
+
+    @Override
+    public Page<StaffResponse> getStaff( int page, int limit) {
+
+            PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+            Page<Staff> staff = staffRepository.findAll(pageRequest);
+            List<Staff> staffs = staff.stream()
+                    .filter(s -> !s.isDeleted())
+                    .filter(s -> !s.isStatus())
+                    .toList();
+
+            return new PageImpl<>(staffs, pageRequest, staffs.size()).map(staffMapper::toResponse);
 
     }
 

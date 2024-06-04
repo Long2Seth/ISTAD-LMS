@@ -6,6 +6,7 @@ import co.istad.lms.features.user.dto.UserResponse;
 public record StaffResponseDetail(
         String uuid,
         String position,
+        boolean status,
         UserResponse user
 ) {
 }

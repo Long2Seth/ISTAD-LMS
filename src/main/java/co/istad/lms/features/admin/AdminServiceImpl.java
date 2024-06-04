@@ -6,6 +6,7 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Admin;
 import co.istad.lms.features.admin.dto.AdminRequest;
 import co.istad.lms.features.admin.dto.AdminRequestDetail;
+import co.istad.lms.features.admin.dto.AdminResponse;
 import co.istad.lms.features.admin.dto.AdminResponseDetail;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequest;
@@ -59,7 +60,7 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public AdminResponseDetail createAdmin(@Valid AdminRequest adminRequest) {
+    public AdminResponse createAdmin(@Valid AdminRequest adminRequest) {
         // Check if the user already exists
         if (userRepository.existsByEmailOrUsername(adminRequest.user().email(), adminRequest.user().username())) {
             log.error("User with email = {} or username = {} already exists", adminRequest.user().email(), adminRequest.user().username());
@@ -100,7 +101,7 @@ public class AdminServiceImpl implements AdminService {
         // Set user to admin and save
         admin.setUser(user);
         Admin savedAdmin = adminRepository.save(admin);
-        return adminMapper.toAdminResponseDetail(savedAdmin);
+        return adminMapper.toAdminResponse(savedAdmin);
     }
 
 
@@ -168,20 +169,7 @@ User user = userRepository.findByUuid(admin.getUser().getUuid())
 
 
 
-//    @Override
-//    public Page<AdminResponseDetail> getAdmins(int page, int limit) {
-//        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
-//        Page<Admin> admins = adminRepository.findAll(pageRequest);
-//
-//        List<Admin> filteredAdmins = admins.stream()
-//                .filter(admin -> !admin.isDeleted())
-//                .filter(admin -> !admin.isStatus())
-//                .toList();
-//
-//        Page<Admin> filteredAdminsPage = new PageImpl<>(filteredAdmins, pageRequest, filteredAdmins.size());
-//
-//        return filteredAdminsPage.map(adminMapper::toAdminResponseDetail);
-//    }
+
 
     @Override
     public Page<AdminResponseDetail> getAdminsDetail(int page, int limit) {
@@ -194,10 +182,27 @@ User user = userRepository.findByUuid(admin.getUser().getUuid())
                 .toList();
         return new PageImpl<>(filteredAdmins , pageRequest , filteredAdmins.size())
                 .map(adminMapper::toAdminResponseDetail);
+
     }
 
     @Override
-    public AdminResponseDetail getAdminByUuid(String uuid) {
+    public Page<AdminResponse> getAdmins(int page, int limit) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Admin> admins = adminRepository.findAll(pageRequest);
+        List<Admin> filteredAdmins = admins.stream()
+                .filter(admin -> !admin.isDeleted())
+                .filter(admin -> !admin.isStatus())
+                .toList();
+        return new PageImpl<>(filteredAdmins , pageRequest , filteredAdmins.size())
+                .map(adminMapper::toAdminResponse);
+
+    }
+
+
+
+    @Override
+    public AdminResponseDetail getAdminDetailByUuid(String uuid) {
 
         // Find the admin by the uuid
         Admin admin = adminRepository.findByUuid(uuid)
@@ -206,6 +211,19 @@ User user = userRepository.findByUuid(admin.getUser().getUuid())
 
         return adminMapper.toAdminResponseDetail(admin);
     }
+
+    @Override
+    public AdminResponse getAdminByUuid(String uuid) {
+
+            // Find the admin by the uuid
+            Admin admin = adminRepository.findByUuid(uuid)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Admin with uuid = %s not found", uuid)));
+
+            return adminMapper.toAdminResponse(admin);
+
+    }
+
 
     @Override
     public void deleteAdminByUuid(String uuid) {

@@ -57,7 +57,7 @@ public class Class extends Auditable {
 
 
     @OneToMany
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "class_id")
     private Set<Student> students;
 
 

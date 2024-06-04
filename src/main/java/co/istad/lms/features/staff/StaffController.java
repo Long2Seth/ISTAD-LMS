@@ -23,25 +23,42 @@ public class StaffController {
     @PreAuthorize("hasAuthority('admin:control')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public StaffResponseDetail createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
+    public StaffResponse createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
         return staffService.createStaff(staffRequest);
     }
 
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
-    @GetMapping
-    public Page<StaffResponseDetail> getStaffs(
+    @GetMapping("/detail")
+    public Page<StaffResponseDetail> getStaffDetail(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize)
     {
-        return staffService.getStaffs(pageNumber, pageSize);
+        return staffService.getStaffDetail(pageNumber, pageSize);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
+    @GetMapping
+    public Page<StaffResponse> getStaffs(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize)
+    {
+        return staffService.getStaff( pageNumber, pageSize);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:read','staff:read')")
+    @GetMapping("/detail/{uuid}")
+    public StaffResponseDetail getStaffDetailByUuid(@PathVariable String uuid) {
+        return staffService.getStaffDetailByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read','staff:read')")
     @GetMapping("/{uuid}")
-    public StaffResponseDetail getStaffByUuid(@PathVariable String uuid) {
+    public StaffResponse getStaffByUuid(@PathVariable String uuid) {
         return staffService.getStaffByUuid(uuid);
     }
 

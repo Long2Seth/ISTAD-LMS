@@ -1,5 +1,7 @@
 package co.istad.lms.features.payment;
 
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.payment.dto.HistoryPaymentResponse;
 import co.istad.lms.features.payment.dto.PaymentRequest;
 import co.istad.lms.features.payment.dto.PaymentResponse;
 import jakarta.validation.Valid;
@@ -56,6 +58,15 @@ public class PaymentController {
     @DeleteMapping("/{uuid}")
     public void deletePayment(@PathVariable String uuid) {
         paymentService.deletePayment(uuid);
+    }
+
+    @GetMapping("/filter")
+    public Page<HistoryPaymentResponse> filterPayments(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize,
+            @RequestBody BaseSpecification.FilterDto filterDto
+    ) {
+        return paymentService.filterPayment(filterDto, pageNumber, pageSize);
     }
 
 

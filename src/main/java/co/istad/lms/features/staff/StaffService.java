@@ -8,15 +8,19 @@ import org.springframework.data.domain.Page;
 
 public interface StaffService {
 
-    StaffResponseDetail createStaff(StaffRequest staffRequest);
+    StaffResponse createStaff(StaffRequest staffRequest);
 
     StaffResponseDetail updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail);
 
-    StaffResponseDetail getStaffByUuid(String uuid);
+    StaffResponseDetail getStaffDetailByUuid(String uuid);
+
+    StaffResponse getStaffByUuid(String uuid);
 
     void deleteStaffByUuid(String uuid);
 
-    Page<StaffResponseDetail> getStaffs(int page, int limit);
+    Page<StaffResponseDetail> getStaffDetail(int page, int limit);
+
+    Page<StaffResponse> getStaff(int page, int limit);
 
     StaffResponseDetail disableByUuid(String uuid);
 

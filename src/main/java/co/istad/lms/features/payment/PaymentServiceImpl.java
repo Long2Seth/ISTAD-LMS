@@ -1,11 +1,11 @@
 package co.istad.lms.features.payment;
 
 
+import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Payment;
-import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.payment.dto.HistoryPaymentResponse;
 import co.istad.lms.features.payment.dto.PaymentRequest;
 import co.istad.lms.features.payment.dto.PaymentResponse;
-import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.mapper.PaymentMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,18 +27,18 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     private final PaymentRepository paymentRepository;
-    private final StudentRepository studentRepository;
     private final PaymentMapper paymentMapper;
+    private final BaseSpecification<Payment> baseSpecification;
 
     @Override
     public PaymentResponse createPayment(@Valid PaymentRequest paymentRequest) {
 
         //
-//        Student student = studentRepository.findByUuid(paymentRequest.)
-//                .orElseThrow(
-//                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-//                                String.format("Student with uuid = %s have been not found", paymentRequest.studentUuid()))
-//                );
+        //        Student student = studentRepository.findByUuid(paymentRequest.)
+        //                .orElseThrow(
+        //                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+        //                                String.format("Student with uuid = %s have been not found", paymentRequest.studentUuid()))
+        //                );
 
         Payment payment = paymentMapper.toPayment(paymentRequest);
         payment.setUuid(UUID.randomUUID().toString());
@@ -64,7 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findByUuid(uuid)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String .format("Payment with uuid = %s have been not found", uuid)));
+                                String.format("Payment with uuid = %s have been not found", uuid)));
         // return payment that found
         return paymentMapper.toPaymentResponse(payment);
     }
@@ -103,8 +104,24 @@ public class PaymentServiceImpl implements PaymentService {
                                 String.format("Payment with uuid = %s have been not found", uuid))
                 );
         paymentRepository.delete(payment);
-        
+
         paymentMapper.toPaymentResponse(payment);
+
+    }
+
+
+    @Override
+    public Page<HistoryPaymentResponse> filterPayment(BaseSpecification.FilterDto filterDto, int page, int size) {
+
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        Specification<Payment> specification = baseSpecification.filter(filterDto);
+
+        Page<Payment> payments = paymentRepository.findAll(specification, pageRequest);
+
+        return payments.map(paymentMapper::toHistoryPaymentResponse);
 
     }
 }
