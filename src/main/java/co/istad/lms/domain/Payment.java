@@ -26,56 +26,59 @@ public class Payment extends Auditable {
     @NotBlank(message = "UUID is required")
     private String uuid;
 
+
     @Column(nullable = false)
-    @NotNull(message = "Paid amount is required")
-    @Positive(message = "Paid amount must be positive")
+    private String studentName;
+
+
+    private String studentProfile;
+
+
+    @Column(nullable = false)
+    private String gender;
+
+
+    @Column(nullable = false)
+    private Double balanceDue;
+
+
+    @Column(nullable = false)
     private Double paidAmount;
 
-    @Column(nullable = false)
-    @NotNull(message = "Payment date is required")
-    private LocalDate paymentDate;
 
     @Column(nullable = false)
-    @NotNull(message = "Discount is required")
-    @PositiveOrZero(message = "Discount cannot be negative")
+    private LocalDate paidDate;
+
+
+    @Column(nullable = false)
     private Double discount;
 
-    @Column(nullable = false)
-    @NotNull(message = "Due amount is required")
-    @PositiveOrZero(message = "Due amount cannot be negative")
-    private Double dueAmount;
 
     @Column(nullable = false)
-    @NotNull(message = "Total amount is required")
-    @Positive(message = "Total amount must be positive")
-    private Double totalAmount;
+    private Double originalPayment;
+
 
     @Column(nullable = false)
-    @NotNull(message = "Year is required")
-    @Min(value = 2000, message = "Year must be after 2000")
-    @Max(value = 2100, message = "Year must be before 2100")
-    private Integer year;
+    private Double totalPayment;
 
-    @Column(nullable = false)
-    @NotNull(message = "Semester is required")
-    @Min(value = 1, message = "Semester must be at least 1")
-    @Max(value = 2, message = "Semester can be at most 2")
-    private Integer semester;
+
+    private Double courseFee;
+
+
+    private String paymentMethod;
+
 
     @Column(columnDefinition = "TEXT")
     private String remark;
 
+
     @Column(nullable = false)
-    @NotNull(message = "Status is required")
     private Boolean status;
 
-    @Column(nullable = false)
-    @NotNull(message = "IsDeleted flag is required")
-    private Boolean isDeleted;
 
     @ManyToOne
-    @NotNull(message = "Student is required")
     private Student student;
+
 
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
     private List<Receipt> receipt;

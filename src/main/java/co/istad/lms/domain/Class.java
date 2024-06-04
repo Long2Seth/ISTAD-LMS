@@ -58,7 +58,7 @@ public class Class extends Auditable {
     private Generation generation;
 
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "classes")
     private Set<Student> students;
 
 

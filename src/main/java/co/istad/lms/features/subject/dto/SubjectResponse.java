@@ -7,7 +7,8 @@ public record SubjectResponse(
         Integer practice,
         Integer internship,
         Integer theory,
-        Integer duration
+        Integer duration,
+        String logo
 
 
 ) {
