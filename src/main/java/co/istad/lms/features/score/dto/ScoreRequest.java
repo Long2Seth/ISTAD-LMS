@@ -14,8 +14,8 @@ public record ScoreRequest(
         Double miniProjectScore,
         Double assignmentScore,
 
-        @NotBlank(message = "Student alias is required")
-        String studentAlias,
+        @NotBlank(message = "Student uuid is required")
+        String studentUuid,
 
         @NotBlank(message = "Course alias is required")
         String courseAlias

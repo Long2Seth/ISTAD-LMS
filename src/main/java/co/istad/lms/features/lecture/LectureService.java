@@ -32,13 +32,13 @@ public interface LectureService {
     /**
      * Retrieves a paginated list of all lectures.
      *
-     * @param page is the current page number to retrieve
-     * @param size is the size of record per page to retrieve
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the pageSize of record per pageNumber to retrieve
      * @return {@link Page<LectureDetailResponse>}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    Page<LectureDetailResponse> getAllLectures(int page, int size);
+    Page<LectureDetailResponse> getAllLectures(int pageNumber, int pageSize);
 
     /**
      * Updates an existing lecture by its alias.
@@ -83,12 +83,12 @@ public interface LectureService {
      * Filters lecture based on the specified criteria and retrieves a paginated list of results.
      *
      * @param filterDto is the request object use for filter by any column
-     * @param page      is the current page number
-     * @param size      size of record per page to retrieve
+     * @param pageNumber      is the current pageNumber number
+     * @param pageSize      pageSize of record per pageNumber to retrieve
      * @return {@link Page<LectureDetailResponse>}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    Page<LectureDetailResponse> filterLectures(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<LectureDetailResponse> filterLectures(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 
 }

@@ -42,11 +42,11 @@ public class ShiftController {
     @PreAuthorize("hasAnyAuthority('shift:read')")
     public Page<ShiftDetailResponse> getAllShifts(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return shiftService.getAllShifts(page, size);
+        return shiftService.getAllShifts(pageNumber, pageSize);
 
     }
 
@@ -90,10 +90,10 @@ public class ShiftController {
     public Page<ShiftDetailResponse> filterShifts(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return shiftService.filterShifts(filterDto, page, size);
+        return shiftService.filterShifts(filterDto, pageNumber, pageSize);
     }
 }

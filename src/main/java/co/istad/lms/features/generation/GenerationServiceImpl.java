@@ -56,14 +56,14 @@ public class GenerationServiceImpl implements GenerationService{
     }
 
     @Override
-    public Page<GenerationDetailResponse> getAllGenerations(int page, int size) {
+    public Page<GenerationDetailResponse> getAllGenerations(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
         //create pagination
 
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //get all generation from database
         Page<Generation> generations = generationRepository.findAll(pageRequest);
@@ -142,13 +142,13 @@ public class GenerationServiceImpl implements GenerationService{
     }
 
     @Override
-    public Page<GenerationDetailResponse> filterGenerations(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<GenerationDetailResponse> filterGenerations(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Generation entities based on the criteria provided
         Specification<Generation> specification = baseSpecification.filter(filterDto);

@@ -71,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
             course.setInstructor(instructor);
         }
         //set class to course
-        course.setAClass(aClass);
+        course.setOneClass(aClass);
 
         //set subject to course
         course.setSubject(subject);
@@ -89,18 +89,19 @@ public class CourseServiceImpl implements CourseService {
         //validate course from DTO
         Course course = courseRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found", alias)));
 
+        System.out.println("class Alias = "+course.getOneClass().getGeneration());
         //map to dto and return
         return courseMapper.toCourseDetailResponse(course);
     }
 
     @Override
-    public Page<CourseDetailResponse> getAllCourses(int page, int size) {
+    public Page<CourseDetailResponse> getAllCourses(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all courses in database
         Page<Course> courses = courseRepository.findAll(pageRequest);
@@ -176,13 +177,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Page<CourseDetailResponse> filterCourses(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<CourseDetailResponse> filterCourses(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering course entities based on the criteria provided
         Specification<Course> specification = baseSpecification.filter(filterDto);

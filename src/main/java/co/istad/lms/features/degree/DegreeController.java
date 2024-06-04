@@ -42,11 +42,11 @@ public class DegreeController {
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<DegreeDetailResponse> getAllDegrees(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return degreeService.getAllDegrees(page, size);
+        return degreeService.getAllDegrees(pageNumber, pageSize);
     }
 
 
@@ -88,11 +88,11 @@ public class DegreeController {
     public Page<DegreeDetailResponse> filterDegrees(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return degreeService.filterDegrees(filterDto, page, size);
+        return degreeService.filterDegrees(filterDto, pageNumber, pageSize);
     }
 
 }

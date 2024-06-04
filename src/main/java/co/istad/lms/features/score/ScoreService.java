@@ -39,13 +39,13 @@ public interface ScoreService {
     /**
      * Retrieves a paginated list of all scores
      *
-     * @param page is the current page number to retrieve
-     * @param size is the size of record per page to retrieve
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the pageSize of record per pageNumber to retrieve
      * @return {@link Page<ScoreDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ScoreDetailResponse> getAllScores(int page, int size);
+    Page<ScoreDetailResponse> getAllScores(int pageNumber, int pageSize);
 
     /**
      * Updates an existing score by its alias.
@@ -71,12 +71,12 @@ public interface ScoreService {
      * Filters degree based on the specified criteria and retrieves a paginated list of results.
      *
      * @param filterDto is the request object use for filter by any column
-     * @param page      is the current page number
-     * @param size      size of record per page to retrieve
+     * @param pageNumber      is the current pageNumber number
+     * @param pageSize      pageSize of record per pageNumber to retrieve
      * @return {@link Page<ScoreDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ScoreDetailResponse> filterScores(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<ScoreDetailResponse> filterScores(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 
 }

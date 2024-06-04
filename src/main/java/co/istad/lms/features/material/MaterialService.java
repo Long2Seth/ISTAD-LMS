@@ -47,7 +47,7 @@ public interface MaterialService {
      */
     MaterialDetailResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest);
 
-    Page<MaterialDetailResponse> getAllMaterials(int page, int size);
+    Page<MaterialDetailResponse> getAllMaterials(int pageNumber, int pageSize);
 
 
     /**
@@ -82,12 +82,12 @@ public interface MaterialService {
      * Filters material based on the specified criteria and retrieves a paginated list of results.
      *
      * @param filterDto is the request object use for filter by any column
-     * @param page      is the current page number
-     * @param size      size of record per page to retrieve
+     * @param pageNumber      is the current pageNumber number
+     * @param pageSize      pageSize of record per pageNumber to retrieve
      * @return {@link Page<MaterialDetailResponse>}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    Page<MaterialDetailResponse> filterMaterials(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<MaterialDetailResponse> filterMaterials(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 }
 

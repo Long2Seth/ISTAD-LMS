@@ -35,13 +35,13 @@ public interface AdmissionService {
     /**
      * Retrieves a paginated list of all student admissions.
      *
-     * @param page is the page number to retrieve
-     * @param size is the size of the page to retrieve
+     * @param pageNumber is the pageNumber number to retrieve
+     * @param pageSize is the pageSize of the pageNumber to retrieve
      * @return * @return {@link Page<AdmissionResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<AdmissionDetailResponse> getAllAdmissions(int page, int size);
+    Page<AdmissionDetailResponse> getAllAdmissions(int pageNumber, int pageSize);
 
     /**
      * Updates an existing admission.
@@ -92,11 +92,11 @@ public interface AdmissionService {
      * Filters admissions based on the provided criteria.
      *
      * @param filterDto is the object use for filter any column, any operation
-     * @param page      is the page number of current to retrieve
-     * @param size      is the size of record per page
+     * @param pageNumber      is the pageNumber number of current to retrieve
+     * @param pageSize      is the pageSize of record per pageNumber
      * @return {@link  Page<AdmissionDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 }

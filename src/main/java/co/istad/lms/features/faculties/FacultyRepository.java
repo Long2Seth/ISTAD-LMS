@@ -11,4 +11,8 @@ public interface FacultyRepository extends JpaRepository<Faculty,Long>, JpaSpeci
     Boolean existsByAlias(String alias);
 
     Optional<Faculty> findByAlias(String alias);
+
+    Optional<Faculty> findByAliasAndIsDeletedFalseAndIsDraftFalse(String alias);
+
+    Optional<Faculty> findByAliasAndIsDeletedFalse(String alias);
 }

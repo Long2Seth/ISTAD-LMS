@@ -57,13 +57,13 @@ public class DegreeServiceImpl implements DegreeService {
 
 
     @Override
-    public Page<DegreeDetailResponse> getAllDegrees(int page, int size) {
+    public Page<DegreeDetailResponse> getAllDegrees(int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all degrees in database
         Page<Degree> degrees = degreeRepository.findAll(pageRequest);
@@ -142,13 +142,13 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     @Override
-    public Page<DegreeDetailResponse> filterDegrees(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<DegreeDetailResponse> filterDegrees(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering Degree entities based on the criteria provided
         Specification<Degree> specification = baseSpecification.filter(filterDto);

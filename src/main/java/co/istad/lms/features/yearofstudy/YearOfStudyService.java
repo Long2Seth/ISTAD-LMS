@@ -35,13 +35,13 @@ public interface YearOfStudyService {
     /**
      * Retrieves a paginated list of all yearOfStudy.
      *
-     * @param page is the current page number to retrieve
-     * @param size is the number record per page to retrieve
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the number record per pageNumber to retrieve
      * @return {@link Page<YearOfStudyDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<YearOfStudyDetailResponse> getAllYearOfStudies(int page, int size);
+    Page<YearOfStudyDetailResponse> getAllYearOfStudies(int pageNumber, int pageSize);
 
     /**
      * Updates an existing yearOfStudy by its uuid.
@@ -68,13 +68,13 @@ public interface YearOfStudyService {
      * filter yearOfStudy by any field
      *
      * @param filterDto is object for request to filter
-     * @param page is the current page number to retrieve
-     * @param size is the number record per page to retrieve
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the number record per pageNumber to retrieve
      * @return {@link Page<YearOfStudyDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<YearOfStudyDetailResponse> filterYearOfStudy(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<YearOfStudyDetailResponse> filterYearOfStudy(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 
 
     /**

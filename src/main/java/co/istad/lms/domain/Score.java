@@ -2,6 +2,7 @@ package co.istad.lms.domain;
 
 
 import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,9 +37,13 @@ public class Score extends Auditable {
 
     private Double assignmentScore;
 
-    private String studentAlias;
+    @ManyToOne
+    @JoinColumn(name="student_id")
+    private Student student;
 
-    private String courseAlias;
+    @ManyToOne
+    @JoinColumn(name="course_id")
+    private Course course;
 
     @Column(nullable = false)
     private Boolean isDeleted ;

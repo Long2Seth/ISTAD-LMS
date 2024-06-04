@@ -40,13 +40,13 @@ public interface StudyProgramService {
     /**
      * Retrieves a paginated list of all studyProgram.
      *
-     * @param page is the current page number to retrieve
-     * @param size is the number record per page to retrieve
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the number record per pageNumber to retrieve
      * @return {@link Page<StudyProgramDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<StudyProgramDetailResponse> getAllStudyPrograms(int page, int size);
+    Page<StudyProgramDetailResponse> getAllStudyPrograms(int pageNumber, int pageSize);
 
     /**
      * Updates an existing study program by its alias.
@@ -91,11 +91,11 @@ public interface StudyProgramService {
      * filter studyProgram by any field
      *
      * @param filterDto is object for request to filter
-     * @param page is the current page number to retrieve
-     * @param size is the number record per page to retrieve
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the number record per pageNumber to retrieve
      * @return {@link Page<StudyProgramDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 }

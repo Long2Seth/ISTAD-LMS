@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,6 +30,8 @@ public class Course extends Auditable {
     @Column(nullable = false)
     private Integer status;
 
+    private LocalDate classStart;
+
     @Column(nullable = false)
     private Boolean isDeleted;
 
@@ -41,7 +45,7 @@ public class Course extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "class_id")
-    private Class aClass;
+    private Class oneClass;
 
 
 }

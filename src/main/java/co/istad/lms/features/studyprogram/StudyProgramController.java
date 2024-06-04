@@ -46,11 +46,11 @@ public class StudyProgramController {
     @PreAuthorize("hasAnyAuthority('admin:control')")
     public Page<StudyProgramDetailResponse> getAllStudyPrograms(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return studyProgramService.getAllStudyPrograms(page, size);
+        return studyProgramService.getAllStudyPrograms(pageNumber, pageSize);
 
     }
 
@@ -94,11 +94,11 @@ public class StudyProgramController {
     public Page<StudyProgramDetailResponse> filterStudyPrograms(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return studyProgramService.filterStudyPrograms(filterDto, page, size);
+        return studyProgramService.filterStudyPrograms(filterDto, pageNumber, pageSize);
     }
 
 }

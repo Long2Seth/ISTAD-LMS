@@ -6,6 +6,7 @@ import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.student.dto.StudentResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 public record ClassDetailResponse(

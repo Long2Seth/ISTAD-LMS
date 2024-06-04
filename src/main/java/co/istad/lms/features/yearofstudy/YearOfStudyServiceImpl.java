@@ -81,13 +81,13 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     }
 
     @Override
-    public Page<YearOfStudyDetailResponse> getAllYearOfStudies(int page, int size) {
+    public Page<YearOfStudyDetailResponse> getAllYearOfStudies(int pageNumber, int pageSize) {
 
         //crate sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all yearOfStudy in database
         Page<YearOfStudy> yearOfStudies = yearOfStudyRepository.findAll(pageRequest);
@@ -123,13 +123,13 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     }
 
     @Override
-    public Page<YearOfStudyDetailResponse> filterYearOfStudy(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<YearOfStudyDetailResponse> filterYearOfStudy(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering YearOfStudy entities based on the criteria provided
         Specification<YearOfStudy> specification = baseSpecification.filter(filterDto);

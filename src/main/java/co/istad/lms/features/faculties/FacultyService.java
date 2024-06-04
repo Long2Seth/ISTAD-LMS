@@ -40,14 +40,14 @@ public interface FacultyService {
     /**
      * Retrieves a paginated list of all faculties.
      *
-     * @param page is the page number to retrieve
-     * @param size is the size of the page to retrieve
+     * @param pageNumber is the pageNumber number to retrieve
+     * @param pageSize is the pageSize of the pageNumber to retrieve
      * @return * @return {@link Page<FacultyDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
 
-    Page<FacultyDetailResponse> getAllFaculties(int page, int size);
+    Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize);
 
     /**
      * Update faculty by alias
@@ -91,14 +91,33 @@ public interface FacultyService {
 
 
     /**
+     * public faculty by alias
+     *
+     * @param alias is the unique name of faculty
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicFacultyByAlias(String alias);
+
+    /**
+     * private faculty by alias
+     *
+     * @param alias is the unique name of faculty
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void privateFacultyByAlias(String alias);
+
+
+    /**
      * filter faculty by dynamic field and operation
      *
      * @param filterDto is the object that use for filter
-     * @param page      is the current page request
-     * @param size      is the size of record per page
+     * @param pageNumber      is the current pageNumber request
+     * @param pageSize      is the pageSize of record per pageNumber
      * @return {@link Page<FacultyDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<FacultyDetailResponse> filterFaculties(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<FacultyDetailResponse> filterFaculties(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 }

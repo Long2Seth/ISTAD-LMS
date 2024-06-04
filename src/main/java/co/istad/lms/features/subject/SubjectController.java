@@ -40,11 +40,11 @@ public class SubjectController {
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<SubjectDetailResponse> getAllSubjects(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return subjectService.getAllSubject(page, size);
+        return subjectService.getAllSubject(pageNumber, pageSize);
     }
 
     @PutMapping("/{alias}")
@@ -86,11 +86,11 @@ public class SubjectController {
     public Page<SubjectDetailResponse> filterSubjects(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return subjectService.filterSubject(filterDto, page, size);
+        return subjectService.filterSubject(filterDto, pageNumber, pageSize);
     }
 
 }

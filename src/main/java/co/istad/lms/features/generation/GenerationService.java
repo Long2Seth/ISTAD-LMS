@@ -38,13 +38,13 @@ public interface GenerationService {
     /**
      * Retrieves a paginated list of all generations.
      *
-     * @param page is the page number to retrieve
-     * @param size is the size of the page to retrieve
+     * @param pageNumber is the pageNumber number to retrieve
+     * @param pageSize is the pageSize of the pageNumber to retrieve
      * @return  * @return {@link Page<GenerationDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<GenerationDetailResponse> getAllGenerations(int page, int size);
+    Page<GenerationDetailResponse> getAllGenerations(int pageNumber, int pageSize);
 
     /**
      * Update generation by alias
@@ -87,11 +87,11 @@ public interface GenerationService {
      * filter generation by dynamic field and operation
      *
      * @param filterDto is the object that use for filter
-     * @param page      is the current page request
-     * @param size      is the size of record per page
+     * @param pageNumber      is the current pageNumber request
+     * @param pageSize      is the pageSize of record per pageNumber
      * @return {@link Page<GenerationDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<GenerationDetailResponse> filterGenerations(BaseSpecification.FilterDto filterDto, int page, int size);
+    Page<GenerationDetailResponse> filterGenerations(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 }

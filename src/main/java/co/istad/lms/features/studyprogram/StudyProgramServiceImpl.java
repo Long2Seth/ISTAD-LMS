@@ -88,13 +88,13 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     }
 
     @Override
-    public Page<StudyProgramDetailResponse> getAllStudyPrograms(int page, int size) {
+    public Page<StudyProgramDetailResponse> getAllStudyPrograms(int pageNumber, int pageSize) {
 
         //crate sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all studyProgram in database
         Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(pageRequest);
@@ -176,13 +176,13 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     }
 
     @Override
-    public Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int page, int size) {
+    public Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
-        //create pagination with current page and size of page
-        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //create a dynamic query specification for filtering YearOfStudy entities based on the criteria provided
         Specification<StudyProgram> specification = baseSpecification.filter(filterDto);

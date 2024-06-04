@@ -11,6 +11,6 @@ public record CourseDetailResponse(
         Boolean isDeleted,
         SubjectResponse subject,
         InstructorResponse instructor,
-        ClassResponse aClass
+        ClassResponse oneClass
 ) {
 }

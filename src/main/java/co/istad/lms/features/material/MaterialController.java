@@ -40,11 +40,11 @@ public class MaterialController {
     @PreAuthorize("hasAnyAuthority('material:read')")
     public Page<MaterialDetailResponse> getAllMaterials(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return materialService.getAllMaterials(page, size);
+        return materialService.getAllMaterials(pageNumber, pageSize);
     }
 
 
@@ -86,11 +86,11 @@ public class MaterialController {
     public Page<MaterialDetailResponse> filterMaterials(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return materialService.filterMaterials(filterDto, page, size);
+        return materialService.filterMaterials(filterDto, pageNumber, pageSize);
     }
 
 

@@ -46,11 +46,11 @@ public class FacultyController {
     @GetMapping
     public Page<FacultyDetailResponse> getAllFaculties(
 
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return facultyService.getAllFaculties(page, size);
+        return facultyService.getAllFaculties(pageNumber, pageSize);
 
     }
 
@@ -88,17 +88,33 @@ public class FacultyController {
         facultyService.disableFacultyByAlias(alias);
     }
 
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void publicFaculty(@PathVariable String alias) {
+
+        facultyService.publicFacultyByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/private")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void privateFaculty(@PathVariable String alias) {
+
+        facultyService.privateFacultyByAlias(alias);
+    }
+
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<FacultyDetailResponse> filterFaculties(
 
             @RequestBody BaseSpecification.FilterDto filterDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return facultyService.filterFaculties(filterDto, page, size);
+        return facultyService.filterFaculties(filterDto, pageNumber, pageSize);
     }
 
 }
