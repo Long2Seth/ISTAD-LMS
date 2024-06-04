@@ -58,8 +58,7 @@ public class Class extends Auditable {
     private Generation generation;
 
 
-    @OneToMany
-    @JoinColumn(name = "class_id")
+    @ManyToMany(mappedBy = "classes")
     private Set<Student> students;
 
 
