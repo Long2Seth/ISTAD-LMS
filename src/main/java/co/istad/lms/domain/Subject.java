@@ -37,7 +37,13 @@ public class Subject extends Auditable {
     private String logo;
 
     @Column(nullable = false)
-    private Integer credit;
+    private Integer theory;
+
+    @Column(nullable = false)
+    private Integer practice;
+
+    @Column(nullable = false)
+    private Integer internship;
 
     @Column(nullable = false)
     private Integer duration;

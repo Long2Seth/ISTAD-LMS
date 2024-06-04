@@ -91,6 +91,25 @@ public interface FacultyService {
 
 
     /**
+     * public faculty by alias
+     *
+     * @param alias is the unique name of faculty
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicFacultyByAlias(String alias);
+
+    /**
+     * private faculty by alias
+     *
+     * @param alias is the unique name of faculty
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void privateFacultyByAlias(String alias);
+
+
+    /**
      * filter faculty by dynamic field and operation
      *
      * @param filterDto is the object that use for filter

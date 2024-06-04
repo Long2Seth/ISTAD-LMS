@@ -162,6 +162,35 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
+    public void publicFacultyByAlias(String alias) {
+
+        //validate from dto by alias
+        Faculty faculty =
+                facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        faculty.setIsDraft(false);
+
+        //save to database
+        facultyRepository.save(faculty);
+    }
+
+    @Override
+    public void privateFacultyByAlias(String alias) {
+
+
+        //validate from dto by alias
+        Faculty faculty =
+                facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found ! ", alias)));
+
+        //set isDraft to false(private)
+        faculty.setIsDraft(true);
+
+        //save to database
+        facultyRepository.save(faculty);
+    }
+
+    @Override
     public Page<FacultyDetailResponse> filterFaculties(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order

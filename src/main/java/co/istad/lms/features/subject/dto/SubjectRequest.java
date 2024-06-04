@@ -2,6 +2,7 @@ package co.istad.lms.features.subject.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,8 +22,13 @@ public record SubjectRequest(
         String description,
         String subjectLogo,
 
-        @NotNull(message = "credit is require")
-        Integer credit,
+        @NotNull(message = "theory is require")
+        Integer theory,
+
+        @NotNull(message = "practice is require")
+        Integer practice,
+        @NotNull(message = "internship is require")
+        Integer internship,
 
         @NotNull(message = "duration is require")
         Integer duration,

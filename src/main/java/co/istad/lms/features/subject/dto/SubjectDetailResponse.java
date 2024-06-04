@@ -9,7 +9,9 @@ public record SubjectDetailResponse(
         String title,
         String description,
         String logo,
-        Integer credit,
+        Integer practice,
+        Integer internship,
+        Integer theory,
         Integer duration,
 
         JsonNode curriculum,

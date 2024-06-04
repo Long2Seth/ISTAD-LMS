@@ -88,6 +88,22 @@ public class FacultyController {
         facultyService.disableFacultyByAlias(alias);
     }
 
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void publicFaculty(@PathVariable String alias) {
+
+        facultyService.publicFacultyByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/private")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void privateFaculty(@PathVariable String alias) {
+
+        facultyService.privateFacultyByAlias(alias);
+    }
+
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ public class Class extends Auditable {
 
     @Column(nullable = false)
     private String className;
+
 
     @Column(columnDefinition = "TEXT")
     private String description;

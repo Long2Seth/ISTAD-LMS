@@ -45,10 +45,9 @@ public class BaseSpecification<T> {
                         predicates.add(createPredicate(root, criteriaBuilder, specs));
                     }
                 } catch (ResponseStatusException e) {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "filter has been not found " +
-                            "the result");
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "filter has been not found, check operator and other information");
                 } catch (Exception e) {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while processing the request");
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "An error occurred while processing the request");
                 }
             }
             // Combine predicates based on the global operator (AND/OR)
@@ -60,6 +59,7 @@ public class BaseSpecification<T> {
 
     // Method to check if a column exists in the entity class
     private boolean isValidColumn(Class<?> entityClass, String column) {
+
         for (Field field : entityClass.getDeclaredFields()) {
             if (field.getName().equals(column)) {
                 return true;
@@ -70,6 +70,7 @@ public class BaseSpecification<T> {
 
     // Method to create predicate based on specified criteria
     private Predicate createPredicate(From<?, ?> from, CriteriaBuilder criteriaBuilder, SpecsDto specs) {
+
         try {
             // Validate if the operation is valid
             if (!isValidOperation(specs.getOperation())) {
@@ -197,6 +198,7 @@ public class BaseSpecification<T> {
 
     // Method to create a LESS_THAN predicate based on the field type
     private Predicate createLessThanPredicate(From<?, ?> from, CriteriaBuilder criteriaBuilder, SpecsDto specs, Class<?> fieldType) {
+
         if (fieldType == Integer.class || fieldType == int.class) {
             return criteriaBuilder.lessThan(from.get(specs.getColumn()), Integer.parseInt(specs.getValue()));
 
@@ -219,6 +221,7 @@ public class BaseSpecification<T> {
 
     // Method to create a BETWEEN predicate based on the field type
     private Predicate createBetweenPredicate(From<?, ?> from, CriteriaBuilder criteriaBuilder, SpecsDto specs, Class<?> fieldType) {
+
         String[] split = specs.getValue().split(",");
         if (fieldType == Integer.class || fieldType == int.class) {
             return criteriaBuilder.between(from.get(specs.getColumn()), Integer.parseInt(split[0]), Integer.parseInt(split[1]));
@@ -317,6 +320,7 @@ public class BaseSpecification<T> {
     @Getter
     @Setter
     public static class SpecsDto {
+
         private String column;
         private String value;
         private String joinTable;
@@ -332,6 +336,7 @@ public class BaseSpecification<T> {
     @Getter
     @Setter
     public static class FilterDto {
+
         private List<SpecsDto> specsDto;
         private GlobalOperator globalOperator;
 
