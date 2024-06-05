@@ -26,6 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUuid(String uuid);
 
+    Optional<User> findByUsername(String username);
+
 
     @Query("SELECT u FROM User u WHERE u.id IN (SELECT a.user.id FROM Admin a)")
     Page<User> findAllUsersWithAdminRole(Pageable pageable);

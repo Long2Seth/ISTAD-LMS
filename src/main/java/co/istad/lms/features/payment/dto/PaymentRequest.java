@@ -1,42 +1,44 @@
 package co.istad.lms.features.payment.dto;
 
-import jakarta.validation.constraints.*;
+import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.student.dto.StudentRequest;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.time.LocalDate;
 
 @Builder
 public record PaymentRequest(
+        @NotNull(message = "Student name be required")
+        String studentName,
 
-        @NotNull(message = "Paid amount is required")
+        @NotNull(message = "Payment full be required")
+        @Positive(message = "Payment full must be positive")
+        double originalPayment,
+
+
+        @NotNull(message = "Discount  be required")
+        @Positive(message = "Discount must be positive")
+        double discount,
+
+
+        @NotNull(message = "Paid amount be required")
         @Positive(message = "Paid amount must be positive")
         Double paidAmount,
 
-        @NotNull(message = "Payment date is required")
-        LocalDate paymentDate,
 
-        @NotNull(message = "Discount is required")
-        @PositiveOrZero(message = "Discount cannot be negative")
-        Double discount,
+        @NotNull(message = "Due date  be required")
+        LocalDate paidDate,
 
-        @NotNull(message = "Due amount is required")
-        @PositiveOrZero(message = "Due amount cannot be negative")
-        Double dueAmount,
 
-        @NotNull(message = "Total amount is required")
-        @Positive(message = "Total amount must be positive")
-        Double totalAmount,
 
-        @NotNull(message = "Year is required")
-        Integer year,
 
-        @NotNull(message = "Semester is required")
-        @Min(value = 1, message = "Semester must be at least 1")
-        @Max(value = 2, message = "Semester can be at most 2")
-        Integer semester,
+        @NotNull(message = "Payment method be required")
+        String paymentMethod,
 
-        String remark,
 
-        String studentUuid
+        String remarks
 ) {
 }

@@ -3,9 +3,13 @@ package co.istad.lms.features.payment;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Payment;
+import co.istad.lms.domain.User;
+import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.payment.dto.HistoryPaymentResponse;
 import co.istad.lms.features.payment.dto.PaymentRequest;
 import co.istad.lms.features.payment.dto.PaymentResponse;
+import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.mapper.PaymentMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,23 +33,42 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final BaseSpecification<Payment> baseSpecification;
+    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
 
     @Override
     public PaymentResponse createPayment(@Valid PaymentRequest paymentRequest) {
 
-        //
-        //        Student student = studentRepository.findByUuid(paymentRequest.)
-        //                .orElseThrow(
-        //                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-        //                                String.format("Student with uuid = %s have been not found", paymentRequest.studentUuid()))
-        //                );
 
-        Payment payment = paymentMapper.toPayment(paymentRequest);
+        User user = userRepository.findByUsername(paymentRequest.studentName())
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("User with username = %s have been not found", paymentRequest.studentName()))
+                );
+
+        // create new payment
+        Payment payment = new Payment();
+
         payment.setUuid(UUID.randomUUID().toString());
-        payment.setStatus(false);
-        payment.setIsDeleted(false);
-        paymentRepository.save(payment);
-        return paymentMapper.toPaymentResponse(payment);
+
+        payment.setStudentName(paymentRequest.studentName());
+        payment.setStudentProfile(user.getProfileImage());
+        payment.setGender(user.getGender());
+
+        payment.setOriginalPayment(paymentRequest.originalPayment());
+        payment.setDiscount(paymentRequest.discount());
+        payment.setPaidAmount(paymentRequest.paidAmount());
+        payment.setPaidDate(paymentRequest.paidDate());
+        payment.setPaymentMethod(paymentRequest.paymentMethod());
+        payment.setRemark(paymentRequest.remarks());
+
+        // logic
+        payment.setTotalPayment(paymentRequest.paidAmount());
+        payment.setCourseFee(paymentRequest.originalPayment() - (paymentRequest.originalPayment() * (paymentRequest.discount() / 100)));
+        payment.setBalanceDue(payment.getCourseFee() - payment.getTotalPayment());
+        payment.setStatus(Boolean.valueOf(payment.getBalanceDue() == 0 ? "Paired" : "Unpaid"));
+
+        return paymentMapper.toPaymentResponse(paymentRepository.save(payment));
     }
 
     @Override
@@ -81,14 +104,14 @@ public class PaymentServiceImpl implements PaymentService {
                 );
 
         // update payment
-        payment.setPaidAmount(paymentRequest.paidAmount());
-        payment.setPaymentDate(paymentRequest.paymentDate());
-        payment.setDiscount(paymentRequest.discount());
-        payment.setDueAmount(paymentRequest.dueAmount());
-        payment.setTotalAmount(paymentRequest.totalAmount());
-        payment.setYear(paymentRequest.year());
-        payment.setSemester(paymentRequest.semester());
-        payment.setRemark(paymentRequest.remark());
+//        payment.setPaidAmount(paymentRequest.paidAmount());
+//        payment.setPaymentDate(paymentRequest.paymentDate());
+//        payment.setDiscount(paymentRequest.discount());
+//        payment.setDueAmount(paymentRequest.dueAmount());
+//        payment.setTotalAmount(paymentRequest.totalAmount());
+//        payment.setYear(paymentRequest.year());
+//        payment.setSemester(paymentRequest.semester());
+//        payment.setRemark(paymentRequest.remark());
 
         // save payment
         paymentRepository.save(payment);
