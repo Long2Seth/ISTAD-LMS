@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserResponseDetail> getAllUsersDetail(int page, int limit) {
 
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<User> users = userRepository.findAll(pageRequest);
 
         List<User> filteredUsers = users.stream()
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponse> getAllUsersWithAdminRole(int page, int limit) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<User> users = userRepository.findAllUsersWithAdminRole(pageRequest);
         return users.map(userMapper::toUserResponse);
     }

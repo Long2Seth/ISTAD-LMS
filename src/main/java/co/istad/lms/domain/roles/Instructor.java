@@ -3,6 +3,7 @@ package co.istad.lms.domain.roles;
 
 
 
+import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "instructors")
 @Entity
-public class Instructor {
+public class Instructor extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

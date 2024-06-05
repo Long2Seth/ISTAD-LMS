@@ -111,8 +111,6 @@ public class ClassServiceImpl implements ClassService {
         //save to database
         classRepository.save(aClass);
 
-        //check student size
-        System.out.println("size of set student= "+(aClass.getStudents().size()));
     }
 
     @Override

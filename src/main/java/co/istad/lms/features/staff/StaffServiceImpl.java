@@ -198,7 +198,7 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Page<StaffResponseDetail> getStaffDetail(int page, int limit) {
 
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Staff> staff = staffRepository.findAll(pageRequest);
         List<Staff> staffs = staff.stream()
                 .filter(s -> !s.isDeleted())
@@ -212,7 +212,7 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Page<StaffResponse> getStaff( int page, int limit) {
 
-            PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+            PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
             Page<Staff> staff = staffRepository.findAll(pageRequest);
             List<Staff> staffs = staff.stream()
                     .filter(s -> !s.isDeleted())

@@ -73,7 +73,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Page<StudentResponseDetail> getStudents(int page, int limit) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Student> students = studentRepository.findAll(pageRequest);
         List<Student> filteredStudents = students.stream()
                 .filter(student -> !student.isDeleted())

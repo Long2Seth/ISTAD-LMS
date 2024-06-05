@@ -13,6 +13,8 @@ public interface PaymentService {
 
     Page<PaymentResponse> getPayments(int page, int limit);
 
+//    Page<PaymentResponse> getLatestPaymentsForAllStudents(int page, int limit);
+
     PaymentResponse getPaymentById(String uuid);
 
     PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest);

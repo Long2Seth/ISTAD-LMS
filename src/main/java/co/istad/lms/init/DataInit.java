@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class DataInit {
 
     private final AuthorityRepository authorityRepository;
-    private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final GraduationRepository graduationRepository;
