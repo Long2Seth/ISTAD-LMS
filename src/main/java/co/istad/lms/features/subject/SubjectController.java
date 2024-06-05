@@ -81,6 +81,22 @@ public class SubjectController {
         subjectService.disableSubjectByAlias(alias);
     }
 
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void publicSubject(@PathVariable String alias){
+
+        subjectService.publicSubjectByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/private")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void privateSubject(@PathVariable String alias){
+
+        subjectService.privateSubjectByAlias(alias);
+    }
+
     @GetMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<SubjectDetailResponse> filterSubjects(

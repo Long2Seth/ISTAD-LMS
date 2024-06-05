@@ -75,6 +75,22 @@ public class DegreeController {
         degreeService.enableDegreeByAlias(alias);
     }
 
+    @PutMapping("/{alias}/public")
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void publicDegree(@PathVariable String alias) {
+
+        degreeService.publicDegreeByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/private")
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void privateDegree(@PathVariable String alias) {
+
+        degreeService.privateDegreeByAlias(alias);
+    }
+
     @PutMapping("/{alias}/disable")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -18,6 +18,10 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpec
 
     Optional<Subject> findAllByAlias(String alias);
 
+    Optional<Subject> findByAliasAndIsDeletedFalseAndIsDraftFalse(String alias);
+
+    Optional<Subject> findByAliasAndIsDeletedFalse(String alias);
+
 
 }
 

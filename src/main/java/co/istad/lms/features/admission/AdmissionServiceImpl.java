@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -36,7 +37,20 @@ public class AdmissionServiceImpl implements AdmissionService {
     public void createAdmission(AdmissionRequest admissionRequest) {
 
         //map form DTO to entity
-        Admission admission=admissionMapper.fromAdmissionRequest(admissionRequest);
+        Admission admission = admissionMapper.fromAdmissionRequest(admissionRequest);
+
+        // Check if the status of admission is set to 1 (open)
+        if (admissionRequest.status() == 1) {
+
+            // Find all admissions that are open (status = 1)
+            Set<Admission> admissions = admissionRepository.findAllByStatus(1);
+
+            // Close all open admissions (set status to 2)
+            admissions.forEach(admissionMap -> admissionMap.setStatus(2));
+
+            // Batch save all updated admissions
+            admissionRepository.saveAll(admissions);
+        }
 
         //set uuid to admission
         admission.setUuid(UUID.randomUUID().toString());
@@ -44,7 +58,7 @@ public class AdmissionServiceImpl implements AdmissionService {
         admission.setIsDeleted(false);
 
         //save to database
-       admissionRepository.save(admission);
+        admissionRepository.save(admission);
     }
 
     @Override
@@ -130,7 +144,21 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public void updateAdmissionStatus(String uuid, AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
 
-        Admission admission= admissionRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Admission = %s has not been found",uuid)));
+        Admission admission = admissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found", uuid)));
+
+        // Check if the status of the admission is set to 1 (open)
+        if (admissionUpdateStatusRequest.status() == 1) {
+
+            // Find all admissions that are open (status = 1)
+            Set<Admission> admissions = admissionRepository.findAllByStatus(1);
+
+            // Update status to 2 for all open admissions
+            admissions.forEach(admissionMap -> admissionMap.setStatus(2));
+
+            // Batch save all updated admissions
+            admissionRepository.saveAll(admissions);
+        }
+
 
         //set new status
         admission.setStatus(admissionUpdateStatusRequest.status());

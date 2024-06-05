@@ -88,6 +88,25 @@ public interface StudyProgramService {
     void disableStudyProgramByAlias(String alias);
 
     /**
+     * public studyProgram by alias
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicStudyProgramByAlias(String alias);
+
+
+    /**
+     * private studyProgram by alias
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void privateStudyProgramByAlias(String alias);
+
+    /**
      * filter studyProgram by any field
      *
      * @param filterDto is object for request to filter

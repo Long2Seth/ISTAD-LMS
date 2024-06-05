@@ -82,6 +82,25 @@ public interface DegreeService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
+
+    /**
+     * public degree by alias
+     *
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicDegreeByAlias(String alias);
+
+    /**
+     * private degree by alias
+     *
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void privateDegreeByAlias(String alias);
+
     void disableDegreeByAlias(String alias);
 
     /**

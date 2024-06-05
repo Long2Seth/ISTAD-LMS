@@ -40,8 +40,8 @@ public class YearOfStudy extends Auditable {
 
     @ManyToMany
     @JoinTable(
-            name = "study_programs_subjects",
-            joinColumns = @JoinColumn(name = "study_program_id"),
+            name = "year_of_subjects",
+            joinColumns = @JoinColumn(name = "year_of_study_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private Set<Subject> subjects;

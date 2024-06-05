@@ -48,7 +48,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     generate-ddl: true
     properties:
       hibernate:
@@ -69,4 +69,4 @@ spring:
         starttls:
           enable: true
   profiles:
-    active: prod
+    active: dev

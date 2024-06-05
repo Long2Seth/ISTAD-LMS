@@ -128,6 +128,32 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     @Override
+    public void publicDegreeByAlias(String alias) {
+
+        //validate degree from dto by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        degree.setIsDraft(false);
+
+        //save to database
+        degreeRepository.save(degree);
+    }
+
+    @Override
+    public void privateDegreeByAlias(String alias) {
+
+        //validate degree from dto by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDraft to true(private)
+        degree.setIsDraft(true);
+
+        //save to database
+        degreeRepository.save(degree);
+    }
+
+    @Override
     public void disableDegreeByAlias(String alias) {
 
         //validate degree from dto by alias
@@ -135,6 +161,9 @@ public class DegreeServiceImpl implements DegreeService {
 
         //set isDeleted to true(disable)
         degree.setIsDeleted(true);
+
+        //set isDraft to true(private)
+        degree.setIsDraft(true);
 
         //save to database
         degreeRepository.save(degree);

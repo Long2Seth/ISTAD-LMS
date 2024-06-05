@@ -143,7 +143,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     }
 
     @Override
-    public YearOfStudyDetailResponse adSubject(String uuid, YearOfStudySubjectRequest yearOfStudySubjectRequest) {
+    public YearOfStudyDetailResponse addSubject(String uuid, YearOfStudySubjectRequest yearOfStudySubjectRequest) {
 
         //validate year of study from dto by uuid
         YearOfStudy yearOfStudy = yearOfStudyRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study = %s has been not found", uuid)));

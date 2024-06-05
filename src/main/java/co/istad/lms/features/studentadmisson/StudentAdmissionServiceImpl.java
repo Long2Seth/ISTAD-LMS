@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -53,10 +54,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
     public void createStudentAdmission(StudentAdmissionRequest studentAdmissionRequest) {
 
         //find admission that open
-        List<Admission> admissions = admissionRepository.findByStatus(1);
-        if (admissions.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("admission has been closed"));
-        }
+        Admission admission = admissionRepository.findByStatus(1).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
 
         //validate degree by degree alias
         Degree degree = degreeRepository.findByAlias(studentAdmissionRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found", studentAdmissionRequest.degreeAlias())));
@@ -83,7 +81,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         studentAdmission.setStudyProgram(studyProgram);
 
         //set admission to student admission
-        studentAdmission.setAdmission(admissions.get(0));
+        studentAdmission.setAdmission(admission);
 
         //save to database
         studentAdmissionRepository.save(studentAdmission);

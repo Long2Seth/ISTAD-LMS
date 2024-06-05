@@ -83,7 +83,7 @@ public class YearOfStudyController {
             @PathVariable String uuid,
             @Valid @RequestBody YearOfStudySubjectRequest yearOfStudySubjectRequest) {
 
-        return yearOfStudyService.adSubject(uuid, yearOfStudySubjectRequest);
+        return yearOfStudyService.addSubject(uuid, yearOfStudySubjectRequest);
 
     }
 

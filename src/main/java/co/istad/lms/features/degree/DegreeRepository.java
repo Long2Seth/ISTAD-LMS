@@ -1,6 +1,7 @@
 package co.istad.lms.features.degree;
 
 import co.istad.lms.domain.Degree;
+import co.istad.lms.domain.Subject;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,10 @@ public interface DegreeRepository extends JpaRepository<Degree, Long>, JpaSpecif
     Optional<Degree> findByLevel(String level);
 
     Boolean existsByAlias(String alias);
+
+    Optional<Degree> findByAliasAndIsDeletedFalseAndIsDraftFalse(String alias);
+
+    Optional<Degree> findByAliasAndIsDeletedFalse(String alias);
 
 
 }

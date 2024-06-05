@@ -81,11 +81,16 @@ public class ClassServiceImpl implements ClassService {
         //find generation by generationAlias in classRequest
         Generation generation = generationRepository.findByAlias(classRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found", classRequest.generationAlias())));
 
-       //check all student alias from DTO null or not
+        //check all student alias from DTO null or not
         if (classRequest.studentUuid() != null) {
 
             //find student by studentUuid from dto
-            Set<Student> students = classRequest.studentUuid().stream().map(studentUui -> studentRepository.findByUuid(studentUui).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s has not been found.", studentUui)))).collect(Collectors.toSet());
+            Set<Student> students =
+                    classRequest.studentUuid().stream().map(studentUui ->
+                        studentRepository.findByUuid(studentUui).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s has not been found.", studentUui)))
+
+                    ).collect(Collectors.toSet());
+
 
             //set student to class
             aClass.setStudents(students);
@@ -105,6 +110,9 @@ public class ClassServiceImpl implements ClassService {
 
         //save to database
         classRepository.save(aClass);
+
+        //check student size
+        System.out.println("size of set student= "+(aClass.getStudents().size()));
     }
 
     @Override
@@ -257,10 +265,14 @@ public class ClassServiceImpl implements ClassService {
 
         //find all student from DTO in database to add by student uuid
         Set<Student> students =
-                classAddStudentRequest.studentUuid().stream().map(studendUuid -> studentRepository.findByUuid(studendUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studendUuid)))).collect(Collectors.toSet());
+                classAddStudentRequest.studentUuid().stream().map(studentUuid -> studentRepository.findByUuid(studentUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studentUuid)))).collect(Collectors.toSet());
+        //check shift, studyProgram, degree from admission match with clas or not
+        students.forEach(student -> {
+//            if(student.get)
+        });
 
         //get all student in class
-        Set<Student> allStudents=aClass.getStudents();
+        Set<Student> allStudents = aClass.getStudents();
 
         //add new student from request
         allStudents.addAll(students);
@@ -284,17 +296,17 @@ public class ClassServiceImpl implements ClassService {
                         String.format("Class = %s has not been found", alias)));
 
         //find all student in database by uuid
-        Student student=
-                studentRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Student = %s has not been found in database",uuid)));
+        Student student =
+                studentRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student = %s has not been found in database", uuid)));
 
         //get all student from class
-        Set<Student> allStudents=aClass.getStudents();
+        Set<Student> allStudents = aClass.getStudents();
 
         //check for student is existed in class or not
-        if(allStudents==null||!allStudents.contains(student)){
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found " +
-                    "in class %s",uuid,alias));
+        if (allStudents == null || !allStudents.contains(student)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found " +
+                    "in class %s", uuid, alias));
         }
         //remove student from class
         allStudents.remove(student);

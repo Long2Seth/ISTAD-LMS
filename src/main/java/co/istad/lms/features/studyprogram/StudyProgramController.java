@@ -88,6 +88,22 @@ public class StudyProgramController {
         studyProgramService.disableStudyProgramByAlias(alias);
     }
 
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admin:control')")
+    void publicStudyProgram(@PathVariable String alias) {
+
+        studyProgramService.publicStudyProgramByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/private")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admin:control')")
+    void privateStudyProgram(@PathVariable String alias) {
+
+        studyProgramService.privateStudyProgramByAlias(alias);
+    }
+
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyAuthority('admin:control')")
