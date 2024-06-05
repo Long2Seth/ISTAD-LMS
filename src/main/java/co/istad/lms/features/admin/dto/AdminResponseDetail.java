@@ -24,6 +24,6 @@ public record AdminResponseDetail(
 
         Integer experienceYear,
 
-        UserResponse user
+        UserResponseDetail user
 ) {
 }

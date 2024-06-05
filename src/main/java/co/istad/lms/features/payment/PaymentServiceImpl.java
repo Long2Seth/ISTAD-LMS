@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,36 +40,42 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentResponse createPayment(@Valid PaymentRequest paymentRequest) {
 
-
         User user = userRepository.findByUsername(paymentRequest.studentName())
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("User with username = %s have been not found", paymentRequest.studentName()))
+                                String.format("User with username = %s have been not found", paymentRequest.studentName())
+                        )
                 );
 
-        // create new payment
-        Payment payment = new Payment();
+        // Retrieve existing payments for the student
+        List<Payment> existingPayments = paymentRepository.findByStudentName(paymentRequest.studentName());
 
-        payment.setUuid(UUID.randomUUID().toString());
+            // Create a new payment if no existing payments are found
+            Payment payment = new Payment();
 
-        payment.setStudentName(paymentRequest.studentName());
-        payment.setStudentProfile(user.getProfileImage());
-        payment.setGender(user.getGender());
+            payment.setUuid(UUID.randomUUID().toString());
+            payment.setStudentName(paymentRequest.studentName());
+            payment.setStudentProfile(user.getProfileImage());
+            payment.setGender(user.getGender());
 
-        payment.setOriginalPayment(paymentRequest.originalPayment());
-        payment.setDiscount(paymentRequest.discount());
-        payment.setPaidAmount(paymentRequest.paidAmount());
-        payment.setPaidDate(paymentRequest.paidDate());
-        payment.setPaymentMethod(paymentRequest.paymentMethod());
-        payment.setRemark(paymentRequest.remarks());
+            payment.setOriginalPayment(paymentRequest.originalPayment());
+            payment.setDiscount(paymentRequest.discount());
+            payment.setPaidAmount(paymentRequest.paidAmount());
+            payment.setPaidDate(paymentRequest.paidDate());
+            payment.setPaymentMethod(paymentRequest.paymentMethod());
+            payment.setRemark(paymentRequest.remarks());
 
-        // logic
-        payment.setTotalPayment(paymentRequest.paidAmount());
-        payment.setCourseFee(paymentRequest.originalPayment() - (paymentRequest.originalPayment() * (paymentRequest.discount() / 100)));
-        payment.setBalanceDue(payment.getCourseFee() - payment.getTotalPayment());
-        payment.setStatus(Boolean.valueOf(payment.getBalanceDue() == 0 ? "Paired" : "Unpaid"));
+            // Initial calculation
+            payment.setTotalPayment(paymentRequest.paidAmount());
+            payment.setCourseFee(paymentRequest.originalPayment() - (paymentRequest.originalPayment() * (paymentRequest.discount() / 100)));
+            payment.setBalanceDue(payment.getCourseFee() - payment.getTotalPayment());
+            payment.setStatus(Boolean.valueOf(payment.getBalanceDue() == 0 ? "Paired" : "Unpaid"));
 
-        return paymentMapper.toPaymentResponse(paymentRepository.save(payment));
+        // Save the payment to the repository
+        paymentRepository.save(payment);
+
+        // Return the response
+        return paymentMapper.toPaymentResponse(payment);
     }
 
     @Override

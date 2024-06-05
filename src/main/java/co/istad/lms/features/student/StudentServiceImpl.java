@@ -84,7 +84,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponseDetail createStudent(StudentRequest studentRequest) {
 
-
         if (userRepository.existsByEmailOrUsername(studentRequest.user().email() , studentRequest.user().username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.user().email()));
         }
@@ -97,6 +96,7 @@ public class StudentServiceImpl implements StudentService {
 
         // Map user request to user
         User user = userMapper.fromUserRequest(studentRequest.user());
+
         user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
         user.setIsDeleted(false);
@@ -106,6 +106,7 @@ public class StudentServiceImpl implements StudentService {
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setAuthorities(getDefaultAuthorities());
+
         // Save user
         student.setUser(userRepository.save(user));
 

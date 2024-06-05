@@ -1,6 +1,7 @@
 package co.istad.lms.features.academic.dto;
 
 import co.istad.lms.features.user.dto.UserResponse;
+import co.istad.lms.features.user.dto.UserResponseDetail;
 
 import java.time.LocalDate;
 
@@ -22,6 +23,6 @@ public record AcademicResponseDetail(
 
         Integer experienceYear,
 
-        UserResponse user
+        UserResponseDetail user
 ) {
 }
