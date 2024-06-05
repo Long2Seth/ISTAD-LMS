@@ -14,7 +14,6 @@ import java.util.Set;
     public record ClassResponse(
 
             String alias,
-            String className,
-            Set<StudentResponse> students
+            String classNameg
     ) {
     }

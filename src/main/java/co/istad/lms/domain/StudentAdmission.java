@@ -92,5 +92,4 @@ public class StudentAdmission extends Auditable {
     private Boolean isDeleted = false;
 
 
-
 }
