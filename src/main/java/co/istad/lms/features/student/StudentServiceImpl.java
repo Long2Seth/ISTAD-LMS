@@ -40,9 +40,12 @@ public class StudentServiceImpl implements StudentService {
 
 
     private Set<Authority> getDefaultAuthorities() {
+
         Set<Authority> authorities = new HashSet<>();
+
         authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
         authorities.addAll(authorityRepository.findAllByAuthorityName("user:read"));
+
         return authorities;
     }
 
@@ -65,7 +68,6 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
     }
-
 
 
 

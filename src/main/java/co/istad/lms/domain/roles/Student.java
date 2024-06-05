@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,14 +34,5 @@ public class Student {
 
     @OneToOne
     private User user;
-
-
-    @ManyToMany
-    @JoinTable(
-            name = "students_classes",
-            joinColumns = @JoinColumn( referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "class_id" , referencedColumnName = "id")
-    )
-    private List<Class> classes;
 
 }

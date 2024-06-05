@@ -6,6 +6,7 @@ import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.faculties.FacultyRepository;
 import co.istad.lms.features.faculties.dto.FacultyResponse;
+import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
@@ -27,6 +28,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static co.istad.lms.utils.MediaUtil.getUrl;
+
 @Service
 @RequiredArgsConstructor
 public class StudyProgramServiceImpl implements StudyProgramService{
@@ -41,6 +44,8 @@ public class StudyProgramServiceImpl implements StudyProgramService{
 
     private final FacultyRepository facultyRepository;
 
+    private final MinioStorageService minioStorageService;
+
     private final YearOfStudyRepository yearOfStudyRepository;
 
     @Override
@@ -53,10 +58,12 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         }
 
         //validate degree by alias from DTO
-        Degree degree=degreeRepository.findByAlias(studyProgramRequest.degreeAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
+        Degree degree=
+                degreeRepository.findByAliasAndIsDeletedFalse(studyProgramRequest.degreeAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
 
         //validate faculty by alias from DTO
-        Faculty faculty=facultyRepository.findByAlias(studyProgramRequest.facultyAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
+        Faculty faculty=
+                facultyRepository.findByAliasAndIsDeletedFalse(studyProgramRequest.facultyAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
 
 
         //map from DTO to entity
@@ -83,6 +90,11 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         //validate studyProgram from DTO by alias
         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found.", alias)));
 
+        //update logo url for studyProgram
+        if(studyProgram.getLogo()!=null){
+            studyProgram.setLogo(getUrl(studyProgram.getLogo(),minioStorageService));
+        }
+
         //map to DTO and return
         return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
     }
@@ -99,6 +111,12 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         //find all studyProgram in database
         Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(pageRequest);
 
+        // update the logo URL for each studyProgram
+        studyPrograms.forEach(studyProgram -> {
+            if (studyProgram.getLogo() != null) {
+                studyProgram.setLogo(getUrl(studyProgram.getLogo(), minioStorageService));
+            }
+        });
         //map entity to DTO and return
         return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);
     }
@@ -127,6 +145,11 @@ public class StudyProgramServiceImpl implements StudyProgramService{
 
         //map from DTO to entity
         studyProgramMapper.updateStudyProgramFromRequest(studyProgram, studyProgramUpdateRequest);
+
+        //update logo url for studyProgram
+        if(studyProgram.getLogo()!=null){
+            studyProgram.setLogo(getUrl(studyProgram.getLogo(),minioStorageService));
+        }
 
         //save to database
         studyProgramRepository.save(studyProgram);
@@ -170,9 +193,40 @@ public class StudyProgramServiceImpl implements StudyProgramService{
         //set isDeleted to false(enable)
         studyProgram.setIsDeleted(true);
 
+        //set isDraft to true(private)
+        studyProgram.setIsDraft(true);
+
         //save to database
         studyProgramRepository.save(studyProgram);
 
+    }
+
+    @Override
+    public void publicStudyProgramByAlias(String alias) {
+
+        //validate degree from dto by alias
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        studyProgram.setIsDraft(false);
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+    }
+
+    @Override
+    public void privateStudyProgramByAlias(String alias) {
+
+        //validate degree from dto by alias
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
+
+        //set isDraft to true(private)
+        studyProgram.setIsDraft(true);
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
     }
 
     @Override
@@ -189,6 +243,13 @@ public class StudyProgramServiceImpl implements StudyProgramService{
 
         //get all entity that match with filter condition
         Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(specification,pageRequest);
+
+        // update the logo URL for each studyProgram
+        studyPrograms.forEach(studyProgram -> {
+            if (studyProgram.getLogo() != null) {
+                studyProgram.setLogo(getUrl(studyProgram.getLogo(), minioStorageService));
+            }
+        });
 
         //map to DTO and return
         return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);

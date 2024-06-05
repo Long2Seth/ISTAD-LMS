@@ -144,6 +144,9 @@ public class FacultyServiceImpl implements FacultyService {
         //set isDelete to true (disable)
         faculty.setIsDeleted(true);
 
+        //set isDraft to false(public)
+        faculty.setIsDraft(true);
+
         //save to database
         facultyRepository.save(faculty);
     }

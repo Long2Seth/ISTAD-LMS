@@ -15,6 +15,7 @@ public interface ClassMapper {
     @Mapping(target = "studyProgram",ignore = true)
     @Mapping(target = "shift",ignore = true)
     @Mapping(target = "generation",ignore = true)
+    @Mapping(target = "students",ignore = true)
     Class fromClassRequest(ClassRequest classRequest);
 
     ClassDetailResponse toClassDetailResponse(Class classes);

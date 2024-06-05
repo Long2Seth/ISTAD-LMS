@@ -84,7 +84,7 @@ public interface YearOfStudyService {
      * @param yearOfStudySubjectRequest is the Set of subject alias to add
      * @return {@link YearOfStudyDetailResponse}
      */
-    YearOfStudyDetailResponse adSubject(String uuid, YearOfStudySubjectRequest yearOfStudySubjectRequest);
+    YearOfStudyDetailResponse addSubject(String uuid, YearOfStudySubjectRequest yearOfStudySubjectRequest);
 
     /**
      * delete a subject from yearOfStudy

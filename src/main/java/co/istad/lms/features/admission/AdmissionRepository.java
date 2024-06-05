@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AdmissionRepository extends JpaRepository<Admission, Long>,JpaSpecificationExecutor<Admission> {
     Optional<Admission> findByUuid(String uuid);
 
-    List<Admission> findByStatus(Integer status);
+    Optional<Admission> findByStatus(Integer status);
+
+    Set<Admission> findAllByStatus(Integer status);
 }

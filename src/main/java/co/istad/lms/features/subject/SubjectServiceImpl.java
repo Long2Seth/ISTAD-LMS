@@ -153,6 +153,8 @@ public class SubjectServiceImpl implements SubjectService {
         //validate subject from dto by alias
         Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));
 
+        //set isDeleted to false(enable)
+        subject.setIsDeleted(false);
         //save to database
         subjectRepository.save(subject);
 
@@ -164,9 +166,38 @@ public class SubjectServiceImpl implements SubjectService {
         //validate subject from dto by alias
         Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));
 
+        //set isDeleted to true(disable)
+        subject.setIsDeleted(true);
+
         //save to database
         subjectRepository.save(subject);
 
+    }
+
+    @Override
+    public void publicSubjectByAlias(String alias) {
+
+        //validate subject from dto by alias
+        Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        subject.setIsDraft(false);
+
+        //save to database
+        subjectRepository.save(subject);
+    }
+
+    @Override
+    public void privateSubjectByAlias(String alias) {
+
+        //validate subject from dto by alias
+        Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));
+
+        //set isDraft to true(private)
+        subject.setIsDraft(true);
+
+        //save to database
+        subjectRepository.save(subject);
     }
 
     @Override

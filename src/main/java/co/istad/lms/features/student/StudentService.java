@@ -8,6 +8,12 @@ import org.springframework.data.domain.Page;
 
 public interface StudentService {
 
+    /**
+     *
+     * @param page the current page number
+     * @param limit is the size of record per page
+     * @return {@link Page<StudentResponse>}
+     */
     Page<StudentResponseDetail> getStudents(int page, int limit);
 
     StudentResponseDetail createStudent(StudentRequest studentRequest);

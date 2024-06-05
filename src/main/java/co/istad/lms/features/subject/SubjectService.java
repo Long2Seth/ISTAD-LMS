@@ -85,6 +85,24 @@ public interface SubjectService {
     void disableSubjectByAlias(String alias);
 
     /**
+     * public subject by alias
+     *
+     * @param alias is the unique name of subject
+     * @author Nouth Chanraksa
+     * @since 1.0 (2024)
+     */
+    void publicSubjectByAlias(String alias);
+
+    /**
+     * private subject by alias
+     *
+     * @param alias is the unique name of subject
+     * @author Nouth Chanraksa
+     * @since 1.0 (2024)
+     */
+    void privateSubjectByAlias(String alias);
+
+    /**
      * Filters subject based on the specified criteria and retrieves a paginated list of results.
      *
      * @param filterDto is the request object use for filter by any column
