@@ -36,4 +36,6 @@ public class Student extends Auditable {
     @OneToOne
     private User user;
 
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Class> classes;
 }

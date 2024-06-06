@@ -66,8 +66,8 @@ public class InstructorController {
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/disable")
-    public InstructorResponseDetail disableInstructorByUuid(@PathVariable String uuid){
-        return instructorService.disableInstructorByUuid(uuid);
+    public void disableInstructorByUuid(@PathVariable String uuid){
+        instructorService.disableInstructorByUuid(uuid);
     }
 
 
@@ -75,8 +75,8 @@ public class InstructorController {
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/enable")
-    public InstructorResponseDetail enableInstructorByUuid(@PathVariable String uuid){
-        return instructorService.enableInstructorByUuid(uuid);
+    public void enableInstructorByUuid(@PathVariable String uuid){
+         instructorService.enableInstructorByUuid(uuid);
     }
 
 
@@ -84,8 +84,8 @@ public class InstructorController {
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/block")
-    public InstructorResponseDetail blockInstructorByUuid(@PathVariable String uuid){
-        return instructorService.blockInstructorByUuid(uuid);
+    public void blockInstructorByUuid(@PathVariable String uuid){
+         instructorService.blockInstructorByUuid(uuid);
     }
 
 

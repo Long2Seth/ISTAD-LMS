@@ -2,10 +2,12 @@ package co.istad.lms.mapper;
 
 
 import co.istad.lms.domain.Payment;
+import co.istad.lms.domain.User;
 import co.istad.lms.features.payment.dto.HistoryPaymentResponse;
 import co.istad.lms.features.payment.dto.PaymentRequest;
 import co.istad.lms.features.payment.dto.PaymentResponse;
-import org.mapstruct.Mapper;
+import co.istad.lms.features.user.dto.UserUpdateRequest;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
@@ -14,5 +16,10 @@ public interface PaymentMapper {
 
     HistoryPaymentResponse toHistoryPaymentResponse(Payment payment);
 
-    Payment toPayment(PaymentRequest paymentRequest);
+    Payment toPaymentRequest(PaymentRequest paymentRequest);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updatePaymentFromRequest(@MappingTarget Payment payment, HistoryPaymentResponse paymentRequest);
+
+
 }

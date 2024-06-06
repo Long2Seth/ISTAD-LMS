@@ -42,21 +42,10 @@ public class StaffServiceImpl implements StaffService {
 
 
 
-    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
-        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
-        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
-        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
-        birthPlace.setStreet(birthPlaceRequest.street());
-        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
-        return birthPlace;
-    }
-
 
 
     @Override
-    public StaffResponse createStaff(StaffRequest staffRequest) {
+    public void createStaff(StaffRequest staffRequest) {
 
 
         if (userRepository.existsByUsername(staffRequest.user().username())) {
@@ -92,9 +81,10 @@ public class StaffServiceImpl implements StaffService {
         staff.setUuid(UUID.randomUUID().toString());
         staff.setPosition(staffRequest.position());
         staff.setUser(user);
+
+        // Save the staff
         staffRepository.save(staff);
 
-        return staffMapper.toResponse(staff);
 
     }
 
@@ -125,21 +115,14 @@ public class StaffServiceImpl implements StaffService {
             );
         }
 
-        // Update the user
-        staff.setPosition(staffRequestDetail.position());
-        user.setNameEn(staffRequestDetail.user().nameEn());
-        user.setNameKh(staffRequestDetail.user().nameKh());
-        user.setEmail(staffRequestDetail.user().email());
-        user.setPhoneNumber(staffRequestDetail.user().phoneNumber());
-        user.setGender(staffRequestDetail.user().gender());
-        user.setCityOrProvince(staffRequestDetail.user().cityOrProvince());
-        user.setKhanOrDistrict(staffRequestDetail.user().khanOrDistrict());
-        user.setSangkatOrCommune(staffRequestDetail.user().sangkatOrCommune());
-        user.setStreet(staffRequestDetail.user().street());
-        user.setProfileImage(staffRequestDetail.user().profileImage());
-        user.setBirthPlace(toBirthPlace(staffRequestDetail.user().birthPlace()));
+        // Update the staff
+        staffMapper.updateStaffFromRequest(staff, staffRequestDetail);
 
-        // Update the authorities
+        if (staffRequestDetail.user().password() != null) {
+            user.setPassword(passwordEncoder.encode(staffRequestDetail.user().password()));
+        }
+
+        // Set the authorities of the user from the authorities of the adminRequest
         Set<Authority> allAuthorities = new HashSet<>();
         for (AuthorityRequestToUser request : staffRequestDetail.user().authorities()) {
             Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
@@ -147,8 +130,12 @@ public class StaffServiceImpl implements StaffService {
             allAuthorities.addAll(foundAuthorities);
         }
         user.setAuthorities(allAuthorities);
+
+
         // Save the user
         userRepository.save(user);
+        staff.setUser(user);
+
         // Save the staff
         staffRepository.save(staff);
 
@@ -224,7 +211,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public StaffResponseDetail disableByUuid(String uuid) {
+    public void disableByUuid(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -232,13 +219,17 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
+
+        // Change status is true
         staff.setStatus(true);
+
+        // Save the staff
         staffRepository.save(staff);
-        return staffMapper.toResponseDetail(staff);
+
     }
 
     @Override
-    public StaffResponseDetail enableByUuid(String uuid) {
+    public void enableByUuid(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -246,15 +237,17 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
+
+        // Change status is false
         staff.setStatus(false);
-        staffRepository.save(staff);
-        return staffMapper.toResponseDetail(staff);
 
+        // Save the staff
+        staffRepository.save(staff);
 
     }
 
     @Override
-    public StaffResponseDetail updateDeletedStatus(String uuid) {
+    public void updateDeletedStatus(String uuid) {
 
         Staff staff = staffRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -262,9 +255,12 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with uuid = %s was not found.", uuid)
                         )
                 );
+
+        // Change deleted status is true
         staff.setDeleted(true);
+
+        // Save the staff
         staffRepository.save(staff);
-        return staffMapper.toResponseDetail(staff);
 
     }
 

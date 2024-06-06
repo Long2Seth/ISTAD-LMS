@@ -35,8 +35,8 @@ public class ReceiptController {
     @PreAuthorize("hasAnyAuthority('admin:control','adcademic:write')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ReceiptResponse createReceipt(@Valid @RequestBody ReceiptRequest receiptRequest){
-        return  receiptService.createReceipt(receiptRequest);
+    public void createReceipt(@Valid @RequestBody ReceiptRequest receiptRequest){
+          receiptService.createReceipt(receiptRequest);
     }
 
 

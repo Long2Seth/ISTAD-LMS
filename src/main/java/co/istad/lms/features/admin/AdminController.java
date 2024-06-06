@@ -21,8 +21,8 @@ public class AdminController {
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public AdminResponse createAdmin(@Valid @RequestBody AdminRequest adminRequest) {
-        return adminService.createAdmin(adminRequest);
+    public void createAdmin(@Valid @RequestBody AdminRequest adminRequest) {
+         adminService.createAdmin(adminRequest);
     }
 
 
@@ -75,22 +75,22 @@ public class AdminController {
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/disable")
-    public AdminResponseDetail disableByUuid(@PathVariable String uuid) {
-        return adminService.disableAdminByUuid(uuid);
+    public void disableByUuid(@PathVariable String uuid) {
+         adminService.disableAdminByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/enable")
-    public AdminResponseDetail enableByUuid(@PathVariable String uuid) {
-        return adminService.enableAdminByUuid(uuid);
+    public void enableByUuid(@PathVariable String uuid) {
+         adminService.enableAdminByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @PatchMapping("/{uuid}/block")
-    public AdminResponseDetail blockByUuid(@PathVariable String uuid) {
-        return adminService.blockAdminByUuid(uuid);
+    public void blockByUuid(@PathVariable String uuid) {
+         adminService.blockAdminByUuid(uuid);
     }
 
 }

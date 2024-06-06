@@ -58,7 +58,7 @@ public class Class extends Auditable {
     private Generation generation;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "classes_students",
             joinColumns = @JoinColumn(name = "class_id"),

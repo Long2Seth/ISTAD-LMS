@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final UserRepository userRepository;
 
     @Override
-    public PaymentResponse createPayment(@Valid PaymentRequest paymentRequest) {
+    public void createPayment(@Valid PaymentRequest paymentRequest) {
 
         User user = userRepository.findByUsername(paymentRequest.studentName())
                 .orElseThrow(
@@ -90,8 +90,6 @@ public class PaymentServiceImpl implements PaymentService {
         // Save the payment to the repository
         paymentRepository.save(payment);
 
-        // Return the response
-        return paymentMapper.toPaymentResponse(payment);
     }
 
 
@@ -123,10 +121,11 @@ public class PaymentServiceImpl implements PaymentService {
                                 String.format("Payment with uuid = %s have been not found", uuid)));
         // return payment that found
         return paymentMapper.toPaymentResponse(payment);
+
     }
 
     @Override
-    public PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest) {
+    public PaymentResponse updatePayment(String uuid, HistoryPaymentResponse paymentRequest) {
 
         // find payment by uuid
         Payment payment = paymentRepository.findByUuid(uuid)
@@ -134,16 +133,9 @@ public class PaymentServiceImpl implements PaymentService {
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Payment with uuid = %s have been not found", uuid))
                 );
-
+        
         // update payment
-//        payment.setPaidAmount(paymentRequest.paidAmount());
-//        payment.setPaymentDate(paymentRequest.paymentDate());
-//        payment.setDiscount(paymentRequest.discount());
-//        payment.setDueAmount(paymentRequest.dueAmount());
-//        payment.setTotalAmount(paymentRequest.totalAmount());
-//        payment.setYear(paymentRequest.year());
-//        payment.setSemester(paymentRequest.semester());
-//        payment.setRemark(paymentRequest.remark());
+        paymentMapper.updatePaymentFromRequest(payment, paymentRequest);
 
         // save payment
         paymentRepository.save(payment);

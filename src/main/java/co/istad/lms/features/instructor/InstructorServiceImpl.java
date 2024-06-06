@@ -121,39 +121,15 @@ public class InstructorServiceImpl implements InstructorService {
 
 
         // Update instructor details
-        instructor.setDegree(instructorRequestDetail.degree());
-        instructor.setMajor(instructorRequestDetail.major());
-        instructor.setHighSchool(instructorRequestDetail.highSchool());
-        instructor.setStudyAtUniversityOrInstitution(instructorRequestDetail.studyAtUniversityOrInstitution());
-        instructor.setExperienceAtWorkingPlace(instructorRequestDetail.experienceAtWorkingPlace());
-        instructor.setExperienceYear(instructorRequestDetail.experienceYear());
-        instructor.setDegreeGraduationDate(instructorRequestDetail.degreeGraduationDate());
-        instructor.setHighSchoolGraduationDate(instructorRequestDetail.highSchoolGraduationDate());
-        instructor.setDeleted(false);
-        instructor.setStatus(false);
+        instructorMapper.updateInstructorFromRequest(instructor, instructorRequestDetail);
+        // Save the updated user and instructor
+        userMapper.updateUserDetailFromRequest(user, instructorRequestDetail.user());
 
-        // Update user details
+        if (instructorRequestDetail.user().password() != null) {
+            user.setPassword(passwordEncoder.encode(instructorRequestDetail.user().password()));
+        }
 
-        user.setEmail(instructorRequestDetail.user().email());
-        user.setPhoneNumber(instructorRequestDetail.user().phoneNumber());
-        user.setPassword(passwordEncoder.encode(instructorRequestDetail.user().password()));
-        user.setIsBlocked(false);
-        user.setIsDeleted(false);
-        user.setGender(instructorRequestDetail.user().gender());
-        user.setNameEn(instructorRequestDetail.user().nameEn());
-        user.setNameKh(instructorRequestDetail.user().nameKh());
-        user.setUsername(instructorRequestDetail.user().username());
-        user.setProfileImage(instructorRequestDetail.user().profileImage());
-        user.setCityOrProvince(instructorRequestDetail.user().cityOrProvince());
-        user.setKhanOrDistrict(instructorRequestDetail.user().khanOrDistrict());
-        user.setSangkatOrCommune(instructorRequestDetail.user().sangkatOrCommune());
-        user.setStreet(instructorRequestDetail.user().street());
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        // Update birth place
-        user.setBirthPlace(toBirthPlace(instructorRequestDetail.user().birthPlace()));
-        // Update authorities
+        // Set the authorities of the user from the authorities of the adminRequest
         Set<Authority> allAuthorities = new HashSet<>();
         for (AuthorityRequestToUser request : instructorRequestDetail.user().authorities()) {
             Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
@@ -162,12 +138,15 @@ public class InstructorServiceImpl implements InstructorService {
         }
         user.setAuthorities(allAuthorities);
 
-        // Save the updated user and instructor
         userRepository.save(user);
+
+        // Save the updated user and instructor
         instructor.setUser(user);
         Instructor savedAdmin = instructorRepository.save(instructor);
 
         return instructorMapper.toResponseDetail(savedAdmin);
+
+
     }
 
     @Override
@@ -180,6 +159,7 @@ public class InstructorServiceImpl implements InstructorService {
                 ));
 
         return instructorMapper.toResponseDetail(instructor);
+
     }
 
 
@@ -213,39 +193,51 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public InstructorResponseDetail disableInstructorByUuid(String uuid) {
+    public void disableInstructorByUuid(String uuid) {
         Instructor instructor = instructorRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
+
+        // Disable the instructor
         instructor.setStatus(true);
-        return instructorMapper.toResponseDetail(instructorRepository.save(instructor));
+
+        // Save the instructor
+        instructorRepository.save(instructor);
     }
 
     @Override
-    public InstructorResponseDetail enableInstructorByUuid(String uuid) {
+    public void enableInstructorByUuid(String uuid) {
 
         Instructor instructor = instructorRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
+
+        // Enable the instructor
         instructor.setStatus(false);
-        return instructorMapper.toResponseDetail(instructorRepository.save(instructor));
+
+        // Save the instructor
+        instructorRepository.save(instructor);
 
     }
 
     @Override
-    public InstructorResponseDetail blockInstructorByUuid(String uuid) {
+    public void blockInstructorByUuid(String uuid) {
 
         Instructor instructor = instructorRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Instructor with uuid = %s not found", uuid)
                 ));
+
+        // Block the instructor
         instructor.setDeleted(true);
-        return instructorMapper.toResponseDetail(instructorRepository.save(instructor));
+
+        // Save the instructor
+       instructorRepository.save(instructor);
         
     }
 
