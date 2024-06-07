@@ -11,6 +11,8 @@ public interface CourseRepository extends JpaRepository<Course,Long>, JpaSpecifi
     Boolean existsByAlias(String alias);
 
     Optional<Course> findByAlias(String alias);
+
+//    Optional<Course> finByOneClass(String oneClass);
  }
 
 

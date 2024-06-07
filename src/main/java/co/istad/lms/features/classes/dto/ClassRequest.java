@@ -13,6 +13,9 @@ public record ClassRequest(
         @NotBlank(message = "Class name cannot be null")
         String className,
 
+        @NotNull(message = "Year is require")
+        Integer year,
+
         String description,
 
         String instructorUuid,

@@ -4,6 +4,7 @@ import co.istad.lms.features.student.dto.StudentRequest;
 import co.istad.lms.features.student.dto.StudentRequestDetail;
 import co.istad.lms.features.student.dto.StudentResponse;
 import co.istad.lms.features.student.dto.StudentResponseDetail;
+import co.istad.lms.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -81,6 +83,12 @@ public class StudentController {
     @PatchMapping("/{uuid}/block")
     public StudentResponseDetail blockStudent(@PathVariable String uuid) {
         return studentService.blockStudentByUuid(uuid);
+    }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasAnyAuthority('academic:read')")
+    public String getProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userDetails.getUsername();
     }
 
 

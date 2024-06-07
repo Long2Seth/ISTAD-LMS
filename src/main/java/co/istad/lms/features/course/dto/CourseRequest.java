@@ -20,6 +20,9 @@ public record CourseRequest(
 
         LocalDate classStart,
 
+        @NotNull(message = "isStarted is require")
+        Boolean isStarted,
+
         @NotBlank(message = "Subject Alias cannot be blank")
         @Size(max = 100, message = "Subject Alias must be less than 100 characters")
         String subjectAlias,

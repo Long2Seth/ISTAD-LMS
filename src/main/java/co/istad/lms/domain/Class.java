@@ -31,6 +31,8 @@ public class Class extends Auditable {
     @Column(nullable = false)
     private String className;
 
+    @Column(nullable = false)
+    Integer year;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -65,4 +67,16 @@ public class Class extends Auditable {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private Set<Student> students;
+
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "classes_year_of_studies",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "year_of_study_id")
+    )
+    private Set<YearOfStudy> yearOfStudies;
+
+    @OneToMany(mappedBy = "oneClass", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
+    Set<Course> courses;
 }

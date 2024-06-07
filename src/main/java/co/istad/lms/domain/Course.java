@@ -3,12 +3,14 @@ package co.istad.lms.domain;
 
 import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,12 +30,15 @@ public class Course extends Auditable {
     private String title;
 
     @Column(nullable = false)
-    private Integer status;
-
-    private LocalDate classStart;
+    private Boolean isDraft;
 
     @Column(nullable = false)
     private Boolean isDeleted;
+
+    @Column(nullable = false)
+    private Boolean isStarted;
+
+    private LocalDate courseStart;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
@@ -46,6 +51,9 @@ public class Course extends Auditable {
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Class oneClass;
+
+    @ManyToMany(mappedBy = "courses")
+    Set<Student> students;
 
 
 }

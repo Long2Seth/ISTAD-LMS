@@ -4,6 +4,7 @@ package co.istad.lms.domain.roles;
 
 
 import co.istad.lms.domain.Class;
+import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Payment;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
@@ -37,4 +38,12 @@ public class Student {
 
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Class> classes;
+
+    @ManyToMany
+    @JoinTable(
+            name = "students_courses",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    Set<Course> courses;
 }
