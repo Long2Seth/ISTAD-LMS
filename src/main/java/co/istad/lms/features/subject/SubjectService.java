@@ -94,13 +94,13 @@ public interface SubjectService {
     void publicSubjectByAlias(String alias);
 
     /**
-     * private subject by alias
+     * draft subject by alias
      *
      * @param alias is the unique name of subject
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    void privateSubjectByAlias(String alias);
+    void draftSubjectByAlias(String alias);
 
     /**
      * Filters subject based on the specified criteria and retrieves a paginated list of results.

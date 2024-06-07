@@ -93,4 +93,42 @@ public interface YearOfStudyService {
      * @param alias is the alias of subject to delete
      */
     void deleteSubject(String uuid, String alias);
+
+
+    /**
+     * Enable yearOfStudy
+     *
+     * @param uuid is the unique name of yearOfStudy
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void enableYearOfStudyByUuid(String uuid);
+
+    /**
+     * Disable  yearOfStudy by uuid
+     *
+     * @param uuid is the unique name of yearOfStudy
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void disableYearOfStudyByUuid(String uuid);
+
+    /**
+     * public yearOfStudy by alias
+     *
+     * @param uuid is the unique name of yearOfStudy
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicYearOfStudyByUuid(String uuid);
+
+
+    /**
+     * draft yearOfStudy by uuid
+     *
+     * @param uuid is the unique name of yearOfStudy
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void draftYearOfStudyByUuid(String uuid);
 }

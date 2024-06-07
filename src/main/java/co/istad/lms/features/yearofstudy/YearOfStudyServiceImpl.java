@@ -195,4 +195,62 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         yearOfStudyRepository.save(yearOfStudy);
 
     }
+
+    @Override
+    public void enableYearOfStudyByUuid(String uuid) {
+
+        //get yearOfStudy by uuid from DTO
+        YearOfStudy yearOfStudy=
+                yearOfStudyRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStud = %s has not been found",uuid)));
+
+        //set isDeleted to false(enable)
+        yearOfStudy.setIsDeleted(false);
+
+        //save to database
+        yearOfStudyRepository.save(yearOfStudy);
+
+    }
+
+    @Override
+    public void disableYearOfStudyByUuid(String uuid) {
+
+        //get yearOfStudy by uuid from DTO
+        YearOfStudy yearOfStudy=
+                yearOfStudyRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStud = %s has not been found",uuid)));
+
+        //set isDeleted to false(disable)
+        yearOfStudy.setIsDeleted(true);
+
+        //save to database
+        yearOfStudyRepository.save(yearOfStudy);
+
+    }
+
+    @Override
+    public void publicYearOfStudyByUuid(String uuid) {
+
+        //get yearOfStudy by uuid from DTO
+        YearOfStudy yearOfStudy=
+                yearOfStudyRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStud = %s has not been found",uuid)));
+
+        //set isDraft to false(public)
+        yearOfStudy.setIsDraft(false);
+
+        //save to database
+        yearOfStudyRepository.save(yearOfStudy);
+    }
+
+    @Override
+    public void draftYearOfStudyByUuid(String uuid) {
+
+        //get yearOfStudy by uuid from DTO
+        YearOfStudy yearOfStudy=
+                yearOfStudyRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStud = %s has not been found",uuid)));
+
+        //set isDraft to false(draft)
+        yearOfStudy.setIsDeleted(true);
+
+        //save to database
+        yearOfStudyRepository.save(yearOfStudy);
+    }
 }

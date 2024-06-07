@@ -93,13 +93,13 @@ public interface DegreeService {
     void publicDegreeByAlias(String alias);
 
     /**
-     * private degree by alias
+     * draft degree by alias
      *
      * @param alias is the unique name of degree
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void privateDegreeByAlias(String alias);
+    void draftDegreeByAlias(String alias);
 
     void disableDegreeByAlias(String alias);
 

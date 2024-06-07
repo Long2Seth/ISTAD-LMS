@@ -98,13 +98,13 @@ public interface StudyProgramService {
 
 
     /**
-     * private studyProgram by alias
+     * draft studyProgram by alias
      *
      * @param alias is the unique name of studyProgram
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void privateStudyProgramByAlias(String alias);
+    void draftStudyProgramByAlias(String alias);
 
     /**
      * filter studyProgram by any field

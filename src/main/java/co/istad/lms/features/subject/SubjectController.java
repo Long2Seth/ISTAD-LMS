@@ -89,12 +89,12 @@ public class SubjectController {
         subjectService.publicSubjectByAlias(alias);
     }
 
-    @PutMapping("/{alias}/private")
+    @PutMapping("/{alias}/draft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('faculty:update')")
-    void privateSubject(@PathVariable String alias){
+    void draftSubject(@PathVariable String alias){
 
-        subjectService.privateSubjectByAlias(alias);
+        subjectService.draftSubjectByAlias(alias);
     }
 
     @GetMapping("/filter")

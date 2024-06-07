@@ -188,7 +188,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void privateSubjectByAlias(String alias) {
+    public void draftSubjectByAlias(String alias) {
 
         //validate subject from dto by alias
         Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));

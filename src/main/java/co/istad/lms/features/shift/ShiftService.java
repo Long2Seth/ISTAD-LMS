@@ -90,4 +90,22 @@ public interface ShiftService {
      * @since 1.0 (2024)
      */
     Page<ShiftDetailResponse> filterShifts(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+
+    /**
+     * public shift by alias
+     *
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicShiftByAlias(String alias);
+
+    /**
+     * draft shift by alias
+     *
+     * @param alias is the unique name of degree
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void draftShiftByAlias(String alias);
 }

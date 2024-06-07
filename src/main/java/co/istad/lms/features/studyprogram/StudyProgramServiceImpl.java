@@ -216,7 +216,7 @@ public class StudyProgramServiceImpl implements StudyProgramService{
     }
 
     @Override
-    public void privateStudyProgramByAlias(String alias) {
+    public void draftStudyProgramByAlias(String alias) {
 
         //validate degree from dto by alias
         StudyProgram studyProgram =

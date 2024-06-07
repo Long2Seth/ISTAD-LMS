@@ -96,4 +96,20 @@ public class ShiftController {
 
         return shiftService.filterShifts(filterDto, pageNumber, pageSize);
     }
+
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('shift:update')")
+    void publicShift(@PathVariable String alias) {
+
+        shiftService.publicShiftByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/draft")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('shift:update')")
+    void draftShift(@PathVariable String alias) {
+
+        shiftService.draftShiftByAlias(alias);
+    }
 }

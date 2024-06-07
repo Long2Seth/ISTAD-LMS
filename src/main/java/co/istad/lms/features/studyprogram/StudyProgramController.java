@@ -96,12 +96,12 @@ public class StudyProgramController {
         studyProgramService.publicStudyProgramByAlias(alias);
     }
 
-    @PutMapping("/{alias}/private")
+    @PutMapping("/{alias}/draft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    void privateStudyProgram(@PathVariable String alias) {
+    void draftStudyProgram(@PathVariable String alias) {
 
-        studyProgramService.privateStudyProgramByAlias(alias);
+        studyProgramService.draftStudyProgramByAlias(alias);
     }
 
 

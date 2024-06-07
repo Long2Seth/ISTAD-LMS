@@ -100,13 +100,13 @@ public interface FacultyService {
     void publicFacultyByAlias(String alias);
 
     /**
-     * private faculty by alias
+     * draft faculty by alias
      *
      * @param alias is the unique name of faculty
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void privateFacultyByAlias(String alias);
+    void draftFacultyByAlias(String alias);
 
 
     /**

@@ -97,4 +97,13 @@ public class YearOfStudyController {
         yearOfStudyService.deleteSubject(uuid, alias);
 
     }
+
+    @PutMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public void disableYearOfStudy(@PathVariable String uuid){
+
+        yearOfStudyService.disableYearOfStudyByUuid(uuid);
+
+    }
 }

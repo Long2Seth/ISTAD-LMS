@@ -187,4 +187,5 @@ public class AdmissionServiceImpl implements AdmissionService {
         return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
 
     }
+
 }

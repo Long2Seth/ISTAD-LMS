@@ -99,4 +99,6 @@ public interface AdmissionService {
      * @since 1.0 (2024)
      */
     Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+
 }
+

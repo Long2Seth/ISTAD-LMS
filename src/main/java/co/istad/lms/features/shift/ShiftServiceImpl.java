@@ -157,4 +157,30 @@ public class ShiftServiceImpl implements ShiftService {
         //map to DTO and return
         return shifts.map(shiftMapper::toShiftDetailResponse);
     }
+
+    @Override
+    public void publicShiftByAlias(String alias) {
+
+        //validate shift from dto by alias
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found ! ", alias)));
+
+        //set isDeleted to true(public)
+        shift.setIsDraft(false);
+
+        //save to database
+        shiftRepository.save(shift);
+    }
+
+    @Override
+    public void draftShiftByAlias(String alias) {
+
+        //validate shift from dto by alias
+        Shift shift = shiftRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found ! ", alias)));
+
+        //set isDeleted to true(draft)
+        shift.setIsDraft(true);
+
+        //save to database
+        shiftRepository.save(shift);
+    }
 }

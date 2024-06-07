@@ -96,12 +96,12 @@ public class FacultyController {
         facultyService.publicFacultyByAlias(alias);
     }
 
-    @PutMapping("/{alias}/private")
+    @PutMapping("/{alias}/draft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('faculty:update')")
-    void privateFaculty(@PathVariable String alias) {
+    void draftFaculty(@PathVariable String alias) {
 
-        facultyService.privateFacultyByAlias(alias);
+        facultyService.draftFacultyByAlias(alias);
     }
 
 

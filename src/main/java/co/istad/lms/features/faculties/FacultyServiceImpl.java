@@ -179,7 +179,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public void privateFacultyByAlias(String alias) {
+    public void draftFacultyByAlias(String alias) {
 
 
         //validate from dto by alias
