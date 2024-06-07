@@ -6,8 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,6 +19,12 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, JpaSpec
     Optional<Payment> findByUuid(String uuid);
 
     Optional<Payment> findByStudentUuid(String studentUuid);
+
+    List<Payment> findByStudentName(String studentName);
+
+//    @Query("SELECT p FROM Payment p WHERE p.id IN (SELECT MAX(p2.id) FROM Payment p2 GROUP BY p2.studentName)")
+//    Page<Payment> findLatestPaymentsForAllStudents();
+
 
 
 

@@ -41,14 +41,14 @@ public class PaymentController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:write')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PaymentResponse createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
-        return paymentService.createPayment(paymentRequest);
+    public void createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
+        paymentService.createPayment(paymentRequest);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PutMapping("/{uuid}")
-    public PaymentResponse updatePayment(@PathVariable String uuid,  @RequestBody PaymentRequest paymentRequest) {
+    public PaymentResponse updatePayment(@PathVariable String uuid,  @RequestBody HistoryPaymentResponse paymentRequest) {
         return paymentService.updatePayment(uuid, paymentRequest);
     }
 

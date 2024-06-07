@@ -2,6 +2,8 @@ package co.istad.lms.features.user;
 
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
+import co.istad.lms.features.user.dto.UserResponseDetail;
+import co.istad.lms.features.user.dto.UserUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,9 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('admin:control')")
+
+
+    @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/admins")
     public Page<UserResponse> getAllUsersWithAdminRole(
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -42,23 +46,37 @@ public class UserController {
 
 
 
+    @PreAuthorize("hasAuthority('user:read')")
+    @GetMapping("/details")
+    public Page<UserResponseDetail> getAllUsersDetail(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ){
+        return userService.getAllUsersDetail(pageNumber, pageSize);
+    }
+
+
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('admin:control')")
+    @PreAuthorize("hasAuthority('user:write')")
     @PostMapping
     public UserResponse createUser(@Valid @RequestBody UserRequest userRequest){
         return  userService.createUser(userRequest);
     }
 
 
-    @PreAuthorize("hasAuthority('admin:control')")
+
+
+    @PreAuthorize("hasAuthority('user:update')")
     @PutMapping("/{uuid}")
-    public UserResponse updateUser(@PathVariable String uuid, @Valid @RequestBody UserRequest userRequest){
+    public UserResponse updateUser(@PathVariable String uuid, @Valid @RequestBody UserUpdateRequest userRequest){
         return userService.updateUser(uuid,userRequest);
     }
 
 
-    @PreAuthorize("hasAuthority('admin:control')")
+
+
+    @PreAuthorize("hasAuthority('user:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{uuid}")
     public void deleteUser(@PathVariable String uuid){
@@ -66,32 +84,52 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
+
+
+    @PreAuthorize("hasAnyAuthority('user:read')")
     @GetMapping("/{uuid}")
     public UserResponse getUserById(@PathVariable String uuid){
         return userService.getUserById(uuid);
     }
 
 
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
+
+
+    @PreAuthorize("hasAnyAuthority('user:read')")
+    @GetMapping("/{uuid}/details")
+    public UserResponseDetail getUserDetailById(@PathVariable String uuid){
+        return userService.getUserDetailById(uuid);
+    }
+
+
+
+
+    @PreAuthorize("hasAnyAuthority('user:update')")
     @PatchMapping("/{uuid}/disable")
     public UserResponse disableUser(@PathVariable String uuid){
         return userService.disableUser(uuid);
     }
 
 
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
+
+
+
+    @PreAuthorize("hasAnyAuthority('user:update')")
     @PatchMapping("/{uuid}/enable")
     public UserResponse enableUser(@PathVariable String uuid){
         return userService.enableUser(uuid);
     }
 
 
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
+
+
+    @PreAuthorize("hasAnyAuthority('user:update')")
     @PatchMapping("/{uuid}/block")
     public UserResponse blockUser(@PathVariable String uuid){
         return userService.isDeleted(uuid);
     }
+
+
 
 
 }

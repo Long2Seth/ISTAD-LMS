@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,24 +38,22 @@ public class PaymentServiceImpl implements PaymentService {
     private final UserRepository userRepository;
 
     @Override
-    public PaymentResponse createPayment(@Valid PaymentRequest paymentRequest) {
-
+    public void createPayment(@Valid PaymentRequest paymentRequest) {
 
         User user = userRepository.findByUsername(paymentRequest.studentName())
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("User with username = %s have been not found", paymentRequest.studentName()))
+                                String.format("User with username = %s have been not found", paymentRequest.studentName())
+                        )
                 );
 
-        // create new payment
+        // Create a new payment
         Payment payment = new Payment();
 
         payment.setUuid(UUID.randomUUID().toString());
-
         payment.setStudentName(paymentRequest.studentName());
         payment.setStudentProfile(user.getProfileImage());
         payment.setGender(user.getGender());
-
         payment.setOriginalPayment(paymentRequest.originalPayment());
         payment.setDiscount(paymentRequest.discount());
         payment.setPaidAmount(paymentRequest.paidAmount());
@@ -62,24 +61,55 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setPaymentMethod(paymentRequest.paymentMethod());
         payment.setRemark(paymentRequest.remarks());
 
-        // logic
-        payment.setTotalPayment(paymentRequest.paidAmount());
-        payment.setCourseFee(paymentRequest.originalPayment() - (paymentRequest.originalPayment() * (paymentRequest.discount() / 100)));
-        payment.setBalanceDue(payment.getCourseFee() - payment.getTotalPayment());
-        payment.setStatus(Boolean.valueOf(payment.getBalanceDue() == 0 ? "Paired" : "Unpaid"));
+        // Retrieve existing payments for the student
+        List<Payment> existingPayments = paymentRepository.findByStudentName(paymentRequest.studentName());
 
-        return paymentMapper.toPaymentResponse(paymentRepository.save(payment));
+        // Sum the paidAmount of existing payments
+        double totalPaidAmount = existingPayments.stream()
+                .mapToDouble(Payment::getPaidAmount)
+                .sum();
+
+        // Add the current payment's paidAmount to the total
+        totalPaidAmount += paymentRequest.paidAmount();
+
+        // Set the totalPayment
+        payment.setTotalPayment(totalPaidAmount);
+
+        // Calculate the courseFee
+        double courseFee = paymentRequest.originalPayment() -
+                (paymentRequest.originalPayment() * (paymentRequest.discount() / 100.0));
+        payment.setCourseFee(courseFee);
+
+        // Calculate the balance due
+        double balanceDue = courseFee - totalPaidAmount;
+        payment.setBalanceDue(balanceDue);
+
+        // Set the status based on the balance due
+        payment.setStatus(Boolean.valueOf(balanceDue == 0 ? "Paid" : "Unpaid"));
+
+        // Save the payment to the repository
+        paymentRepository.save(payment);
+
     }
+
 
     @Override
     public Page<PaymentResponse> getPayments(int page, int limit) {
         // get all payments sorted by id in descending order
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Payment> payments = paymentRepository.findAll(pageRequest);
         // return payments that found
         return payments.map(paymentMapper::toPaymentResponse);
 
     }
+
+
+//    @Override
+//    public Page<PaymentResponse> getLatestPaymentsForAllStudents(int page, int limit) {
+//        PageRequest<Payment> latestPayments = paymentRepository.findLatestPaymentsForAllStudents();
+//        return latestPayments.map(paymentMapper::toPaymentResponse);
+//    }
+
 
     @Override
     public PaymentResponse getPaymentById(String uuid) {
@@ -91,10 +121,11 @@ public class PaymentServiceImpl implements PaymentService {
                                 String.format("Payment with uuid = %s have been not found", uuid)));
         // return payment that found
         return paymentMapper.toPaymentResponse(payment);
+
     }
 
     @Override
-    public PaymentResponse updatePayment(String uuid, PaymentRequest paymentRequest) {
+    public PaymentResponse updatePayment(String uuid, HistoryPaymentResponse paymentRequest) {
 
         // find payment by uuid
         Payment payment = paymentRepository.findByUuid(uuid)
@@ -102,16 +133,9 @@ public class PaymentServiceImpl implements PaymentService {
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Payment with uuid = %s have been not found", uuid))
                 );
-
+        
         // update payment
-//        payment.setPaidAmount(paymentRequest.paidAmount());
-//        payment.setPaymentDate(paymentRequest.paymentDate());
-//        payment.setDiscount(paymentRequest.discount());
-//        payment.setDueAmount(paymentRequest.dueAmount());
-//        payment.setTotalAmount(paymentRequest.totalAmount());
-//        payment.setYear(paymentRequest.year());
-//        payment.setSemester(paymentRequest.semester());
-//        payment.setRemark(paymentRequest.remark());
+        paymentMapper.updatePaymentFromRequest(payment, paymentRequest);
 
         // save payment
         paymentRepository.save(payment);

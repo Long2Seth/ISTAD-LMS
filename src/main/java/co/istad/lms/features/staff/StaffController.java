@@ -23,8 +23,8 @@ public class StaffController {
     @PreAuthorize("hasAuthority('admin:control')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public StaffResponse createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
-        return staffService.createStaff(staffRequest);
+    public void createStaff(@Valid  @RequestBody StaffRequest staffRequest) {
+        staffService.createStaff(staffRequest);
     }
 
 
@@ -80,22 +80,22 @@ public class StaffController {
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/disable")
-    public StaffResponseDetail disableByUuid(@PathVariable String uuid) {
-        return staffService.disableByUuid(uuid);
+    public void disableByUuid(@PathVariable String uuid) {
+         staffService.disableByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/enable")
-    public StaffResponseDetail enableByUuid(@PathVariable String uuid) {
-        return staffService.enableByUuid(uuid);
+    public void enableByUuid(@PathVariable String uuid) {
+         staffService.enableByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/block")
-    public StaffResponseDetail updateDeletedStatus(@PathVariable String uuid) {
-        return staffService.updateDeletedStatus(uuid);
+    public void updateDeletedStatus(@PathVariable String uuid) {
+        staffService.updateDeletedStatus(uuid);
     }
 
 

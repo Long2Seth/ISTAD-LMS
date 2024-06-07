@@ -1,16 +1,21 @@
 package co.istad.lms.features.payment.dto;
 
+import java.time.LocalDate;
+
 public record HistoryPaymentResponse (
-        String uuid ,
-        String studentName ,
+        String uuid,
+        String studentName,
+        String studentProfile,
         String gender,
-        String paymentDate,
-        double discount,
-        double totalPayment,
-        double balanceDue,
-        double courseFee,
+        Boolean status,
+        Double balanceDue,
+        Double paidAmount,
+        LocalDate paidDate,
+        Double discount,
+        Double originalPayment,
+        Double totalPayment,
+        Double courseFee,
         String paymentMethod,
-        boolean status ,
-        String remarks
+        String remark
 ) {
 }

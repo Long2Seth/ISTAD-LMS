@@ -7,15 +7,22 @@ import java.time.LocalDate;
 
 @Builder
 public record PaymentResponse(
+
         String uuid,
+        String studentName,
+        String studentProfile,
+        String gender,
+        Boolean status,
+        Double balanceDue,
         Double paidAmount,
-        LocalDate paymentDate,
+        LocalDate paidDate,
         Double discount,
-        Double dueAmount,
-        Double totalAmount,
-        Integer year,
-        Integer semester,
+        Double originalPayment,
+        Double totalPayment,
+        Double courseFee,
+        String paymentMethod,
         String remark
+
 
 ) {
 }

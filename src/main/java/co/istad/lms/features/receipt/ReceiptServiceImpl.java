@@ -27,16 +27,21 @@ public class ReceiptServiceImpl implements ReceiptService {
     private final PaymentRepository paymentRepository;
     private final ReceiptMapper receiptMapper;
 
+
+    // Private method to get the payment
     @Override
     public Page<ReceiptResponse> getReceipts(int page, int limit) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Receipt> receipts = receiptRepository.findAll(pageRequest);
         return receipts.map(receiptMapper::toReceiptResponse);
     }
 
     @Override
-    public ReceiptResponse createReceipt(ReceiptRequest receiptRequest) {
+    public void createReceipt(ReceiptRequest receiptRequest) {
+        // Create a new receipt
         Receipt receipt = receiptMapper.toReceipt(receiptRequest);
+
+        // Set some fields of the receipt
         receipt.setUuid(UUID.randomUUID().toString());
         receipt.setRemarks(receiptRequest.remarks());
         receipt.setIsDeleted(false);
@@ -46,25 +51,34 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Payment with uuid = %s has not been found!", paymentReceipt.uuid())
                 ));
+
+        // Set the payment tu the receipt
         receipt.setPayment(payment);
 
-        Receipt savedReceipt = receiptRepository.save(receipt);
-        return receiptMapper.toReceiptResponse(savedReceipt);
+        //Save the receipt
+       receiptRepository.save(receipt);
     }
 
     @Override
     public ReceiptResponse getReceipt(String uuid) {
+
+        // Fine the receipt by uuid
         Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Receipt with uuid = %s has not been found!", uuid)));
+
         return receiptMapper.toReceiptResponse(receipt);
+
     }
 
     @Override
     public ReceiptResponse updateReceipt(String uuid, ReceiptRequest receiptRequest) {
+
+        // Find the receipt by uuid that is passed
         Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Receipt with uuid = %s has not been found!", uuid)));
+
         receipt.setRemarks(receiptRequest.remarks());
         receipt.setIsDeleted(false);
 
@@ -79,10 +93,14 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public void deleteReceipt(String uuid) {
+
+        // Find the receipt by uuid that is passed
         Receipt receipt = receiptRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Receipt with uuid = %s has not been found!", uuid))
                 );
+
+        // Delete the receipt by calling the delete method of the receiptRepository
         receiptRepository.delete(receipt);
     }
 }

@@ -3,6 +3,7 @@ package co.istad.lms.domain.roles;
 
 
 
+import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Payment;
@@ -20,7 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "students")
 @Entity
-public class Student {
+public class Student extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

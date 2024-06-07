@@ -26,25 +26,40 @@ public class StudentController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
+    @GetMapping("/detail")
+    public Page<StudentResponseDetail> getStudentsDetail(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize) {
+        return studentService.getStudentsDetail(pageNumber, pageSize);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
     @GetMapping
-    public Page<StudentResponseDetail> getStudents(
+    public Page<StudentResponse> getStudents(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize) {
         return studentService.getStudents(pageNumber, pageSize);
     }
 
-
     @PreAuthorize("hasAuthority('admin:control')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public StudentResponseDetail createStudent(@Valid @RequestBody StudentRequest studentRequest) {
-        return studentService.createStudent(studentRequest);
+    public void createStudent(@Valid @RequestBody StudentRequest studentRequest) {
+        studentService.createStudent(studentRequest);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update','user:read')")
+    @GetMapping("/detail/{uuid}")
+    public StudentResponseDetail getStudentsDetailByUuid(@PathVariable String uuid) {
+        return studentService.getStudentDetailByUuid(uuid);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:read','user:read')")
     @GetMapping("/{uuid}")
-    public StudentResponseDetail getStudentByUuid(@PathVariable String uuid) {
+    public StudentResponse getStudentByUuid(@PathVariable String uuid) {
         return studentService.getStudentByUuid(uuid);
     }
 
@@ -52,21 +67,21 @@ public class StudentController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PutMapping("/{uuid}")
     public StudentResponseDetail updateStudent(@PathVariable String uuid, @RequestBody StudentRequestDetail studentRequest) {
-        return studentService.updateStudentByUuid(uuid, studentRequest);
+       return studentService.updateStudentByUuid(uuid, studentRequest);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/enable")
-    public StudentResponseDetail enableStudent(@PathVariable String uuid) {
-        return studentService.enableStudentByUuid(uuid);
+    public void enableStudent(@PathVariable String uuid) {
+        studentService.enableStudentByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}/disable")
-    public StudentResponseDetail disableStudent(@PathVariable String uuid) {
-        return studentService.disableStudentByUuid(uuid);
+    public void disableStudent(@PathVariable String uuid) {
+         studentService.disableStudentByUuid(uuid);
     }
 
 
@@ -81,8 +96,8 @@ public class StudentController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
 
     @PatchMapping("/{uuid}/block")
-    public StudentResponseDetail blockStudent(@PathVariable String uuid) {
-        return studentService.blockStudentByUuid(uuid);
+    public void blockStudent(@PathVariable String uuid) {
+        studentService.blockStudentByUuid(uuid);
     }
 
     @GetMapping("/profile")
