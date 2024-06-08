@@ -39,6 +39,12 @@ public class FacultyServiceImpl implements FacultyService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Faculty = %s already exists.", facultyRequest.alias()));
         }
 
+        //validate logo is available or not
+        if(facultyRequest.logo()!=null&& !minioStorageService.doesObjectExist(facultyRequest.logo())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Logo = %s has not been found",
+                    facultyRequest.logo()));
+        }
+
         //map from DTO to entity
         Faculty faculty = facultyMapper.fromFacultyRequest(facultyRequest);
 
@@ -113,13 +119,22 @@ public class FacultyServiceImpl implements FacultyService {
         //map from DTO to entity
         facultyMapper.updateFacultyFromRequest(faculty, facultyUpdateRequest);
 
-        //save to database
-        facultyRepository.save(faculty);
 
         //set logo url to faculty
         if (faculty.getLogo() != null) {
+
+            //validate logo is available or not
+            if(!minioStorageService.doesObjectExist(facultyUpdateRequest.logo())){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Logo = %s has not been found",
+                        facultyUpdateRequest.logo()));
+            }
+
+            //set logo to faculty
             faculty.setLogo(getUrl(faculty.getLogo(), minioStorageService));
         }
+
+        //save to database
+        facultyRepository.save(faculty);
 
         //return faculty detail
         return facultyMapper.toFacultyDetailResponse(faculty);

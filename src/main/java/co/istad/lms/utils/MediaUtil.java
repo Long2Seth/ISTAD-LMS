@@ -32,4 +32,19 @@ public class MediaUtil {
         return url;
     }
 
+    public static boolean checkObjectExist(String fileName,MinioStorageService minioStorageService){
+
+        try {
+            String contentType = getContentType(fileName);
+            if(contentType==null){
+                return false;
+            }
+            String folderName = contentType.split("/")[0];
+            String objectName = folderName + "/" + fileName;
+            return minioStorageService.doesObjectExist(objectName);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Can not generate image url");
+        }
+    }
+
 }

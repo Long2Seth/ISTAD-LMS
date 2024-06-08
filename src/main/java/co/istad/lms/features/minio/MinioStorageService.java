@@ -39,7 +39,6 @@ public interface MinioStorageService {
      * @return the content type of the file
      * @throws Exception if an error occurs during the retrieval
      */
-    String getFileContentType(String objectName) throws Exception;
 
     /**
      * Generates a pre-signed URL for accessing a file in the Minio storage.
@@ -49,4 +48,6 @@ public interface MinioStorageService {
      * @throws Exception if an error occurs during the URL generation
      */
     String getPreSignedUrl(String objectName) throws Exception;
+
+    boolean doesObjectExist(String objectName);
 }
