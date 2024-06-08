@@ -2,7 +2,6 @@ package co.istad.lms.features.media;
 
 import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.media.dto.MediaResponse;
-import co.istad.lms.utils.MediaUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,9 +51,9 @@ public class MediaServiceImpl implements MediaService {
 
         String folderName = contentType.split("/")[0];
         String newName = UUID.randomUUID().toString();
-        String extension = MediaUtil.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
+        String extension = minioService.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String objectName = folderName + "/" + newName + "." + extension;
-        String url = minioService.getPreSignedUrl(objectName);
+        String url = minioService.getUrl(newName+"."+extension);
 
         try {
             minioService.uploadFile(file, objectName);
@@ -93,15 +92,13 @@ public class MediaServiceImpl implements MediaService {
 
         try {
             String contentType = getContentType(mediaName);
-            String folderName = contentType.split("/")[0];
-            String objectName = folderName + "/" + mediaName;
-            String url = minioService.getPreSignedUrl(objectName);
+            String url = minioService.getUrl(mediaName);
 
 
             return MediaResponse.builder()
                     .name(mediaName)
                     .contentType(contentType)
-                    .extension(MediaUtil.extractExtension(mediaName))
+                    .extension(minioService.extractExtension(mediaName))
                     .uri(url)
                     .build();
         } catch (Exception e) {
@@ -120,7 +117,7 @@ public class MediaServiceImpl implements MediaService {
 
             return MediaResponse.builder()
                     .name(mediaName)
-                    .extension(MediaUtil.extractExtension(mediaName))
+                    .extension(minioService.extractExtension(mediaName))
                     .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
                     .build();
 
@@ -154,7 +151,6 @@ public class MediaServiceImpl implements MediaService {
         try {
             return Files.probeContentType(path);
         } catch (IOException e) {
-            e.printStackTrace();
             return "Unknown type";
         }
     }

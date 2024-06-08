@@ -1,6 +1,7 @@
 package co.istad.lms.features.faculties.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import javax.swing.text.StyledEditorKit;

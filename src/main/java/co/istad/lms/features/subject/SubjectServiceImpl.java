@@ -1,14 +1,10 @@
 package co.istad.lms.features.subject;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Degree;
-import co.istad.lms.domain.StudyProgram;
 import co.istad.lms.domain.Subject;
 import co.istad.lms.features.minio.MinioStorageService;
-import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.subject.dto.SubjectDetailResponse;
 import co.istad.lms.features.subject.dto.SubjectRequest;
-import co.istad.lms.features.subject.dto.SubjectResponse;
 import co.istad.lms.features.subject.dto.SubjectUpdateRequest;
 import co.istad.lms.mapper.SubjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.charset.MalformedInputException;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static co.istad.lms.utils.MediaUtil.getUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +58,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //set logo url to faculty
         if (subject.getLogo() != null) {
-            subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+            subject.setLogo(minioStorageService.getUrl(subject.getLogo()));
         }
 
         //return subject detail
@@ -90,7 +81,7 @@ public class SubjectServiceImpl implements SubjectService {
         //set logo url to faculty
         subjects.forEach(subject -> {
             if (subject.getLogo() != null) {
-                subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+                subject.setLogo(minioStorageService.getUrl(subject.getLogo()));
             }
         });
 
@@ -128,7 +119,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //set logo url to faculty
         if (subject.getLogo() != null) {
-            subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+            subject.setLogo(minioStorageService.getUrl((subject.getLogo())));
         }
 
         //return Subject response
@@ -218,7 +209,7 @@ public class SubjectServiceImpl implements SubjectService {
         //set logo url to faculty
         subjects.forEach(subject -> {
             if (subject.getLogo() != null) {
-                subject.setLogo(getUrl(subject.getLogo(), minioStorageService));
+                subject.setLogo(minioStorageService.getUrl(subject.getLogo()));
             }
         });
         //map to DTO and return

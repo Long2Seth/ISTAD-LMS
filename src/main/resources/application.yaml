@@ -21,6 +21,12 @@ file:
   storage-dir: "filestorage/images/"
   client-dir: "/images/**"
 
+cache:
+  duration: ${CACHE-DURATION}
+  url-duration: ${URL-CACHE-DURATION}
+url:
+  expiry: ${URL-EXPIRY-TIME}
+
 minio:
   url: ${MINIO_URL}
   secret-key: ${MINIO_SECRETE_KEY}

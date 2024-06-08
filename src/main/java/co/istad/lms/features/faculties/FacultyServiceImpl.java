@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import static co.istad.lms.utils.MediaUtil.getUrl;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +39,8 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         //validate logo is available or not
-        if(facultyRequest.logo()!=null&& !minioStorageService.doesObjectExist(facultyRequest.logo())){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Logo = %s has not been found",
+        if (facultyRequest.logo() != null&&!facultyRequest.logo().isEmpty() && !minioStorageService.doesObjectExist(facultyRequest.logo())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     facultyRequest.logo()));
         }
 
@@ -64,7 +63,7 @@ public class FacultyServiceImpl implements FacultyService {
 
         //set logo url to faculty
         if (faculty.getLogo() != null) {
-            faculty.setLogo(getUrl(faculty.getLogo(), minioStorageService));
+            faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
         }
 
         //return Faculty detail
@@ -86,8 +85,8 @@ public class FacultyServiceImpl implements FacultyService {
 
         // update the logo URL for each faculty
         faculties.forEach(faculty -> {
-            if (faculty.getLogo() != null) {
-                faculty.setLogo(getUrl(faculty.getLogo(), minioStorageService));
+            if (faculty.getLogo() != null&&!faculty.getLogo().isEmpty()) {
+                faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
             }
         });
 
@@ -120,21 +119,20 @@ public class FacultyServiceImpl implements FacultyService {
         facultyMapper.updateFacultyFromRequest(faculty, facultyUpdateRequest);
 
 
-        //set logo url to faculty
-        if (faculty.getLogo() != null) {
+        if (facultyUpdateRequest.logo() != null&&!facultyUpdateRequest.logo().isEmpty()) {
 
             //validate logo is available or not
-            if(!minioStorageService.doesObjectExist(facultyUpdateRequest.logo())){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Logo = %s has not been found",
+            if (!minioStorageService.doesObjectExist(facultyUpdateRequest.logo())) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                         facultyUpdateRequest.logo()));
             }
-
-            //set logo to faculty
-            faculty.setLogo(getUrl(faculty.getLogo(), minioStorageService));
         }
 
         //save to database
         facultyRepository.save(faculty);
+
+        //set logo to faculty
+        faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
 
         //return faculty detail
         return facultyMapper.toFacultyDetailResponse(faculty);
@@ -225,8 +223,8 @@ public class FacultyServiceImpl implements FacultyService {
 
         //set logo url to faculty
         faculties.forEach(faculty -> {
-            if (faculty.getLogo() != null) {
-                faculty.setLogo(getUrl(faculty.getLogo(), minioStorageService));
+            if (faculty.getLogo() != null&&!faculty.getLogo().isEmpty()) {
+                faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
             }
         });
 

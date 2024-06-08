@@ -43,11 +43,13 @@ public interface MinioStorageService {
     /**
      * Generates a pre-signed URL for accessing a file in the Minio storage.
      *
-     * @param objectName the name of the object in the storage
+     * @param fileName the name of file
      * @return the pre-signed URL for accessing the file
-     * @throws Exception if an error occurs during the URL generation
      */
-    String getPreSignedUrl(String objectName) throws Exception;
+    String getUrl(String fileName);
 
-    boolean doesObjectExist(String objectName);
+
+    public  String extractExtension(String mediaName);
+
+    boolean doesObjectExist(String fileName);
 }
