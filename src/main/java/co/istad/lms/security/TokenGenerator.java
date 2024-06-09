@@ -33,7 +33,7 @@ public class TokenGenerator {
         //  we can also create scope for the token from the userDetails object here !
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
-                .expiresAt(now.plus(3, ChronoUnit.DAYS))
+                .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS") //
                 .build();
@@ -46,7 +46,7 @@ public class TokenGenerator {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
-                .expiresAt(now.plus(7, ChronoUnit.DAYS))
+                .expiresAt(now.plus(3, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
                 .build();

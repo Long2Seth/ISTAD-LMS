@@ -97,7 +97,7 @@ public class MinioStorageServiceImpl implements MinioStorageService {
 
             //check content type for file
             String contentType = getContentType(fileName);
-            if (contentType == null || !contentType.trim().isEmpty()) {
+            if (contentType == null || contentType.trim().isEmpty()) {
                 return false;
             }
 
