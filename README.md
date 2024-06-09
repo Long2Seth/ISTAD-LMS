@@ -90,7 +90,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **login** 
   - **Description:** Endpoint to login.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/auth/login`
+  - **Endpoint:** `/api/v1/auth/login`
   - **Request Body:**
 
 ```json
@@ -109,7 +109,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **register(not use)** 
   - **Description:** Endpoint to register(not use).
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/auth/register`
+  - **Endpoint:** `/api/v1/auth/register`
   - **Request Body:**
 
 ```json
@@ -158,7 +158,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **refresh** 
   - **Description:** Endpoint to refresh.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/auth/refresh`
+  - **Endpoint:** `/api/v1/auth/refresh`
   - **Request Body:**
 
 ```json
@@ -179,7 +179,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getPassword** 
   - **Description:** Endpoint to getpassword.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/password/view`
+  - **Endpoint:** `/api/v1/password/view`
   - **Request Body:**
 
 ```json
@@ -194,7 +194,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **changePassword** 
   - **Description:** Endpoint to changepassword.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/password/change`
+  - **Endpoint:** `/api/v1/password/change`
   - **Request Body:**
 
 ```json
@@ -217,7 +217,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **resetPassword** 
   - **Description:** Endpoint to resetpassword.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/password/reset`
+  - **Endpoint:** `/api/v1/password/reset`
   - **Request Body:**
 
 ```json
@@ -238,7 +238,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/authorities?pageNum=0&pageSize=50`
+  - **Endpoint:** `/api/v1/authorities?pageNum=0&pageSize=50`
   - **Request Body:**
 
 ```json
@@ -249,7 +249,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/authorities`
+  - **Endpoint:** `/api/v1/authorities`
   - **Request Body:**
 
 ```json
@@ -278,7 +278,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/faculties`
+  - **Endpoint:** `/api/v1/faculties`
   - **Request Body:**
 
 ```json
@@ -303,7 +303,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/faculties/sciences-and-technologies`
+  - **Endpoint:** `/api/v1/faculties/sciences-and-technologies`
   - **Request Body:**
 
 ```json
@@ -314,7 +314,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/faculties?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/faculties?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -325,7 +325,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/business-management-i`
+  - **Endpoint:** `/api/v1/faculties/business-management-i`
   - **Request Body:**
 
 ```json
@@ -346,7 +346,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/faculties/mis`
+  - **Endpoint:** `/api/v1/faculties/mis`
   - **Request Body:**
 
 ```json
@@ -357,7 +357,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/faculties/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/faculties/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -388,7 +388,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/business-management/enable`
+  - **Endpoint:** `/api/v1/faculties/business-management/enable`
   - **Request Body:**
 
 ```json
@@ -399,7 +399,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/business-management/public`
+  - **Endpoint:** `/api/v1/faculties/business-management/public`
   - **Request Body:**
 
 ```json
@@ -410,7 +410,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/business-management/draft`
+  - **Endpoint:** `/api/v1/faculties/business-management/draft`
   - **Request Body:**
 
 ```json
@@ -421,7 +421,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/business-management/disable`
+  - **Endpoint:** `/api/v1/faculties/business-management/disable`
   - **Request Body:**
 
 ```json
@@ -438,7 +438,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/degrees`
+  - **Endpoint:** `/api/v1/degrees`
   - **Request Body:**
 
 ```json
@@ -461,7 +461,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/degrees/bachelor`
+  - **Endpoint:** `/api/v1/degrees/bachelor`
   - **Request Body:**
 
 ```json
@@ -472,7 +472,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/degrees?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/degrees?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -483,7 +483,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/degrees/master`
+  - **Endpoint:** `/api/v1/degrees/master`
   - **Request Body:**
 
 ```json
@@ -502,7 +502,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/degrees/master`
+  - **Endpoint:** `/api/v1/degrees/master`
   - **Request Body:**
 
 ```json
@@ -513,7 +513,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/degrees/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/degrees/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -544,7 +544,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/degrees/master-i/enable`
+  - **Endpoint:** `/api/v1/degrees/master-i/enable`
   - **Request Body:**
 
 ```json
@@ -555,7 +555,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/degrees/master-i/disable`
+  - **Endpoint:** `/api/v1/degrees/master-i/disable`
   - **Request Body:**
 
 ```json
@@ -566,7 +566,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/degrees/master-i/public`
+  - **Endpoint:** `/api/v1/degrees/master-i/public`
   - **Request Body:**
 
 ```json
@@ -577,7 +577,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/degrees/master-i/draft`
+  - **Endpoint:** `/api/v1/degrees/master-i/draft`
   - **Request Body:**
 
 ```json
@@ -594,7 +594,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/study-programs`
+  - **Endpoint:** `/api/v1/study-programs`
   - **Request Body:**
 
 ```json
@@ -621,7 +621,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master-i`
+  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master-i`
   - **Request Body:**
 
 ```json
@@ -642,7 +642,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master-ii`
+  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master-ii`
   - **Request Body:**
 
 ```json
@@ -653,7 +653,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/study-programs?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/study-programs?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -664,7 +664,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/study-programs/{uuid}`
+  - **Endpoint:** `/api/v1/study-programs/{uuid}`
   - **Request Body:**
 
 ```json
@@ -675,7 +675,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/study-programs/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/study-programs/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -706,7 +706,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/enable`
+  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/enable`
   - **Request Body:**
 
 ```json
@@ -717,7 +717,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/disable`
+  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/disable`
   - **Request Body:**
 
 ```json
@@ -728,7 +728,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/public`
+  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/public`
   - **Request Body:**
 
 ```json
@@ -739,7 +739,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/draft`
+  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/draft`
   - **Request Body:**
 
 ```json
@@ -760,7 +760,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **addSubjectsByAlias** 
   - **Description:** Endpoint to addsubjectsbyalias.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/subjects`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/subjects`
   - **Request Body:**
 
 ```json
@@ -779,7 +779,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deletedSubjectFromYearOfStudy** 
   - **Description:** Endpoint to deletedsubjectfromyearofstudy.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/year-of-studies/84f538cf-b65d-43e7-94ce-2842431f4395/subjects/java-programming`
+  - **Endpoint:** `/api/v1/year-of-studies/84f538cf-b65d-43e7-94ce-2842431f4395/subjects/java-programming`
   - **Request Body:**
 
 ```json
@@ -792,7 +792,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/year-of-studies`
+  - **Endpoint:** `/api/v1/year-of-studies`
   - **Request Body:**
 
 ```json
@@ -813,7 +813,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915`
   - **Request Body:**
 
 ```json
@@ -830,7 +830,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915`
   - **Request Body:**
 
 ```json
@@ -841,7 +841,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/year-of-studies?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/year-of-studies?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -852,7 +852,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid(not use)** 
   - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
+  - **Endpoint:** `/api/v1/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
   - **Request Body:**
 
 ```json
@@ -863,7 +863,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/year-of-studies/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/year-of-studies/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -894,7 +894,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/enable`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/enable`
   - **Request Body:**
 
 ```json
@@ -905,7 +905,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/disable`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/disable`
   - **Request Body:**
 
 ```json
@@ -916,7 +916,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/public`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/public`
   - **Request Body:**
 
 ```json
@@ -927,7 +927,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/draft`
+  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/draft`
   - **Request Body:**
 
 ```json
@@ -944,7 +944,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/subjects`
+  - **Endpoint:** `/api/v1/subjects`
   - **Request Body:**
 
 ```json
@@ -1003,7 +1003,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/reactJs`
+  - **Endpoint:** `/api/v1/subjects/reactJs`
   - **Request Body:**
 
 ```json
@@ -1026,7 +1026,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/subjects/reactJs`
+  - **Endpoint:** `/api/v1/subjects/reactJs`
   - **Request Body:**
 
 ```json
@@ -1037,7 +1037,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/subjects?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/subjects?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1048,7 +1048,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/subbjects/java-basic`
+  - **Endpoint:** `/api/v1/subbjects/java-basic`
   - **Request Body:**
 
 ```json
@@ -1059,7 +1059,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/subjects/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/subjects/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1090,7 +1090,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/reactJs/disable`
+  - **Endpoint:** `/api/v1/subjects/reactJs/disable`
   - **Request Body:**
 
 ```json
@@ -1101,7 +1101,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/java-basic/enable`
+  - **Endpoint:** `/api/v1/subjects/java-basic/enable`
   - **Request Body:**
 
 ```json
@@ -1112,7 +1112,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/java-basic/public`
+  - **Endpoint:** `/api/v1/subjects/java-basic/public`
   - **Request Body:**
 
 ```json
@@ -1123,7 +1123,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **private** 
   - **Description:** Endpoint to private.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/java-basic/private`
+  - **Endpoint:** `/api/v1/subjects/java-basic/private`
   - **Request Body:**
 
 ```json
@@ -1140,7 +1140,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/shifts`
+  - **Endpoint:** `/api/v1/shifts`
   - **Request Body:**
 
 ```json
@@ -1169,7 +1169,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/shifts/weekday-evening`
+  - **Endpoint:** `/api/v1/shifts/weekday-evening`
   - **Request Body:**
 
 ```json
@@ -1194,7 +1194,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/shifts/weekday-morning`
+  - **Endpoint:** `/api/v1/shifts/weekday-morning`
   - **Request Body:**
 
 ```json
@@ -1205,7 +1205,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/shifts?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/shifts?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1216,7 +1216,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/shifts/weekday-evening`
+  - **Endpoint:** `/api/v1/shifts/weekday-evening`
   - **Request Body:**
 
 ```json
@@ -1227,7 +1227,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/shifts/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/shifts/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1258,7 +1258,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/enable`
+  - **Endpoint:** `/api/v1/shifts/weekday-morning/enable`
   - **Request Body:**
 
 ```json
@@ -1269,7 +1269,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/disable`
+  - **Endpoint:** `/api/v1/shifts/weekday-morning/disable`
   - **Request Body:**
 
 ```json
@@ -1280,7 +1280,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/public`
+  - **Endpoint:** `/api/v1/shifts/weekday-morning/public`
   - **Request Body:**
 
 ```json
@@ -1291,7 +1291,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/draft`
+  - **Endpoint:** `/api/v1/shifts/weekday-morning/draft`
   - **Request Body:**
 
 ```json
@@ -1314,7 +1314,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/admissions`
+  - **Endpoint:** `/api/v1/admissions`
   - **Request Body:**
 
 ```json
@@ -1339,7 +1339,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931`
+  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931`
   - **Request Body:**
 
 ```json
@@ -1350,7 +1350,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admissions?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/admissions?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1361,7 +1361,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931`
+  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931`
   - **Request Body:**
 
 ```json
@@ -1378,7 +1378,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid(not use)** 
   - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
+  - **Endpoint:** `/api/v1/admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
   - **Request Body:**
 
 ```json
@@ -1389,7 +1389,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admissions/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/admissions/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1420,7 +1420,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/disable`
+  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/disable`
   - **Request Body:**
 
 ```json
@@ -1431,7 +1431,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/enable`
+  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/enable`
   - **Request Body:**
 
 ```json
@@ -1442,7 +1442,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateStatusByUuid** 
   - **Description:** Endpoint to updatestatusbyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/status`
+  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/status`
   - **Request Body:**
 
 ```json
@@ -1463,7 +1463,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/student-admissions`
+  - **Endpoint:** `/api/v1/student-admissions`
   - **Request Body:**
 
 ```json
@@ -1518,7 +1518,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/student-admissions/736b0871-2c04-4dc9-a8d7-6d2d8bd9fee3`
+  - **Endpoint:** `/api/v1/student-admissions/736b0871-2c04-4dc9-a8d7-6d2d8bd9fee3`
   - **Request Body:**
 
 ```json
@@ -1529,7 +1529,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/student-admissions?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/student-admissions?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1540,7 +1540,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/student-admissions/2eef8ea3-158b-4ad6-890a-58cfd12133d1`
+  - **Endpoint:** `/api/v1/student-admissions/2eef8ea3-158b-4ad6-890a-58cfd12133d1`
   - **Request Body:**
 
 ```json
@@ -1561,7 +1561,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid(not use)** 
   - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/student-admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
+  - **Endpoint:** `/api/v1/student-admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
   - **Request Body:**
 
 ```json
@@ -1572,7 +1572,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/student-admissions/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/student-admissions/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1627,7 +1627,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/generations`
+  - **Endpoint:** `/api/v1/generations`
   - **Request Body:**
 
 ```json
@@ -1654,7 +1654,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/generations/gen1`
+  - **Endpoint:** `/api/v1/generations/gen1`
   - **Request Body:**
 
 ```json
@@ -1665,7 +1665,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/generations?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/generations?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1676,7 +1676,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/generations/gen1`
+  - **Endpoint:** `/api/v1/generations/gen1`
   - **Request Body:**
 
 ```json
@@ -1701,7 +1701,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/generations/gen1`
+  - **Endpoint:** `/api/v1/generations/gen1`
   - **Request Body:**
 
 ```json
@@ -1712,7 +1712,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/generations/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/generations/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1743,7 +1743,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/generations/gen1/enable`
+  - **Endpoint:** `/api/v1/generations/gen1/enable`
   - **Request Body:**
 
 ```json
@@ -1754,7 +1754,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/generations/gen1/enable`
+  - **Endpoint:** `/api/v1/generations/gen1/enable`
   - **Request Body:**
 
 ```json
@@ -1765,7 +1765,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/generations/gen1/public`
+  - **Endpoint:** `/api/v1/generations/gen1/public`
   - **Request Body:**
 
 ```json
@@ -1776,7 +1776,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/generations/gen1/draft`
+  - **Endpoint:** `/api/v1/generations/gen1/draft`
   - **Request Body:**
 
 ```json
@@ -1797,7 +1797,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **addStudentByUuid** 
   - **Description:** Endpoint to addstudentbyuuid.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/classes/dev-op/students`
+  - **Endpoint:** `/api/v1/classes/dev-op/students`
   - **Request Body:**
 
 ```json
@@ -1816,7 +1816,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteStudentByUuid** 
   - **Description:** Endpoint to deletestudentbyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/classes/{alias}/students/{uuid}`
+  - **Endpoint:** `/api/v1/classes/{alias}/students/{uuid}`
   - **Request Body:**
 
 ```json
@@ -1829,7 +1829,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/classes`
+  - **Endpoint:** `/api/v1/classes`
   - **Request Body:**
 
 ```json
@@ -1868,7 +1868,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/classes/dev-op2`
+  - **Endpoint:** `/api/v1/classes/dev-op2`
   - **Request Body:**
 
 ```json
@@ -1879,7 +1879,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/classes?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/classes?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1890,7 +1890,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/classes/beginners.`
+  - **Endpoint:** `/api/v1/classes/beginners.`
   - **Request Body:**
 
 ```json
@@ -1909,7 +1909,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/classes/e2`
+  - **Endpoint:** `/api/v1/classes/e2`
   - **Request Body:**
 
 ```json
@@ -1920,7 +1920,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/classes/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/classes/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -1953,7 +1953,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/classes/alias/enable`
+  - **Endpoint:** `/api/v1/classes/alias/enable`
   - **Request Body:**
 
 ```json
@@ -1964,7 +1964,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/classes/alias/enable`
+  - **Endpoint:** `/api/v1/classes/alias/enable`
   - **Request Body:**
 
 ```json
@@ -1975,7 +1975,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **public** 
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/classes/alias/public`
+  - **Endpoint:** `/api/v1/classes/alias/public`
   - **Request Body:**
 
 ```json
@@ -1986,7 +1986,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **draft** 
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/classes/alias/draft`
+  - **Endpoint:** `/api/v1/classes/alias/draft`
   - **Request Body:**
 
 ```json
@@ -2007,7 +2007,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **addInstructorByUuid** 
   - **Description:** Endpoint to addinstructorbyuuid.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/courses/{alias}/instructors/{uuid}`
+  - **Endpoint:** `/api/v1/courses/{alias}/instructors/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2018,7 +2018,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteInstructorByUuid** 
   - **Description:** Endpoint to deleteinstructorbyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/courses/{alias}/instructors/{uuid}`
+  - **Endpoint:** `/api/v1/courses/{alias}/instructors/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2031,7 +2031,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew(not use)** 
   - **Description:** Endpoint to createnew(not use).
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/courses`
+  - **Endpoint:** `/api/v1/courses`
   - **Request Body:**
 
 ```json
@@ -2060,7 +2060,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/courses/java-advance-data`
+  - **Endpoint:** `/api/v1/courses/java-advance-data`
   - **Request Body:**
 
 ```json
@@ -2071,7 +2071,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/courses?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/courses?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2082,7 +2082,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/courses/java2`
+  - **Endpoint:** `/api/v1/courses/java2`
   - **Request Body:**
 
 ```json
@@ -2101,7 +2101,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/course/{alias}`
+  - **Endpoint:** `/api/v1/course/{alias}`
   - **Request Body:**
 
 ```json
@@ -2112,7 +2112,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/courses/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/courses/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2167,7 +2167,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/courses/{uuid}/enable`
+  - **Endpoint:** `/api/v1/courses/{uuid}/enable`
   - **Request Body:**
 
 ```json
@@ -2178,7 +2178,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/courses/{uuid}/enable`
+  - **Endpoint:** `/api/v1/courses/{uuid}/enable`
   - **Request Body:**
 
 ```json
@@ -2195,7 +2195,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/lectures`
+  - **Endpoint:** `/api/v1/lectures`
   - **Request Body:**
 
 ```json
@@ -2226,7 +2226,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/lectures`
+  - **Endpoint:** `/api/v1/lectures`
   - **Request Body:**
 
 ```json
@@ -2237,7 +2237,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/faculties?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/faculties?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2248,7 +2248,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/lectures/Introduction to Java`
+  - **Endpoint:** `/api/v1/lectures/Introduction to Java`
   - **Request Body:**
 
 ```json
@@ -2277,7 +2277,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/lectures/Introduction to Java`
+  - **Endpoint:** `/api/v1/lectures/Introduction to Java`
   - **Request Body:**
 
 ```json
@@ -2288,7 +2288,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/lectures/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/lectures/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2319,7 +2319,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/{uuid}/enable`
+  - **Endpoint:** `/api/v1/faculties/{uuid}/enable`
   - **Request Body:**
 
 ```json
@@ -2330,7 +2330,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/faculties/{uuid}/enable`
+  - **Endpoint:** `/api/v1/faculties/{uuid}/enable`
   - **Request Body:**
 
 ```json
@@ -2347,7 +2347,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/scores`
+  - **Endpoint:** `/api/v1/scores`
   - **Request Body:**
 
 ```json
@@ -2382,7 +2382,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/scores/{uuid}`
+  - **Endpoint:** `/api/v1/scores/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2393,7 +2393,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/scores?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/scores?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2404,7 +2404,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/scores/{uuid}`
+  - **Endpoint:** `/api/v1/scores/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2429,7 +2429,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/scores/{uuid}`
+  - **Endpoint:** `/api/v1/scores/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2440,7 +2440,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/scores/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/scores/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2471,7 +2471,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/scores/{uuid}/enable`
+  - **Endpoint:** `/api/v1/scores/{uuid}/enable`
   - **Request Body:**
 
 ```json
@@ -2482,7 +2482,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/scores/{uuid}/enable`
+  - **Endpoint:** `/api/v1/scores/{uuid}/enable`
   - **Request Body:**
 
 ```json
@@ -2499,7 +2499,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/attendances`
+  - **Endpoint:** `/api/v1/attendances`
   - **Request Body:**
 
 ```json
@@ -2526,7 +2526,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/attendances/{uuid}`
+  - **Endpoint:** `/api/v1/attendances/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2537,7 +2537,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/attendances?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/attendances?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2548,7 +2548,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/attendances/{uuid}`
+  - **Endpoint:** `/api/v1/attendances/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2567,7 +2567,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/attendances/{uuid}`
+  - **Endpoint:** `/api/v1/attendances/{uuid}`
   - **Request Body:**
 
 ```json
@@ -2578,7 +2578,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/scores/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/scores/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2621,7 +2621,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/users?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/users?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2632,7 +2632,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllDetail** 
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/users/details?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/users/details?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2643,7 +2643,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/users/8e221fd6-14d5-4e65-8704-d1a79f5abac8`
+  - **Endpoint:** `/api/v1/users/8e221fd6-14d5-4e65-8704-d1a79f5abac8`
   - **Request Body:**
 
 ```json
@@ -2654,7 +2654,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getDetailByUuid** 
   - **Description:** Endpoint to getdetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/users/details/412201d1-27a1-481a-8573-28daa9a3f8ea`
+  - **Endpoint:** `/api/v1/users/details/412201d1-27a1-481a-8573-28daa9a3f8ea`
   - **Request Body:**
 
 ```json
@@ -2665,7 +2665,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllAdminUser** 
   - **Description:** Endpoint to getalladminuser.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/users/admins?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/users/admins?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2676,7 +2676,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/users/17d0c6b8-5671-479b-898d-e633795ce7ab`
+  - **Endpoint:** `/api/v1/users/17d0c6b8-5671-479b-898d-e633795ce7ab`
   - **Request Body:**
 
 ```json
@@ -2749,7 +2749,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08`
+  - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08`
   - **Request Body:**
 
 ```json
@@ -2760,7 +2760,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createUser** 
   - **Description:** Endpoint to createuser.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/users`
+  - **Endpoint:** `/api/v1/users`
   - **Request Body:**
 
 ```json
@@ -2809,7 +2809,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/enable`
+  - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/enable`
   - **Request Body:**
 
 ```json
@@ -2820,7 +2820,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/disable`
+  - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/disable`
   - **Request Body:**
 
 ```json
@@ -2831,7 +2831,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **block** 
   - **Description:** Endpoint to block.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/block`
+  - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/block`
   - **Request Body:**
 
 ```json
@@ -2848,7 +2848,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admins?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/admins?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2859,7 +2859,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllAdminDetail** 
   - **Description:** Endpoint to getalladmindetail.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admins/detail?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/admins/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -2870,7 +2870,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0`
+  - **Endpoint:** `/api/v1/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0`
   - **Request Body:**
 
 ```json
@@ -2881,7 +2881,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAdminDetailByUuid** 
   - **Description:** Endpoint to getadmindetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/admins/detail/bd47c1ee-b6d1-46c7-bcda-0e8acaecdeab`
+  - **Endpoint:** `/api/v1/admins/detail/bd47c1ee-b6d1-46c7-bcda-0e8acaecdeab`
   - **Request Body:**
 
 ```json
@@ -2892,7 +2892,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/admins`
+  - **Endpoint:** `/api/v1/admins`
   - **Request Body:**
 
 ```json
@@ -2945,7 +2945,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/admins/6086e407-02e2-48e2-8005-ce646acbd617`
+  - **Endpoint:** `/api/v1/admins/6086e407-02e2-48e2-8005-ce646acbd617`
   - **Request Body:**
 
 ```json
@@ -3042,7 +3042,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/disable`
+  - **Endpoint:** `/api/v1/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/disable`
   - **Request Body:**
 
 ```json
@@ -3053,7 +3053,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/enable`
+  - **Endpoint:** `/api/v1/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/enable`
   - **Request Body:**
 
 ```json
@@ -3064,7 +3064,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **block** 
   - **Description:** Endpoint to block.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0/block`
+  - **Endpoint:** `/api/v1/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0/block`
   - **Request Body:**
 
 ```json
@@ -3075,7 +3075,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d`
+  - **Endpoint:** `/api/v1/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d`
   - **Request Body:**
 
 ```json
@@ -3092,7 +3092,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/instructors?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/instructors?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3103,7 +3103,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllDetail** 
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/instructors/detail?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/instructors/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3114,7 +3114,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/instructors/66d30761-cdc6-41f9-98fb-07a52b121331`
+  - **Endpoint:** `/api/v1/instructors/66d30761-cdc6-41f9-98fb-07a52b121331`
   - **Request Body:**
 
 ```json
@@ -3125,7 +3125,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getDetailByUuid** 
   - **Description:** Endpoint to getdetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/instructors/detail/abde37f5-aa3d-4123-8121-2782fde7e706`
+  - **Endpoint:** `/api/v1/instructors/detail/abde37f5-aa3d-4123-8121-2782fde7e706`
   - **Request Body:**
 
 ```json
@@ -3136,7 +3136,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/instructors`
+  - **Endpoint:** `/api/v1/instructors`
   - **Request Body:**
 
 ```json
@@ -3189,7 +3189,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/instructors/187e91d9-ddc3-4f5c-9051-c9a02e5241d2`
+  - **Endpoint:** `/api/v1/instructors/187e91d9-ddc3-4f5c-9051-c9a02e5241d2`
   - **Request Body:**
 
 ```json
@@ -3294,7 +3294,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/enable`
+  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/enable`
   - **Request Body:**
 
 ```json
@@ -3305,7 +3305,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/disable`
+  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/disable`
   - **Request Body:**
 
 ```json
@@ -3316,7 +3316,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **block** 
   - **Description:** Endpoint to block.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/block`
+  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/block`
   - **Request Body:**
 
 ```json
@@ -3327,7 +3327,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf`
+  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf`
   - **Request Body:**
 
 ```json
@@ -3344,7 +3344,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/students?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/students?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3355,7 +3355,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllDetail** 
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/students/detail?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/students/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3366,7 +3366,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/students/80da63ce-84f7-42bd-a1f1-426c7ca3bd5c`
+  - **Endpoint:** `/api/v1/students/80da63ce-84f7-42bd-a1f1-426c7ca3bd5c`
   - **Request Body:**
 
 ```json
@@ -3377,7 +3377,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **geDetailByUuid** 
   - **Description:** Endpoint to gedetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/students/detail/f0b5dd7e-4397-4cd1-8785-dd0e683fa9e6`
+  - **Endpoint:** `/api/v1/students/detail/f0b5dd7e-4397-4cd1-8785-dd0e683fa9e6`
   - **Request Body:**
 
 ```json
@@ -3388,7 +3388,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/students`
+  - **Endpoint:** `/api/v1/students`
   - **Request Body:**
 
 ```json
@@ -3429,7 +3429,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/students/0764bf00-ff0b-4ef0-8253-14afc348ac90`
+  - **Endpoint:** `/api/v1/students/0764bf00-ff0b-4ef0-8253-14afc348ac90`
   - **Request Body:**
 
 ```json
@@ -3490,7 +3490,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/disable`
+  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/disable`
   - **Request Body:**
 
 ```json
@@ -3501,7 +3501,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/enable`
+  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/enable`
   - **Request Body:**
 
 ```json
@@ -3512,7 +3512,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **block** 
   - **Description:** Endpoint to block.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/block`
+  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/block`
   - **Request Body:**
 
 ```json
@@ -3523,7 +3523,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9`
+  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9`
   - **Request Body:**
 
 ```json
@@ -3540,7 +3540,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/academics?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/academics?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3551,7 +3551,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllDetail** 
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/academics/detail?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/academics/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3562,7 +3562,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/academics/75ce2581-4698-4ae3-b2a7-35c76d6ab435`
+  - **Endpoint:** `/api/v1/academics/75ce2581-4698-4ae3-b2a7-35c76d6ab435`
   - **Request Body:**
 
 ```json
@@ -3584,7 +3584,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/academics`
+  - **Endpoint:** `/api/v1/academics`
   - **Request Body:**
 
 ```json
@@ -3637,7 +3637,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/academics/72177f77-9053-4e30-a3c7-80b704333c47`
+  - **Endpoint:** `/api/v1/academics/72177f77-9053-4e30-a3c7-80b704333c47`
   - **Request Body:**
 
 ```json
@@ -3736,7 +3736,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
+  - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
   - **Request Body:**
 
 ```json
@@ -3747,7 +3747,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
+  - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
   - **Request Body:**
 
 ```json
@@ -3758,7 +3758,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **block** 
   - **Description:** Endpoint to block.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
+  - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
   - **Request Body:**
 
 ```json
@@ -3769,7 +3769,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+  - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
   - **Request Body:**
 
 ```json
@@ -3786,7 +3786,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/staffs?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/staffs?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -3808,7 +3808,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+  - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
   - **Request Body:**
 
 ```json
@@ -3830,7 +3830,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/staffs`
+  - **Endpoint:** `/api/v1/staffs`
   - **Request Body:**
 
 ```json
@@ -3903,7 +3903,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/staffs/05732c9c-e1d2-4382-bfdc-c3ebab215da0`
+  - **Endpoint:** `/api/v1/staffs/05732c9c-e1d2-4382-bfdc-c3ebab215da0`
   - **Request Body:**
 
 ```json
@@ -3990,7 +3990,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
+  - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
   - **Request Body:**
 
 ```json
@@ -4001,7 +4001,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
+  - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
   - **Request Body:**
 
 ```json
@@ -4012,7 +4012,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **block** 
   - **Description:** Endpoint to block.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/staffs/99efc622-5a59-4731-8c3c-1a1fbdd4e3ba/block`
+  - **Endpoint:** `/api/v1/staffs/99efc622-5a59-4731-8c3c-1a1fbdd4e3ba/block`
   - **Request Body:**
 
 ```json
@@ -4023,7 +4023,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+  - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
   - **Request Body:**
 
 ```json
@@ -4046,7 +4046,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **upload-single** 
   - **Description:** Endpoint to upload-single.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/medias/upload-single`
+  - **Endpoint:** `/api/v1/medias/upload-single`
   - **Request Body:**
 
 ```json
@@ -4057,7 +4057,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **upload-multiple** 
   - **Description:** Endpoint to upload-multiple.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/medias/upload-multiple`
+  - **Endpoint:** `/api/v1/medias/upload-multiple`
   - **Request Body:**
 
 ```json
@@ -4068,7 +4068,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByName** 
   - **Description:** Endpoint to getbyname.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/medias/a75e2608-efc8-45e7-8d87-238c66f564b1.jpg`
+  - **Endpoint:** `/api/v1/medias/a75e2608-efc8-45e7-8d87-238c66f564b1.jpg`
   - **Request Body:**
 
 ```json
@@ -4079,7 +4079,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByName(not use)** 
   - **Description:** Endpoint to deletebyname(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/medias/e9d6f354-677f-4021-8cdc-7192d999d4ca.png`
+  - **Endpoint:** `/api/v1/medias/e9d6f354-677f-4021-8cdc-7192d999d4ca.png`
   - **Request Body:**
 
 ```json
@@ -4090,7 +4090,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **downloadByName** 
   - **Description:** Endpoint to downloadbyname.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/medias/b4ca30ea-acfd-4c9b-8a09-79777c79da51.png/download`
+  - **Endpoint:** `/api/v1/medias/b4ca30ea-acfd-4c9b-8a09-79777c79da51.png/download`
   - **Request Body:**
 
 ```json
@@ -4107,7 +4107,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createNew** 
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/materials`
+  - **Endpoint:** `/api/v1/materials`
   - **Request Body:**
 
 ```json
@@ -4140,7 +4140,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByAlias** 
   - **Description:** Endpoint to updatebyalias.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
+  - **Endpoint:** `/api/v1/materials/java-introduction-slide-1`
   - **Request Body:**
 
 ```json
@@ -4165,7 +4165,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByAlias** 
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
+  - **Endpoint:** `/api/v1/materials/java-introduction-slide-1`
   - **Request Body:**
 
 ```json
@@ -4176,7 +4176,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/materials?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/materials?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -4187,7 +4187,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByAlias(not use)** 
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
+  - **Endpoint:** `/api/v1/materials/java-introduction-slide-1`
   - **Request Body:**
 
 ```json
@@ -4198,7 +4198,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/materials/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/materials/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -4229,7 +4229,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **disable** 
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/disable`
+  - **Endpoint:** `/api/v1/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/disable`
   - **Request Body:**
 
 ```json
@@ -4240,7 +4240,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **enable** 
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/enable`
+  - **Endpoint:** `/api/v1/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/enable`
   - **Request Body:**
 
 ```json
@@ -4263,7 +4263,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/payments?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/payments?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -4274,7 +4274,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/payments/012ab18c-b6bc-4d7d-8bcc-8d1a0e67c437`
+  - **Endpoint:** `/api/v1/payments/012ab18c-b6bc-4d7d-8bcc-8d1a0e67c437`
   - **Request Body:**
 
 ```json
@@ -4285,7 +4285,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **filter** 
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/payments/filter?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/payments/filter?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -4316,7 +4316,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createPayment** 
   - **Description:** Endpoint to createpayment.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/payments`
+  - **Endpoint:** `/api/v1/payments`
   - **Request Body:**
 
 ```json
@@ -4345,7 +4345,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/payments/1a5cc4c2-8c76-4743-aca7-cd5876dbf411`
+  - **Endpoint:** `/api/v1/payments/1a5cc4c2-8c76-4743-aca7-cd5876dbf411`
   - **Request Body:**
 
 ```json
@@ -4376,7 +4376,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/payments/9d865cc6-3bfb-41a3-a986-aca05c64b455`
+  - **Endpoint:** `/api/v1/payments/9d865cc6-3bfb-41a3-a986-aca05c64b455`
   - **Request Body:**
 
 ```json
@@ -4393,7 +4393,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAll** 
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/receipts?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/receipts?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -4404,7 +4404,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **create** 
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/receipts`
+  - **Endpoint:** `/api/v1/receipts`
   - **Request Body:**
 
 ```json
@@ -4431,7 +4431,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getByUuid** 
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
+  - **Endpoint:** `/api/v1/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
   - **Request Body:**
 
 ```json
@@ -4442,7 +4442,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
+  - **Endpoint:** `/api/v1/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
   - **Request Body:**
 
 ```json
@@ -4467,7 +4467,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/receipts/cf10f40b-2d4c-448a-b5f0-06fee5c1aacc`
+  - **Endpoint:** `/api/v1/receipts/cf10f40b-2d4c-448a-b5f0-06fee5c1aacc`
   - **Request Body:**
 
 ```json
@@ -4490,7 +4490,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getAllGraduation** 
   - **Description:** Endpoint to getallgraduation.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/graduations?pageNumber=1&pageSize=22`
+  - **Endpoint:** `/api/v1/graduations?pageNumber=1&pageSize=22`
   - **Request Body:**
 
 ```json
@@ -4501,7 +4501,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getgraduationByUuid** 
   - **Description:** Endpoint to getgraduationbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/graduations/74f1b8ef-831a-41ac-ad04-7aadafd32400`
+  - **Endpoint:** `/api/v1/graduations/74f1b8ef-831a-41ac-ad04-7aadafd32400`
   - **Request Body:**
 
 ```json
@@ -4512,7 +4512,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByUuid** 
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
+  - **Endpoint:** `/api/v1/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
   - **Request Body:**
 
 ```json
@@ -4533,7 +4533,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByUuid** 
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
+  - **Endpoint:** `/api/v1/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
   - **Request Body:**
 
 ```json
@@ -4550,7 +4550,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **allCurriculum** 
   - **Description:** Endpoint to allcurriculum.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/curriculums?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/curriculums?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
@@ -4561,7 +4561,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **getCurriculumByYearAndSemester** 
   - **Description:** Endpoint to getcurriculumbyyearandsemester.
   - **HTTP Method:** GET
-  - **Endpoint:** `{{base_url}}/curriculums/2024/Fall`
+  - **Endpoint:** `/api/v1/curriculums/2024/Fall`
   - **Request Body:**
 
 ```json
@@ -4572,7 +4572,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **createCurriculum** 
   - **Description:** Endpoint to createcurriculum.
   - **HTTP Method:** POST
-  - **Endpoint:** `{{base_url}}/curriculums`
+  - **Endpoint:** `/api/v1/curriculums`
   - **Request Body:**
 
 ```json
@@ -4625,7 +4625,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **addSubjectToCurriculum** 
   - **Description:** Endpoint to addsubjecttocurriculum.
   - **HTTP Method:** PATCH
-  - **Endpoint:** `{{base_url}}/curriculums/Foundation/one`
+  - **Endpoint:** `/api/v1/curriculums/Foundation/one`
   - **Request Body:**
 
 ```json
@@ -4674,7 +4674,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **updateByYearAndSemester** 
   - **Description:** Endpoint to updatebyyearandsemester.
   - **HTTP Method:** PUT
-  - **Endpoint:** `{{base_url}}/curriculums/Foundation/Semester one`
+  - **Endpoint:** `/api/v1/curriculums/Foundation/Semester one`
   - **Request Body:**
 
 ```json
@@ -4707,7 +4707,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **deleteByYearAndSemester** 
   - **Description:** Endpoint to deletebyyearandsemester.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `{{base_url}}/curriculums/Foundation/one`
+  - **Endpoint:** `/api/v1/curriculums/Foundation/one`
   - **Request Body:**
 
 ```json
