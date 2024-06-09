@@ -39,7 +39,7 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         //validate logo is available or not
-        if (facultyRequest.logo() != null && !facultyRequest.logo().trim().isEmpty() && !minioStorageService.doesObjectExist(facultyRequest.logo())) {
+        if ( !minioStorageService.doesObjectExist(facultyRequest.logo())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     facultyRequest.logo()));
         }
