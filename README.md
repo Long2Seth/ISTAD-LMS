@@ -52,11 +52,11 @@ Welcome to the official documentation for the iData API. This documentation prov
 iData is an open-source mock API with enormous datasets integration for beginning developers. With iData, you can easily create, manage, and test APIs using intuitive tools and features.
 
 ---
-<details><summary><b>Unnamed Folder</b></summary>
+## Unnamed Folder <a name="unnamed-folder"></a>
 
-<details><summary><b>Security Management</b></summary>
+## Security Management <a name="security-management"></a>
 
-<details><summary><b>auth</b></summary>
+## auth <a name="auth"></a>
 
 - **login** ➕
   - **Description:** Endpoint to login.
@@ -141,9 +141,7 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>password</b></summary>
+## password <a name="password"></a>
 
 - **getPassword** ➕
   - **Description:** Endpoint to getpassword.
@@ -198,9 +196,7 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>authority</b></summary>
+## authority <a name="authority"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -230,13 +226,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## Faculty Management <a name="faculty-management"></a>
 
-</details>
-
-<details><summary><b>Faculty Management</b></summary>
-
-<details><summary><b>faculty</b></summary>
+## faculty <a name="faculty"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -398,9 +390,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>degree</b></summary>
+## degree <a name="degree"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -552,9 +542,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>studyProgram</b></summary>
+## studyProgram <a name="studyprogram"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -712,11 +700,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## yearOfStudy <a name="yearofstudy"></a>
 
-<details><summary><b>yearOfStudy</b></summary>
-
-<details><summary><b>subjects</b></summary>
+## subjects <a name="subjects"></a>
 
 - **addSubjectsByAlias** ➕
   - **Description:** Endpoint to addsubjectsbyalias.
@@ -747,8 +733,6 @@ No Body
 
 ```
   - **Response:** No examples available
-
-</details>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -896,9 +880,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>subject</b></summary>
+## subject <a name="subject"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -1090,9 +1072,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>shifts</b></summary>
+## shifts <a name="shifts"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -1256,13 +1236,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## Admission Management <a name="admission-management"></a>
 
-</details>
-
-<details><summary><b>Admission Management</b></summary>
-
-<details><summary><b>admission</b></summary>
+## admission <a name="admission"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -1405,9 +1381,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>studentAmission</b></summary>
+## studentAmission <a name="studentamission"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -1561,13 +1535,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## Academic Management <a name="academic-management"></a>
 
-</details>
-
-<details><summary><b>Academic Management</b></summary>
-
-<details><summary><b>generation</b></summary>
+## generation <a name="generation"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -1707,11 +1677,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## class <a name="class"></a>
 
-<details><summary><b>class</b></summary>
-
-<details><summary><b>students</b></summary>
+## students <a name="students"></a>
 
 - **addStudentByUuid** ➕
   - **Description:** Endpoint to addstudentbyuuid.
@@ -1742,8 +1710,6 @@ No Body
 No Body
 ```
   - **Response:** No examples available
-
-</details>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -1891,11 +1857,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## course <a name="course"></a>
 
-<details><summary><b>course</b></summary>
-
-<details><summary><b>instructor</b></summary>
+## instructor <a name="instructor"></a>
 
 - **addInstructorByUuid** ➕
   - **Description:** Endpoint to addinstructorbyuuid.
@@ -1918,8 +1882,6 @@ No Body
 No Body
 ```
   - **Response:** No examples available
-
-</details>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -2079,9 +2041,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>lecture</b></summary>
+## lecture <a name="lecture"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -2229,9 +2189,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>score</b></summary>
+## score <a name="score"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -2379,9 +2337,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>attendance</b></summary>
+## attendance <a name="attendance"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -2493,13 +2449,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## user management <a name="user-management"></a>
 
-</details>
-
-<details><summary><b>user management</b></summary>
-
-<details><summary><b>user</b></summary>
+## user <a name="user"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -2711,9 +2663,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>admin</b></summary>
+## admin <a name="admin"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -2941,9 +2891,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>instructor</b></summary>
+## instructor <a name="instructor"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -3191,9 +3139,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>student</b></summary>
+## student <a name="student"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -3385,9 +3331,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>academic</b></summary>
+## academic <a name="academic"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -3629,9 +3573,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>staff</b></summary>
+## staff <a name="staff"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -3881,13 +3823,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## Material Mangement <a name="material-mangement"></a>
 
-</details>
-
-<details><summary><b>Material Mangement</b></summary>
-
-<details><summary><b>medias</b></summary>
+## medias <a name="medias"></a>
 
 - **upload-single** ➕
   - **Description:** Endpoint to upload-single.
@@ -3944,9 +3882,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>material</b></summary>
+## material <a name="material"></a>
 
 - **createNew** ➕
   - **Description:** Endpoint to createnew.
@@ -4092,9 +4028,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>curriculum</b></summary>
+## curriculum <a name="curriculum"></a>
 
 - **allCurriculum** ➕
   - **Description:** Endpoint to allcurriculum.
@@ -4264,13 +4198,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## Payment Management <a name="payment-management"></a>
 
-</details>
-
-<details><summary><b>Payment Management</b></summary>
-
-<details><summary><b>paymeent</b></summary>
+## paymeent <a name="paymeent"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -4398,9 +4328,7 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
-
-<details><summary><b>receipt</b></summary>
+## receipt <a name="receipt"></a>
 
 - **getAll** ➕
   - **Description:** Endpoint to getall.
@@ -4487,13 +4415,9 @@ No Body
 ```
   - **Response:** No examples available
 
-</details>
+## Public Website <a name="public-website"></a>
 
-</details>
-
-<details><summary><b>Public Website</b></summary>
-
-<details><summary><b>graduation</b></summary>
+## graduation <a name="graduation"></a>
 
 - **getAllGraduation** ➕
   - **Description:** Endpoint to getallgraduation.
@@ -4548,9 +4472,3 @@ No Body
 No Body
 ```
   - **Response:** No examples available
-
-</details>
-
-</details>
-
-</details>
