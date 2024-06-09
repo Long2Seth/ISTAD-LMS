@@ -161,4 +161,30 @@ public class GenerationServiceImpl implements GenerationService{
 
 
     }
+
+    @Override
+    public void publicGenerationByAlias(String alias) {
+
+        //validate generation from dto by alias
+        Generation generation = generationRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        generation.setIsDraft(false);
+
+        //save to database
+        generationRepository.save(generation);
+    }
+
+    @Override
+    public void draftGenerationByAlias(String alias) {
+
+        //validate generation from dto by alias
+        Generation generation = generationRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found ! ", alias)));
+
+        //set isDraft to true(draft)
+        generation.setIsDraft(true);
+
+        //save to database
+        generationRepository.save(generation);
+    }
 }

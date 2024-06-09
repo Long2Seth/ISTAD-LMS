@@ -17,6 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.prefs.BackingStoreException;
 
 @Service
@@ -35,11 +40,35 @@ public class ShiftServiceImpl implements ShiftService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Shift = %s already exists.", shiftRequest.alias()));
         }
 
+        LocalTime startTime = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            startTime = LocalTime.parse(shiftRequest.startTime(), formatter);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("StartTime = %s is not valid", shiftRequest.startTime()));
+        }
+
+        LocalTime endTime = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            endTime = LocalTime.parse(shiftRequest.endTime(), formatter);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("EndTime = %s is not valid", shiftRequest.endTime()));
+        }
+
         //map from DTO to entity
         Shift shift = shiftMapper.fromShiftRequest(shiftRequest);
 
         //set isDeleted to false(enable)
         shift.setIsDeleted(false);
+
+        //set startTime
+        shift.setStartTime(startTime);
+
+        //set endTime
+        shift.setEndTime(endTime);
 
         //save to database
         shiftRepository.save(shift);
@@ -92,8 +121,41 @@ public class ShiftServiceImpl implements ShiftService {
             }
         }
 
+        LocalTime startTime = null;
+        if (shiftUpdateRequest.startTime() != null && !shiftUpdateRequest.startTime().trim().isEmpty()) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+                startTime = LocalTime.parse(shiftUpdateRequest.startTime(), formatter);
+
+            } catch (DateTimeParseException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        String.format("StartTime = %s is not valid", shiftUpdateRequest.startTime()));
+            }
+
+        }
+
+        LocalTime endTime = null;
+        if (shiftUpdateRequest.endTime() != null && !shiftUpdateRequest.endTime().trim().isEmpty()) {
+            try {
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+                endTime = LocalTime.parse(shiftUpdateRequest.endTime(), formatter);
+            } catch (DateTimeParseException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        String.format("EndTime = %s is not valid", shiftUpdateRequest.endTime()));
+            }
+        }
+
         //map from DTO to entity
         shiftMapper.updateShiftFromRequest(shift, shiftUpdateRequest);
+
+        //set startTime
+        shift.setStartTime(startTime);
+
+        //set endTime
+        shift.setEndTime(endTime);
 
         //save to database
         shiftRepository.save(shift);

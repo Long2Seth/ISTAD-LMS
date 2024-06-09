@@ -105,4 +105,20 @@ public class ClassController {
         classService.deleteStudent(alias,uuid);
     }
 
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:update')")
+    void publicClass(@PathVariable String alias) {
+
+        classService.publicClassByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/draft")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('class:update')")
+    void draftClass(@PathVariable String alias) {
+
+        classService.draftClassByAlias(alias);
+    }
+
 }
