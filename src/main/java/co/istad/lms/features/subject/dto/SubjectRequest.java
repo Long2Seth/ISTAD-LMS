@@ -20,7 +20,7 @@ public record SubjectRequest(
         String title,
 
         String description,
-        String subjectLogo,
+        String logo,
 
         @NotNull(message = "theory is require")
         Integer theory,

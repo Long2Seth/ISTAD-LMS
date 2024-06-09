@@ -360,4 +360,30 @@ public class ClassServiceImpl implements ClassService {
         //save to database
         classRepository.save(aClass);
     }
+
+    @Override
+    public void publicClassByAlias(String alias) {
+
+        //validate class from dto by alias
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        aClass.setIsDraft(false);
+
+        //save to database
+        classRepository.save(aClass);
+    }
+
+    @Override
+    public void draftClassByAlias(String alias) {
+
+        //validate class from dto by alias
+        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
+
+        //set isDraft to true(draft)
+        aClass.setIsDraft(true);
+
+        //save to database
+        classRepository.save(aClass);
+    }
 }

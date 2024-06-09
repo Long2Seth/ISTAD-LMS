@@ -71,6 +71,22 @@ public class GenerationController {
         generationService.disableGenerationByAlias(alias);
     }
 
+    @PutMapping("/{alias}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void publicGeneration(@PathVariable String alias) {
+
+        generationService.publicGenerationByAlias(alias);
+    }
+
+    @PutMapping("/{alias}/draft")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    void draftGeneration(@PathVariable String alias) {
+
+        generationService.draftGenerationByAlias(alias);
+    }
+
     @GetMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<GenerationDetailResponse> filterGenerations(

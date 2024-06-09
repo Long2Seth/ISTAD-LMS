@@ -22,12 +22,10 @@ public record ShiftRequest(
         String name,
 
         @NotNull(message = "Start time is required")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-        LocalTime startTime,
+        String startTime,
 
         @NotNull(message = "End time is required")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-        LocalTime endTime,
+        String endTime,
 
         @NotNull(message = "Weekday is required")
         Boolean weekday,

@@ -5,14 +5,13 @@ import co.istad.lms.features.shift.dto.ShiftDetailResponse;
 import co.istad.lms.features.shift.dto.ShiftRequest;
 import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.shift.dto.ShiftUpdateRequest;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface ShiftMapper {
 
+    @Mapping(target = "startTime",ignore = true)
+    @Mapping(target = "endTime",ignore = true)
     Shift fromShiftRequest(ShiftRequest ShiftRequest);
 
     ShiftDetailResponse toShiftDetailResponse(Shift Shift);
@@ -20,6 +19,8 @@ public interface ShiftMapper {
     ShiftResponse toShiftResponse(Shift Shift);
 
 
+    @Mapping(target = "startTime",ignore = true)
+    @Mapping(target = "endTime",ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateShiftFromRequest(@MappingTarget Shift Shift, ShiftUpdateRequest ShiftUpdateRequest);
 }
