@@ -54,6 +54,16 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 ---
 
+## For application.ylm profile <a name=""></a>
+
+
+- **Instructor:** Profile use [test]
+- **Student and frontend:** Profile use [dev]
+
+---
+## For application.ylm profile <a name=""></a>
+**DownLoad postman document:** https://drive.google.com/file/d/1f_HXE7LdqyFopPTr-r8ZhKKoR1yhE7U5/view?usp=sharing
+---
 ## ISTAD LMS API <a name="istad-lms-api"></a>
 
 <details><summary>Show/Hide</summary>
