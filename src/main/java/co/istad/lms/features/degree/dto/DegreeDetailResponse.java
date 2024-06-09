@@ -6,9 +6,7 @@ public record DegreeDetailResponse(
         String alias,
         String level,
         String description,
-        String modifiedBy,
-        Boolean isDeleted,
-        LocalDateTime createdAt,
-        LocalDateTime lastModifiedAt
+        Boolean isDraft,
+        Boolean isDeleted
 ) {
 }

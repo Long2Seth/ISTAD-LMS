@@ -1,14 +1,18 @@
 package co.istad.lms.features.degree;
 
+import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Degree;
-import co.istad.lms.features.degree.dto.DegreeCreateRequest;
+import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
 import co.istad.lms.mapper.DegreeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,58 +21,173 @@ import org.springframework.web.server.ResponseStatusException;
 public class DegreeServiceImpl implements DegreeService {
 
     private final DegreeMapper degreeMapper;
+
     private final DegreeRepository degreeRepository;
 
+    private final BaseSpecification<Degree> baseSpecification;
 
     @Override
-    public DegreeDetailResponse createDegree(DegreeCreateRequest degreeRequest) {
+    public void createDegree(DegreeRequest degreeRequest) {
 
-        if(degreeRepository.existsByAlias(degreeRequest.alias())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "degree with alias "+degreeRequest.alias()+"is already exist!!");
+        //validate degree by alias
+        if (degreeRepository.existsByAlias(degreeRequest.alias())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Degree = %s has already existed.", degreeRequest.alias()));
         }
 
-        if(degreeRepository.existsByLevel(degreeRequest.alias())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "degree with alias "+degreeRequest.alias()+"is already exist!!");
-        }
+        // map DTO to entity
+        Degree degree = degreeMapper.fromDegreeRequest(degreeRequest);
 
-        Degree degree =degreeMapper.fromDegreeRequest(degreeRequest);
-        return null;
+        //set isDeleted to false(enable)
+        degree.setIsDeleted(false);
+
+        //save to database
+        degreeRepository.save(degree);
+
     }
 
     @Override
     public DegreeDetailResponse getDegreeByAlias(String alias) {
-        return null;
+
+        //find degree by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
+
+        //return degree detail
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
 
-    @Override
-    public DegreeDetailResponse getDegreeByLevel(String level) {
-        return null;
-    }
 
     @Override
-    public DegreeDetailResponse getAllDegree() {
-        return null;
+    public Page<DegreeDetailResponse> getAllDegrees(int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all degrees in database
+        Page<Degree> degrees = degreeRepository.findAll(pageRequest);
+
+        //map entity to DTO and return
+        return degrees.map(degreeMapper::toDegreeDetailResponse);
     }
 
-    @Override
-    public DegreeResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
-        return null;
-    }
 
     @Override
-    public DegreeResponse updateDegreeByLevel(String level, DegreeUpdateRequest degreeUpdateRequest) {
-        return null;
+    public DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
+
+        //find degree by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
+
+        //check null alias from DTO
+        if (degreeUpdateRequest.alias() != null) {
+
+            //validate alias from dto with original alias
+            if (!alias.equalsIgnoreCase(degreeUpdateRequest.alias())) {
+
+                //validate new alias is conflict with other alias or not
+                if (degreeRepository.existsByAlias(degreeUpdateRequest.alias())) {
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Degree = %s already exist.", degreeUpdateRequest.alias()));
+                }
+            }
+        }
+
+        //map DTO to entity
+        degreeMapper.updateDegreeFromRequest(degree, degreeUpdateRequest);
+
+        //save to database
+        degreeRepository.save(degree);
+
+        //return Degree DTO
+        return degreeMapper.toDegreeDetailResponse(degree);
     }
+
 
     @Override
     public void deleteDegreeByAlias(String alias) {
 
+        //find degree in database by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
+
+        //delete degree in database
+        degreeRepository.delete(degree);
     }
 
     @Override
-    public void deleteDegreeByLevel(String level) {
+    public void enableDegreeByAlias(String alias) {
+
+        //validate degree from dto by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDeleted to false(enable)
+        degree.setIsDeleted(false);
+
+        //save to database
+        degreeRepository.save(degree);
+    }
+
+    @Override
+    public void publicDegreeByAlias(String alias) {
+
+        //validate degree from dto by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        degree.setIsDraft(false);
+
+        //save to database
+        degreeRepository.save(degree);
+    }
+
+    @Override
+    public void draftDegreeByAlias(String alias) {
+
+        //validate degree from dto by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDraft to true(private)
+        degree.setIsDraft(true);
+
+        //save to database
+        degreeRepository.save(degree);
+    }
+
+    @Override
+    public void disableDegreeByAlias(String alias) {
+
+        //validate degree from dto by alias
+        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+
+        //set isDeleted to true(disable)
+        degree.setIsDeleted(true);
+
+        //set isDraft to true(private)
+        degree.setIsDraft(true);
+
+        //save to database
+        degreeRepository.save(degree);
 
     }
+
+    @Override
+    public Page<DegreeDetailResponse> filterDegrees(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //create a dynamic query specification for filtering Degree entities based on the criteria provided
+        Specification<Degree> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<Degree> degrees = degreeRepository.findAll(specification, pageRequest);
+
+        //map to DTO and return
+        return degrees.map(degreeMapper::toDegreeDetailResponse);
+
+    }
+
 }

@@ -20,7 +20,8 @@ public class ValidationException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BasedErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
+    BasedErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
+
         BasedError<List<?>> basedError = new BasedError<>();
         List<Map<String, Object>> errors = new ArrayList<>();
 
@@ -38,9 +39,4 @@ public class ValidationException {
         return new BasedErrorResponse(basedError);
     }
 
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> handleServiceErrors(ResponseStatusException ex) {
-        return ResponseEntity.status(ex.getStatusCode())
-                .body(Map.of("errors", ex.getReason()));
-    }
 }

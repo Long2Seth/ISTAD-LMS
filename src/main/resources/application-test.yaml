@@ -1,0 +1,40 @@
+DB_USERNAME: istadlms
+DB_PASSWORD: ISTAD@LMS
+DB_HOST: 152.42.220.220
+DB_PORT: 5436
+DB_NAME: istad_lms_db
+
+ACT_PRIVATE: access-refresh-token-keys/access-token-private.key
+ACT_PUBLIC: access-refresh-token-keys/access-token-public.key
+# This is for the refresh token
+RET_PRIVATE: access-refresh-token-keys/refresh-token-private.key
+RET_PUBLIC: access-refresh-token-keys/refresh-token-public.key
+
+SERVER_PORT: 8080
+
+DOMAIN: http://localhost:8080
+
+MAIL_USERNAME: sokname56@gmail.com
+MAIL_PASSWORD: ehis ldbm otct hykc
+MAIL_HOST: smtp.gmail.com
+MAIL_HOST_PORT: 587
+
+SECURITY_NAME: soknem
+SECURITY_PASSWORD: 12345
+
+MINIO_URL: http://152.42.220.220:9000
+MINIO_ACCESS_KEY: oDoNzywQ1izDAGesaewc
+MINIO_SECRETE_KEY: OloMCKeWUuEbxMieFO5cOMWTRsTseKiF3kmislhU
+MINIO_BUCKET: minio-test-bucket-1
+
+TELEGRAM_TOKEN: 7241005023:AAFWXOc957x3OVrfr4KuyWhnueKl1RHwmEI
+#TELEGRAM_USERNAME: istad_admission_bot
+TELEGRAM_ID: -1002229493417
+
+#MEDIA_SERVER_PATH: D:\\SERVER\\ITE\\
+MEDIA_BASE_URI: http://152.42.220.220:9090/
+
+#number of hour
+CACHE-DURATION: 12
+URL-CACHE-DURATION: 12
+URL-EXPIRY-TIME : 24

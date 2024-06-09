@@ -1,19 +1,13 @@
 package co.istad.lms.features.admission;
 
-import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
-import co.istad.lms.features.admission.dto.AdmissionResponse;
-import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.admission.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admissions")
@@ -22,78 +16,87 @@ public class AdmissionController {
 
     private final AdmissionService admissionService;
 
-    @PostMapping("/")
-    public ResponseEntity<AdmissionResponse> createNewAdmission(@Valid @RequestBody AdmissionCreateRequest admissionCreateRequest) {
-        AdmissionResponse createdAdmission = admissionService.createAdmission(admissionCreateRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmission);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('admission:write')")
+    public void createAdmission(@Valid @RequestBody AdmissionRequest admissionCreateRequest) {
+
+        admissionService.createAdmission(admissionCreateRequest);
+
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<AdmissionResponse> getAdmissionById(@PathVariable String uuid) {
-        AdmissionResponse admissionResponse = admissionService.getAdmissionByUuid(uuid);
-        return ResponseEntity.ok(admissionResponse);
-    }
+    @PreAuthorize("hasAnyAuthority('admission:read')")
+    public AdmissionDetailResponse getAdmissionByUuid(@PathVariable String uuid) {
 
-    @GetMapping("/name-en/{nameEn}")
-    public ResponseEntity<List<AdmissionResponse>> getAdmissionByNameEn(@PathVariable String nameEn) {
-        List<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameEn(nameEn);
-        return ResponseEntity.ok(admissionResponse);
-    }
-
-    @GetMapping("/name-kh/{nameKh}")
-    public ResponseEntity<List<AdmissionResponse>> getAdmissionByNameKh(@PathVariable String nameKh) {
-        List<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameKh(nameKh);
-        return ResponseEntity.ok(admissionResponse);
-    }
-
-    @GetMapping("/name-en-contain/{nameEnContain}")
-    public ResponseEntity<Page<AdmissionResponse>> getAdmissionByNameEnContains(
-            @PathVariable String nameEnContain,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameEnContains(nameEnContain, pageable);
-        return ResponseEntity.ok(admissionResponse);
-    }
-
-    @GetMapping("/name-kh-contain/{nameKhContain}")
-    public ResponseEntity<Page<AdmissionResponse>> getAdmissionByNameKhContains(
-            @PathVariable String nameKhContain,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<AdmissionResponse> admissionResponse = admissionService.getAdmissionByNameKhContains(nameKhContain, pageable);
-        return ResponseEntity.ok(admissionResponse);
+        return admissionService.getAdmissionByUuid(uuid);
     }
 
 
-    @GetMapping("/")
-    public ResponseEntity<Page<AdmissionResponse>> getAllAdmissions(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortOrder
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('admission:read')")
+    public Page<AdmissionDetailResponse> getAllAdmissions(
+
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Page<AdmissionResponse> admissionsPage = admissionService.getAllAdmissions(pageable);
-        return ResponseEntity.ok(admissionsPage);
+
+        return admissionService.getAllAdmissions(pageNumber, pageSize);
     }
 
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<AdmissionResponse> updateAdmission(@PathVariable String uuid,
-                                                             @RequestBody AdmissionUpdateRequest admissionRequest) {
-        AdmissionResponse updatedAdmission = admissionService.updateAdmission(uuid, admissionRequest);
-        return ResponseEntity.ok(updatedAdmission);
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('admission:update')")
+    public AdmissionDetailResponse updateAdmission(
+
+            @PathVariable String uuid,
+            @Valid @RequestBody AdmissionUpdateRequest admissionRequest) {
+
+        return admissionService.updateAdmission(uuid, admissionRequest);
+    }
+
+    @PutMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admission:update')")
+    void enableAdmission(@PathVariable String uuid) {
+
+        admissionService.enableAdmissionByUuid(uuid);
+    }
+
+    @PutMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admission:update')")
+    void disableAdmission(@PathVariable String uuid) {
+
+        admissionService.disableAdmissionByUuid(uuid);
+    }
+
+    @PutMapping("/{uuid}/status")
+    @PreAuthorize("hasAnyAuthority('admission:update')")
+    void updateAdmissionStatus(@PathVariable String uuid, @Valid @RequestBody AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
+
+        admissionService.updateAdmissionStatus(uuid, admissionUpdateStatusRequest);
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteAdmission(@PathVariable String uuid) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('admission:delete')")
+    public void deleteAdmission(@PathVariable String uuid) {
+
         admissionService.deleteAdmission(uuid);
-        return ResponseEntity.noContent().build();
+
+    }
+
+    @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('admission:read')")
+    public Page<AdmissionDetailResponse> filterAdmissions(
+
+            @RequestBody BaseSpecification.FilterDto filterDto,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return admissionService.filterAdmissions(filterDto, pageNumber, pageSize);
     }
 }

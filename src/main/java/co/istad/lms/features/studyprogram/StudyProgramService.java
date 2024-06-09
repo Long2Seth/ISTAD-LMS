@@ -1,0 +1,120 @@
+package co.istad.lms.features.studyprogram;
+
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
+import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
+import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
+import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
+import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+/**
+ * Service interface for managing studyProgram.
+ *
+ * @author Pov Soknem
+ * @since 1.0 (2024)
+ */
+public interface StudyProgramService {
+
+    /**
+     * Creates a new studyProgram.
+     *
+     * @param studyProgramRequest is the request object containing the details of the study program to be created
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void createStudyProgram(StudyProgramRequest studyProgramRequest);
+
+    /**
+     * Retrieves the details of a studyProgram by its alias.
+     *
+     * @param alias is the unique name of studyProgram
+     * @return {@link StudyProgramDetailResponse}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    StudyProgramDetailResponse getStudyProgramByAlias(String alias);
+
+    /**
+     * Retrieves a paginated list of all studyProgram.
+     *
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the number record per pageNumber to retrieve
+     * @return {@link Page<StudyProgramDetailResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    Page<StudyProgramDetailResponse> getAllStudyPrograms(int pageNumber, int pageSize);
+
+    /**
+     * Updates an existing study program by its alias.
+     *
+     * @param alias is the unique name of studyProgram
+     * @param studyProgramUpdateRequest the request object containing the updated details of the study program
+     * @return {@link StudyProgramDetailResponse}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    StudyProgramDetailResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest);
+
+    /**
+     * Deletes a study program by its alias.
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void deleteStudyProgramByAlias(String alias);
+
+
+    /**
+     * Enable studyProgram
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void enableStudyProgramByAlias(String alias);
+
+    /**
+     * Disable studyProgram by alias
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void disableStudyProgramByAlias(String alias);
+
+    /**
+     * public studyProgram by alias
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicStudyProgramByAlias(String alias);
+
+
+    /**
+     * draft studyProgram by alias
+     *
+     * @param alias is the unique name of studyProgram
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void draftStudyProgramByAlias(String alias);
+
+    /**
+     * filter studyProgram by any field
+     *
+     * @param filterDto is object for request to filter
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the number record per pageNumber to retrieve
+     * @return {@link Page<StudyProgramDetailResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+}

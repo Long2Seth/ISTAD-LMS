@@ -1,12 +1,16 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -19,19 +23,31 @@ public class StudyProgram extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50, name = "alias", unique = true)
+    @Column(nullable = false, length = 50, unique = true)
     private String alias;
 
-    @Column(nullable = false, length = 50, name = "syudy_program_name")
+    @Column( length = 50,nullable = false)
     private String studyProgramName;
 
-    @Column(nullable = false, length = 50, name = "description")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "logo")
+    @Column(columnDefinition = "TEXT")
     private String logo;
 
-    @Column(name = "faculty_id")
-    private Long facultyId;
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
+    @Column(nullable = false)
+    private Boolean isDraft;
+
+    @ManyToOne
+    @JoinColumn(name = "degree_alias",nullable = false)
+    private Degree degree;
+
+    @ManyToOne
+    @JoinColumn(name = "faculty_alias",nullable = false)
+    private Faculty faculty;
+
 
 }

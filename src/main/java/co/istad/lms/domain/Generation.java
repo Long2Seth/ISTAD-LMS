@@ -1,41 +1,43 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @Table(name = "generations")
 @Entity
-public class Generation extends Auditable{
+public class Generation extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , length = 50 , name = "alias")
+    @Column(nullable = false,unique = true)
     private String alias;
 
-    @Column(nullable = false , length = 50 , name = "name")
+    @Column(nullable = false , length = 50)
     private String name;
 
-    @Column(nullable = false , length = 50 , name = "description")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column( name = "start_year" , nullable = false)
+    @Column(nullable = false)
     private Integer startYear;
 
-    @Column( name = "end_year" , nullable = false)
+    @Column(nullable = false)
     private Integer endYear;
 
-    @Column( name = "is_deleted" , nullable = false)
+    @Column(nullable = false)
     private Boolean isDeleted;
+
+    @Column(nullable = false)
+    private Boolean isDraft;
 
 
 }

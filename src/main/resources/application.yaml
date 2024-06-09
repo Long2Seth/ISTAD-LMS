@@ -1,5 +1,5 @@
 media:
-#  server-path: ${MEDIA_SERVER_PATH}
+  #  server-path: ${MEDIA_SERVER_PATH}
   #  client-path: /media/**
   base-uri: ${MEDIA_BASE_URI}
 server:
@@ -21,11 +21,26 @@ file:
   storage-dir: "filestorage/images/"
   client-dir: "/images/**"
 
+cache:
+  duration: ${CACHE-DURATION}
+  url-duration: ${URL-CACHE-DURATION}
+url:
+  expiry: ${URL-EXPIRY-TIME}
+
 minio:
   url: ${MINIO_URL}
   secret-key: ${MINIO_SECRETE_KEY}
   bucket-name: ${MINIO_BUCKET}
   access-key: ${MINIO_ACCESS_KEY}
+
+app:
+  domain: ${DOMAIN}
+
+telegram:
+  bot:
+    token: ${TELEGRAM_TOKEN}
+#    username: ${TELEGRAM_USERNAME}
+    id: ${TELEGRAM_ID}
 
 spring:
   application:
@@ -42,8 +57,11 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update # or update
+      ddl-auto: update
     generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
   security:
     user:
       name: ${SECURITY_NAME}

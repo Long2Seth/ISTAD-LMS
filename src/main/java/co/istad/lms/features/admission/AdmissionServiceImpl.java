@@ -1,26 +1,26 @@
 // AdmissionServiceImpl.java
+
 package co.istad.lms.features.admission;
 
-import co.istad.lms.domain.Admission;
-import co.istad.lms.domain.Degree;
-import co.istad.lms.domain.Shift;
-import co.istad.lms.domain.StudyProgram;
-import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
-import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
-import co.istad.lms.features.admission.dto.AdmissionResponse;
-import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.*;
+import co.istad.lms.features.admission.dto.*;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.telegrambot.TelegramBotService;
 import co.istad.lms.mapper.AdmissionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -28,101 +28,164 @@ import java.util.UUID;
 public class AdmissionServiceImpl implements AdmissionService {
 
     private final AdmissionRepository admissionRepository;
+
     private final AdmissionMapper admissionMapper;
-    private final DegreeRepository degreeRepository;
-    private final ShiftRepository shiftRepository;
-    private final StudyProgramRepository studyProgramRepository;
+
+    private final BaseSpecification<Admission> baseSpecification;
 
     @Override
-    public AdmissionResponse createAdmission(AdmissionCreateRequest admissionCreateRequest) {
-        Degree degree = degreeRepository.findByAlias(admissionCreateRequest.degreeAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "degree with Degree alias =" + admissionCreateRequest.degreeAlias() + "not found"));
-        Shift shift = shiftRepository.findByAlias(admissionCreateRequest.shiftAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "shift with shift alias =" + admissionCreateRequest.shiftAlias() + "not found"));
+    public void createAdmission(AdmissionRequest admissionRequest) {
 
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(admissionCreateRequest.studyProgramAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "study program with study program alias =" + admissionCreateRequest.studyProgramAlias() + "not found"));
+        //map form DTO to entity
+        Admission admission = admissionMapper.fromAdmissionRequest(admissionRequest);
 
-        Admission admission = admissionMapper.fromAdmissionRequest(admissionCreateRequest);
-        admission.setUuid(UUID.randomUUID().toString()); // Generate UUID
-        admission.setShift(shift);
-        admission.setDegree(degree);
-        admission.setStudyProgram(studyProgram);
-        admission = admissionRepository.save(admission);
-        return admissionMapper.toAdmissionResponse(admission);
+        // Check if the status of admission is set to 1 (open)
+        if (admissionRequest.status() == 1) {
+
+            // Find all admissions that are open (status = 1)
+            Set<Admission> admissions = admissionRepository.findAllByStatus(1);
+
+            // Close all open admissions (set status to 2)
+            admissions.forEach(admissionMap -> admissionMap.setStatus(2));
+
+            // Batch save all updated admissions
+            admissionRepository.saveAll(admissions);
+        }
+
+        //set uuid to admission
+        admission.setUuid(UUID.randomUUID().toString());
+
+        admission.setIsDeleted(false);
+
+        //save to database
+        admissionRepository.save(admission);
     }
 
     @Override
     public AdmissionDetailResponse getAdmissionByUuid(String uuid) {
-        Admission admission = admissionRepository.findByUuid(uuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Admission with uuid = " + uuid + " doesn't exist ! "));
+
+        //find admission in database by uuid
+        Admission admission = admissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ", uuid)));
+
+        //save to database and return AdmissionDetail
         return admissionMapper.toAdmissionDetailResponse(admission);
     }
 
     @Override
-    public List<AdmissionResponse> getAdmissionByNameEn(String nameEn) {
-        if (!admissionRepository.existsByNameEn(nameEn)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Admission with name = " + nameEn + " doesn't exist ! ");
-        }
-        List<Admission> admission = admissionRepository.findByNameEnIgnoreCase(nameEn);
-        return admission.stream().map(
-                admissionMapper::toAdmissionResponse).toList();
+    public Page<AdmissionDetailResponse> getAllAdmissions(int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+
+        //find all admission in database
+        Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
+
+        //map entity to database and return AdmissionDetail
+        return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
     }
 
     @Override
-    public List<AdmissionResponse> getAdmissionByNameKh(String nameKh) {
-        if (!admissionRepository.existsByNameKh(nameKh)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Admission with name = " + nameKh + " doesn't exist ! ");
-        }
-        List<Admission> admission = admissionRepository.findByNameKhIgnoreCase(nameKh);
-        return admission.stream().map(
-                admissionMapper::toAdmissionResponse).toList();
-    }
+    public AdmissionDetailResponse updateAdmission(String admissionUuid,
+                                                   AdmissionUpdateRequest admissionUpdateRequest) {
 
-    @Override
-    public Page<AdmissionResponse> getAdmissionByNameEnContains(String nameEnContain, Pageable pageable) {
-        Page<Admission> admissionsPage = admissionRepository.findByNameEnContainingIgnoreCase(nameEnContain, pageable);
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
-    }
+        //find admission by uuid in database
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission  = %s has not been found ! ", admissionUuid)));
 
-    @Override
-    public Page<AdmissionResponse> getAdmissionByNameKhContains(String nameKhContain, Pageable pageable) {
-        Page<Admission> admissionsPage = admissionRepository.findByNameKhContainingIgnoreCase(nameKhContain, pageable);
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
-    }
+        //map data from DTO to entity
+        admissionMapper.updateAdmissionFromRequest(admission, admissionUpdateRequest);
 
+        //save to database
+        admissionRepository.save(admission);
 
-    @Override
-    public Page<AdmissionResponse> getAllAdmissions(Pageable pageable) {
-        Page<Admission> admissionsPage = admissionRepository.findAll(pageable);
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
-    }
-
-    @Override
-    public AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionRequest) {
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Account with id = " + admissionUuid + " doesn't exist ! "));
-
-        admissionMapper.updateAdmissionFromRequest(admission, admissionRequest);
-        admission = admissionRepository.save(admission);
-        return admissionMapper.toAdmissionResponse(admission);
+        //return admissionResponse to controller
+        return admissionMapper.toAdmissionDetailResponse(admission);
     }
 
     @Override
     public void deleteAdmission(String admissionUuid) {
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Account with id = " + admissionUuid + " doesn't exist ! "));
+
+        //validate admission by uuid
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
+
+        //delete from database
         admissionRepository.delete(admission);
     }
+
+    @Override
+    public void disableAdmissionByUuid(String admissionUuid) {
+
+        //validate from dto with uuid
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
+
+        //set isDelete to true (disable)
+        admission.setIsDeleted(true);
+
+        //save to database
+        admissionRepository.save(admission);
+    }
+
+    @Override
+    public void enableAdmissionByUuid(String admissionUuid) {
+
+        //validate from dto by uuid
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
+
+        //set isDeleted to false(enable)
+        admission.setIsDeleted(false);
+
+        //save to database
+        admissionRepository.save(admission);
+
+    }
+
+    @Override
+    public void updateAdmissionStatus(String uuid, AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
+
+        Admission admission = admissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found", uuid)));
+
+        // Check if the status of the admission is set to 1 (open)
+        if (admissionUpdateStatusRequest.status() == 1) {
+
+            // Find all admissions that are open (status = 1)
+            Set<Admission> admissions = admissionRepository.findAllByStatus(1);
+
+            // Update status to 2 for all open admissions
+            admissions.forEach(admissionMap -> admissionMap.setStatus(2));
+
+            // Batch save all updated admissions
+            admissionRepository.saveAll(admissions);
+        }
+
+
+        //set new status
+        admission.setStatus(admissionUpdateStatusRequest.status());
+
+        //save to database
+        admissionRepository.save(admission);
+
+    }
+
+    @Override
+    public Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //create a dynamic query specification for filtering Admission entities based on the criteria provided
+        Specification<Admission> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<Admission> admissionsPage = admissionRepository.findAll(specification, pageRequest);
+
+        //map to DTO and return
+        return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
+
+    }
+
 }

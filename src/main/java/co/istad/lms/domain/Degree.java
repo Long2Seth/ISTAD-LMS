@@ -1,11 +1,10 @@
 package co.istad.lms.domain;
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,17 +17,19 @@ public class Degree extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50, name = "alias", unique = true)
+    @Column(nullable = false, unique = true)
     private String alias;
 
-    @Column(nullable = false, length = 50, name = "level", unique = true)
+    @Column(nullable = false, length = 50)
     private String level;
 
-    @Column(name = "description")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean is_deleted;
+    @Column(nullable = false)
+    private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isDraft;
 
 }

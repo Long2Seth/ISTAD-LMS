@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "minio")
 public class MinioProperties {
+
     private String url;
     private String accessKey;
     private String secretKey;

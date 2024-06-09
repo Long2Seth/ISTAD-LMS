@@ -1,6 +1,8 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,24 +13,30 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "attendances")
 @Entity
-public class Attendance {
+public class Attendance extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "uuid" , nullable = false )
+    @Column(nullable = false, unique = true)
     private String uuid;
 
-    @Column ( name = "status" , nullable = false )
-    private Boolean status;
+    @Column(nullable = false)
+    private Integer status;
 
-    @Column ( name = "note")
+    @Column(columnDefinition = "TEXT")
     private String note;
 
-    @Column ( name = "student_id" , nullable = false )
-    private Long studentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id", nullable = false)
+    private Lecture lecture;
 
-    @Column (name = "lecture_id" , nullable = false)
-    private Long lectureId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
 }

@@ -1,25 +1,18 @@
 package co.istad.lms.features.admission;
 
 import co.istad.lms.domain.Admission;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import co.istad.lms.domain.StudentAdmission;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-public interface AdmissionRepository extends JpaRepository<Admission, Long> {
+public interface AdmissionRepository extends JpaRepository<Admission, Long>,JpaSpecificationExecutor<Admission> {
     Optional<Admission> findByUuid(String uuid);
 
-    Boolean existsByNameEn(String nameEn);
+    Optional<Admission> findByStatus(Integer status);
 
-    Boolean existsByNameKh(String nameKh);
-
-    List<Admission> findByNameEnIgnoreCase(String nameEn);
-
-    List<Admission> findByNameKhIgnoreCase(String nameKh);
-
-    Page<Admission> findByNameEnContainingIgnoreCase(String nameEn, Pageable pageable);
-
-    Page<Admission> findByNameKhContainingIgnoreCase(String nameKh, Pageable pageable);
+    Set<Admission> findAllByStatus(Integer status);
 }

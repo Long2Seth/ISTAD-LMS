@@ -1,6 +1,7 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,23 +12,32 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "faculties")
 @Entity
-public class Faculty extends Auditable{
+public class Faculty extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , length = 50 , name = "alias")
+    @Column(nullable = false,unique = true)
     private String alias;
 
-    @Column(nullable = false , length = 50 , name = "name")
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false , length = 50 , name = "description")
+    @Column(columnDefinition = "TEXT")
+    String logo;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column( name = "address" , nullable = false , length = 50)
+    @Column(columnDefinition = "TEXT")
     private String address;
+
+    @Column( nullable = false)
+    private Boolean isDeleted=false;
+
+    @Column(nullable = false)
+    private Boolean isDraft;
 
 
 }
