@@ -26,7 +26,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
+    public AuthResponse login(@Valid @RequestBody AuthRequest request) {
         return authService.login(request);
     }
 
@@ -37,46 +37,6 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Register new user",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UserRequest.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                                {
-                                                    "alias": "sophea",
-                                                    "nameEn": "sophea",
-                                                    "nameKh": "សុភា",
-                                                    "username": "sophea",
-                                                    "gender": "Male",
-                                                    "email": "sophea@example.com",
-                                                    "password": "password123",
-                                                    "profileImage": "http://example.com/profile.jpg",
-                                                    "phoneNumber": "+123456789",
-                                                    "cityOrProvince": "Phnom Penh",
-                                                    "khanOrDistrict": "Chamkar Mon",
-                                                    "sangkatOrCommune": "Tonle Bassac",
-                                                    "street": "123",
-                                                    "birthPlace": {
-                                                        "cityOrProvince": "string",
-                                                        "khanOrDistrict": "string",
-                                                        "sangkatOrCommune": "string",
-                                                        "villageOrPhum": "string",
-                                                        "street": "string",
-                                                        "houseNumber": "string"
-                                                    },
-                                                    "authorities": [
-                                                        {
-                                                            "authorityName": "user:write"
-                                                        }
-                                                    ]
-                                                }
-                                            """
-                            )
-                    )
-            )
-    )
     public UserResponse registerUser(@Valid @RequestBody UserRequest userRequest) {
         return userService.createUser(userRequest);
     }
