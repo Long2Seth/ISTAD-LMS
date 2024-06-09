@@ -21,16 +21,17 @@ Welcome to the official documentation for the iData API. This documentation prov
 iData is an open-source mock API with enormous datasets integration for beginning developers. With iData, you can easily create, manage, and test APIs using intuitive tools and features.
 
 ---
-## Unnamed Folder <a name="unnamed-folder"></a>
+<details><summary><b>Unnamed Folder</b></summary>
 
-  ## Security Management <a name="security-management"></a>
+<details><summary><b>Security Management</b></summary>
 
-    ## auth <a name="auth"></a>
+<details><summary><b>auth</b></summary>
 
-      ### login ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/auth/login`
-      - **Request Body:**
+- **login** ➕
+  - **Description:** Endpoint to login.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/auth/login`
+  - **Request Body:**
 
 ```json
 {
@@ -43,13 +44,13 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### register ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/auth/register`
-      - **Request Body:**
+- **register** ➕
+  - **Description:** Endpoint to register.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/auth/register`
+  - **Request Body:**
 
 ```json
 {
@@ -92,13 +93,13 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### refresh ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/auth/refresh`
-      - **Request Body:**
+- **refresh** ➕
+  - **Description:** Endpoint to refresh.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/auth/refresh`
+  - **Request Body:**
 
 ```json
 {
@@ -107,15 +108,17 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-    ## password <a name="password"></a>
+<details><summary><b>password</b></summary>
 
-      ### getPassword ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/password/view`
-      - **Request Body:**
+- **getPassword** ➕
+  - **Description:** Endpoint to getpassword.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/password/view`
+  - **Request Body:**
 
 ```json
 {
@@ -124,13 +127,13 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### changePassword ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/password/change`
-      - **Request Body:**
+- **changePassword** ➕
+  - **Description:** Endpoint to changepassword.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/password/change`
+  - **Request Body:**
 
 ```json
 {
@@ -147,13 +150,13 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### resetPassword ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/password/reset`
-      - **Request Body:**
+- **resetPassword** ➕
+  - **Description:** Endpoint to resetpassword.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/password/reset`
+  - **Request Body:**
 
 ```json
 {
@@ -162,26 +165,28 @@ iData is an open-source mock API with enormous datasets integration for beginnin
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-    ## authority <a name="authority"></a>
+<details><summary><b>authority</b></summary>
 
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/authorities?pageNum=0&pageSize=50`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/authorities?pageNum=0&pageSize=50`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/authorities`
-      - **Request Body:**
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/authorities`
+  - **Request Body:**
 
 ```json
 {
@@ -192,17 +197,21 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-  ## Faculty Management <a name="faculty-management"></a>
+</details>
 
-    ## faculty <a name="faculty"></a>
+<details><summary><b>Faculty Management</b></summary>
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/faculties`
-      - **Request Body:**
+<details><summary><b>faculty</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/faculties`
+  - **Request Body:**
 
 ```json
 {
@@ -225,35 +234,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/faculties/business-management-4`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/faculties/business-management-4`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/faculties?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/faculties?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/business-management`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/business-management`
+  - **Request Body:**
 
 ```json
 {
@@ -270,24 +279,24 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/faculties/mis`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/faculties/mis`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/faculties/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/faculties/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -312,59 +321,61 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/business-management/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### public ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/business-management/public`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/business-management/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### draft ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/business-management/draft`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/business-management/disable`
-      - **Request Body:**
+- **public** ➕
+  - **Description:** Endpoint to public.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/business-management/public`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **draft** ➕
+  - **Description:** Endpoint to draft.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/business-management/draft`
+  - **Request Body:**
 
-    ## degree <a name="degree"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/degrees`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/business-management/disable`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+<details><summary><b>degree</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/degrees`
+  - **Request Body:**
 
 ```json
 {
@@ -381,35 +392,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/degrees/master`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/degrees?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/degrees/master`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/degrees?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/degrees/master`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/degrees/master`
+  - **Request Body:**
 
 ```json
 {
@@ -422,24 +433,24 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/degrees/master`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/degrees/master`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/degrees/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/degrees/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -464,59 +475,61 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/degrees/master/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/degrees/master/disable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/degrees/master/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### public ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/degrees/master/public`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### draft ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/degrees/master/draft`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/degrees/master/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **public** ➕
+  - **Description:** Endpoint to public.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/degrees/master/public`
+  - **Request Body:**
 
-    ## studyProgram <a name="studyprogram"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/study-programs`
-      - **Request Body:**
+- **draft** ➕
+  - **Description:** Endpoint to draft.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/degrees/master/draft`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+<details><summary><b>studyProgram</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/study-programs`
+  - **Request Body:**
 
 ```json
 {
@@ -537,13 +550,13 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master`
+  - **Request Body:**
 
 ```json
 {
@@ -558,46 +571,46 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/study-programs?pageNumber=0&pageSize=25`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/study-programs/{uuid}`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/study-programs?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/study-programs/{uuid}`
+  - **Request Body:**
 
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/study-programs/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/study-programs/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -622,61 +635,63 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/disable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### public ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/public`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### private ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/private`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **public** ➕
+  - **Description:** Endpoint to public.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/public`
+  - **Request Body:**
 
-    ## yearOfStudy <a name="yearofstudy"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ## subjects <a name="subjects"></a>
+- **private** ➕
+  - **Description:** Endpoint to private.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/study-programs/management-information-systems-master/private`
+  - **Request Body:**
 
-        ### addSubjectsByAlias ➕
-        - **HTTP Method:** POST
-        - **Endpoint:** `{{base_url}}/year-of-studies/392c75c3-03c5-4838-b23a-315b638d3f2f/subjects`
-        - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+<details><summary><b>yearOfStudy</b></summary>
+
+<details><summary><b>subjects</b></summary>
+
+- **addSubjectsByAlias** ➕
+  - **Description:** Endpoint to addsubjectsbyalias.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/year-of-studies/392c75c3-03c5-4838-b23a-315b638d3f2f/subjects`
+  - **Request Body:**
 
 ```json
 {
@@ -689,24 +704,26 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-        - **Response:** No examples available
-
-        ### deletedSubjectFromYearOfStudy ➕
-        - **HTTP Method:** DELETE
-        - **Endpoint:** `{{base_url}}/year-of-studies/84f538cf-b65d-43e7-94ce-2842431f4395/subjects/java-programming`
-        - **Request Body:**
+- **deletedSubjectFromYearOfStudy** ➕
+  - **Description:** Endpoint to deletedsubjectfromyearofstudy.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/year-of-studies/84f538cf-b65d-43e7-94ce-2842431f4395/subjects/java-programming`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-        - **Response:** No examples available
+</details>
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/year-of-studies`
-      - **Request Body:**
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/year-of-studies`
+  - **Request Body:**
 
 ```json
 {
@@ -721,13 +738,13 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
+  - **Request Body:**
 
 ```json
 {
@@ -738,46 +755,46 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/year-of-studies/c9c632fa-af83-4f97-bd99-c78e8b94fef0`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/year-of-studies?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/year-of-studies/c9c632fa-af83-4f97-bd99-c78e8b94fef0`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/year-of-studies?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
+  - **Request Body:**
 
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/year-of-studies/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/year-of-studies/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -802,59 +819,61 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/enable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### public ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/public`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### draft ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/draft`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **public** ➕
+  - **Description:** Endpoint to public.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/public`
+  - **Request Body:**
 
-    ## subject <a name="subject"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/subjects`
-      - **Request Body:**
+- **draft** ➕
+  - **Description:** Endpoint to draft.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/year-of-studies/{uuid}/draft`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+<details><summary><b>subject</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/subjects`
+  - **Request Body:**
 
 ```json
 {
@@ -907,13 +926,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/java-basic`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/java-basic`
+  - **Request Body:**
 
 ```json
 {
@@ -930,46 +949,46 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/subjects/java-basic`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/subjects/java-basic`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/subjects?pageNumber=0&pageSize=25`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/subbjects/java-basic`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/subjects?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/subbjects/java-basic`
+  - **Request Body:**
 
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/subjects/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/subjects/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -994,59 +1013,61 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/java-basic/disable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/java-basic/enable`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/java-basic/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### public ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/java-basic/public`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### private ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/java-basic/private`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/java-basic/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **public** ➕
+  - **Description:** Endpoint to public.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/java-basic/public`
+  - **Request Body:**
 
-    ## shifts <a name="shifts"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/shifts`
-      - **Request Body:**
+- **private** ➕
+  - **Description:** Endpoint to private.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/java-basic/private`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+<details><summary><b>shifts</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/shifts`
+  - **Request Body:**
 
 ```json
 {
@@ -1069,13 +1090,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/shifts/weekday-afternoon`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/shifts/weekday-afternoon`
+  - **Request Body:**
 
 ```json
 {
@@ -1094,46 +1115,46 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/shifts/weekday-afternoon1`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/shifts/weekday-afternoon1`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/shifts?pageNumber=0&pageSize=25`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/shifts/weekday-morning`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/shifts?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/shifts/weekday-morning`
+  - **Request Body:**
 
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/shifts/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/shifts/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -1158,61 +1179,65 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/shifts/weekday-morning/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/shifts/weekday-afternoon/disable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### public ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/shifts/weekday-morning/public`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### draft ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/shifts/weekday-morning/draft`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/shifts/weekday-afternoon/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **public** ➕
+  - **Description:** Endpoint to public.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/public`
+  - **Request Body:**
 
-  ## Admission Management <a name="admission-management"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-    ## admission <a name="admission"></a>
+- **draft** ➕
+  - **Description:** Endpoint to draft.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/shifts/weekday-morning/draft`
+  - **Request Body:**
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/admissions`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+</details>
+
+<details><summary><b>Admission Management</b></summary>
+
+<details><summary><b>admission</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/admissions`
+  - **Request Body:**
 
 ```json
 {
@@ -1231,35 +1256,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admissions/3e29b29e-a52d-414a-8e31-dadd17522343`
-      - **Request Body:**
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admissions/3e29b29e-a52d-414a-8e31-dadd17522343`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admissions?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admissions?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/admissions/2e30a5fe-30be-4be2-b232-4e67ae1f844c`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/admissions/2e30a5fe-30be-4be2-b232-4e67ae1f844c`
+  - **Request Body:**
 
 ```json
 { "remark": "update",
@@ -1268,24 +1293,24 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admissions/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admissions/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -1310,35 +1335,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/admissions/3e29b29e-a52d-414a-8e31-dadd17522343/disable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/admissions/3e29b29e-a52d-414a-8e31-dadd17522343/enable`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/admissions/3e29b29e-a52d-414a-8e31-dadd17522343/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/admissions/3e29b29e-a52d-414a-8e31-dadd17522343/enable`
+  - **Request Body:**
 
-      ### updateStatusByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/admissions/91df7fd6-e63e-4127-9311-2ec75e295ce7/status`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateStatusByUuid** ➕
+  - **Description:** Endpoint to updatestatusbyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/admissions/91df7fd6-e63e-4127-9311-2ec75e295ce7/status`
+  - **Request Body:**
 
 ```json
 {
@@ -1347,15 +1372,17 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-    ## studentAmission <a name="studentamission"></a>
+<details><summary><b>studentAmission</b></summary>
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/student-admissions`
-      - **Request Body:**
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/student-admissions`
+  - **Request Body:**
 
 ```json
 {
@@ -1404,35 +1431,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/student-admissions/eabfb42e-7ee9-478a-b38b-72a07dd92b25`
-      - **Request Body:**
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/student-admissions/eabfb42e-7ee9-478a-b38b-72a07dd92b25`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/student-admissions?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/student-admissions?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/student-admissions/2eef8ea3-158b-4ad6-890a-58cfd12133d1`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/student-admissions/2eef8ea3-158b-4ad6-890a-58cfd12133d1`
+  - **Request Body:**
 
 ```json
 { "nameEn": "soknem",
@@ -1447,24 +1474,24 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/student-admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/student-admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/student-admissions/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/student-admissions/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -1501,17 +1528,21 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-  ## Academic Management <a name="academic-management"></a>
+</details>
 
-    ## generation <a name="generation"></a>
+<details><summary><b>Academic Management</b></summary>
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/generations`
-      - **Request Body:**
+<details><summary><b>generation</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/generations`
+  - **Request Body:**
 
 ```json
 {
@@ -1532,35 +1563,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/generations/gen1`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/generations?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/generations/gen1`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/generations?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/generations/gen1`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/generations/gen1`
+  - **Request Body:**
 
 ```json
 {
@@ -1579,24 +1610,24 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/generations/gen1`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/generations/gen1`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/generations/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/generations/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -1621,39 +1652,41 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/generations/gen1/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/generations/gen1/enable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/generations/gen1/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/generations/gen1/enable`
+  - **Request Body:**
 
-    ## class <a name="class"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ## students <a name="students"></a>
+</details>
 
-        ### addStudentByUuid ➕
-        - **HTTP Method:** POST
-        - **Endpoint:** `{{base_url}}/classes/dev-op/students`
-        - **Request Body:**
+<details><summary><b>class</b></summary>
+
+<details><summary><b>students</b></summary>
+
+- **addStudentByUuid** ➕
+  - **Description:** Endpoint to addstudentbyuuid.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/classes/dev-op/students`
+  - **Request Body:**
 
 ```json
 {
@@ -1666,24 +1699,26 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-        - **Response:** No examples available
-
-        ### deleteStudentByUuid ➕
-        - **HTTP Method:** DELETE
-        - **Endpoint:** `{{base_url}}/classes/{alias}/students/{uuid}`
-        - **Request Body:**
+- **deleteStudentByUuid** ➕
+  - **Description:** Endpoint to deletestudentbyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/classes/{alias}/students/{uuid}`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-        - **Response:** No examples available
+</details>
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/classes`
-      - **Request Body:**
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/classes`
+  - **Request Body:**
 
 ```json
 {
@@ -1716,35 +1751,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/classes/dev-op2`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/classes?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/classes/dev-op2`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/classes?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/classes/beginners.`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/classes/beginners.`
+  - **Request Body:**
 
 ```json
 {
@@ -1757,24 +1792,24 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/classes/e2`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/classes/e2`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/classes/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/classes/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -1801,61 +1836,65 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/classes/alias/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/classes/alias/enable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/classes/alias/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-    ## course <a name="course"></a>
-
-      ## instructor <a name="instructor"></a>
-
-        ### addInstructorByUuid ➕
-        - **HTTP Method:** POST
-        - **Endpoint:** `{{base_url}}/courses/{alias}/instructors/{uuid}`
-        - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/classes/alias/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-        - **Response:** No examples available
+</details>
 
-        ### deleteInstructorByUuid ➕
-        - **HTTP Method:** DELETE
-        - **Endpoint:** `{{base_url}}/courses/{alias}/instructors/{uuid}`
-        - **Request Body:**
+<details><summary><b>course</b></summary>
+
+<details><summary><b>instructor</b></summary>
+
+- **addInstructorByUuid** ➕
+  - **Description:** Endpoint to addinstructorbyuuid.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/courses/{alias}/instructors/{uuid}`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-        - **Response:** No examples available
+- **deleteInstructorByUuid** ➕
+  - **Description:** Endpoint to deleteinstructorbyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/courses/{alias}/instructors/{uuid}`
+  - **Request Body:**
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/courses`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/courses`
+  - **Request Body:**
 
 ```json
 {
@@ -1878,35 +1917,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/courses/java-advance-data`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/courses?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/courses/java-advance-data`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/courses?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/courses/java2`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/courses/java2`
+  - **Request Body:**
 
 ```json
 {
@@ -1919,24 +1958,24 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/course/{alias}`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/course/{alias}`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/courses/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/courses/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -1985,37 +2024,39 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/courses/{uuid}/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/courses/{uuid}/enable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/courses/{uuid}/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/courses/{uuid}/enable`
+  - **Request Body:**
 
-    ## lecture <a name="lecture"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/lectures`
-      - **Request Body:**
+</details>
+
+<details><summary><b>lecture</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/lectures`
+  - **Request Body:**
 
 ```json
 {
@@ -2040,35 +2081,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/lectures`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/lectures`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/faculties?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/faculties?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/lectures/Introduction to Java`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/lectures/Introduction to Java`
+  - **Request Body:**
 
 ```json
 {
@@ -2091,24 +2132,24 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/lectures/Introduction to Java`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/lectures/Introduction to Java`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/lectures/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/lectures/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -2133,37 +2174,39 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/{uuid}/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/faculties/{uuid}/enable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/{uuid}/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/faculties/{uuid}/enable`
+  - **Request Body:**
 
-    ## score <a name="score"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/scores`
-      - **Request Body:**
+</details>
+
+<details><summary><b>score</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/scores`
+  - **Request Body:**
 
 ```json
 {
@@ -2192,35 +2235,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/scores/{uuid}`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/scores/{uuid}`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/scores?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/scores?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/scores/{uuid}`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/scores/{uuid}`
+  - **Request Body:**
 
 ```json
 {
@@ -2239,24 +2282,24 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/scores/{uuid}`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/scores/{uuid}`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/scores/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/scores/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -2281,37 +2324,39 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/scores/{uuid}/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/scores/{uuid}/enable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/scores/{uuid}/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/scores/{uuid}/enable`
+  - **Request Body:**
 
-    ## attendance <a name="attendance"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/attendances`
-      - **Request Body:**
+</details>
+
+<details><summary><b>attendance</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/attendances`
+  - **Request Body:**
 
 ```json
 {
@@ -2332,35 +2377,35 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/attendances/{uuid}`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/attendances/{uuid}`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/attendances?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/attendances?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/attendances/{uuid}`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/attendances/{uuid}`
+  - **Request Body:**
 
 ```json
 {
@@ -2373,24 +2418,24 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/attendances/{uuid}`
-      - **Request Body:**
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/attendances/{uuid}`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/scores/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/scores/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -2415,61 +2460,65 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-  ## user management <a name="user-management"></a>
+</details>
 
-    ## user <a name="user"></a>
+<details><summary><b>user management</b></summary>
 
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/users?pageNumber=0&pageSize=25`
-      - **Request Body:**
+<details><summary><b>user</b></summary>
 
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAllDetail ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `UNKNOWN`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/users?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/users/8e221fd6-14d5-4e65-8704-d1a79f5abac8`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getAllAdminUser ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/users/admins?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **getAllDetail** ➕
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `UNKNOWN`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/users/8e221fd6-14d5-4e65-8704-d1a79f5abac8`
+  - **Request Body:**
 
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/users/17d0c6b8-5671-479b-898d-e633795ce7ab`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getAllAdminUser** ➕
+  - **Description:** Endpoint to getalladminuser.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/users/admins?pageNumber=0&pageSize=25`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/users/17d0c6b8-5671-479b-898d-e633795ce7ab`
+  - **Request Body:**
 
 ```json
 {
@@ -2536,24 +2585,24 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### createUser ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/users`
-      - **Request Body:**
+- **createUser** ➕
+  - **Description:** Endpoint to createuser.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/users`
+  - **Request Body:**
 
 ```json
 {
@@ -2596,92 +2645,94 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/disable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### block ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/block`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-    ## admin <a name="admin"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admins?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAllAdminDetail ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admins/detail`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0`
-      - **Request Body:**
+- **block** ➕
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/block`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getAdminDetailByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/admins/detail/bd47c1ee-b6d1-46c7-bcda-0e8acaecdeab`
-      - **Request Body:**
+<details><summary><b>admin</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admins?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAllAdminDetail** ➕
+  - **Description:** Endpoint to getalladmindetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admins/detail`
+  - **Request Body:**
 
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/admins`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getAdminDetailByUuid** ➕
+  - **Description:** Endpoint to getadmindetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/admins/detail/bd47c1ee-b6d1-46c7-bcda-0e8acaecdeab`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/admins`
+  - **Request Body:**
 
 ```json
 {
@@ -2728,13 +2779,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/admins/7525553b-7f01-4697-9c8d-071faf695cb4`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/admins/7525553b-7f01-4697-9c8d-071faf695cb4`
+  - **Request Body:**
 
 ```json
 {
@@ -2813,103 +2864,105 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/disable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/enable`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### block ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0/block`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-    ## instructor <a name="instructor"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/instructors?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **block** ➕
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0/block`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAllDetail ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/instructors/detail`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/instructors/66d30761-cdc6-41f9-98fb-07a52b121331`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getDetailByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/instructors/detail/abde37f5-aa3d-4123-8121-2782fde7e706`
-      - **Request Body:**
+<details><summary><b>instructor</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/instructors?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAllDetail** ➕
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/instructors/detail`
+  - **Request Body:**
 
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/instructors`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/instructors/66d30761-cdc6-41f9-98fb-07a52b121331`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getDetailByUuid** ➕
+  - **Description:** Endpoint to getdetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/instructors/detail/abde37f5-aa3d-4123-8121-2782fde7e706`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/instructors`
+  - **Request Body:**
 
 ```json
 {
@@ -2956,13 +3009,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/instructors/187e91d9-ddc3-4f5c-9051-c9a02e5241d2`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/instructors/187e91d9-ddc3-4f5c-9051-c9a02e5241d2`
+  - **Request Body:**
 
 ```json
 {
@@ -3061,103 +3114,105 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/disable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### block ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/block`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-    ## student <a name="student"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/students?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **block** ➕
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/block`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAllDetail ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/students/detail`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/students/80da63ce-84f7-42bd-a1f1-426c7ca3bd5c`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### geDetailByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/students/detail/f0b5dd7e-4397-4cd1-8785-dd0e683fa9e6`
-      - **Request Body:**
+<details><summary><b>student</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/students?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAllDetail** ➕
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/students/detail`
+  - **Request Body:**
 
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/students`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/students/80da63ce-84f7-42bd-a1f1-426c7ca3bd5c`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **geDetailByUuid** ➕
+  - **Description:** Endpoint to gedetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/students/detail/f0b5dd7e-4397-4cd1-8785-dd0e683fa9e6`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/students`
+  - **Request Body:**
 
 ```json
 {
@@ -3192,13 +3247,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/students/0764bf00-ff0b-4ef0-8253-14afc348ac90`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/students/0764bf00-ff0b-4ef0-8253-14afc348ac90`
+  - **Request Body:**
 
 ```json
 {
@@ -3253,103 +3308,105 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/disable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/enable`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### block ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/block`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-    ## academic <a name="academic"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/academics?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **block** ➕
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9/block`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAllDetail ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/academics/detail?pageNumber=0&pageSize=25`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/academics/75ce2581-4698-4ae3-b2a7-35c76d6ab435`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/students/af92b40a-88c8-4829-8039-c776ea0a31b9`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getacademicDetailByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `UNKNOWN`
-      - **Request Body:**
+<details><summary><b>academic</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/academics?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAllDetail** ➕
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/academics/detail?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/academics`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/academics/75ce2581-4698-4ae3-b2a7-35c76d6ab435`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getacademicDetailByUuid** ➕
+  - **Description:** Endpoint to getacademicdetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `UNKNOWN`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/academics`
+  - **Request Body:**
 
 ```json
 {
@@ -3396,13 +3453,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/academics/72177f77-9053-4e30-a3c7-80b704333c47`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/academics/72177f77-9053-4e30-a3c7-80b704333c47`
+  - **Request Body:**
 
 ```json
 {
@@ -3495,103 +3552,105 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### block ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-    ## staff <a name="staff"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/staffs?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **block** ➕
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAllDetail ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `UNKNOWN`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getDetailByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `UNKNOWN`
-      - **Request Body:**
+<details><summary><b>staff</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/staffs?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getAllDetail** ➕
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `UNKNOWN`
+  - **Request Body:**
 
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/staffs`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **getDetailByUuid** ➕
+  - **Description:** Endpoint to getdetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `UNKNOWN`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/staffs`
+  - **Request Body:**
 
 ```json
 {
@@ -3658,13 +3717,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/staffs/05732c9c-e1d2-4382-bfdc-c3ebab215da0`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/staffs/05732c9c-e1d2-4382-bfdc-c3ebab215da0`
+  - **Request Body:**
 
 ```json
 {
@@ -3745,118 +3804,124 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### block ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-  ## Material Mangement <a name="material-mangement"></a>
-
-    ## medias <a name="medias"></a>
-
-      ### upload-single ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/medias/upload-single`
-      - **Request Body:**
+- **block** ➕
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### upload-multiple ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/medias/upload-multiple`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### getByName ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/medias/a75e2608-efc8-45e7-8d87-238c66f564b1.jpg`
-      - **Request Body:**
-
-```json
-
-```
-
-      - **Response:** No examples available
-
-      ### deleteByName ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/medias/e9d6f354-677f-4021-8cdc-7192d999d4ca.png`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### downloadByName ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/medias/b4ca30ea-acfd-4c9b-8a09-79777c79da51.png/download`
-      - **Request Body:**
+</details>
+
+<details><summary><b>Material Mangement</b></summary>
+
+<details><summary><b>medias</b></summary>
+
+- **upload-single** ➕
+  - **Description:** Endpoint to upload-single.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/medias/upload-single`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **upload-multiple** ➕
+  - **Description:** Endpoint to upload-multiple.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/medias/upload-multiple`
+  - **Request Body:**
 
-    ## material <a name="material"></a>
+```json
+No Body
+```
+  - **Response:** No examples available
 
-      ### createNew ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/materials`
-      - **Request Body:**
+- **getByName** ➕
+  - **Description:** Endpoint to getbyname.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/medias/a75e2608-efc8-45e7-8d87-238c66f564b1.jpg`
+  - **Request Body:**
+
+```json
+
+```
+  - **Response:** No examples available
+
+- **deleteByName** ➕
+  - **Description:** Endpoint to deletebyname.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/medias/e9d6f354-677f-4021-8cdc-7192d999d4ca.png`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **downloadByName** ➕
+  - **Description:** Endpoint to downloadbyname.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/medias/b4ca30ea-acfd-4c9b-8a09-79777c79da51.png/download`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+</details>
+
+<details><summary><b>material</b></summary>
+
+- **createNew** ➕
+  - **Description:** Endpoint to createnew.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/materials`
+  - **Request Body:**
 
 ```json
 {
@@ -3883,13 +3948,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByAlias ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
-      - **Request Body:**
+- **updateByAlias** ➕
+  - **Description:** Endpoint to updatebyalias.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
+  - **Request Body:**
 
 ```json
 {
@@ -3908,46 +3973,46 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByAlias ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
-      - **Request Body:**
+- **getByAlias** ➕
+  - **Description:** Endpoint to getbyalias.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
+  - **Request Body:**
 
 ```json
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/materials?pageNumber=0&pageSize=25`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### deleteByAlias ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
-      - **Request Body:**
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/materials?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **deleteByAlias** ➕
+  - **Description:** Endpoint to deletebyalias.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/materials/java-introduction-slide-1`
+  - **Request Body:**
 
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/materials/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/materials/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -3972,59 +4037,61 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### disable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/disable`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-      ### enable ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/enable`
-      - **Request Body:**
+- **disable** ➕
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/disable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-    ## curriculum <a name="curriculum"></a>
-
-      ### allCurriculum ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/curriculums?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **enable** ➕
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/enable`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getCurriculumByYearAndSemester ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/curriculums/2024/Fall`
-      - **Request Body:**
+<details><summary><b>curriculum</b></summary>
+
+- **allCurriculum** ➕
+  - **Description:** Endpoint to allcurriculum.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/curriculums?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getCurriculumByYearAndSemester** ➕
+  - **Description:** Endpoint to getcurriculumbyyearandsemester.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/curriculums/2024/Fall`
+  - **Request Body:**
 
-      ### createCurriculum ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/curriculums`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **createCurriculum** ➕
+  - **Description:** Endpoint to createcurriculum.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/curriculums`
+  - **Request Body:**
 
 ```json
 {
@@ -4071,13 +4138,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### addSubjectToCurriculum ➕
-      - **HTTP Method:** PATCH
-      - **Endpoint:** `{{base_url}}/curriculums/Foundation/one`
-      - **Request Body:**
+- **addSubjectToCurriculum** ➕
+  - **Description:** Endpoint to addsubjecttocurriculum.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `{{base_url}}/curriculums/Foundation/one`
+  - **Request Body:**
 
 ```json
 {
@@ -4120,13 +4187,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByYearAndSemester ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/curriculums/Foundation/Semester one`
-      - **Request Body:**
+- **updateByYearAndSemester** ➕
+  - **Description:** Endpoint to updatebyyearandsemester.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/curriculums/Foundation/Semester one`
+  - **Request Body:**
 
 ```json
 {
@@ -4153,50 +4220,54 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByYearAndSemester ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/curriculums/Foundation/one`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-  ## Payment Management <a name="payment-management"></a>
-
-    ## paymeent <a name="paymeent"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/payments?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **deleteByYearAndSemester** ➕
+  - **Description:** Endpoint to deletebyyearandsemester.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/curriculums/Foundation/one`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/payments/012ab18c-b6bc-4d7d-8bcc-8d1a0e67c437`
-      - **Request Body:**
+</details>
+
+<details><summary><b>Payment Management</b></summary>
+
+<details><summary><b>paymeent</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/payments?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/payments/012ab18c-b6bc-4d7d-8bcc-8d1a0e67c437`
+  - **Request Body:**
 
-      ### filter ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/payments/filter?pageNumber=0&pageSize=25`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **filter** ➕
+  - **Description:** Endpoint to filter.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/payments/filter?pageNumber=0&pageSize=25`
+  - **Request Body:**
 
 ```json
 {
@@ -4223,13 +4294,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### createPayment ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/payments`
-      - **Request Body:**
+- **createPayment** ➕
+  - **Description:** Endpoint to createpayment.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/payments`
+  - **Request Body:**
 
 ```json
 {
@@ -4252,13 +4323,13 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/payments/1531c438-1f06-4153-8282-c5702b07968e`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/payments/1531c438-1f06-4153-8282-c5702b07968e`
+  - **Request Body:**
 
 ```json
 {
@@ -4283,37 +4354,39 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/payments/9d865cc6-3bfb-41a3-a986-aca05c64b455`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-    ## receipt <a name="receipt"></a>
-
-      ### getAll ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/receipts?pageNumber=0&pageSize=25`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/payments/9d865cc6-3bfb-41a3-a986-aca05c64b455`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### create ➕
-      - **HTTP Method:** POST
-      - **Endpoint:** `{{base_url}}/receipts`
-      - **Request Body:**
+<details><summary><b>receipt</b></summary>
+
+- **getAll** ➕
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/receipts?pageNumber=0&pageSize=25`
+  - **Request Body:**
+
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **create** ➕
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `{{base_url}}/receipts`
+  - **Request Body:**
 
 ```json
 {
@@ -4334,24 +4407,24 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### getByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
-      - **Request Body:**
+- **getByUuid** ➕
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
-      - **Request Body:**
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
+  - **Request Body:**
 
 ```json
 {
@@ -4370,50 +4443,54 @@ No Body
 
 }
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/receipts/cf10f40b-2d4c-448a-b5f0-06fee5c1aacc`
-      - **Request Body:**
-
-```json
-No Body
-```
-
-      - **Response:** No examples available
-
-  ## Public Website <a name="public-website"></a>
-
-    ## graduation <a name="graduation"></a>
-
-      ### getAllGraduation ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/graduations?pageNumber=1&pageSize=22`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/receipts/cf10f40b-2d4c-448a-b5f0-06fee5c1aacc`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
 
-      ### getgraduationByUuid ➕
-      - **HTTP Method:** GET
-      - **Endpoint:** `{{base_url}}/graduations/74f1b8ef-831a-41ac-ad04-7aadafd32400`
-      - **Request Body:**
+</details>
+
+<details><summary><b>Public Website</b></summary>
+
+<details><summary><b>graduation</b></summary>
+
+- **getAllGraduation** ➕
+  - **Description:** Endpoint to getallgraduation.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/graduations?pageNumber=1&pageSize=22`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+- **getgraduationByUuid** ➕
+  - **Description:** Endpoint to getgraduationbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `{{base_url}}/graduations/74f1b8ef-831a-41ac-ad04-7aadafd32400`
+  - **Request Body:**
 
-      ### updateByUuid ➕
-      - **HTTP Method:** PUT
-      - **Endpoint:** `{{base_url}}/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
-      - **Request Body:**
+```json
+No Body
+```
+  - **Response:** No examples available
+
+- **updateByUuid** ➕
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `{{base_url}}/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
+  - **Request Body:**
 
 ```json
 {
@@ -4428,16 +4505,21 @@ No Body
 
 
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
-
-      ### deleteByUuid ➕
-      - **HTTP Method:** DELETE
-      - **Endpoint:** `{{base_url}}/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
-      - **Request Body:**
+- **deleteByUuid** ➕
+  - **Description:** Endpoint to deletebyuuid.
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `{{base_url}}/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
+  - **Request Body:**
 
 ```json
 No Body
 ```
+  - **Response:** No examples available
 
-      - **Response:** No examples available
+</details>
+
+</details>
+
+</details>
