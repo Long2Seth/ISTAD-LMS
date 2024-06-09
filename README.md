@@ -1,4 +1,4 @@
-##ISTAD LMS API DOCUMENT
+## Unnamed Folder
 
   ## Security Management
 
@@ -4189,12 +4189,3 @@ No Body
 ```
 
       **Response:** No examples available
-<details><summary>
-| header | header |
-| ------ | ------ |
-|        |        |
-|        |        |<details><summary>Click to expand</summary>
-Click to expand
-</details></summary>
-
-</details>
