@@ -29,6 +29,8 @@ MINIO_ACCESS_KEY: oDoNzywQ1izDAGesaewc
 MINIO_SECRETE_KEY: OloMCKeWUuEbxMieFO5cOMWTRsTseKiF3kmislhU
 MINIO_BUCKET: minio-test-bucket-1
 
+DOMAIN: http://localhost:8080
+
 #MEDIA_SERVER_PATH: D:\\SERVER\\ITE\\
 MEDIA_BASE_URI: http://152.42.220.220:9090/
 

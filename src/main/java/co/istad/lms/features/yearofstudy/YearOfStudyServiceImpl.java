@@ -248,7 +248,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
                 yearOfStudyRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStud = %s has not been found",uuid)));
 
         //set isDraft to false(draft)
-        yearOfStudy.setIsDeleted(true);
+        yearOfStudy.setIsDraft(true);
 
         //save to database
         yearOfStudyRepository.save(yearOfStudy);

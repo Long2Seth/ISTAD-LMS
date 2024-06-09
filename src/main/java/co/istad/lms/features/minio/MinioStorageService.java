@@ -49,6 +49,8 @@ public interface MinioStorageService {
     String getUrl(String fileName);
 
 
+    String getShortenedUrl(String fileName);
+
     public  String extractExtension(String mediaName);
 
     boolean doesObjectExist(String fileName);

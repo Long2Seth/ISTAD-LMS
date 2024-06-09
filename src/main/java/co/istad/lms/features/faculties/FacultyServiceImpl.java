@@ -63,7 +63,7 @@ public class FacultyServiceImpl implements FacultyService {
 
         //set logo url to faculty
         if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-            faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
+            faculty.setLogo(minioStorageService.getUrl((faculty.getLogo())));
         }
 
         //return Faculty detail
