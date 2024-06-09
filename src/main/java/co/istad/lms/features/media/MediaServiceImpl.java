@@ -50,9 +50,13 @@ public class MediaServiceImpl implements MediaService {
         }
 
         String folderName = contentType.split("/")[0];
+
         String newName = UUID.randomUUID().toString();
+
         String extension = minioService.extractExtension(Objects.requireNonNull(file.getOriginalFilename()));
+
         String objectName = folderName + "/" + newName + "." + extension;
+
         String url = minioService.getUrl(newName+"."+extension);
 
         try {
@@ -111,8 +115,11 @@ public class MediaServiceImpl implements MediaService {
 
         try {
             String contentType = getContentType(mediaName);
+
             String folderName = contentType.split("/")[0];
+
             String objectName = folderName + "/" + mediaName;
+
             minioService.deleteFile(objectName);
 
             return MediaResponse.builder()
@@ -131,10 +138,15 @@ public class MediaServiceImpl implements MediaService {
 
         try {
             String contentType = getContentType(mediaName);
+
             String folderName = contentType.split("/")[0];
+
             String objectName = folderName + "/" + mediaName;
+
             InputStream inputStream = minioService.getFile(objectName);
+
             Path tempFile = Files.createTempFile("minio", mediaName);
+
             Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
 
             return new UrlResource(tempFile.toUri());

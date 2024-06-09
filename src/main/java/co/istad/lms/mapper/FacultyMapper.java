@@ -21,4 +21,5 @@ public interface FacultyMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFacultyFromRequest(@MappingTarget Faculty faculty, FacultyUpdateRequest facultyUpdateRequest);
+
 }

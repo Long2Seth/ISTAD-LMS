@@ -37,6 +37,9 @@ public class MinioStorageServiceImpl implements MinioStorageService {
     @Value("${url.expiry}")
     private int urlExpiryTime;
 
+    @Value("${app.domain}")
+    private String domain;
+
     @Override
     public void uploadFile(MultipartFile file, String objectName) throws Exception {
 
@@ -133,6 +136,11 @@ public class MinioStorageServiceImpl implements MinioStorageService {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getShortenedUrl(String fileName) {
+        return String.format("%s/api/v1/files/%s", domain, fileName);
     }
 
 
