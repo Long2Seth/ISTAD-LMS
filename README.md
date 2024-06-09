@@ -5,15 +5,46 @@ Welcome to the official documentation for the iData API. This documentation prov
 ## 📑 Table of Contents
 
 1. [Introduction](#introduction) 🌟
-2. [User Management](#user-management) 👥
-3. [Authentication](#authentication) 🔐
-4. [Base URL](#base-url) 🌐
-5. [Generate API](#generate-api)✨
-    - [Schema Creation](#schema-creation)
-    - [Importing File](#import-file) 📁
-    - [Data Scraping](#data-scraping)🔗
-6. [Error Handling](#error-handling) ❌
-7. [Rate Limits](#rate-limits) ⏳
+- [Security Management](#security-management)
+  - [auth](#auth)
+  - [password](#password)
+  - [authority](#authority)
+- [Faculty Management](#faculty-management)
+  - [faculty](#faculty)
+  - [degree](#degree)
+  - [studyProgram](#studyprogram)
+  - [yearOfStudy](#yearofstudy)
+    - [subjects](#subjects)
+  - [subject](#subject)
+  - [shifts](#shifts)
+- [Admission Management](#admission-management)
+  - [admission](#admission)
+  - [studentAmission](#studentamission)
+- [Academic Management](#academic-management)
+  - [generation](#generation)
+  - [class](#class)
+    - [students](#students)
+  - [course](#course)
+    - [instructor](#instructor)
+  - [lecture](#lecture)
+  - [score](#score)
+  - [attendance](#attendance)
+- [user management](#user-management)
+  - [user](#user)
+  - [admin](#admin)
+  - [instructor](#instructor)
+  - [student](#student)
+  - [academic](#academic)
+  - [staff](#staff)
+- [Material Mangement](#material-mangement)
+  - [medias](#medias)
+  - [material](#material)
+  - [curriculum](#curriculum)
+- [Payment Management](#payment-management)
+  - [paymeent](#paymeent)
+  - [receipt](#receipt)
+- [Public Website](#public-website)
+  - [graduation](#graduation)
 
 ---
 ## Introduction <a name="introduction"></a>
