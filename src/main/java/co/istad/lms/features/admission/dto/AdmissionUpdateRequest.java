@@ -9,5 +9,6 @@ import java.time.LocalDate;
 public record AdmissionUpdateRequest(
 
         String remark,
-        LocalDate endDate
+        LocalDate endDate,
+        String telegramLink
 ) {}

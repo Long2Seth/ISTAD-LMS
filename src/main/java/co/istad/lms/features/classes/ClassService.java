@@ -111,4 +111,23 @@ public interface ClassService {
      */
     void deleteStudent(String alias,String uuid);
 
+
+    /**
+     * public class by alias
+     *
+     * @param alias is the unique name of class
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicClassByAlias(String alias);
+
+    /**
+     * draft class by alias
+     *
+     * @param alias is the unique name of class
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void draftClassByAlias(String alias);
+
 }

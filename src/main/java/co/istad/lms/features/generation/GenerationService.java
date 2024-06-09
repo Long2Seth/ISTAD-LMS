@@ -94,4 +94,22 @@ public interface GenerationService {
      * @since 1.0 (2024)
      */
     Page<GenerationDetailResponse> filterGenerations(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+
+    /**
+     * public generation by alias
+     *
+     * @param alias is the unique name
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void publicGenerationByAlias(String alias);
+
+    /**
+     * draft generation by alias
+     *
+     * @param alias is the unique name
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    void draftGenerationByAlias(String alias);
 }
