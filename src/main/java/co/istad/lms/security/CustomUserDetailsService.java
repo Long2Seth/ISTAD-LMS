@@ -1,5 +1,6 @@
     package co.istad.lms.security;
 
+    import co.istad.lms.domain.User;
     import co.istad.lms.features.user.UserRepository;
     import lombok.RequiredArgsConstructor;
     import org.springframework.security.core.userdetails.UserDetails;
@@ -11,14 +12,27 @@
     @Service
     @RequiredArgsConstructor
     public class CustomUserDetailsService implements UserDetailsService {
+
+
         private final UserRepository userRepository;
+
+
 
         @Override
         public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
-            var user = userRepository.findByEmailOrUsername(emailOrUsername, emailOrUsername)
+
+            // get the user from the database using the email or username
+            User user = userRepository.findByEmailOrUsername(emailOrUsername, emailOrUsername)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
+            // create a custom user details object and set the user object to the custom user details object
             CustomUserDetails customUserDetails = new CustomUserDetails();
+            // set the user object to the custom user details object
             customUserDetails.setUser(user);
+
             return customUserDetails;
         }
+
+
     }

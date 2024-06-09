@@ -16,29 +16,41 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
+
+
     private User user;
+
+
 
     // make the proper format for the authorities
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        // create a list of authorities
         List<GrantedAuthority> authorities = new ArrayList<>();
+
+        // add the authorities to the list
         user.getAuthorities().forEach(
-                role -> {
-                    authorities.add(new SimpleGrantedAuthority(role.getAuthorityName()));
+                authority -> {
+                    authorities.add(new SimpleGrantedAuthority(authority.getAuthorityName()));
                 }
         );
+
         return authorities;
     }
+
 
     @Override
     public String getPassword() {
         return user.getPassword();
     }
 
+
     @Override
     public String getUsername() {
         return user.getEmail();
     }
+
 
     // will add it tmr!
     @Override
@@ -46,18 +58,26 @@ public class CustomUserDetails implements UserDetails {
         return user.isAccountNonExpired();
     }
 
+
+
     @Override
     public boolean isAccountNonLocked() {
         return user.isAccountNonLocked();
     }
+
+
 
     @Override
     public boolean isCredentialsNonExpired() {
         return user.isCredentialsNonExpired();
     }
 
+
+
     @Override
     public boolean isEnabled() {
         return !user.getIsBlocked();
     }
+
+
 }

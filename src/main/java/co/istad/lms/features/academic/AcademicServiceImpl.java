@@ -134,12 +134,18 @@ public class AcademicServiceImpl implements AcademicService {
 
         // Set the authorities of the user from the authorities of the adminRequest
         Set<Authority> allAuthorities = new HashSet<>();
-        for (AuthorityRequestToUser request : academicRequestDetail.user().authorities()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-            System.out.println("foundAuthorities = " + foundAuthorities);
-            allAuthorities.addAll(foundAuthorities);
+        if (academicRequestDetail.user().authorities() == null || academicRequestDetail.user().authorities().isEmpty()) {
+            for (Authority request : user.getAuthorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+        } else {
+            for (AuthorityRequestToUser request : academicRequestDetail.user().authorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+            user.setAuthorities(allAuthorities);
         }
-        user.setAuthorities(allAuthorities);
 
         // Save the updated user and academic
         userRepository.save(user);
