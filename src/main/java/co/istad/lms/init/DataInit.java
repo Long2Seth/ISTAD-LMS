@@ -109,7 +109,7 @@ public class DataInit {
             user.setNameKh("អេតមីន");
             user.setUsername("admin");
             user.setEmail("admin@gmail.com");
-            user.setPassword(passwordEncoder.encode("admin"));
+            user.setPassword(passwordEncoder.encode("Admin@123"));
             user.setGender("male");
             user.setProfileImage("https://newogle.com");
             user.setPhoneNumber("0123456789");

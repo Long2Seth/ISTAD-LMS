@@ -27,14 +27,10 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
 
-
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityRepository authorityRepository;
-
-
-
 
 
     @Override
@@ -104,7 +100,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(UserRequest userRequest) {
 
         // Validate if user exists by email or username
-        if (userRepository.existsByEmailOrUsername(userRequest.email() , userRequest.username())) {
+        if (userRepository.existsByEmailOrUsername(userRequest.email(), userRequest.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format("User email = %s has already been existed!", userRequest.email()));
         }
@@ -150,12 +146,18 @@ public class UserServiceImpl implements UserService {
 
         // Set the authorities of the user from the authorities of the adminRequest
         Set<Authority> allAuthorities = new HashSet<>();
-        for (AuthorityRequestToUser request : userRequest.authorities()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-            System.out.println("foundAuthorities = " + foundAuthorities);
-            allAuthorities.addAll(foundAuthorities);
+        if (userRequest.authorities() == null || userRequest.authorities().isEmpty()) {
+            for (Authority request : user.getAuthorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+        } else {
+            for (AuthorityRequestToUser request : userRequest.authorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+            user.setAuthorities(allAuthorities);
         }
-        user.setAuthorities(allAuthorities);
 
         return userMapper.toUserResponse(userRepository.save(user));
 

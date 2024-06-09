@@ -129,14 +129,20 @@ public class InstructorServiceImpl implements InstructorService {
             user.setPassword(passwordEncoder.encode(instructorRequestDetail.user().password()));
         }
 
-        // Set the authorities of the user from the authorities of the adminRequest
+        // Set the authorities of the user from the authorities
         Set<Authority> allAuthorities = new HashSet<>();
-        for (AuthorityRequestToUser request : instructorRequestDetail.user().authorities()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-            System.out.println("foundAuthorities = " + foundAuthorities);
-            allAuthorities.addAll(foundAuthorities);
+        if (instructorRequestDetail.user().authorities() == null || instructorRequestDetail.user().authorities().isEmpty()) {
+            for (Authority request : user.getAuthorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+        } else {
+            for (AuthorityRequestToUser request : instructorRequestDetail.user().authorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+            user.setAuthorities(allAuthorities);
         }
-        user.setAuthorities(allAuthorities);
 
         userRepository.save(user);
 

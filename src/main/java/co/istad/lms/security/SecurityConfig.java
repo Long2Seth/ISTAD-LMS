@@ -30,19 +30,28 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+
     private final CustomUserDetailsService userDetailsService;
     private final JwtToUserConverter jwtToUserConverter;
     private final KeyUtils keyUtils;
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 
     @Bean
@@ -52,6 +61,8 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+
 
 
     @Bean
@@ -68,6 +79,8 @@ public class SecurityConfig {
                 .build();
     }
 
+
+
     @Bean
     @Qualifier("jwtRefreshTokenEncoder")
     JwtEncoder jwtRefreshTokenEncoder() {
@@ -78,11 +91,17 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwkSource);
     }
 
+
+
+
     @Bean
     @Qualifier("jwtRefreshTokenDecoder")
     JwtDecoder jwtRefreshTokenDecoder() {
         return NimbusJwtDecoder.withPublicKey(keyUtils.getRefreshTokenPublicKey()).build();
     }
+
+
+
 
     @Bean
     @Primary
@@ -94,11 +113,17 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwkSource);
     }
 
+
+
+
     @Bean
     @Primary
     JwtDecoder jwtAccessTokenDecoder() {
         return NimbusJwtDecoder.withPublicKey(keyUtils.getAccessTokenPublicKey()).build();
     }
+
+
+
 
     @Bean
     @Qualifier("refreshTokenAuthProvider")
@@ -107,4 +132,7 @@ public class SecurityConfig {
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;
     }
+
+
+
 }

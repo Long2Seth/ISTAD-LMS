@@ -96,7 +96,7 @@ public class UserController {
 
 
     @PreAuthorize("hasAnyAuthority('user:read')")
-    @GetMapping("/{uuid}/details")
+    @GetMapping("/details/{uuid}")
     public UserResponseDetail getUserDetailById(@PathVariable String uuid){
         return userService.getUserDetailById(uuid);
     }
