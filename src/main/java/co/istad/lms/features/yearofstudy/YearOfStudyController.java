@@ -106,4 +106,31 @@ public class YearOfStudyController {
         yearOfStudyService.disableYearOfStudyByUuid(uuid);
 
     }
+
+    @PutMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public void enableYearOfStudy(@PathVariable String uuid){
+
+        yearOfStudyService.enableYearOfStudyByUuid(uuid);
+
+    }
+
+    @PutMapping("/{uuid}/public")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public void publicYearOfStudy(@PathVariable String uuid){
+
+        yearOfStudyService.publicYearOfStudyByUuid(uuid);
+
+    }
+
+    @PutMapping("/{uuid}/draft")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public void draftYearOfStudy(@PathVariable String uuid){
+
+        yearOfStudyService.draftYearOfStudyByUuid(uuid);
+
+    }
 }

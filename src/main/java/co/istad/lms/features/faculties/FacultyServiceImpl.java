@@ -39,7 +39,7 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         //validate logo is available or not
-        if (facultyRequest.logo() != null&&!facultyRequest.logo().isEmpty() && !minioStorageService.doesObjectExist(facultyRequest.logo())) {
+        if (facultyRequest.logo() != null && !facultyRequest.logo().trim().isEmpty() && !minioStorageService.doesObjectExist(facultyRequest.logo())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     facultyRequest.logo()));
         }
@@ -62,7 +62,7 @@ public class FacultyServiceImpl implements FacultyService {
         Faculty faculty = facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", alias)));
 
         //set logo url to faculty
-        if (faculty.getLogo() != null) {
+        if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
             faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
         }
 
@@ -85,7 +85,7 @@ public class FacultyServiceImpl implements FacultyService {
 
         // update the logo URL for each faculty
         faculties.forEach(faculty -> {
-            if (faculty.getLogo() != null&&!faculty.getLogo().isEmpty()) {
+            if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
                 faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
             }
         });
@@ -119,7 +119,7 @@ public class FacultyServiceImpl implements FacultyService {
         facultyMapper.updateFacultyFromRequest(faculty, facultyUpdateRequest);
 
 
-        if (facultyUpdateRequest.logo() != null&&!facultyUpdateRequest.logo().isEmpty()) {
+        if (facultyUpdateRequest.logo() != null && !facultyUpdateRequest.logo().trim().isEmpty()) {
 
             //validate logo is available or not
             if (!minioStorageService.doesObjectExist(facultyUpdateRequest.logo())) {
@@ -223,7 +223,7 @@ public class FacultyServiceImpl implements FacultyService {
 
         //set logo url to faculty
         faculties.forEach(faculty -> {
-            if (faculty.getLogo() != null&&!faculty.getLogo().isEmpty()) {
+            if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
                 faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
             }
         });

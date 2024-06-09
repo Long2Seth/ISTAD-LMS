@@ -48,6 +48,12 @@ public class StudyProgramServiceImpl implements StudyProgramService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Study program = %s has already existed.", studyProgramRequest.alias()));
         }
 
+        //validate logo from DTO
+        if (studyProgramRequest.logo() != null && !studyProgramRequest.logo().trim().isEmpty() && !minioStorageService.doesObjectExist(studyProgramRequest.logo())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
+                    studyProgramRequest.logo()));
+        }
+
         //validate degree by alias from DTO
         Degree degree =
                 degreeRepository.findByAliasAndIsDeletedFalse(studyProgramRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
@@ -82,7 +88,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found.", alias)));
 
         //update logo url for studyProgram
-        if (studyProgram.getLogo() != null) {
+        if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
             studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
         }
 
@@ -104,7 +110,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         // update the logo URL for each studyProgram
         studyPrograms.forEach(studyProgram -> {
-            if (studyProgram.getLogo() != null) {
+            if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
                 studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
             }
         });
@@ -137,12 +143,16 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         studyProgramMapper.updateStudyProgramFromRequest(studyProgram, studyProgramUpdateRequest);
 
         //update logo url for studyProgram
-        if (studyProgram.getLogo() != null) {
-            studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
+        if (studyProgramUpdateRequest.logo() != null && !studyProgramUpdateRequest.logo().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
+                    studyProgramUpdateRequest.logo()));
         }
 
         //save to database
         studyProgramRepository.save(studyProgram);
+
+        //set url to logo
+        studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
 
         //map entity to DTO and return
         return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
@@ -236,7 +246,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         // update the logo URL for each studyProgram
         studyPrograms.forEach(studyProgram -> {
-            if (studyProgram.getLogo() != null) {
+            if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
                 studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
             }
         });
