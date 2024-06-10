@@ -136,12 +136,18 @@ public class AdminServiceImpl implements AdminService {
 
         // Set the authorities of the user from the authorities of the adminRequest
         Set<Authority> allAuthorities = new HashSet<>();
-        for (AuthorityRequestToUser request : adminRequestDetail.user().authorities()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-            System.out.println("foundAuthorities = " + foundAuthorities);
-            allAuthorities.addAll(foundAuthorities);
+        if (adminRequestDetail.user().authorities() == null || adminRequestDetail.user().authorities().isEmpty()) {
+            for (Authority request : user.getAuthorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+        } else {
+            for (AuthorityRequestToUser request : adminRequestDetail.user().authorities()) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+                allAuthorities.addAll(foundAuthorities);
+            }
+            user.setAuthorities(allAuthorities);
         }
-        user.setAuthorities(allAuthorities);
 
         // Set the data of field the user by the userRequest
         userRepository.save(user);

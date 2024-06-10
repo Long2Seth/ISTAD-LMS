@@ -22,19 +22,31 @@ import java.util.Objects;
 
 @Component
 public class KeyUtils {
+
+
     @Autowired
     Environment environment;
+
+
     @Value("${ACCESS_TOKEN_PRIVATE_KEY_PATH}")
     private String accessTokenPrivateKey;
+
+
     @Value("${ACCESS_TOKEN_PUBLIC_KEY_PATH}")
     private String accessTokenPublicKey;
+
+
     @Value("${REFRESH_TOKEN_PRIVATE_KEY_PATH}")
     private String refreshTokenPrivateKey;
+
+
     @Value("${REFRESH_TOKEN_PUBLIC_KEY_PATH}")
     private String refreshTokenPublicKey;
 
+
     KeyPair accessTokenKeyPair;
     KeyPair refreshTokenKeyPair;
+
 
     private KeyPair getAccessTokenKeyPair(){
         if(Objects.isNull(accessTokenKeyPair)){
@@ -43,12 +55,17 @@ public class KeyUtils {
         return accessTokenKeyPair;
 
     }
+
+
     private KeyPair getRefreshTokenKeyPair(){
         if(Objects.isNull(refreshTokenKeyPair)){
             refreshTokenKeyPair = getKeyPair(refreshTokenPublicKey, refreshTokenPrivateKey);
         }
         return refreshTokenKeyPair;
     }
+
+
+
     private KeyPair getKeyPair(String publicKeyPath , String privateKeyPath ){
         KeyPair keyPair;
         File publicKeyFile = new File(publicKeyPath);
@@ -84,10 +101,14 @@ public class KeyUtils {
         }
 
 
+
+
         File directory = new File("access-refresh-token-keys");
         if(!directory.exists()){
             directory.mkdirs();
         }
+
+
 
         try{
             // we are going to generate a keypair
@@ -112,19 +133,31 @@ public class KeyUtils {
         return keyPair;
 
     }
+
+
     // get public key and private key for the access token and refresh token for other class to use
     public RSAPublicKey getAccessTokenPublicKey(){
         return (RSAPublicKey) getAccessTokenKeyPair().getPublic();
     }
+
+
     public RSAPrivateKey getAccessTokenPrivateKey(){
         return (RSAPrivateKey) getAccessTokenKeyPair().getPrivate();
     }
+
+
+
     public RSAPrivateKey getRefreshTokenPrivateKey(){
         return (RSAPrivateKey) getRefreshTokenKeyPair().getPrivate();
     }
+
+
+
     public RSAPublicKey getRefreshTokenPublicKey(){
         return (RSAPublicKey)getRefreshTokenKeyPair().getPublic();
     }
+
+
 
 
 }

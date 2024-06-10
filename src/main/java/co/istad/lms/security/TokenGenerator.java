@@ -15,10 +15,18 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+
+
 @Component
 public class TokenGenerator {
+
+
     private final  JwtEncoder jwtAccessTokenEncoder;
     private final JwtEncoder jwtRefreshTokenEncoder;
+
+
+
+    // inject the jwtAccessTokenEncoder and jwtRefreshTokenEncoder
     public TokenGenerator(
             JwtEncoder jwtAccessTokenEncoder,
             @Qualifier("jwtRefreshTokenEncoder") JwtEncoder jwtRefreshTokenEncoder
@@ -27,57 +35,92 @@ public class TokenGenerator {
         this.jwtAccessTokenEncoder = jwtAccessTokenEncoder;
     }
 
+
+
+    //Access token expires after 3 days
     private String createAccessToken(Authentication authentication) {
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         Instant now = Instant.now();
+
         //  we can also create scope for the token from the userDetails object here !
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
-                .issuer("ITSAD-LMS") //
+                .issuer("ITSAD-LMS")
                 .build();
         return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
+
+
     // expire after 7 days
     private String createRefreshToken(Authentication authentication) {
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         Instant now = Instant.now();
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(now.plus(3, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
                 .build();
+
         return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
     }
+
+
+
 
 
     // token rotation !
     public AuthResponse generateTokens(Authentication authentication ) {
+
+        // check if the principal is an instance of CustomUserDetails
         if(!(authentication.getPrincipal() instanceof CustomUserDetails  customUserDetails)){
             throw new BadCredentialsException("Provided Token is not valid");
         }
+
+// check if the credentials is an instance of Jwt
         String refreshToken ;
+
         if( authentication.getCredentials() instanceof Jwt jwt){
+
             Instant now = Instant.now();
             Instant expireAt = jwt.getExpiresAt();
             Duration duration = Duration.between(now, expireAt);
+
             long daysUtilsExpired = duration.toDays();
+
             // Duration.between(Instant.now(), jwt.getExpiresAt()).toDays() < 7
             if(daysUtilsExpired < 7){
+
                 refreshToken = createRefreshToken(authentication);
+
             }else {
+
                 refreshToken = jwt.getTokenValue();
+
             }
+
         }else {
+
             refreshToken = createRefreshToken(authentication);
+
         }
         return AuthResponse.builder()
+
                 .refreshToken(refreshToken)
                 .accessToken(createAccessToken(authentication))
                 .build();
 
     }
+
+
+
 }

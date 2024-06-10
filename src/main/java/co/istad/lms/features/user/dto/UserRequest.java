@@ -2,11 +2,9 @@ package co.istad.lms.features.user.dto;
 
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
+import org.checkerframework.checker.regex.qual.Regex;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,7 +39,9 @@ public record UserRequest(
         String email,
 
         @NotBlank(message = "Password is required")
-        @Size(min = 6, message = "Password must be at least 6 characters")
+        @Size(min = 8, message = "Password must be at least 8 characters")
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+                message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
         String password,
 
         @NotBlank(message = "Profile image is required")
