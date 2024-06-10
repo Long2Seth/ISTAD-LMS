@@ -28,7 +28,7 @@ public class FacultyController {
     @PreAuthorize("hasAnyAuthority('faculty:write')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void createDegree(@Valid @RequestBody FacultyRequest facultyRequest) {
+    void createFaculty(@Valid @RequestBody FacultyRequest facultyRequest) {
 
         facultyService.createFaculty(facultyRequest);
 
