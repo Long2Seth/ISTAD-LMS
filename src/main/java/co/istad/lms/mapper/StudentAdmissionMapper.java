@@ -44,11 +44,11 @@ public interface StudentAdmissionMapper {
 //    @Mapping(source = "bacIiGrade", target = "user.bacIiGrade")
     @Mapping(source = "gender", target = "user.gender")
     @Mapping(source = "avatar", target = "user.profileImage")
-    @Mapping(source = "address", target = "user.address")
+//    @Mapping(source = "address", target = "user.address")
 //    @Mapping(source = "guardianContact", target = "user.guardianContact")
 //    @Mapping(source = "guardianRelationShip", target = "user.guardianRelationShip")
 //    @Mapping(source = "knownIstad", target = "user.knownIstad")
 //    @Mapping(source = "identity", target = "user.identity")
-    @Mapping(source = "biography", target = "user.biography")
+//    @Mapping(source = "biography", target = "user.biography")
     Student toStudent(StudentAdmission studentAdmission);
 }

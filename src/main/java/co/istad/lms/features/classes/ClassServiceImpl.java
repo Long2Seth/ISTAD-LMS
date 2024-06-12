@@ -16,15 +16,18 @@ import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.studentadmisson.StudentAdmissionRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
 import co.istad.lms.mapper.StudentAdmissionMapper;
+import co.istad.lms.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -60,6 +63,11 @@ public class ClassServiceImpl implements ClassService {
     private final StudentAdmissionRepository studentAdmissionRepository;
 
     private final StudentAdmissionMapper studentAdmissionMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
 
     private final CourseRepository courseRepository;
 
@@ -331,14 +339,31 @@ public class ClassServiceImpl implements ClassService {
 
         Set<Student> students = studentAdmissions.stream()
                 .map(studentAdmission -> {
+
+                    //map from student admission
                     Student student = studentAdmissionMapper.toStudent(studentAdmission);
 
-                    // Set additional fields here
-                    student.setCourses(aClass.getCourses());
-
                     student.setUuid(UUID.randomUUID().toString());
+                    student.setStatus(false);
+                    student.setDeleted(false);
 
-                    student.getUser().setPassword("");
+                    // Map user request to user
+                    User user = student.getUser();
+
+                    user.setUuid(UUID.randomUUID().toString());
+                    user.setPassword(passwordEncoder.encode("Student@istad2024"));
+                    user.setIsDeleted(false);
+                    user.setIsBlocked(false);
+                    user.setIsChangePassword(false);
+                    user.setAccountNonExpired(true);
+                    user.setAccountNonLocked(true);
+                    user.setCredentialsNonExpired(true);
+                    user.setAuthorities(new HashSet<>());
+
+                    // Save user
+                    student.setUser(userRepository.save(user));
+                    // Save student
+                    studentRepository.save(student);
 
                     return student;
                 })
