@@ -7,8 +7,6 @@ import javax.swing.text.StyledEditorKit;
 import java.util.Set;
 
 public record ClassRequest(
-        @NotBlank(message = "Alias cannot be null")
-        String alias,
 
         @NotBlank(message = "Class name cannot be null")
         String className,

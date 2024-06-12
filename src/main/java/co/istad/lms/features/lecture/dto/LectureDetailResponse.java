@@ -4,12 +4,13 @@ import co.istad.lms.features.course.dto.CourseResponse;
 import jakarta.persistence.Column;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record LectureDetailResponse(
 
         String uuid,
-        String startTime,
-        String endTime,
+        LocalTime startTime,
+        LocalTime endTime,
         String description,
         LocalDate lectureDate,
         Boolean isDeleted,

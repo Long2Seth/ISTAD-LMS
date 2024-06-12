@@ -19,6 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
 @Service
@@ -44,8 +48,44 @@ public class LectureServiceImpl implements LectureService {
         // map DTO to entity
         Lecture lecture = lectureMapper.fromLectureRequest(lectureRequest);
 
+        LocalTime startTime = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            startTime = LocalTime.parse(lectureRequest.startTime(), formatter);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("StartTime = %s is not valid", lectureRequest.startTime()));
+        }
+
+        LocalTime endTime = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            endTime = LocalTime.parse(lectureRequest.endTime(), formatter);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("EndTime = %s is not valid", lectureRequest.endTime()));
+        }
+
+        LocalDate lectureDate = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            lectureDate = LocalDate.parse(lectureRequest.lectureDate(), formatter);
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("lectureDate = %s is not valid", lectureRequest.lectureDate()));
+        }
+
         //set isDeleted to false(enable)
         lecture.setIsDeleted(false);
+
+        //set startTime
+        lecture.setStartTime(startTime);
+
+        //set endTime
+        lecture.setEndTime(endTime);
+
+        //set lectureDate
+        lecture.setLectureDate(lectureDate);
 
         //set uuid to lecture
         lecture.setUuid(UUID.randomUUID().toString());

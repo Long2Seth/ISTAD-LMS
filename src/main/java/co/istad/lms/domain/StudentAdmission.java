@@ -72,6 +72,10 @@ public class StudentAdmission extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String biography;
 
+    @Column(length = 100)
+    private String studentUuid;
+
+
     @ManyToOne
     @JoinColumn(name = "shift_id",nullable = false)
     private Shift shift;
@@ -91,5 +95,7 @@ public class StudentAdmission extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted ;
 
+    @Column(nullable = false)
+    private boolean isStudent;
 
 }

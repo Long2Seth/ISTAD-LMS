@@ -1,8 +1,8 @@
 package co.istad.lms.features.classes;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.classes.dto.ClassAddStudentRequest;
@@ -21,8 +21,6 @@ import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
 import co.istad.lms.mapper.StudentAdmissionMapper;
-import co.istad.lms.mapper.UserMapper;
-import co.istad.lms.utils.DefaultAuthority;
 import lombok.RequiredArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
@@ -37,8 +35,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.SecureRandom;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -343,35 +342,89 @@ public class ClassServiceImpl implements ClassService {
                 }).map(studentAdmissionUuid ->
                         studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
 
+        //add all studentAdmission to student
         Set<Student> students = studentAdmissions.stream()
-                .map(studentAdmission -> {
+                .map( studentAdmission ->  {
 
-                    //map from student admission
-                    Student student = studentAdmissionMapper.toStudent(studentAdmission);
+                    //if studentAdmission already add to class(also has in student and user table)
+                    if (studentAdmission.isStudent()) {
 
-                    student.setUuid(UUID.randomUUID().toString());
+                        //get student from student table
+                        Student student =
+                                studentRepository.findByUuid(studentAdmission.getUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",studentAdmission.getStudentUuid())));
 
-                    // Map user request to user
-                    User user = student.getUser();
 
-                    user.setUuid(UUID.randomUUID().toString());
-                    user.setPassword(passwordEncoder.encode(generateStrongPassword()));
-                    user.setIsDeleted(false);
-                    user.setStatus(false);
-                    user.setIsChangePassword(false);
-                    user.setAccountNonExpired(true);
-                    user.setAccountNonLocked(true);
-                    user.setCredentialsNonExpired(true);
-                    user.setAuthorities(studentService.get);
+                        //get all class that student study
+                        Set<Class> classes=student.getClasses();
 
-                    // Save user
-                    student.setUser(userRepository.save(user));
-                    // Save student
-                    studentRepository.save(student);
+                        //add new class to set of class of student
+                        classes.add(aClass);
 
-                    return student;
+                        //set classes to student
+                        student.setClasses(classes);
+
+                        return student;
+                    }
+                    //admission that doesn't add to class yet(not student)
+                    else{
+
+                        //map from student admission
+                        Student student = studentAdmissionMapper.toStudent(studentAdmission);
+
+                        if (userRepository.existsByEmailOrUsername(student.getUser().getEmail(), student.getUser().getUsername())) {
+                            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("UserName = %s or %s has " +
+                                    "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
+                        }
+
+                        //set uuid to student
+                        student.setUuid(UUID.randomUUID().toString());
+
+                        // Map user request to user
+                        User user = student.getUser();
+
+                        //set uuid to user
+                        user.setUuid(UUID.randomUUID().toString());
+
+                        //random password for user(student)
+                        user.setPassword(passwordEncoder.encode(generateStrongPassword()));
+
+                        user.setIsDeleted(false);
+                        user.setStatus(false);
+
+                        //set userName to user
+                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s", "-") + "-" + studentAdmission.getDob());
+
+                        //set user information
+                        user.setIsChangePassword(false);
+                        user.setAccountNonExpired(true);
+                        user.setAccountNonLocked(true);
+                        user.setCredentialsNonExpired(true);
+
+                        //set default authorities to user
+                        user.setAuthorities(studentService.getDefaultAuthoritiesStudent());
+
+                        // set user to student
+                        student.setUser(userRepository.save(user));
+
+
+                        //set student uuid to admission
+                        studentAdmission.setStudentUuid(student.getUuid());
+
+                        //set isStudent true(mark for admission that already add to student)
+                        studentAdmission.setStudent(true);
+
+
+                        return student;
+                    }
+
                 })
                 .collect(Collectors.toSet());
+
+        //save student to database
+        studentRepository.saveAll(students);
+
+        //save all studentAdmission to database
+        studentAdmissionRepository.saveAll(studentAdmissions);
 
         //get all student in class
         Set<Student> allStudents = aClass.getStudents();
@@ -399,7 +452,7 @@ public class ClassServiceImpl implements ClassService {
 
         //find all student in database by  student uuid
         Student student =
-                studentRepository.findByUuid(studentUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                studentRepository.findStudentByUserUuid(studentUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Student = %s has not been found in database", studentUuid)));
 
         //get all student from class
