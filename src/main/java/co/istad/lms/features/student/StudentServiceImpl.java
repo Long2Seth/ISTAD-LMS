@@ -2,15 +2,12 @@ package co.istad.lms.features.student;
 
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
-import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.user.UserRepository;
-import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
-import co.istad.lms.utils.DefaultAuthority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,11 +30,20 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final UserRepository userRepository;
-    private final DefaultAuthority defaultAuthority;
+    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
 
+    public Set<Authority> getDefaultAuthoritiesStudent() {
+        // Set default authorities
+        Set<Authority> authorities = new HashSet<>();
+        authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("user:read"));
+
+        return authorities;
+
+    }
 
     @Override
     public Page<StudentResponse> getStudents(int page, int limit) {
@@ -100,7 +106,7 @@ public class StudentServiceImpl implements StudentService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-        user.setAuthorities(defaultAuthority.getDefaultAuthoritiesStudent());
+        user.setAuthorities(getDefaultAuthoritiesStudent());
 
         //Save user
         userRepository.save(user);
