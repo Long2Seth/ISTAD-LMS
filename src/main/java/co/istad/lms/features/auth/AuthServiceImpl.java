@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.emailOrUsername());
             if (!userDetails.isAccountNonLocked() || !userDetails.isEnabled()) {
                 throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatus.UNAUTHORIZED,
                         String.format("Invalid email or username and password . Please try again.")
                 );
 
@@ -52,12 +52,12 @@ public class AuthServiceImpl implements AuthService {
             //Handle invalid credentials exception with password
             if (ex.getMessage().equalsIgnoreCase("Bad credentials")) {
                 throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatus.UNAUTHORIZED,
                         String.format("Invalid password. Please try again.")
                 );
             } else {
                 throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatus.UNAUTHORIZED,
                         String.format("Invalid email or username. Please try again.")
                 );
             }
