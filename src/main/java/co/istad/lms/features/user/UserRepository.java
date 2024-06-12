@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByIsChangePassword(boolean isChangePassword);
 
-    boolean existsByPassword(String password);
+    boolean existsByEmailOrUsernameAndUuidNot(String email, String username, String uuid);
 
     Optional<User> findByEmailOrUsername(String email, String username);
 

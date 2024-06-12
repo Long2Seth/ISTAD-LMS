@@ -23,7 +23,6 @@ public class Payment extends Auditable {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @NotBlank(message = "UUID is required")
     private String uuid;
 
 

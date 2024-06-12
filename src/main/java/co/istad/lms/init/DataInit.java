@@ -113,12 +113,13 @@ public class DataInit {
             user.setGender("male");
             user.setProfileImage("https://newogle.com");
             user.setPhoneNumber("0123456789");
+            user.setDob(LocalDate.parse("1990-01-01"));
             user.setCityOrProvince("Phnom Penh");
             user.setKhanOrDistrict("Dangkao");
             user.setSangkatOrCommune("Dangkao");
             user.setVillageOrPhum("Dangkao");
             user.setStreet("Dangkao");
-            user.setIsBlocked(false);
+            user.setStatus(false);
             user.setIsDeleted(false);
             user.setIsChangePassword(false);
 

@@ -1,9 +1,6 @@
 package co.istad.lms.features.staff;
 
-import co.istad.lms.features.staff.dto.StaffRequest;
-import co.istad.lms.features.staff.dto.StaffRequestDetail;
-import co.istad.lms.features.staff.dto.StaffResponse;
-import co.istad.lms.features.staff.dto.StaffResponseDetail;
+import co.istad.lms.features.staff.dto.*;
 import org.springframework.data.domain.Page;
 
 
@@ -30,12 +27,12 @@ public interface StaffService {
      * Updates an existing staff.
      *
      * @param uuid    is the unique identifier of staff
-     * @param staffRequestDetail the request object containing the updated staff details
+     * @param staffRequestUpdate the request object containing the updated staff details
      * @return {@link StaffResponseDetail}
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    StaffResponseDetail updateStaffByUuid(String uuid, StaffRequestDetail staffRequestDetail);
+    StaffResponseDetail updateStaffByUuid(String uuid, StaffRequestUpdate staffRequestUpdate);
 
 
 

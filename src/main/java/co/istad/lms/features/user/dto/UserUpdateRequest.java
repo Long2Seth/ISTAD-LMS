@@ -19,7 +19,6 @@ public record UserUpdateRequest(
         String khanOrDistrict,
         String sangkatOrCommune,
         String street,
-        JsonBirthPlace birthPlace,
-        Set<AuthorityRequestToUser> authorities
+        JsonBirthPlace birthPlace
 ) {
 }

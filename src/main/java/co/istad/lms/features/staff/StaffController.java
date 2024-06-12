@@ -1,10 +1,7 @@
 package co.istad.lms.features.staff;
 
 
-import co.istad.lms.features.staff.dto.StaffRequest;
-import co.istad.lms.features.staff.dto.StaffRequestDetail;
-import co.istad.lms.features.staff.dto.StaffResponse;
-import co.istad.lms.features.staff.dto.StaffResponseDetail;
+import co.istad.lms.features.staff.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -64,9 +61,9 @@ public class StaffController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PutMapping("/{uuid}")
-    public StaffResponseDetail updateStaffByUuid(@PathVariable String uuid, @RequestBody StaffRequestDetail staffRequestDetail) {
-        return staffService.updateStaffByUuid(uuid, staffRequestDetail);
+    @PatchMapping("/{uuid}")
+    public StaffResponseDetail updateStaffByUuid(@PathVariable String uuid, @RequestBody StaffRequestUpdate staffRequestUpdate) {
+        return staffService.updateStaffByUuid(uuid, staffRequestUpdate);
     }
 
 
@@ -79,21 +76,24 @@ public class StaffController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PatchMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/disable")
     public void disableByUuid(@PathVariable String uuid) {
          staffService.disableByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PatchMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/enable")
     public void enableByUuid(@PathVariable String uuid) {
          staffService.enableByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PatchMapping("/{uuid}/block")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/block")
     public void updateDeletedStatus(@PathVariable String uuid) {
         staffService.updateDeletedStatus(uuid);
     }

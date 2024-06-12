@@ -12,7 +12,5 @@ public interface GraduationRepository extends JpaRepository<Graduation, Long> {
 
     Optional<Graduation> findByUuid(String uuid);
 
-    Optional<Graduation> findByGpa(String gpa);
-
     boolean existsByGpa(String gpa);
 }

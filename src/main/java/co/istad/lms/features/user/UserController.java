@@ -68,7 +68,7 @@ public class UserController {
 
 
     @PreAuthorize("hasAuthority('user:update')")
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     public UserResponse updateUser(@PathVariable String uuid, @Valid @RequestBody UserUpdateRequest userRequest){
         return userService.updateUser(uuid,userRequest);
     }
@@ -105,9 +105,10 @@ public class UserController {
 
 
     @PreAuthorize("hasAnyAuthority('user:update')")
-    @PatchMapping("/{uuid}/disable")
-    public UserResponse disableUser(@PathVariable String uuid){
-        return userService.disableUser(uuid);
+    @PutMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void disableUser(@PathVariable String uuid){
+        userService.disableUser(uuid);
     }
 
 
@@ -115,18 +116,20 @@ public class UserController {
 
 
     @PreAuthorize("hasAnyAuthority('user:update')")
-    @PatchMapping("/{uuid}/enable")
-    public UserResponse enableUser(@PathVariable String uuid){
-        return userService.enableUser(uuid);
+    @PutMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void enableUser(@PathVariable String uuid){
+        userService.enableUser(uuid);
     }
 
 
 
 
     @PreAuthorize("hasAnyAuthority('user:update')")
-    @PatchMapping("/{uuid}/block")
-    public UserResponse blockUser(@PathVariable String uuid){
-        return userService.isDeleted(uuid);
+    @PutMapping("/{uuid}/block")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void blockUser(@PathVariable String uuid){
+         userService.isDeleted(uuid);
     }
 
 

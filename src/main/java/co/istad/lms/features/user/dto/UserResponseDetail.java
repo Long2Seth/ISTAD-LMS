@@ -20,7 +20,6 @@ public record UserResponseDetail(
         String khanOrDistrict,
         String sangkatOrCommune,
         String street,
-        JsonBirthPlace birthPlace,
-        Set<AuthorityResponseToUser> authorities
+        JsonBirthPlace birthPlace
 ) {
 }

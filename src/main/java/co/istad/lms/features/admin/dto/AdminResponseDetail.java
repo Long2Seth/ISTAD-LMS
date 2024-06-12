@@ -7,7 +7,9 @@ import co.istad.lms.features.user.dto.UserResponseDetail;
 import java.time.LocalDate;
 
 public record AdminResponseDetail(
+
         String uuid,
+
         String highSchool,
 
         LocalDate highSchoolGraduationDate,
@@ -24,6 +26,32 @@ public record AdminResponseDetail(
 
         Integer experienceYear,
 
-        UserResponseDetail user
+        // filed user
+        String nameEn,
+
+        String nameKh,
+
+        String username,
+
+        String gender,
+
+        LocalDate dob,
+
+        String email,
+
+        String profileImage,
+
+        String phoneNumber,
+
+        String cityOrProvince,
+
+        String khanOrDistrict,
+
+        String sangkatOrCommune,
+
+        String street,
+
+        JsonBirthPlace birthPlace
+
 ) {
 }

@@ -119,33 +119,30 @@ public interface UserService {
      * Retrieves a paginated list of all users with student role.
      *
      * @param uuid is the unique identifier of user
-     * @return {@link Page<UserResponse>}
      * @since 1.0 (2024)
      * @author Long Piseth
      */
-    UserResponse disableUser(String uuid);
+    void disableUser(String uuid);
 
 
     /**
      * Retrieves a paginated list of all users with student role.
      *
      * @param uuid is the unique identifier of user
-     * @return {@link Page<UserResponse>}
      * @since 1.0 (2024)
      * @author Long Piseth
      */
-    UserResponse enableUser(String uuid);
+    void enableUser(String uuid);
 
 
     /**
      * Retrieves a paginated list of all users with student role.
      *
      * @param uuid is the unique identifier of user
-     * @return {@link Page<UserResponse>}
      * @since 1.0 (2024)
      * @author Long Piseth
      */
-    UserResponse isDeleted(String uuid);
+    void isDeleted(String uuid);
 
 
 }

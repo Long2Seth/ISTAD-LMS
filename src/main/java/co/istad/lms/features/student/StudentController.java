@@ -1,9 +1,6 @@
 package co.istad.lms.features.student;
 
-import co.istad.lms.features.student.dto.StudentRequest;
-import co.istad.lms.features.student.dto.StudentRequestDetail;
-import co.istad.lms.features.student.dto.StudentResponse;
-import co.istad.lms.features.student.dto.StudentResponseDetail;
+import co.istad.lms.features.student.dto.*;
 import co.istad.lms.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,16 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/students")
 public class StudentController {
 
+
     private final StudentService studentService;
-
-
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
-    @GetMapping("/detail")
-    public Page<StudentResponseDetail> getStudentsDetail(
-            @RequestParam(defaultValue = "0") int pageNumber,
-            @RequestParam(defaultValue = "25") int pageSize) {
-        return studentService.getStudentsDetail(pageNumber, pageSize);
-    }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
@@ -42,11 +31,13 @@ public class StudentController {
         return studentService.getStudents(pageNumber, pageSize);
     }
 
-    @PreAuthorize("hasAuthority('admin:control')")
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public void createStudent(@Valid @RequestBody StudentRequest studentRequest) {
-        studentService.createStudent(studentRequest);
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
+    @GetMapping("/detail")
+    public Page<StudentResponseDetail> getStudentsDetail(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize) {
+        return studentService.getStudentsDetail(pageNumber, pageSize);
     }
 
 
@@ -64,24 +55,42 @@ public class StudentController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PutMapping("/{uuid}")
-    public StudentResponseDetail updateStudent(@PathVariable String uuid, @RequestBody StudentRequestDetail studentRequest) {
-       return studentService.updateStudentByUuid(uuid, studentRequest);
+    @PreAuthorize("hasAuthority('admin:control')")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public void createStudent(@Valid @RequestBody StudentRequest studentRequest) {
+        studentService.createStudent(studentRequest);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PatchMapping("/{uuid}/enable")
+    @PatchMapping("/{uuid}")
+    public StudentResponseDetail updateStudent(@PathVariable String uuid, @RequestBody StudentRequestUpdate studentRequest) {
+        return studentService.updateStudentByUuid(uuid, studentRequest);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/enable")
     public void enableStudent(@PathVariable String uuid) {
         studentService.enableStudentByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-    @PatchMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/disable")
     public void disableStudent(@PathVariable String uuid) {
-         studentService.disableStudentByUuid(uuid);
+        studentService.disableStudentByUuid(uuid);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/block")
+    public void blockStudent(@PathVariable String uuid) {
+        studentService.blockStudentByUuid(uuid);
     }
 
 
@@ -92,13 +101,6 @@ public class StudentController {
         studentService.deleteStudentByUuid(uuid);
     }
 
-
-    @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
-
-    @PatchMapping("/{uuid}/block")
-    public void blockStudent(@PathVariable String uuid) {
-        studentService.blockStudentByUuid(uuid);
-    }
 
     @GetMapping("/profile")
     @PreAuthorize("hasAnyAuthority('academic:read')")

@@ -1,5 +1,6 @@
 package co.istad.lms.features.admin;
 
+import co.istad.lms.domain.User;
 import co.istad.lms.domain.roles.Admin;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,6 @@ import java.util.Optional;
 public interface AdminRepository extends JpaRepository<Admin, Long>{
 
     Optional<Admin> findByUuid(String uuid);
-
+    Optional<Admin> findByUser(User user);
 
 }

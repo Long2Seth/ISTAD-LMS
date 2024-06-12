@@ -1,19 +1,13 @@
 package co.istad.lms.domain.roles;
 
-
-
-
-import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.Course;
-import co.istad.lms.domain.Payment;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -21,20 +15,17 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "students")
 @Entity
-public class Student extends Auditable {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    String uuid;
-
-    boolean status;
-
-    boolean isDeleted;
+    private String uuid;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -46,5 +37,5 @@ public class Student extends Auditable {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    Set<Course> courses;
+    private Set<Course> courses;
 }

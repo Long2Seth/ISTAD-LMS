@@ -3,6 +3,10 @@ package co.istad.lms.domain;
 
 import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.json.BirthPlace;
+import co.istad.lms.domain.roles.Academic;
+import co.istad.lms.domain.roles.Admin;
+import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,8 +73,10 @@ public class User extends Auditable {
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
+
+
     private Boolean isDeleted;
-    private Boolean isBlocked;
+    private Boolean status;
     private Boolean isChangePassword;
 
 
@@ -81,5 +87,17 @@ public class User extends Auditable {
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id")
     )
     private Set<Authority> authorities;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Admin admin;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Student student;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Instructor instructor;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Academic academic;
 
 }
