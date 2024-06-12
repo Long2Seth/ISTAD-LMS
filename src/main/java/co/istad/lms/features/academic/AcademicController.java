@@ -1,10 +1,7 @@
 package co.istad.lms.features.academic;
 
 
-import co.istad.lms.features.academic.dto.AcademicRequest;
-import co.istad.lms.features.academic.dto.AcademicRequestDetail;
-import co.istad.lms.features.academic.dto.AcademicResponse;
-import co.istad.lms.features.academic.dto.AcademicResponseDetail;
+import co.istad.lms.features.academic.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/academics")
 public class AcademicController {
 
+
     private final AcademicService academicService;
+
 
     @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read')")
     @GetMapping("/detail/{uuid}")
@@ -60,9 +59,9 @@ public class AcademicController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PutMapping("/{uuid}")
-    public AcademicResponseDetail updateAcademicByUuid(@PathVariable String uuid, @RequestBody AcademicRequestDetail academicRequest) {
-        return academicService.updateAcademicByUuid(uuid, academicRequest);
+    @PatchMapping("/{uuid}")
+    public AcademicResponseDetail updateAcademicByUuid(@PathVariable String uuid, @RequestBody AcademicRequestUpdate academicRequestUpdate) {
+        return academicService.updateAcademicByUuid(uuid, academicRequestUpdate);
     }
 
 
@@ -75,21 +74,24 @@ public class AcademicController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PatchMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/disable")
     public void updateDisableAcademicByUuid(@PathVariable String uuid) {
         academicService.updateDisableAcademicByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PatchMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/enable")
     public void updateEnableAcademicByUuid(@PathVariable String uuid) {
         academicService.updateEnableAcademicByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PatchMapping("/{uuid}/block")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/block")
     public void updateDeletedAcademicByUuid(@PathVariable String uuid) {
         academicService.updateDeletedAcademicByUuid(uuid);
     }

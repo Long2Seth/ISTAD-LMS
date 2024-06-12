@@ -1,5 +1,6 @@
 package co.istad.lms.features.academic;
 
+import co.istad.lms.domain.User;
 import co.istad.lms.domain.roles.Academic;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public interface AcademicRepository extends JpaRepository<Academic, Long>{
 
     Optional<Academic> findByUuid(String uuid);
+
+    Optional<Academic> findByUser(User user);
 
 
 }

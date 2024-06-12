@@ -1,9 +1,6 @@
 package co.istad.lms.features.admin;
 
-import co.istad.lms.features.admin.dto.AdminRequest;
-import co.istad.lms.features.admin.dto.AdminRequestDetail;
-import co.istad.lms.features.admin.dto.AdminResponse;
-import co.istad.lms.features.admin.dto.AdminResponseDetail;
+import co.istad.lms.features.admin.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +32,8 @@ public class AdminController {
         return adminService.getAdminsDetail(pageNumber, pageSize);
     }
 
+
+
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @GetMapping
     public Page<AdminResponse> findAll(
@@ -59,9 +58,9 @@ public class AdminController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PutMapping("/{uuid}")
-    public AdminResponseDetail updateByUuid(@PathVariable String uuid, @RequestBody AdminRequestDetail adminRequestDetail) {
-        return adminService.updateAdminByUuid(uuid, adminRequestDetail);
+    @PatchMapping("/{uuid}")
+    public AdminResponseDetail updateByUuid(@PathVariable String uuid, @RequestBody AdminRequestUpdate adminRequestUpdate) {
+        return adminService.updateAdminByUuid(uuid, adminRequestUpdate);
     }
 
 
@@ -74,21 +73,24 @@ public class AdminController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PatchMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/disable")
     public void disableByUuid(@PathVariable String uuid) {
          adminService.disableAdminByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PatchMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/enable")
     public void enableByUuid(@PathVariable String uuid) {
          adminService.enableAdminByUuid(uuid);
     }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PatchMapping("/{uuid}/block")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{uuid}/block")
     public void blockByUuid(@PathVariable String uuid) {
          adminService.blockAdminByUuid(uuid);
     }

@@ -1,9 +1,6 @@
 package co.istad.lms.features.student;
 
-import co.istad.lms.features.student.dto.StudentRequest;
-import co.istad.lms.features.student.dto.StudentRequestDetail;
-import co.istad.lms.features.student.dto.StudentResponse;
-import co.istad.lms.features.student.dto.StudentResponseDetail;
+import co.istad.lms.features.student.dto.*;
 import org.springframework.data.domain.Page;
 
 public interface StudentService {
@@ -48,7 +45,7 @@ public interface StudentService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    StudentResponseDetail updateStudentByUuid (String uuid , StudentRequestDetail studentRequest);
+    StudentResponseDetail updateStudentByUuid (String uuid , StudentRequestUpdate studentRequest);
 
 
 

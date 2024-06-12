@@ -8,14 +8,51 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record AdminRequestDetail(
+
+        
         String highSchool,
+
         LocalDate highSchoolGraduationDate,
+
         String degree,
+
         LocalDate degreeGraduationDate,
+
         String major,
+
         String studyAtUniversityOrInstitution,
+
         String experienceAtWorkingPlace,
+
         Integer experienceYear,
-        UserRequestDetail user
+
+        // filed user
+        String nameEn,
+
+        String nameKh,
+
+        String username,
+
+        String gender,
+
+        LocalDate dob,
+
+        String email,
+
+        String profileImage,
+
+        String phoneNumber,
+
+        String cityOrProvince,
+
+        String khanOrDistrict,
+
+        String sangkatOrCommune,
+
+        String street,
+
+        JsonBirthPlace birthPlace
+
+
 ) {
 }

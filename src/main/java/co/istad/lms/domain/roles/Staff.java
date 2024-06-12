@@ -1,8 +1,5 @@
 package co.istad.lms.domain.roles;
 
-
-
-import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,21 +11,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "staffs")
 @Entity
-public class Staff extends Auditable {
+public class Staff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    String uuid;
+    private String uuid;
 
-    String position;
-
-    boolean status;
-
-    boolean isDeleted;
+    private String position;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }

@@ -76,7 +76,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !user.getIsBlocked();
+        return !user.getStatus();
     }
 
 
