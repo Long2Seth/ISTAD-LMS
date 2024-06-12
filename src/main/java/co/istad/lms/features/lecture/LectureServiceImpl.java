@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class LectureServiceImpl implements LectureService {
@@ -34,21 +36,19 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public void createLecture(LectureRequest lectureRequest) {
 
-        //validate lecture by alias
-        if (lectureRepository.existsByAlias(lectureRequest.alias())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Lecture = %s already exists.", lectureRequest.alias()));
-        }
 
-        //check course from DTO by alias
+        //check course from DTO by uuid
         Course course =
-                courseRepository.findByAlias(lectureRequest.courseAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",lectureRequest.courseAlias())));
+                courseRepository.findByUuid(lectureRequest.courseUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",lectureRequest.courseUuid())));
 
         // map DTO to entity
         Lecture lecture = lectureMapper.fromLectureRequest(lectureRequest);
 
         //set isDeleted to false(enable)
         lecture.setIsDeleted(false);
+
+        //set uuid to lecture
+        lecture.setUuid(UUID.randomUUID().toString());
 
         //set course to lecture
         lecture.setCourse(course);
@@ -59,10 +59,12 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public LectureDetailResponse getLectureByAlias(String alias) {
+    public LectureDetailResponse getLectureByUuid(String uuid) {
 
-        //find lecture by alias
-        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found.", alias)));
+        //find lecture by uuid
+        Lecture lecture =
+                lectureRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Lecture = %s has not been found.", uuid)));
 
         //return lecture detail
         return lectureMapper.toLectureDetailResponse(lecture);
@@ -87,24 +89,12 @@ public class LectureServiceImpl implements LectureService {
 
 
     @Override
-    public LectureDetailResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest) {
+    public LectureDetailResponse updateLectureByUuid(String uuid, LectureUpdateRequest lectureUpdateRequest) {
 
-        //find lecture by alias
-        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found.", alias)));
-
-        //check null alias from DTO
-        if (lectureUpdateRequest.alias() != null) {
-
-            //validate alias from dto with original alias
-            if (!alias.equalsIgnoreCase(lectureUpdateRequest.alias())) {
-
-                //validate new alias is conflict with other alias or not
-                if (lectureRepository.existsByAlias(lectureUpdateRequest.alias())) {
-
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Lecture = %s already exist.", lectureUpdateRequest.alias()));
-                }
-            }
-        }
+        //find lecture by uuid
+        Lecture lecture =
+                lectureRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Lecture = %s has not been found.", uuid)));
 
         //map DTO to entity
         lectureMapper.updateLectureFromRequest(lecture, lectureUpdateRequest);
@@ -118,20 +108,24 @@ public class LectureServiceImpl implements LectureService {
 
 
     @Override
-    public void deleteLectureByAlias(String alias) {
+    public void deleteLectureByUuid(String uuid) {
 
-        //find lecture in database by alias
-        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found.", alias)));
+        //find lecture in database by uuid
+        Lecture lecture =
+                lectureRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Lecture = %s has not been found.", uuid)));
 
         //delete lecture in database
         lectureRepository.delete(lecture);
     }
 
     @Override
-    public void enableLectureByAlias(String alias) {
+    public void enableLectureByUuid(String uuid) {
 
-        //validate lecture from dto by alias
-        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found ! ", alias)));
+        //validate lecture from dto by uuid
+        Lecture lecture =
+                lectureRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Lecture = %s has not been found ! ", uuid)));
 
         //set isDeleted to false(enable)
         lecture.setIsDeleted(false);
@@ -141,10 +135,12 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public void disableLectureByAlias(String alias) {
+    public void disableLectureByUuid(String uuid) {
 
-        //validate lecture from dto by alias
-        Lecture lecture = lectureRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found ! ", alias)));
+        //validate lecture from dto by uuid
+        Lecture lecture =
+                lectureRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Lecture = %s has not been found ! ", uuid)));
 
         //set isDeleted to true(disable)
         lecture.setIsDeleted(true);

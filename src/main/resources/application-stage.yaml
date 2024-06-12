@@ -31,10 +31,7 @@ MINIO_BUCKET: minio-test-bucket-1
 
 DOMAIN: http://localhost:8080
 
-#MEDIA_SERVER_PATH: D:\\SERVER\\ITE\\
-MEDIA_BASE_URI: http://152.42.220.220:9090/
+MEDIA_BASE_URI: http://localhost:8080
+MEDIA_ENDPOINT: /api/v1/medias
 
-#number of hour
-CACHE-DURATION: 12
-URL-CACHE-DURATION: 12
 URL-EXPIRY-TIME : 24

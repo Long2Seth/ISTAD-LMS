@@ -13,8 +13,8 @@ public record AdmissionRequest(
 
         String remark,
         @NotNull(message = "openDate is require")
-        LocalDate openDate,
-        LocalDate endDate,
+        String openDate,
+        String endDate,
 
         String telegramLink
 ) {}

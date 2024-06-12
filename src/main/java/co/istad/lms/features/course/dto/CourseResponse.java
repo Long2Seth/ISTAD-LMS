@@ -2,7 +2,7 @@ package co.istad.lms.features.course.dto;
 
 public record CourseResponse(
 
-        String alias,
+        String uuid,
         String title
 ) {
 }

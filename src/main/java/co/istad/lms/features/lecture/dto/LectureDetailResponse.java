@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public record LectureDetailResponse(
 
-        String alias,
+        String uuid,
         String startTime,
         String endTime,
         String description,

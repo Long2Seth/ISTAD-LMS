@@ -10,7 +10,7 @@ import java.util.Set;
 
 public record CourseDetailResponse(
 
-        String alias,
+        String uuid,
         Boolean isDeleted,
         SubjectResponse subject,
         InstructorResponse instructor,

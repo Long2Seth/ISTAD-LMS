@@ -27,11 +27,11 @@ public class ClassController {
 
     }
 
-    @GetMapping("/{alias}")
+    @GetMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('class:read')")
-    ClassDetailResponse getClassByAlias(@PathVariable String alias) {
+    ClassDetailResponse getClassByAlias(@PathVariable String uuid) {
 
-        return classService.getClassByAlias(alias);
+        return classService.getClassByUuid(uuid);
 
     }
 
@@ -46,36 +46,36 @@ public class ClassController {
         return classService.getAllClasses(pageNumber, pageSize);
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('class:update')")
-    public ClassDetailResponse updateClass(@PathVariable String alias,
+    public ClassDetailResponse updateClass(@PathVariable String uuid,
                                            @Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
 
-        return classService.updateClassByAlias(alias, classUpdateRequest);
+        return classService.updateClassByUuid(uuid, classUpdateRequest);
     }
 
-    @DeleteMapping("/{alias}")
+    @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('class:delete')")
-    public void deleteClass(@PathVariable String alias) {
+    public void deleteClass(@PathVariable String uuid) {
 
-        classService.deleteClassByAlias(alias);
+        classService.deleteClassByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/enable")
+    @PutMapping("/{uuid}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('class:delete')")
-    void enableClass(@PathVariable String alias) {
+    void enableClass(@PathVariable String uuid) {
 
-        classService.enableClassByAlias(alias);
+        classService.enableClassByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/disable")
+    @PutMapping("/{uuid}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('class:delete')")
-    void disableClass(@PathVariable String alias) {
+    void disableClass(@PathVariable String uuid) {
 
-        classService.disableClassByAlias(alias);
+        classService.disableClassByUuid(uuid);
     }
 
     @GetMapping("/filter")
@@ -90,35 +90,35 @@ public class ClassController {
         return classService.filterClasses(filterDto, pageNumber, pageSize);
     }
 
-    @PostMapping("/{alias}/students")
+    @PostMapping("/{uuid}/students")
     @PreAuthorize("hasAnyAuthority('class:update')")
-    public ClassDetailResponse addStudentToClass(@PathVariable String alias,
+    public ClassDetailResponse addStudentToClass(@PathVariable String uuid,
                                                  @Valid @RequestBody ClassAddStudentRequest classAddStudentRequest){
-        return classService.addStudent(alias,classAddStudentRequest);
+        return classService.addStudent(uuid,classAddStudentRequest);
     }
 
-    @DeleteMapping("/{alias}/students/{uuid}")
+    @DeleteMapping("/{uuid}/students/{suuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('class:delete')")
-    public void deleteStudentInClass(@PathVariable String alias,@PathVariable String uuid){
+    public void deleteStudentInClass(@PathVariable String uuid,@PathVariable String suuid){
 
-        classService.deleteStudent(alias,uuid);
+        classService.deleteStudent(uuid,suuid);
     }
 
-    @PutMapping("/{alias}/public")
+    @PutMapping("/{uuid}/public")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('class:update')")
-    void publicClass(@PathVariable String alias) {
+    void publicClass(@PathVariable String uuid) {
 
-        classService.publicClassByAlias(alias);
+        classService.publicClassByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/draft")
+    @PutMapping("/{uuid}/draft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('class:update')")
-    void draftClass(@PathVariable String alias) {
+    void draftClass(@PathVariable String uuid) {
 
-        classService.draftClassByAlias(alias);
+        classService.draftClassByUuid(uuid);
     }
 
 }

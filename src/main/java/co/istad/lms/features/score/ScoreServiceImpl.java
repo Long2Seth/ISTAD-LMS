@@ -39,11 +39,11 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public void createScore(ScoreRequest scoreRequest) {
 
-        Student student=
-                studentRepository.findByUuid(scoreRequest.studentUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",scoreRequest.studentUuid())));
+        Student student =
+                studentRepository.findByUuid(scoreRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", scoreRequest.studentUuid())));
 
-        Course course=
-                courseRepository.findByAlias(scoreRequest.courseAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",scoreRequest.courseAlias())));
+        Course course =
+                courseRepository.findByUuid(scoreRequest.courseUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found", scoreRequest.courseUuid())));
         //map from DTO to entity
         Score score = scoreMapper.fromScoreRequest(scoreRequest);
 

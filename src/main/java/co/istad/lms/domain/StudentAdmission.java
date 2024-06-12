@@ -21,7 +21,7 @@ public class StudentAdmission extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true,length = 100)
     private String uuid;
 
     @Column(nullable = false, length = 50)
@@ -33,7 +33,7 @@ public class StudentAdmission extends Auditable {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String highSchool;
 
     @Column(length = 50)
@@ -89,7 +89,7 @@ public class StudentAdmission extends Auditable {
     private Admission admission;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean isDeleted ;
 
 
 }

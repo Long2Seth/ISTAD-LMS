@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course,Long>, JpaSpecificationExecutor<Course> {
 
-    Boolean existsByAlias(String alias);
+    Boolean existsByUuid(String alias);
 
-    Optional<Course> findByAlias(String alias);
+    Optional<Course> findByUuid(String alias);
 
 //    Optional<Course> finByOneClass(String oneClass);
  }

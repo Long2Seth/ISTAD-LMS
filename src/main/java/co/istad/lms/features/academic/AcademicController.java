@@ -60,7 +60,7 @@ public class AcademicController {
 
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     public AcademicResponseDetail updateAcademicByUuid(@PathVariable String uuid, @RequestBody AcademicRequestDetail academicRequest) {
         return academicService.updateAcademicByUuid(uuid, academicRequest);
     }

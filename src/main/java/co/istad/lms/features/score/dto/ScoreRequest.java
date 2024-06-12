@@ -18,6 +18,6 @@ public record ScoreRequest(
         String studentUuid,
 
         @NotBlank(message = "Course alias is required")
-        String courseAlias
+        String courseUuid
 ) {
 }

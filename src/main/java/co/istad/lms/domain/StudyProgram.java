@@ -23,7 +23,7 @@ public class StudyProgram extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     private String alias;
 
     @Column( length = 50,nullable = false)

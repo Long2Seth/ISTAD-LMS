@@ -9,7 +9,6 @@ public record ClassUpdateRequest(
 
         String alias,
 
-
         String className,
 
         String description,

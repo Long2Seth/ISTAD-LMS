@@ -2,6 +2,8 @@ package co.istad.lms.features.subject;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Subject;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.subject.dto.SubjectDetailResponse;
 import co.istad.lms.features.subject.dto.SubjectRequest;
@@ -25,9 +27,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectRepository subjectRepository;
 
-    private final MinioStorageService minioStorageService;
-
     private final BaseSpecification<Subject> baseSpecification;
+
+    private final MediaService mediaService;
+
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
     @Override
@@ -37,6 +41,13 @@ public class SubjectServiceImpl implements SubjectService {
         if (subjectRepository.existsByAlias(subjectRequest.alias())) {
 
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Subject = %s already exists.", subjectRequest.alias()));
+        }
+
+        //validate logo from DTO
+        if (subjectRequest.logo() != null && !subjectRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(subjectRequest.logo())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
+                    subjectRequest.logo()));
         }
 
 
@@ -58,7 +69,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //set logo url to faculty
         if (subject.getLogo() != null) {
-            subject.setLogo(minioStorageService.getUrl(subject.getLogo()));
+            subject.setLogo(mediaService.getUrl(subject.getLogo()));
         }
 
         //return subject detail
@@ -81,7 +92,7 @@ public class SubjectServiceImpl implements SubjectService {
         //set logo url to faculty
         subjects.forEach(subject -> {
             if (subject.getLogo() != null) {
-                subject.setLogo(minioStorageService.getUrl(subject.getLogo()));
+                subject.setLogo(mediaService.getUrl(subject.getLogo()));
             }
         });
 
@@ -111,6 +122,13 @@ public class SubjectServiceImpl implements SubjectService {
             }
         }
 
+        //validate logo from DTO
+        if (subjectUpdateRequest.logo() != null && !subjectUpdateRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(subjectUpdateRequest.logo())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
+                    subjectUpdateRequest.logo()));
+        }
+
         //map DTO to entity
         subjectMapper.updateSubjectFromRequest(subject, subjectUpdateRequest);
 
@@ -119,7 +137,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //set logo url to faculty
         if (subject.getLogo() != null) {
-            subject.setLogo(minioStorageService.getUrl((subject.getLogo())));
+            subject.setLogo(mediaService.getUrl((subject.getLogo())));
         }
 
         //return Subject response
@@ -209,7 +227,7 @@ public class SubjectServiceImpl implements SubjectService {
         //set logo url to faculty
         subjects.forEach(subject -> {
             if (subject.getLogo() != null) {
-                subject.setLogo(minioStorageService.getUrl(subject.getLogo()));
+                subject.setLogo(mediaService.getUrl(subject.getLogo()));
             }
         });
         //map to DTO and return

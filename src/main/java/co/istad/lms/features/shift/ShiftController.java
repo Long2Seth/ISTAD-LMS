@@ -50,7 +50,7 @@ public class ShiftController {
 
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('shift:update')")
     public ShiftDetailResponse updateShift(@PathVariable String alias,
                                      @Valid @RequestBody ShiftUpdateRequest shiftUpdateRequest) {

@@ -54,9 +54,9 @@ public class FacultyController {
 
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
-    public FacultyDetailResponse updateDegree(@PathVariable String alias,
+    public FacultyDetailResponse updateFaculty(@PathVariable String alias,
                                               @Valid @RequestBody FacultyUpdateRequest facultyUpdateRequest) {
 
         return facultyService.updateFacultyByAlias(alias, facultyUpdateRequest);

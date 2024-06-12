@@ -1,9 +1,15 @@
 package co.istad.lms.features.media;
 
 import co.istad.lms.features.media.dto.MediaResponse;
+import co.istad.lms.features.media.dto.MediaViewResponse;
+import io.minio.errors.*;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.rmi.ServerException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface MediaService {
@@ -49,4 +55,10 @@ public interface MediaService {
      * @return the resource object containing the media file
      */
     Resource downloadMediaByName(String mediaName);
+
+
+    MediaViewResponse viewByFileName(String fileName) throws ServerException, InsufficientDataException,
+            ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, io.minio.errors.ServerException;
+
+    String getUrl(String fileName);
 }

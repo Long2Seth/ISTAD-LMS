@@ -6,9 +6,6 @@ import jakarta.validation.constraints.Size;
 
 public record LectureRequest(
 
-            @NotBlank(message = "Alias is required")
-            @Size(max = 50, message = "Alias cannot be longer than 50 characters")
-            String alias,
             @NotBlank(message = "Start time is required")
             String startTime,
             String endTime,
@@ -17,7 +14,7 @@ public record LectureRequest(
             String lectureDate,
             Boolean status,
 
-            String courseAlias,
+            String courseUuid,
             @NotNull(message = "isDraft is required")
             Boolean isDraft
 ) {

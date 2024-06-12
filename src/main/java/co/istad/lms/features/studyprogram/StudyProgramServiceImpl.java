@@ -6,6 +6,8 @@ import co.istad.lms.domain.Faculty;
 import co.istad.lms.domain.StudyProgram;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.faculties.FacultyRepository;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
@@ -38,6 +40,10 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
     private final MinioStorageService minioStorageService;
 
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final MediaService mediaService;
+
 
     @Override
     public void createStudyProgram(StudyProgramRequest studyProgramRequest) {
@@ -49,7 +55,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         }
 
         //validate logo from DTO
-        if (studyProgramRequest.logo() != null && !studyProgramRequest.logo().trim().isEmpty() && !minioStorageService.doesObjectExist(studyProgramRequest.logo())) {
+        if (studyProgramRequest.logo() != null && !studyProgramRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studyProgramRequest.logo())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     studyProgramRequest.logo()));
         }
@@ -89,7 +95,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         //update logo url for studyProgram
         if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
-            studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
+            studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
         }
 
         //map to DTO and return
@@ -111,7 +117,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         // update the logo URL for each studyProgram
         studyPrograms.forEach(studyProgram -> {
             if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
-                studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
+                studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
             }
         });
         //map entity to DTO and return
@@ -143,7 +149,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         studyProgramMapper.updateStudyProgramFromRequest(studyProgram, studyProgramUpdateRequest);
 
         //update logo url for studyProgram
-        if (studyProgramUpdateRequest.logo() != null && !studyProgramUpdateRequest.logo().trim().isEmpty()) {
+        if (studyProgramUpdateRequest.logo() != null && !studyProgramUpdateRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studyProgramUpdateRequest.logo())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     studyProgramUpdateRequest.logo()));
         }
@@ -152,7 +158,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         studyProgramRepository.save(studyProgram);
 
         //set url to logo
-        studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
+        studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
 
         //map entity to DTO and return
         return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
@@ -247,7 +253,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         // update the logo URL for each studyProgram
         studyPrograms.forEach(studyProgram -> {
             if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
-                studyProgram.setLogo(minioStorageService.getUrl(studyProgram.getLogo()));
+                studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
             }
         });
 

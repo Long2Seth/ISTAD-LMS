@@ -5,13 +5,13 @@ import lombok.Builder;
 import org.springframework.core.io.InputStreamResource;
 
 @Builder
-public record MediaResponse(
-        String name,
+public record MediaViewResponse(
+
+        String fileName,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         String contentType,
-        String extension,
-        String uri,
-        Long size
-) {
 
+        Long fileSize,
+        InputStreamResource stream
+        ) {
 }
