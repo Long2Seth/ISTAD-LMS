@@ -21,7 +21,11 @@ import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
 import co.istad.lms.mapper.StudentAdmissionMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.utils.DefaultAuthority;
 import lombok.RequiredArgsConstructor;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,9 +36,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.security.SecureRandom;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -344,21 +347,19 @@ public class ClassServiceImpl implements ClassService {
                     Student student = studentAdmissionMapper.toStudent(studentAdmission);
 
                     student.setUuid(UUID.randomUUID().toString());
-                    student.setStatus(false);
-                    student.setDeleted(false);
 
                     // Map user request to user
                     User user = student.getUser();
 
                     user.setUuid(UUID.randomUUID().toString());
-                    user.setPassword(passwordEncoder.encode("Student@istad2024"));
+                    user.setPassword(passwordEncoder.encode(generateStrongPassword()));
                     user.setIsDeleted(false);
-                    user.setIsBlocked(false);
+                    user.setStatus(false);
                     user.setIsChangePassword(false);
                     user.setAccountNonExpired(true);
                     user.setAccountNonLocked(true);
                     user.setCredentialsNonExpired(true);
-                    user.setAuthorities(new HashSet<>());
+                    user.setAuthorities(null);
 
                     // Save user
                     student.setUser(userRepository.save(user));
@@ -445,4 +446,21 @@ public class ClassServiceImpl implements ClassService {
         //save to database
         classRepository.save(aClass);
     }
+
+    private static String generateStrongPassword() {
+        CharacterRule lowercaseRule = new CharacterRule(EnglishCharacterData.LowerCase, 1);
+        CharacterRule uppercaseRule = new CharacterRule(EnglishCharacterData.UpperCase, 1);
+        CharacterRule digitRule = new CharacterRule(EnglishCharacterData.Digit, 1);
+        CharacterRule specialCharRule = new CharacterRule(EnglishCharacterData.Special, 1);
+
+        PasswordGenerator generator = new PasswordGenerator();
+
+        return generator.generatePassword(8, Arrays.asList(
+                lowercaseRule,
+                uppercaseRule,
+                digitRule,
+                specialCharRule
+        ));
+    }
+
 }
