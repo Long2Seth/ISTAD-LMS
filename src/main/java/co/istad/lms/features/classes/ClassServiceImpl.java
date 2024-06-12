@@ -14,6 +14,7 @@ import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.instructor.InstructorRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.student.StudentService;
 import co.istad.lms.features.studentadmisson.StudentAdmissionRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.user.UserRepository;
@@ -60,6 +61,8 @@ public class ClassServiceImpl implements ClassService {
     private final InstructorRepository instructorRepository;
 
     private final StudentRepository studentRepository;
+
+    private final StudentService studentService;
 
     private final YearOfStudyRepository yearOfStudyRepository;
 
@@ -359,7 +362,7 @@ public class ClassServiceImpl implements ClassService {
                     user.setAccountNonExpired(true);
                     user.setAccountNonLocked(true);
                     user.setCredentialsNonExpired(true);
-                    user.setAuthorities(null);
+                    user.setAuthorities(studentService.get);
 
                     // Save user
                     student.setUser(userRepository.save(user));
