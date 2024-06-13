@@ -50,7 +50,7 @@ public class DegreeController {
     }
 
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
     public DegreeDetailResponse updateDegree(@PathVariable String alias,
                                              @Valid @RequestBody DegreeUpdateRequest degreeUpdateRequest) {

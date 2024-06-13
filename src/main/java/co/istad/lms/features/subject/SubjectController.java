@@ -47,7 +47,7 @@ public class SubjectController {
         return subjectService.getAllSubject(pageNumber, pageSize);
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
     public SubjectDetailResponse updateSubject(@PathVariable String alias,
                                         @Valid @RequestBody SubjectUpdateRequest subjectUpdateRequest) {

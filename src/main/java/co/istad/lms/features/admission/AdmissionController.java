@@ -45,7 +45,7 @@ public class AdmissionController {
     }
 
 
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('admission:update')")
     public AdmissionDetailResponse updateAdmission(
@@ -74,6 +74,7 @@ public class AdmissionController {
 
     @PutMapping("/{uuid}/status")
     @PreAuthorize("hasAnyAuthority('admission:update')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateAdmissionStatus(@PathVariable String uuid, @Valid @RequestBody AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
 
         admissionService.updateAdmissionStatus(uuid, admissionUpdateStatusRequest);

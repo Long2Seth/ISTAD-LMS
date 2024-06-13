@@ -39,13 +39,20 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public void createScore(ScoreRequest scoreRequest) {
 
-        Student student=
-                studentRepository.findByUuid(scoreRequest.studentUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",scoreRequest.studentUuid())));
+        Student student =
+                studentRepository.findByUuid(scoreRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", scoreRequest.studentUuid())));
 
-        Course course=
-                courseRepository.findByAlias(scoreRequest.courseAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",scoreRequest.courseAlias())));
+        Course course =
+                courseRepository.findByUuid(scoreRequest.courseUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found", scoreRequest.courseUuid())));
         //map from DTO to entity
         Score score = scoreMapper.fromScoreRequest(scoreRequest);
+
+        //validate duplicate score for a student by course
+        if(scorerRepository.existsByStudentAndCourse(student,course)){
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("score with student = %s and course  " +
+                    "= %s has already existed",student.getUser().getUuid(),course.getUuid()));
+        }
 
         //set student to score
         score.setStudent(student);

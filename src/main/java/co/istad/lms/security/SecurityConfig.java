@@ -1,6 +1,6 @@
 package co.istad.lms.security;
 
-import co.istad.lms.utils.KeyUtils;
+import co.istad.lms.util.KeyUtil;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,7 +41,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtToUserConverter jwtToUserConverter;
-    private final KeyUtils keyUtils;
+    private final KeyUtil keyUtil;
 
 
 
@@ -50,6 +49,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 
 
@@ -84,8 +84,8 @@ public class SecurityConfig {
     @Bean
     @Qualifier("jwtRefreshTokenEncoder")
     JwtEncoder jwtRefreshTokenEncoder() {
-        JWK jwk = new RSAKey.Builder(keyUtils.getRefreshTokenPublicKey())
-                .privateKey(keyUtils.getRefreshTokenPrivateKey())
+        JWK jwk = new RSAKey.Builder(keyUtil.getRefreshTokenPublicKey())
+                .privateKey(keyUtil.getRefreshTokenPrivateKey())
                 .build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
@@ -97,7 +97,7 @@ public class SecurityConfig {
     @Bean
     @Qualifier("jwtRefreshTokenDecoder")
     JwtDecoder jwtRefreshTokenDecoder() {
-        return NimbusJwtDecoder.withPublicKey(keyUtils.getRefreshTokenPublicKey()).build();
+        return NimbusJwtDecoder.withPublicKey(keyUtil.getRefreshTokenPublicKey()).build();
     }
 
 
@@ -106,8 +106,8 @@ public class SecurityConfig {
     @Bean
     @Primary
     JwtEncoder jwtAccessTokenEncoder() {
-        JWK jwk = new RSAKey.Builder(keyUtils.getAccessTokenPublicKey())
-                .privateKey(keyUtils.getAccessTokenPrivateKey())
+        JWK jwk = new RSAKey.Builder(keyUtil.getAccessTokenPublicKey())
+                .privateKey(keyUtil.getAccessTokenPrivateKey())
                 .build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
@@ -119,7 +119,7 @@ public class SecurityConfig {
     @Bean
     @Primary
     JwtDecoder jwtAccessTokenDecoder() {
-        return NimbusJwtDecoder.withPublicKey(keyUtils.getAccessTokenPublicKey()).build();
+        return NimbusJwtDecoder.withPublicKey(keyUtil.getAccessTokenPublicKey()).build();
     }
 
 

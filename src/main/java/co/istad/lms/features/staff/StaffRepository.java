@@ -1,5 +1,6 @@
 package co.istad.lms.features.staff;
 
+import co.istad.lms.domain.User;
 import co.istad.lms.domain.roles.Staff;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,7 @@ import java.util.Optional;
 public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     Optional<Staff> findByUuid(String uuid);
+
+    Optional<Staff> findByUser(User user);
 
 }

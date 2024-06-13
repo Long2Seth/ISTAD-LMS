@@ -1,9 +1,6 @@
 package co.istad.lms.features.instructor;
 
-import co.istad.lms.features.instructor.dto.InstructorRequest;
-import co.istad.lms.features.instructor.dto.InstructorRequestDetail;
-import co.istad.lms.features.instructor.dto.InstructorResponse;
-import co.istad.lms.features.instructor.dto.InstructorResponseDetail;
+import co.istad.lms.features.instructor.dto.*;
 import org.springframework.data.domain.Page;
 
 /**
@@ -24,7 +21,7 @@ public interface InstructorService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    InstructorResponse createInstructor(InstructorRequest instructorRequest);
+    void createInstructor(InstructorRequest instructorRequest);
 
 
 
@@ -32,12 +29,12 @@ public interface InstructorService {
      * Updates an existing instructor.
      *
      * @param uuid    is the unique identifier of instructor
-     * @param instructorRequestDetail the request object containing the updated instructor details
+     * @param instructorRequestUpdate the request object containing the updated instructor details
      * @return {@link InstructorResponseDetail}
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    InstructorResponseDetail updateInstructorByUuid(String uuid, InstructorRequestDetail instructorRequestDetail);
+    InstructorResponseDetail updateInstructorByUuid(String uuid, InstructorRequestUpdate instructorRequestUpdate);
 
 
 

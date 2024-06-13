@@ -84,7 +84,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     public Page<YearOfStudyDetailResponse> getAllYearOfStudies(int pageNumber, int pageSize) {
 
         //crate sort order
-        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "year");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
@@ -126,7 +126,7 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
     public Page<YearOfStudyDetailResponse> filterYearOfStudy(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
-        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "year");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);

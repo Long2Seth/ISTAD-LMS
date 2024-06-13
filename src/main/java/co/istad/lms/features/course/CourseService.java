@@ -27,63 +27,63 @@ public interface CourseService {
     void createCourse(CourseRequest courseRequest);
 
     /**
-     * Retrieves the details of a course by its alias.
+     * Retrieves the details of a course by its uuid.
      *
-     * @param alias is the unique name of degree
+     * @param uuid is the unique name of degree
      * @return {@link CourseDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    CourseDetailResponse getCourseByAlias(String alias);
+    CourseDetailResponse getCourseByUuid(String uuid);
 
     /**
      * Retrieves a paginated list of all courses.
      *
      * @param pageNumber is the current pageNumber number to retrieve
      * @param pageSize is the pageSize of record per pageNumber to retrieve
-     * @return {@link Page <CourseDetailResponse>}
+     * @return {@link Page<CourseDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
     Page<CourseDetailResponse> getAllCourses(int pageNumber, int pageSize);
 
     /**
-     * Updates an existing course by its alias.
+     * Updates an existing course by its uuid.
      *
-     * @param alias               is the unique name of course
+     * @param uuid               is the unique name of course
      * @param courseUpdateRequest is the request object containing the updated course details
      * @return {@link CourseDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    CourseDetailResponse updateCourseByAlias(String alias, CourseUpdateRequest courseUpdateRequest);
+    CourseDetailResponse updateCourseByUuid(String uuid, CourseUpdateRequest courseUpdateRequest);
 
     /**
-     * Deletes a course by its alias.
+     * Deletes a course by its uuid.
      *
-     * @param alias is the unique name of course
+     * @param uuid is the unique name of course
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void deleteCourseByAlias(String alias);
+    void deleteCourseByUuid(String uuid);
 
     /**
-     * Enable course by alias
+     * Enable course by uuid
      *
-     * @param alias is the unique name of course
+     * @param uuid is the unique name of course
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void enableCourseByAlias(String alias);
+    void enableCourseByUuid(String uuid);
 
     /**
-     * Disable course by alias
+     * Disable course by uuid
      *
-     * @param alias is the unique name of course
+     * @param uuid is the unique name of course
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void disableCourseByAlias(String alias);
+    void disableCourseByUuid(String uuid);
 
     /**
      * Filters courses based on the specified criteria and retrieves a paginated list of results.
@@ -100,15 +100,15 @@ public interface CourseService {
     /**
      * add instructor to course
      *
-     * @param alias is the unique name of course
-     * @param uuid is the uuid of instructor to add to course
+     * @param uuid is the unique name of course
+     * @param instructorUuid is the uuid of instructor to add to course
      * @return {@link CourseDetailResponse}
      */
-    CourseDetailResponse addInstructorToCourse(String alias, String uuid);
+    CourseDetailResponse addInstructorToCourse(String uuid, String instructorUuid);
 
     /**
-     * @param alias is the unique name of course
-     * @param uuid is the uuid of instructor to delete
+     * @param uuid is the unique name of course
+     * @param instructorUuid is the uuid of instructor to delete
      */
-    void deleteInstructorFromCourse(String alias, String uuid);
+    void deleteInstructorFromCourse(String uuid, String instructorUuid);
 }

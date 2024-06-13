@@ -54,7 +54,7 @@ public class StudyProgramController {
 
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('admin:control')")
     public StudyProgramDetailResponse updateStudyProgram(@PathVariable String alias,
                                                    @Valid @RequestBody StudyProgramUpdateRequest studyProgramUpdateRequest) {

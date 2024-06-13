@@ -48,7 +48,7 @@ public class MaterialController {
     }
 
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('material:update')")
     public MaterialDetailResponse updateMaterial(@PathVariable String alias,
                                                  @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {

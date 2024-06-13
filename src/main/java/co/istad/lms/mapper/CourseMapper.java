@@ -18,6 +18,7 @@ public interface CourseMapper {
     @Mapping(target = "subject",ignore = true)
     @Mapping(target = "instructor",ignore = true)
     @Mapping(target = "oneClass",ignore = true)
+    @Mapping(target = "courseStart", ignore = true)
     Course fromCourseRequest(CourseRequest courseRequest);
 
     CourseDetailResponse toCourseDetailResponse(Course course);
@@ -27,6 +28,7 @@ public interface CourseMapper {
     @Mapping(target = "subject",ignore = true)
     @Mapping(target = "instructor",ignore = true)
     @Mapping(target = "oneClass",ignore = true)
+    @Mapping(target = "courseStart", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCourseFromRequest(@MappingTarget Course course, CourseUpdateRequest courseUpdateRequest);
 

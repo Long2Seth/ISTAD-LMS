@@ -1,9 +1,6 @@
 package co.istad.lms.features.admin;
 
-import co.istad.lms.features.admin.dto.AdminRequest;
-import co.istad.lms.features.admin.dto.AdminRequestDetail;
-import co.istad.lms.features.admin.dto.AdminResponse;
-import co.istad.lms.features.admin.dto.AdminResponseDetail;
+import co.istad.lms.features.admin.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 
@@ -32,12 +29,12 @@ public interface AdminService {
      * Updates fields of an admin that are passed in the adminRequestDetail.
      *
      * @param uuid is the unique identifier of admin
-     * @param adminRequestDetail the request object containing the updated admin details
+     * @param adminRequestUpdate the request object containing the updated admin details
      * @return {@link AdminResponseDetail}
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    AdminResponseDetail updateAdminByUuid (String uuid, AdminRequestDetail adminRequestDetail);
+    AdminResponseDetail updateAdminByUuid (String uuid, AdminRequestUpdate adminRequestUpdate);
 
 
     /**

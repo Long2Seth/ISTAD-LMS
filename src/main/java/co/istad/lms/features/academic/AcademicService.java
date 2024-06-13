@@ -1,9 +1,6 @@
 package co.istad.lms.features.academic;
 
-import co.istad.lms.features.academic.dto.AcademicRequest;
-import co.istad.lms.features.academic.dto.AcademicRequestDetail;
-import co.istad.lms.features.academic.dto.AcademicResponse;
-import co.istad.lms.features.academic.dto.AcademicResponseDetail;
+import co.istad.lms.features.academic.dto.*;
 import org.springframework.data.domain.Page;
 
 
@@ -31,13 +28,13 @@ public interface AcademicService {
     /**
      * Update an existing academic
      * @param uuid is the unique identifier of academic
-     * @param academicRequestDetail is the request object containing the updated academic details
+     * @param academicRequestUpdate is the request object containing the updated academic details
      * @return {@link AcademicResponseDetail}
      * @author Long Piseth
      * @since 1.0 (2024)
      *
      */
-    AcademicResponseDetail updateAcademicByUuid(String uuid , AcademicRequestDetail academicRequestDetail);
+    AcademicResponseDetail updateAcademicByUuid(String uuid , AcademicRequestUpdate academicRequestUpdate);
 
 
 

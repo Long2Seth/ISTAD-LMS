@@ -3,6 +3,10 @@ package co.istad.lms.domain;
 
 import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.json.BirthPlace;
+import co.istad.lms.domain.roles.Academic;
+import co.istad.lms.domain.roles.Admin;
+import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,19 +52,17 @@ public class User extends Auditable {
     @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 100)
     private String password;
+
+    private String rawPassword;
 
     private String profileImage;
 
     @Column(length = 20)
     private String phoneNumber;
 
-    private String cityOrProvince;
-    private String khanOrDistrict;
-    private String sangkatOrCommune;
-    private String villageOrPhum;
-    private String street;
+    @Column(columnDefinition = "TEXT")
+    private String currentAddress;
 
     @Column(name = "birth_place", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
@@ -69,8 +71,10 @@ public class User extends Auditable {
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
+
+
     private Boolean isDeleted;
-    private Boolean isBlocked;
+    private Boolean status;
     private Boolean isChangePassword;
 
 
@@ -81,5 +85,17 @@ public class User extends Auditable {
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id")
     )
     private Set<Authority> authorities;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Admin admin;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Student student;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Instructor instructor;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Academic academic;
 
 }

@@ -10,6 +10,7 @@ import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.telegrambot.TelegramBotService;
 import co.istad.lms.mapper.AdmissionMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +37,22 @@ public class AdmissionServiceImpl implements AdmissionService {
 
     @Override
     public void createAdmission(AdmissionRequest admissionRequest) {
+
+        //check format for openDate
+        LocalDate openDate = DateTimeUtil.stringToLocalDate(admissionRequest.openDate(), "openDate");
+
+        //check endDate value
+        LocalDate endDate = null;
+        if (admissionRequest.endDate() != null && !admissionRequest.endDate().trim().isEmpty()) {
+
+            //validate endDate format
+            endDate = DateTimeUtil.stringToLocalDate(admissionRequest.endDate(), "endDate");
+
+            //validate openDate must before endDate(if endDate contain value)
+            if (openDate.isAfter(endDate)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after openDate");
+            }
+        }
 
         //map form DTO to entity
         Admission admission = admissionMapper.fromAdmissionRequest(admissionRequest);
@@ -93,6 +111,30 @@ public class AdmissionServiceImpl implements AdmissionService {
 
         //find admission by uuid in database
         Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission  = %s has not been found ! ", admissionUuid)));
+
+        //get openDate from admission
+        LocalDate openDate = admission.getOpenDate();
+
+        //if user update openDate
+        if (admissionUpdateRequest.openDate() != null && !admissionUpdateRequest.openDate().trim().isEmpty()) {
+
+            //validate openDate from DTO
+            openDate = DateTimeUtil.stringToLocalDate(admissionUpdateRequest.openDate(), "openDate");
+        }
+
+        //check endDate value
+        LocalDate endDate = admission.getEndDate();
+        if (admissionUpdateRequest.endDate() != null && !admissionUpdateRequest.endDate().trim().isEmpty()) {
+
+            //validate endDate format
+            endDate = DateTimeUtil.stringToLocalDate(admissionUpdateRequest.endDate(), "endDate");
+
+            //validate endDate must be after openDate
+            if (openDate.isAfter(endDate)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after openDate");
+            }
+        }
+
 
         //map data from DTO to entity
         admissionMapper.updateAdmissionFromRequest(admission, admissionUpdateRequest);

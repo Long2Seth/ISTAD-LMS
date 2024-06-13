@@ -5,6 +5,8 @@ import co.istad.lms.domain.Faculty;
 import co.istad.lms.features.faculties.dto.FacultyDetailResponse;
 import co.istad.lms.features.faculties.dto.FacultyRequest;
 import co.istad.lms.features.faculties.dto.FacultyUpdateRequest;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.mapper.FacultyMapper;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,10 @@ public class FacultyServiceImpl implements FacultyService {
 
     private final BaseSpecification<Faculty> baseSpecification;
 
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final MediaService mediaService;
+
     @Override
     public void createFaculty(FacultyRequest facultyRequest) {
 
@@ -39,7 +45,7 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         //validate logo is available or not
-        if (facultyRequest.logo() != null && !facultyRequest.logo().trim().isEmpty() && !minioStorageService.doesObjectExist(facultyRequest.logo())) {
+        if (facultyRequest.logo() != null && !facultyRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(facultyRequest.logo())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     facultyRequest.logo()));
         }
@@ -63,7 +69,7 @@ public class FacultyServiceImpl implements FacultyService {
 
         //set logo url to faculty
         if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-            faculty.setLogo(minioStorageService.getUrl((faculty.getLogo())));
+            faculty.setLogo(mediaService.getUrl((faculty.getLogo())));
         }
 
         //return Faculty detail
@@ -86,7 +92,7 @@ public class FacultyServiceImpl implements FacultyService {
         // update the logo URL for each faculty
         faculties.forEach(faculty -> {
             if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-                faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
+                faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
             }
         });
 
@@ -122,7 +128,7 @@ public class FacultyServiceImpl implements FacultyService {
         if (facultyUpdateRequest.logo() != null && !facultyUpdateRequest.logo().trim().isEmpty()) {
 
             //validate logo is available or not
-            if (!minioStorageService.doesObjectExist(facultyUpdateRequest.logo())) {
+            if (!fileMetaDataRepository.existsByFileName(facultyUpdateRequest.logo())) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                         facultyUpdateRequest.logo()));
             }
@@ -132,7 +138,7 @@ public class FacultyServiceImpl implements FacultyService {
         facultyRepository.save(faculty);
 
         //set logo to faculty
-        faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
+        faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
 
         //return faculty detail
         return facultyMapper.toFacultyDetailResponse(faculty);
@@ -224,7 +230,7 @@ public class FacultyServiceImpl implements FacultyService {
         //set logo url to faculty
         faculties.forEach(faculty -> {
             if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-                faculty.setLogo(minioStorageService.getUrl(faculty.getLogo()));
+                faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
             }
         });
 

@@ -13,15 +13,10 @@ public record UserRequestDetail(
         String gender,
         LocalDate dob,
         String email,
-        String password,
         String profileImage,
         String phoneNumber,
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
-        JsonBirthPlace birthPlace,
-        Set<AuthorityRequestToUser> authorities
+        String currentAddress,
+        JsonBirthPlace birthPlace
 
 ) {
 }

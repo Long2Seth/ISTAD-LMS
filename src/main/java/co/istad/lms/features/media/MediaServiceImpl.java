@@ -1,10 +1,18 @@
 package co.istad.lms.features.media;
 
-import co.istad.lms.features.minio.MinioStorageService;
+import co.istad.lms.domain.FileMetaData;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.media.dto.MediaResponse;
+import co.istad.lms.features.media.dto.MediaViewResponse;
+import co.istad.lms.features.minio.MinioStorageService;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
+import io.minio.StatObjectArgs;
+import io.minio.StatObjectResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -31,25 +39,25 @@ public class MediaServiceImpl implements MediaService {
 
     private final MinioStorageService minioService;
 
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final MinioClient minioClient;
+
+    //base uri for media
     @Value("${media.base-uri}")
     private String baseUri;
+
+    //endpoint that handle manage medias
+    @Value("${media.end-point}")
+    private String mediaEndpoint;
+
+    @Value("${minio.bucket-name}")
+    String bucketName;
 
     @Override
     public MediaResponse uploadSingle(MultipartFile file) throws Exception {
 
-        String contentType = file.getContentType();
-        if (contentType == null || !(contentType.startsWith("image/") ||
-                contentType.startsWith("video/") ||
-                contentType.equals("application/pdf") ||
-                contentType.equals("application/vnd.ms-powerpoint") ||
-                contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation") ||
-                contentType.equals("application/msword") ||
-                contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
-                contentType.equals("text/plain"))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported file type.");
-        }
-
-        String folderName = contentType.split("/")[0];
+        String folderName = getString(file);
 
         String newName = UUID.randomUUID().toString();
 
@@ -57,20 +65,37 @@ public class MediaServiceImpl implements MediaService {
 
         String objectName = folderName + "/" + newName + "." + extension;
 
-        String url = minioService.getUrl(newName+"."+extension);
-
         try {
             minioService.uploadFile(file, objectName);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
+        //create new object that store file metadata
+        FileMetaData fileMetaData = new FileMetaData();
+
+        //set all field
+        fileMetaData.setFileName(newName + "." + extension);
+
+        fileMetaData.setFileSize(file.getSize());
+
+        fileMetaData.setContentType(file.getContentType());
+
+        fileMetaData.setFolder(folderName);
+
+        fileMetaData.setExtension(extension);
+
+        //save file metadata to database
+        fileMetaDataRepository.save(fileMetaData);
+
+
+        //response to DTO
         return MediaResponse.builder()
                 .name(newName + "." + extension)
                 .contentType(file.getContentType())
                 .extension(extension)
                 .size(file.getSize())
-                .uri(url)
+                .uri(baseUri + mediaEndpoint + "/view/" + newName + "." + extension)
                 .build();
     }
 
@@ -96,14 +121,14 @@ public class MediaServiceImpl implements MediaService {
 
         try {
             String contentType = getContentType(mediaName);
-            String url = minioService.getUrl(mediaName);
 
+            String extension = minioService.extractExtension(mediaName);
 
             return MediaResponse.builder()
                     .name(mediaName)
                     .contentType(contentType)
-                    .extension(minioService.extractExtension(mediaName))
-                    .uri(url)
+                    .extension(extension)
+                    .uri(baseUri + mediaEndpoint + "/view/" + mediaName)
                     .build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -125,7 +150,6 @@ public class MediaServiceImpl implements MediaService {
             return MediaResponse.builder()
                     .name(mediaName)
                     .extension(minioService.extractExtension(mediaName))
-                    .uri(String.format("%s%s/%s", baseUri, folderName, mediaName))
                     .build();
 
         } catch (Exception e) {
@@ -166,4 +190,79 @@ public class MediaServiceImpl implements MediaService {
             return "Unknown type";
         }
     }
+
+    @Override
+    public MediaViewResponse viewByFileName(String fileName) {
+
+        // Fetch file metadata from the repository
+        FileMetaData fileMetaData = fileMetaDataRepository.findByFileName(fileName).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "File has not been found!"));
+
+        // Construct the object path in MinIO
+        Path path = Path.of(fileMetaData.getFileName());
+        String objectPath = fileMetaData.getFolder() + "/" + path;
+
+        // Fetch object metadata from MinIO
+        StatObjectArgs statObjectArgs = StatObjectArgs.builder()
+                .bucket(bucketName)
+                .object(objectPath)
+                .build();
+        StatObjectResponse imageMinioMetaData;
+        try {
+            imageMinioMetaData = minioClient.statObject(statObjectArgs);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error fetching file metadata from storage", e);
+        }
+
+        // Fetch the object from MinIO
+        GetObjectArgs getObjectArgs = GetObjectArgs.builder()
+                .bucket(bucketName)
+                .object(objectPath)
+                .build();
+
+        InputStream inputStream;
+        try {
+            inputStream = minioClient.getObject(getObjectArgs);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error fetching file from storage", e);
+        }
+
+        // Wrap the InputStream in an InputStreamResource
+        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+
+        // Construct and return the response
+        return MediaViewResponse.builder()
+                .fileName(fileMetaData.getFileName())
+                .fileSize(fileMetaData.getFileSize())
+                .contentType(fileMetaData.getContentType())
+                .stream(inputStreamResource)
+                .build();
+    }
+
+
+    private static String getString(MultipartFile file) {
+
+        String contentType = file.getContentType();
+
+        if (contentType == null || !(contentType.startsWith("image/") ||
+                contentType.startsWith("video/") ||
+                contentType.equals("application/pdf") ||
+                contentType.equals("application/vnd.ms-powerpoint") ||
+                contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation") ||
+                contentType.equals("application/msword") ||
+                contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+                contentType.equals("text/plain"))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported file type.");
+        }
+
+        return contentType.split("/")[0];
+    }
+
+    @Override
+    public String getUrl(String fileName){
+
+        return baseUri + mediaEndpoint + "/view/" + fileName;
+    }
+
+
 }

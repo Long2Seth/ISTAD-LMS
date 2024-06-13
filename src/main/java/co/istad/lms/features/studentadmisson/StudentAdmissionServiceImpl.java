@@ -7,6 +7,8 @@ import co.istad.lms.features.admission.AdmissionService;
 import co.istad.lms.features.admission.dto.AdmissionRequest;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.degree.dto.DegreeResponse;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionRequest;
@@ -49,12 +51,30 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
     private final AdmissionRepository admissionRepository;
 
+    private final MediaService mediaService;
+
+    private final FileMetaDataRepository fileMetaDataRepository;
+
 
     @Override
     public void createStudentAdmission(StudentAdmissionRequest studentAdmissionRequest) {
 
+        //validate avatar from dto(for image must be upload first and use name from upload to put in)
+        if (studentAdmissionRequest.avatar() != null && !studentAdmissionRequest.avatar().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionRequest.avatar())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("avatar = %s has not been found",
+                    studentAdmissionRequest.avatar()));
+        }
+
+        //validate identity from dto
+        if (studentAdmissionRequest.identity() != null && !studentAdmissionRequest.identity().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionRequest.identity())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("identity = %s has not been found",
+                    studentAdmissionRequest.identity()));
+        }
+
         //find admission that open
-        Admission admission = admissionRepository.findByStatus(1).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
+        Admission admission = admissionRepository.findByStatus(1).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
 
         //validate degree by degree alias
         Degree degree = degreeRepository.findByAlias(studentAdmissionRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found", studentAdmissionRequest.degreeAlias())));
@@ -70,6 +90,9 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //generate uuid for admission
         studentAdmission.setUuid(UUID.randomUUID().toString());
+
+        //set isDeleted false(enable)
+        studentAdmission.setIsDeleted(false);
 
         //set shift to entity
         studentAdmission.setShift(shift);
@@ -87,7 +110,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         studentAdmissionRepository.save(studentAdmission);
 
 //         Send a notification to Telegram
-        telegramBotService.sendAdmissionResponse(studentAdmission);
+//        telegramBotService.sendAdmissionResponse(studentAdmission);
     }
 
     @Override
@@ -96,7 +119,13 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //find student admission in database by uuid
         StudentAdmission admission = studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found ", uuid)));
 
-        //save to database and return AdmissionDetail
+
+        //set avatar url to studentAdmission
+        if (admission.getAvatar() != null && !admission.getAvatar().trim().isEmpty()) {
+            admission.setAvatar(mediaService.getUrl((admission.getAvatar())));
+        }
+
+        //return AdmissionDetail to DTO
         return studentAdmissionMapper.toStudentAdmissionDetailResponse(admission);
     }
 
@@ -112,6 +141,14 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //find all student admission in database
         Page<StudentAdmission> admissionsPage = studentAdmissionRepository.findAll(pageRequest);
 
+        admissionsPage.forEach(studentAdmission -> {
+
+            //set avatar url to studentAdmission
+            if (studentAdmission.getAvatar() != null && !studentAdmission.getAvatar().trim().isEmpty()) {
+                studentAdmission.setAvatar(mediaService.getUrl((studentAdmission.getAvatar())));
+            }
+        });
+
         //map entity to database and return student AdmissionDetail
         return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
     }
@@ -124,6 +161,21 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //map data from DTO to entity
         studentAdmissionMapper.updateStudentAdmissionFromRequest(studentAdmission, studentAdmissionUpdateRequest);
+
+        //validate avatar from dto(for image must be upload first and use name from upload to put in)
+        if (studentAdmissionUpdateRequest.avatar() != null && !studentAdmissionUpdateRequest.avatar().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionUpdateRequest.avatar())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("avatar = %s has not been found",
+                    studentAdmissionUpdateRequest.avatar()));
+
+        }
+
+        //validate identity from dto
+        if (studentAdmissionUpdateRequest.identity() != null && !studentAdmissionUpdateRequest.identity().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionUpdateRequest.identity())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("identity = %s has not been found",
+                    studentAdmissionUpdateRequest.identity()));
+        }
 
         //validate degree from dto with entity
         //if the same, don't update
@@ -156,6 +208,11 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
             //set new studyProgram
             studentAdmission.setStudyProgram(studyProgram);
+        }
+
+        //set avatar url to studentAdmission
+        if (studentAdmission.getAvatar() != null && !studentAdmission.getAvatar().trim().isEmpty()) {
+            studentAdmission.setAvatar(mediaService.getUrl((studentAdmission.getAvatar())));
         }
 
         //save to database
@@ -215,6 +272,14 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //get all entity that match with filter condition
         Page<StudentAdmission> admissionsPage = studentAdmissionRepository.findAll(specification, pageRequest);
+
+        admissionsPage.forEach(studentAdmission -> {
+
+            //set avatar url to studentAdmission
+            if (studentAdmission.getAvatar() != null && !studentAdmission.getAvatar().trim().isEmpty()) {
+                studentAdmission.setAvatar(mediaService.getUrl((studentAdmission.getAvatar())));
+            }
+        });
 
         //map to DTO and return
         return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);

@@ -14,6 +14,7 @@ import co.istad.lms.features.course.dto.CourseUpdateRequest;
 import co.istad.lms.features.instructor.InstructorRepository;
 import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.CourseMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.exec.spi.StandardEntityInstanceResolver;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 
 
 @Service
@@ -44,15 +47,17 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void createCourse(CourseRequest courseRequest) {
 
-        //validate course from DTO
-        if (courseRepository.existsByAlias(courseRequest.alias())) {
-
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, String.format("Course = %s has not been found", courseRequest.alias()));
-        }
-
-        //validate class from DTO by class alias
+        //validate class from DTO by class uuid
         Class aClass =
-                classRepository.findByAlias(courseRequest.classAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", courseRequest.classAlias())));
+                classRepository.findByUuid(courseRequest.classUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", courseRequest.classUuid())));
+
+        LocalDate courseStart=null;
+        //validate courseStart null or not
+        if(courseRequest.courseStart()!=null&&!courseRequest.courseStart().trim().isEmpty()){
+
+            //validate format for course start
+            courseStart= DateTimeUtil.stringToLocalDate(courseRequest.courseStart(),"courseStart");
+        }
 
         //validate subject from DTO by subject alias
         Subject subject=
@@ -73,6 +78,9 @@ public class CourseServiceImpl implements CourseService {
         //set class to course
         course.setOneClass(aClass);
 
+        //set courseStart to curse
+        course.setCourseStart(courseStart);
+
         //set subject to course
         course.setSubject(subject);
 
@@ -84,10 +92,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseDetailResponse getCourseByAlias(String alias) {
+    public CourseDetailResponse getCourseByUuid(String uuid) {
 
         //validate course from DTO
-        Course course = courseRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found", alias)));
+        Course course =
+                courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course = %s has not been found", uuid)));
 
         System.out.println("class Alias = "+course.getOneClass().getGeneration());
         //map to dto and return
@@ -111,23 +121,21 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseDetailResponse updateCourseByAlias(String alias, CourseUpdateRequest courseUpdateRequest) {
+    public CourseDetailResponse updateCourseByUuid(String uuid, CourseUpdateRequest courseUpdateRequest) {
 
-        //find degree by alias
-        Course course = courseRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found.", alias)));
+        //find degree by uuid
+        Course course =
+                courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course = %s has not been found.", uuid)));
 
-        //check null alias from DTO
-        if (courseUpdateRequest.alias() != null) {
+        //validate courseStart null or not
+        if(courseUpdateRequest.courseStart()!=null&&!courseUpdateRequest.courseStart().trim().isEmpty()){
 
-            //validate alias from dto with original alias
-            if (!alias.equalsIgnoreCase(courseUpdateRequest.alias())) {
+            //validate format for course start
+            LocalDate courseStart= DateTimeUtil.stringToLocalDate(courseUpdateRequest.courseStart(),"courseStart");
 
-                //validate new alias is conflict with other alias or not
-                if (courseRepository.existsByAlias(courseUpdateRequest.alias())) {
-
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Course = %s already exist.", courseUpdateRequest.alias()));
-                }
-            }
+            //set courseStart
+            course.setCourseStart(courseStart);
         }
 
         //map DTO to entity
@@ -141,20 +149,24 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteCourseByAlias(String alias) {
+    public void deleteCourseByUuid(String uuid) {
 
-        //find course in database by alias
-        Course course = courseRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found.", alias)));
+        //find course in database by uuid
+        Course course =
+                courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course = %s has not been found.", uuid)));
 
         //delete course in database
         courseRepository.delete(course);
     }
 
     @Override
-    public void enableCourseByAlias(String alias) {
+    public void enableCourseByUuid(String uuid) {
 
-        //validate degree from dto by alias
-        Course course = courseRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found ! ", alias)));
+        //validate degree from dto by uuid
+        Course course =
+                courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course = %s has not been found ! ", uuid)));
 
         //set isDeleted to false(enable)
         course.setIsDeleted(false);
@@ -164,10 +176,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void disableCourseByAlias(String alias) {
+    public void disableCourseByUuid(String uuid) {
 
-        //validate course from dto by alias
-        Course course = courseRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+        //validate course from dto by uuid
+        Course course =
+                courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Degree = %s has not been found ! ", uuid)));
 
         //set isDeleted to true(disable)
         course.setIsDeleted(true);
@@ -196,12 +210,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseDetailResponse addInstructorToCourse(String alias, String uuid) {
+    public CourseDetailResponse addInstructorToCourse(String uuid, String instructorUuid) {
 
-        //validate course from DTO by alias
+        //validate course from DTO by uuid
         Course course=
-                courseRepository.findByAlias(alias).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Course = %s has not been found",alias)));
+                courseRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course = %s has not been found",uuid)));
 
         //validate instructor from DTO by uuid
         Instructor instructor=
@@ -217,10 +231,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteInstructorFromCourse(String alias, String uuid) {
-        //validate course from DTO by alias
+    public void deleteInstructorFromCourse(String uuid, String instructorUuid) {
+        //validate course from DTO by uuid
         Course course=
-                courseRepository.findByAlias(alias).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found",alias)));
+                courseRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course = %s has not been found",uuid)));
 
         //validate instructor from DTO by uuid
         Instructor instructor=

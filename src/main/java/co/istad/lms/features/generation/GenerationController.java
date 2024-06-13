@@ -44,7 +44,7 @@ public class GenerationController {
         return generationService.getAllGenerations(pageNumber, pageSize);
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{alias}")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
     public GenerationDetailResponse updateGeneration(
 

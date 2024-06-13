@@ -2,10 +2,7 @@ package co.istad.lms.mapper;
 
 
 import co.istad.lms.domain.roles.Admin;
-import co.istad.lms.features.admin.dto.AdminRequest;
-import co.istad.lms.features.admin.dto.AdminRequestDetail;
-import co.istad.lms.features.admin.dto.AdminResponse;
-import co.istad.lms.features.admin.dto.AdminResponseDetail;
+import co.istad.lms.features.admin.dto.*;
 import org.mapstruct.*;
 
 
@@ -14,16 +11,32 @@ public interface AdminMapper {
 
     Admin toRequestAdmin(AdminRequest adminRequest);
 
-    @Mapping(source = "user", target = "user")
+    @Mapping(source = "user.uuid", target = "uuid")
+    @Mapping(source = "user.nameEn", target = "nameEn")
+    @Mapping(source = "user.nameKh", target = "nameKh")
+    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.gender", target = "gender")
+    @Mapping(source = "user.dob", target = "dob")
+    @Mapping(source = "user.email", target = "email")
+    @Mapping(source = "user.profileImage", target = "profileImage")
+    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
     AdminResponse toAdminResponse(Admin admin);
 
-
-    @Mapping(source = "user", target = "user")
+    @Mapping(source = "user.uuid", target = "uuid")
+    @Mapping(source = "user.nameEn", target = "nameEn")
+    @Mapping(source = "user.nameKh", target = "nameKh")
+    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.gender", target = "gender")
+    @Mapping(source = "user.dob", target = "dob")
+    @Mapping(source = "user.email", target = "email")
+    @Mapping(source = "user.profileImage", target = "profileImage")
+    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
+    @Mapping(source = "user.birthPlace", target = "birthPlace")
     AdminResponseDetail toAdminResponseDetail(Admin admin);
 
 
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "admin.user", source = "adminRequestDetail.user",qualifiedByName = "updateUserDetailFromRequest")
-    void updateAdminFromRequest( @MappingTarget Admin admin, AdminRequestDetail adminRequestDetail );
+    void updateAdminFromRequest(@MappingTarget Admin admin, AdminRequestUpdate adminRequestUpdate);
 
 }

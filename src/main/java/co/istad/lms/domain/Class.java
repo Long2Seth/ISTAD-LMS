@@ -25,11 +25,11 @@ public class Class extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String alias;
+    @Column(nullable = false, unique = true,length = 100)
+    private String uuid;
 
     @Column(nullable = false)
-    private String className;
+    private String classCode;
 
     @Column(nullable = false)
     Integer year;

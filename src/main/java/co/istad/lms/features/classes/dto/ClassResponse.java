@@ -13,7 +13,7 @@ import java.util.Set;
 
     public record ClassResponse(
 
-            String alias,
-            String classNameg
+            String uuid,
+            String classCode
     ) {
     }

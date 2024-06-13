@@ -15,11 +15,7 @@ public record UserUpdateRequest(
         String password,
         String profileImage,
         String phoneNumber,
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
-        JsonBirthPlace birthPlace,
-        Set<AuthorityRequestToUser> authorities
+        String currentAddress,
+        JsonBirthPlace birthPlace
 ) {
 }

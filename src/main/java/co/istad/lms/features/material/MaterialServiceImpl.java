@@ -7,6 +7,7 @@ import co.istad.lms.features.material.dto.MaterialDetailResponse;
 import co.istad.lms.features.material.dto.MaterialRequest;
 import co.istad.lms.features.material.dto.MaterialResponse;
 import co.istad.lms.features.material.dto.MaterialUpdateRequest;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.MaterialMapper;
@@ -33,6 +34,8 @@ public class MaterialServiceImpl implements MaterialService {
     private final MinioStorageService minioStorageService;
 
     private final BaseSpecification<Material> baseSpecification;
+
+    private final MediaService mediaService;
 
     @Override
     public void createMaterial(MaterialRequest materialRequest) {
@@ -64,7 +67,7 @@ public class MaterialServiceImpl implements MaterialService {
         // Find material by alias
         Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
-        String url = minioStorageService.getUrl(material.getFileName());
+        String url = mediaService.getUrl(material.getFileName());
 
         // Return material detail
         return materialMapper.toMaterialDetailResponse(material, url);
@@ -86,7 +89,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map entity to DTO and return
         return materials.map(material -> {
-            String url = minioStorageService.getUrl(material.getFileName());
+            String url = mediaService.getUrl(material.getFileName());
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
@@ -119,7 +122,7 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        String url = minioStorageService.getUrl(material.getFileName());
+        String url = mediaService.getUrl(material.getFileName());
         return materialMapper.toMaterialDetailResponse(material, url);
     }
 
@@ -172,7 +175,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map to DTO and return
         return materials.map(material -> {
-            String url = minioStorageService.getUrl(material.getFileName());
+            String url = mediaService.getUrl(material.getFileName());
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }

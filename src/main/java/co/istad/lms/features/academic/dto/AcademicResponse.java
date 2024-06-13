@@ -6,7 +6,22 @@ import java.time.LocalDate;
 
 public record AcademicResponse(
         String uuid,
-        boolean status ,
-        UserResponse user
+
+        String nameEn,
+
+        String nameKh,
+
+        String username,
+
+        String gender,
+
+        LocalDate dob,
+
+        String email,
+
+        String profileImage,
+
+        String phoneNumber
+
 ) {
 }

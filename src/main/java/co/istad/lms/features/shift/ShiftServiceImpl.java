@@ -8,6 +8,7 @@ import co.istad.lms.features.shift.dto.ShiftRequest;
 import co.istad.lms.features.shift.dto.ShiftResponse;
 import co.istad.lms.features.shift.dto.ShiftUpdateRequest;
 import co.istad.lms.mapper.ShiftMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,23 +41,9 @@ public class ShiftServiceImpl implements ShiftService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Shift = %s already exists.", shiftRequest.alias()));
         }
 
-        LocalTime startTime = null;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            startTime = LocalTime.parse(shiftRequest.startTime(), formatter);
-        } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("StartTime = %s is not valid", shiftRequest.startTime()));
-        }
+        LocalTime startTime = DateTimeUtil.stringToLocalTime(shiftRequest.startTime(),"StartTime");
 
-        LocalTime endTime = null;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            endTime = LocalTime.parse(shiftRequest.endTime(), formatter);
-        } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("EndTime = %s is not valid", shiftRequest.endTime()));
-        }
+        LocalTime endTime = DateTimeUtil.stringToLocalTime(shiftRequest.endTime(),"EndTime");
 
         //map from DTO to entity
         Shift shift = shiftMapper.fromShiftRequest(shiftRequest);

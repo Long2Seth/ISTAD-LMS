@@ -8,13 +8,12 @@ import java.util.Set;
 
 public record StudyProgramUpdateRequest(
 
-        @Size(max = 50, message = "Alias cannot be longer than 50 characters")
+        @Size(max = 100, message = "Alias cannot be longer than 100 characters")
         String alias,
 
 
-        @Size(max = 50, message = "Study program name cannot be longer than 50 characters")
+        @Size(max = 255, message = "Study program name cannot be longer than 255 characters")
         String studyProgramName,
-
 
         String description,
 

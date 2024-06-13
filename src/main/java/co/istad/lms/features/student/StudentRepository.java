@@ -1,5 +1,6 @@
 package co.istad.lms.features.student;
 
+import co.istad.lms.domain.User;
 import co.istad.lms.domain.roles.Student;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,11 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Optional<Student> findByUuid(String uuid);
 
+    Optional<Student> findStudentByUserUuid(String userUuid);
+
     Optional<Student> findByUserUsername(String username);
+
+    Optional<Student> findByUser(User user);
 
 
 

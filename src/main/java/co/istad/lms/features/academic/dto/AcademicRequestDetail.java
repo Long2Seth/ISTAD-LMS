@@ -1,5 +1,6 @@
 package co.istad.lms.features.academic.dto;
 
+import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserRequestDetail;
 import co.istad.lms.features.user.dto.UserResponse;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 public record AcademicRequestDetail
         (
-                String uuid,
+
                 String highSchool,
 
                 LocalDate highSchoolGraduationDate,
@@ -27,6 +28,28 @@ public record AcademicRequestDetail
 
                 Integer experienceYear,
 
-                UserRequestDetail user
+                String nameEn,
+
+                String nameKh,
+
+                String username,
+
+                String gender,
+
+                LocalDate dob,
+
+                String email,
+
+                String password,
+
+                String profileImage,
+
+                String phoneNumber,
+
+                String currentAddress,
+
+                JsonBirthPlace birthPlace
+
+
         ) {
 }

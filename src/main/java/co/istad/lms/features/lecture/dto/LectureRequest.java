@@ -1,49 +1,26 @@
 package co.istad.lms.features.lecture.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record LectureRequest(
 
-            @NotBlank(message = "Alias is required")
-            @Size(max = 50, message = "Alias cannot be longer than 50 characters")
-            String alias,
-            @NotBlank(message = "Start time is required")
-            String startTime,
-            String endTime,
-            String description,
-            @NotBlank(message = "Lecture date is required")
-            String lectureDate,
-            Boolean status,
+        @NotBlank(message = "startTime is required")
+        String startTime,
+        @NotBlank(message = "endTime is required")
+        String endTime,
+        String description,
+        @NotBlank(message = "lectureDate is required")
+        String lectureDate,
 
-            String courseAlias,
-            @NotNull(message = "isDraft is required")
-            Boolean isDraft
+        @NotBlank(message = "status is require")
+        Boolean status,
+
+        @Size(max = 100, message = "curseUuid cannot be longer than 100 characters")
+        String courseUuid,
+        @NotNull(message = "isDraft is required")
+        Boolean isDraft
 ) {
 }
-
-/*
-
-@Column(nullable = false,unique = true)
-private String alias;
-
-@Column(nullable = false)
-private String startTime;
-
-@Column(nullable = false)
-private String endTime;
-
-private String description;
-
-@Column(nullable = false)
-private LocalDate lectureDate;
-
-@Column(nullable = false)
-private Boolean status;
-
-@Column(nullable = false)
-private Boolean isDeleted;
-
-@Column(nullable = false)
-private String courseAlias;*/

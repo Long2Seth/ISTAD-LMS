@@ -45,7 +45,7 @@ public class YearOfStudyController {
 
     }
 
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('faculty:update')")
     public YearOfStudyDetailResponse updateYearOfStudy(
             @PathVariable String uuid,

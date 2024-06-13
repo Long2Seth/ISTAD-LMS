@@ -32,26 +32,6 @@ public interface MinioStorageService {
      */
     void deleteFile(String objectName) throws Exception;
 
-    /**
-     * Retrieves the content type of a file in the Minio storage.
-     *
-     * @param objectName the name of the object in the storage
-     * @return the content type of the file
-     * @throws Exception if an error occurs during the retrieval
-     */
-
-    /**
-     * Generates a pre-signed URL for accessing a file in the Minio storage.
-     *
-     * @param fileName the name of file
-     * @return the pre-signed URL for accessing the file
-     */
-    String getUrl(String fileName);
-
-
-    String getShortenedUrl(String fileName);
 
     public  String extractExtension(String mediaName);
-
-    boolean doesObjectExist(String fileName);
 }

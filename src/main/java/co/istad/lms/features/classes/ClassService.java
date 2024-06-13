@@ -25,14 +25,14 @@ public interface ClassService {
     void createClass(ClassRequest classRequest);
 
     /**
-     * Retrieves the details of a class by its alias.
+     * Retrieves the details of a class by its uuid.
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @return {@link ClassDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    ClassDetailResponse getClassByAlias(String alias);
+    ClassDetailResponse getClassByUuid(String uuid);
 
     /**
      * Retrieves a paginated list of all classes.
@@ -46,43 +46,43 @@ public interface ClassService {
     Page<ClassDetailResponse> getAllClasses(int pageNumber, int pageSize);
 
     /**
-     * Updates an existing class by its alias.
+     * Updates an existing class by its uuid.
      *
-     * @param alias               is the unique name of class
+     * @param uuid               is the unique name of class
      * @param classUpdateRequest is the request object containing the updated class details
      * @return {@link ClassDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    ClassDetailResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest);
+    ClassDetailResponse updateClassByUuid(String uuid, ClassUpdateRequest classUpdateRequest);
 
 
     /**
-     * Deletes a class by its alias.
+     * Deletes a class by its uuid.
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void deleteClassByAlias(String alias);
+    void deleteClassByUuid(String uuid);
 
     /**
-     * Enable class by alias
+     * Enable class by uuid
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void enableClassByAlias(String alias);
+    void enableClassByUuid(String uuid);
 
     /**
-     * Disable class by alias
+     * Disable class by uuid
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void disableClassByAlias(String alias);
+    void disableClassByUuid(String uuid);
 
     /**
      * Filters class based on the specified criteria and retrieves a paginated list of results.
@@ -98,36 +98,36 @@ public interface ClassService {
 
     /**
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @param classAddSubjectRequest contain information of student to add
      * @return {@link ClassDetailResponse}
      */
-    ClassDetailResponse addStudent(String alias, ClassAddStudentRequest classAddSubjectRequest);
+    ClassDetailResponse addStudent(String uuid, ClassAddStudentRequest classAddSubjectRequest);
 
     /**
      *
-     * @param alias is the unique name of class
-     * @param uuid is the unique identify of student
+     * @param uuid is the unique name of class
+     * @param studentUuid is the unique identify of student
      */
-    void deleteStudent(String alias,String uuid);
+    void deleteStudent(String uuid,String studentUuid);
 
 
     /**
-     * public class by alias
+     * public class by uuid
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void publicClassByAlias(String alias);
+    void publicClassByUuid(String uuid);
 
     /**
-     * draft class by alias
+     * draft class by uuid
      *
-     * @param alias is the unique name of class
+     * @param uuid is the unique name of class
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void draftClassByAlias(String alias);
+    void draftClassByUuid(String uuid);
 
 }

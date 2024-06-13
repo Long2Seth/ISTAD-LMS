@@ -43,7 +43,7 @@ public class StudentAdmissionController {
         return studentAdmissionService.getAllStudentAdmissions(pageNumber, pageSize);
     }
 
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('admission:update')")
     public StudentAdmissionDetailResponse updateStudentAdmission(

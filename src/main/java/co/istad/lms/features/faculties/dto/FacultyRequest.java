@@ -6,12 +6,12 @@ import jakarta.validation.constraints.Size;
 
 public record FacultyRequest(
 
-        @NotBlank(message = "Alias is required")
-        @Size(max = 50, message = "Alias cannot be longer than 50 characters")
+        @NotBlank(message = "alias is required")
+        @Size(max = 100, message = "alias cannot be longer than 100 characters")
         String alias,
 
-        @NotBlank(message = "Name is required")
-        @Size(max = 50, message = "Name cannot be longer than 50 characters")
+        @NotBlank(message = "name is required")
+        @Size(max = 100, message = "name cannot be longer than 100 characters")
         String name,
 
         String description,

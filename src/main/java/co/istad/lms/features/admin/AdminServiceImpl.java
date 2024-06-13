@@ -4,10 +4,7 @@ import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Admin;
-import co.istad.lms.features.admin.dto.AdminRequest;
-import co.istad.lms.features.admin.dto.AdminRequestDetail;
-import co.istad.lms.features.admin.dto.AdminResponse;
-import co.istad.lms.features.admin.dto.AdminResponseDetail;
+import co.istad.lms.features.admin.dto.*;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequest;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
@@ -44,41 +41,22 @@ public class AdminServiceImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
 
 
-    // This method is used to convert the JsonBirthPlace object to BirthPlace object
-    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
-        // Create a new BirthPlace object
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
-        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
-        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
-        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
-        birthPlace.setStreet(birthPlaceRequest.street());
-        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
-        return birthPlace;
-
-    }
-
-
-    @Override
     public void createAdmin(@Valid AdminRequest adminRequest) {
         // Check if the user already exists
-        if (userRepository.existsByEmailOrUsername(adminRequest.user().email(), adminRequest.user().username())) {
-            log.error("User with email = {} or username = {} already exists", adminRequest.user().email(), adminRequest.user().username());
+        if (userRepository.existsByEmailOrUsername(adminRequest.email(), adminRequest.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s already exists", adminRequest.user().email(), adminRequest.user().username()));
+                    String.format("User with email = %s or username = %s already exists", adminRequest.email(), adminRequest.username()));
         }
 
-        // Map adminRequest to Admin entity
+        // Map adminRequest to Admin entity using MapStruct
         Admin admin = adminMapper.toRequestAdmin(adminRequest);
         admin.setUuid(UUID.randomUUID().toString());
-        admin.setDeleted(false);
-        admin.setStatus(false);
 
-        // Map user part of the request to User entity
-        User user = userMapper.fromUserRequest(adminRequest.user());
+        // Map adminRequest to User entity using MapStruct
+        User user = userMapper.fromAdminRequest(adminRequest);
         user.setUuid(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(adminRequest.user().password()));
-        user.setIsBlocked(false);
+        user.setPassword(passwordEncoder.encode(adminRequest.password()));
+        user.setStatus(false);
         user.setIsDeleted(false);
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
@@ -87,76 +65,56 @@ public class AdminServiceImpl implements AdminService {
 
         // Fetch and assign authorities
         Set<Authority> allAuthorities = new HashSet<>();
-        for (AuthorityRequestToUser request : adminRequest.user().authorities()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
+        for (String authorityName : adminRequest.authorityNames()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
             if (foundAuthorities.isEmpty()) {
-                // Handle the case where no authorities are found
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Authority %s not found", request.authorityName()));
+                        String.format("Authority with name = %s not found!", authorityName));
             }
             allAuthorities.addAll(foundAuthorities);
         }
 
-        // Set the authorities of the user
-        user.setAuthorities(allAuthorities);
-
-        // Set user to admin and save
-        admin.setUser(user);
-
-        // Save the admin to the database
-        adminRepository.save(admin);
-
-    }
-
-
-    @Override
-    public AdminResponseDetail updateAdminByUuid(String uuid, AdminRequestDetail adminRequestDetail) {
-
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
-
-        // Find the user by the uuid
-        User user = userRepository.findByUuid(admin.getUser().getUuid())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with uuid = %s not found", admin.getUser().getUuid())));
-
-        // Check if the user with the email already exists
-        if (userRepository.existsByEmailOrUsername(adminRequestDetail.user().email(), adminRequestDetail.user().username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s have already exists", adminRequestDetail.user().email(), adminRequestDetail.user().username()));
-        }
-
-        //update the admin that found by the uuid
-        adminMapper.updateAdminFromRequest(admin, adminRequestDetail);
-        if (adminRequestDetail.user().password() != null) {
-            user.setPassword(passwordEncoder.encode(adminRequestDetail.user().password()));
-        }
-
-        // Set the authorities of the user from the authorities of the adminRequest
-        Set<Authority> allAuthorities = new HashSet<>();
-        if (adminRequestDetail.user().authorities() == null || adminRequestDetail.user().authorities().isEmpty()) {
-            for (Authority request : user.getAuthorities()) {
-                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
-                allAuthorities.addAll(foundAuthorities);
-            }
-        } else {
-            for (AuthorityRequestToUser request : adminRequestDetail.user().authorities()) {
-                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-                allAuthorities.addAll(foundAuthorities);
-            }
-            user.setAuthorities(allAuthorities);
-        }
-
-        // Set the data of field the user by the userRequest
+        // Save the user and admin to the database
         userRepository.save(user);
         admin.setUser(user);
-        Admin savedAdmin = adminRepository.save(admin);
-
-        return adminMapper.toAdminResponseDetail(savedAdmin);
+        adminRepository.save(admin);
     }
 
+    @Override
+    public AdminResponseDetail updateAdminByUuid(String uuid, AdminRequestUpdate adminRequestDetail) {
+
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with UUID = %s not found", uuid)));
+
+        // Check if the user with the provided email or username already exists (excluding current user)
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(adminRequestDetail.email(), adminRequestDetail.username(), user.getUuid())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    String.format("User with email = %s or username = %s already exists", adminRequestDetail.email(), adminRequestDetail.username()));
+        }
+
+        // Update the user fields from the admin request
+        userMapper.updateUserFromAdminRequest(user, adminRequestDetail);
+
+        // Save the updated user entity
+        userRepository.save(user);
+
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
+
+        // Set the updated user to the admin and save
+        admin.setUser(user);
+        adminMapper.updateAdminFromRequest(admin, adminRequestDetail);
+        Admin savedAdmin = adminRepository.save(admin);
+
+        // Return the updated admin details
+        return adminMapper.toAdminResponseDetail(savedAdmin);
+
+
+    }
 
     @Override
     public Page<AdminResponseDetail> getAdminsDetail(int page, int limit) {
@@ -164,23 +122,29 @@ public class AdminServiceImpl implements AdminService {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Admin> admins = adminRepository.findAll(pageRequest);
         List<Admin> filteredAdmins = admins.stream()
-                .filter(admin -> !admin.isDeleted())
-                .filter(admin -> !admin.isStatus())
+                .filter(admin -> !admin.getUser().getStatus())
+                .filter(admin -> !admin.getUser().getIsDeleted())
                 .toList();
+
         return new PageImpl<>(filteredAdmins, pageRequest, filteredAdmins.size())
                 .map(adminMapper::toAdminResponseDetail);
-
     }
 
     @Override
     public Page<AdminResponse> getAdmins(int page, int limit) {
 
+        // Create a page request with the page and limit and sort by id
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+
+        // Find all the admins from the database
         Page<Admin> admins = adminRepository.findAll(pageRequest);
+
+        // Filter the admins that are not deleted and are not disabled
         List<Admin> filteredAdmins = admins.stream()
-                .filter(admin -> !admin.isDeleted())
-                .filter(admin -> !admin.isStatus())
+                .filter(admin -> !admin.getUser().getIsDeleted())
+                .filter(admin -> !admin.getUser().getStatus())
                 .toList();
+
         return new PageImpl<>(filteredAdmins, pageRequest, filteredAdmins.size())
                 .map(adminMapper::toAdminResponse);
 
@@ -190,22 +154,35 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminResponseDetail getAdminDetailByUuid(String uuid) {
 
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
+                        String.format("User with uuid = %s not found", uuid)));
 
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
+
+        // Map the admin entity to AdminResponseDetail DTO
         return adminMapper.toAdminResponseDetail(admin);
+
     }
 
     @Override
     public AdminResponse getAdminByUuid(String uuid) {
 
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
+                        String.format("User with uuid = %s not found", uuid)));
 
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
+
+        // Map the admin entity to AdminResponse DTO
         return adminMapper.toAdminResponse(admin);
 
     }
@@ -214,25 +191,36 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteAdminByUuid(String uuid) {
 
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
+                        String.format("User with uuid = %s not found", uuid)));
+
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
 
         // Delete the admin that found by the uuid
         adminRepository.delete(admin);
+
     }
 
     @Override
     public void disableAdminByUuid(String uuid) {
 
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
+                        String.format("User with uuid = %s not found", uuid)));
+
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
 
         // Set the status of the admin to true
-        admin.setStatus(true);
+        user.setStatus(true);
         // Save the admin to the database that found by the uuid
         adminRepository.save(admin);
 
@@ -242,13 +230,18 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void enableAdminByUuid(String uuid) {
 
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
+                        String.format("User with uuid = %s not found", uuid)));
+
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
 
         // Set the status of the admin to false
-        admin.setStatus(false);
+        user.setStatus(false);
         // Save the admin to the database that found by the uuid
 
         adminRepository.save(admin);
@@ -258,13 +251,18 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void blockAdminByUuid(String uuid) {
 
-        // Find the admin by the uuid
-        Admin admin = adminRepository.findByUuid(uuid)
+        // Find the user by the UUID
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Admin with uuid = %s not found", uuid)));
+                        String.format("User with uuid = %s not found", uuid)));
+
+        // Find the admin associated with the user
+        Admin admin = adminRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Admin for user UUID = %s not found", uuid)));
 
         // Set the deleted(is boolean) of the admin to true , don't delete from the database just set the deleted(disable on the user account)
-        admin.setDeleted(true);
+        user.setIsDeleted(true);
         // Save the admin to the database that found by the uuid
         adminRepository.save(admin);
 

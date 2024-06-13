@@ -1,4 +1,4 @@
-package co.istad.lms.utils;
+package co.istad.lms.util;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Component
-public class KeyUtils {
+public class KeyUtil {
 
 
     @Autowired

@@ -13,8 +13,9 @@ public record AdmissionRequest(
 
         String remark,
         @NotNull(message = "openDate is require")
-        LocalDate openDate,
-        LocalDate endDate,
+        String openDate,
+        String endDate,
 
+        @Size(max = 100,message = "telegramLink cannot be longer than 100 characters")
         String telegramLink
 ) {}

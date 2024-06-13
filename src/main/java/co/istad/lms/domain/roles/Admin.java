@@ -1,6 +1,5 @@
 package co.istad.lms.domain.roles;
 
-import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,14 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "admins")
 @Entity
-public class Admin extends Auditable {
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +43,7 @@ public class Admin extends Auditable {
 
     private Integer experienceYear;
 
-    private boolean status;
-
-    private boolean isDeleted;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 }

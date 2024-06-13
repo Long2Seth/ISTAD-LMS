@@ -19,11 +19,9 @@ public class Score extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(  nullable = false,unique = true )
+    @Column(  nullable = false,unique = true,length = 100)
     private String uuid;
-
-    @Column(nullable = false)
-    private Integer semester;
+    
 
     private Double activityScore;
 

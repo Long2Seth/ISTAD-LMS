@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> filteredUsers = users.stream()
                 .filter(user -> !user.getIsDeleted())
-                .filter(user -> !user.getIsBlocked())
+                .filter(user -> !user.getStatus())
                 .toList();
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponse);
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> filteredUsers = users.stream()
                 .filter(user -> !user.getIsDeleted())
-                .filter(user -> !user.getIsBlocked())
+                .filter(user -> !user.getStatus())
                 .toList();
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponseDetail);
@@ -105,13 +105,14 @@ public class UserServiceImpl implements UserService {
                     String.format("User email = %s has already been existed!", userRequest.email()));
         }
 
+
         // Map user request to user
         User user = userMapper.fromUserRequest(userRequest);
         // Set user uuid
         user.setUuid(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(userRequest.password()));
         user.setIsDeleted(false);
-        user.setIsBlocked(false);
+        user.setStatus(false);
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
@@ -119,9 +120,12 @@ public class UserServiceImpl implements UserService {
 
         // Set user authorities that get authorities by authority name
         Set<Authority> allAuthorities = new HashSet<>();
-        for (AuthorityRequestToUser request : userRequest.authorities()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-            System.out.println("foundAuthorities = " + foundAuthorities);
+        for (String authorityName : userRequest.authorityNames()) {
+            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
+            if (foundAuthorities.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Authority with name = %s not found!", authorityName));
+            }
             allAuthorities.addAll(foundAuthorities);
         }
 
@@ -144,21 +148,6 @@ public class UserServiceImpl implements UserService {
         // Update user from request object that map user request to user
         userMapper.updateUserFromRequest(user, userRequest);
 
-        // Set the authorities of the user from the authorities of the adminRequest
-        Set<Authority> allAuthorities = new HashSet<>();
-        if (userRequest.authorities() == null || userRequest.authorities().isEmpty()) {
-            for (Authority request : user.getAuthorities()) {
-                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
-                allAuthorities.addAll(foundAuthorities);
-            }
-        } else {
-            for (AuthorityRequestToUser request : userRequest.authorities()) {
-                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-                allAuthorities.addAll(foundAuthorities);
-            }
-            user.setAuthorities(allAuthorities);
-        }
-
         return userMapper.toUserResponse(userRepository.save(user));
 
     }
@@ -179,7 +168,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse disableUser(String alias) {
+    public void disableUser(String alias) {
 
         // Check if user exists by email that not found throw exception
         User user = userRepository.findByUuid(alias)
@@ -187,14 +176,14 @@ public class UserServiceImpl implements UserService {
                         String.format("User with alias = %s was not found.", alias)));
 
         // Change boolean isBlocked to true that user is blocked
-        user.setIsBlocked(true);
+        user.setStatus(true);
         // Return user response after save user
-        return userMapper.toUserResponse(userRepository.save(user));
+        userRepository.save(user);
 
     }
 
     @Override
-    public UserResponse enableUser(String alias) {
+    public void enableUser(String alias) {
 
         // Check if user exists by email that not found throw exception
         User user = userRepository.findByUuid(alias)
@@ -202,24 +191,24 @@ public class UserServiceImpl implements UserService {
                         String.format("User with alias = %s was not found.", alias)));
 
         // Change boolean isBlocked to false that user is not blocked
-        user.setIsBlocked(false);
+        user.setStatus(false);
         // Return user response after save user
-        return userMapper.toUserResponse(userRepository.save(user));
+        userRepository.save(user);
 
     }
 
     @Override
-    public UserResponse isDeleted(String alias) {
+    public void isDeleted(String uuid) {
 
         // Check if user exists by email that not found throw exception
-        User user = userRepository.findByUuid(alias)
+        User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("User with alias = %s was not found.", alias)));
+                        String.format("User with alias = %s was not found.", uuid)));
 
         // Change boolean isDeleted to true that user is deleted(soft delete)
         user.setIsDeleted(true);
         // Return user response after save user
-        return userMapper.toUserResponse(userRepository.save(user));
+        userRepository.save(user);
 
     }
 

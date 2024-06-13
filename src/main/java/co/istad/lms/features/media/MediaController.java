@@ -1,7 +1,10 @@
 package co.istad.lms.features.media;
 
 import co.istad.lms.features.media.dto.MediaResponse;
+import co.istad.lms.features.media.dto.MediaViewResponse;
+import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.filechooser.FileView;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @RestController
@@ -28,7 +35,8 @@ public class MediaController {
         return mediaService.uploadSingle(file);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+
+        @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/upload-multiple", consumes = "multipart/form-data")
     @PreAuthorize("hasAnyAuthority('material:write')")
     List<MediaResponse> uploadMultiple(@RequestPart List<MultipartFile> files) {
@@ -41,6 +49,7 @@ public class MediaController {
         return mediaService.loadMediaByName(mediaName);
     }
 
+
     @DeleteMapping("/{mediaName}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('material:delete')")
@@ -49,7 +58,7 @@ public class MediaController {
         return mediaService.deleteMediaByName(mediaName);
     }
 
-    @GetMapping(path = "/{mediaName}/download",
+    @GetMapping(path = "/download/{mediaName}",
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @PreAuthorize("hasAnyAuthority('material:read')")
     ResponseEntity<?> downloadMediaByName(@PathVariable String mediaName) {
@@ -61,5 +70,17 @@ public class MediaController {
                 .headers(headers)
                 .body(resource);
     }
+
+    @GetMapping(value = "/view/{fileName}")
+    public ResponseEntity<InputStreamResource> viewByFileName(@PathVariable String fileName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        MediaViewResponse file = mediaService.viewByFileName(fileName);
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(file.contentType()))
+                .contentLength(file.fileSize())
+                .body(file.stream());
+    }
+
 
 }

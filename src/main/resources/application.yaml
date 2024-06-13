@@ -1,6 +1,7 @@
 media:
-  #  server-path: ${MEDIA_SERVER_PATH}
-  #  client-path: /media/**
+  #media endpoint
+  end-point: ${MEDIA_ENDPOINT}
+  #the host that handle show image
   base-uri: ${MEDIA_BASE_URI}
 server:
   port: ${SERVER_PORT}
@@ -21,9 +22,6 @@ file:
   storage-dir: "filestorage/images/"
   client-dir: "/images/**"
 
-cache:
-  duration: ${CACHE-DURATION}
-  url-duration: ${URL-CACHE-DURATION}
 url:
   expiry: ${URL-EXPIRY-TIME}
 

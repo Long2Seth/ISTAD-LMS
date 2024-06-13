@@ -16,11 +16,7 @@ public record UserResponseDetail(
         String email,
         String profileImage,
         String phoneNumber,
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
-        JsonBirthPlace birthPlace,
-        Set<AuthorityResponseToUser> authorities
+        String currentAddress,
+        JsonBirthPlace birthPlace
 ) {
 }

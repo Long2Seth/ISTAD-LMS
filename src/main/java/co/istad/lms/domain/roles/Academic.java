@@ -1,7 +1,5 @@
 package co.istad.lms.domain.roles;
 
-
-import co.istad.lms.config.jpa.Auditable;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,47 +7,43 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "academics")
 @Entity
-public class Academic extends Auditable {
+public class Academic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    String uuid;
+    private String uuid;
 
     @Column(length = 50)
-    String highSchool;
+    private String highSchool;
 
-    LocalDate highSchoolGraduationDate;
-
-    @Column(length = 50)
-    String degree; // Bachelor, Master, Doctor
-
-    LocalDate degreeGraduationDate;
+    private LocalDate highSchoolGraduationDate;
 
     @Column(length = 50)
-    String major;
+    private String degree;
+
+    private LocalDate degreeGraduationDate;
 
     @Column(length = 50)
-    String studyAtUniversityOrInstitution;
+    private String major;
 
     @Column(length = 50)
-    String experienceAtWorkingPlace;
+    private String studyAtUniversityOrInstitution;
 
-    Integer experienceYear; // experience compare per year
+    @Column(length = 50)
+    private String experienceAtWorkingPlace;
 
-    private boolean status;
-
-    private boolean isDeleted;
+    private Integer experienceYear;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }

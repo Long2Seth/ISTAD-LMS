@@ -1,10 +1,10 @@
 package co.istad.lms.features.student;
 
-import co.istad.lms.features.student.dto.StudentRequest;
-import co.istad.lms.features.student.dto.StudentRequestDetail;
-import co.istad.lms.features.student.dto.StudentResponse;
-import co.istad.lms.features.student.dto.StudentResponseDetail;
+import co.istad.lms.domain.Authority;
+import co.istad.lms.features.student.dto.*;
 import org.springframework.data.domain.Page;
+
+import java.util.Set;
 
 public interface StudentService {
 
@@ -19,6 +19,12 @@ public interface StudentService {
     Page<StudentResponseDetail> getStudentsDetail(int page, int limit);
 
 
+    /**
+     * Retrieves a list of students detail.z
+     * @return {@link Page<StudentResponse>}
+     * @since 1.0 (2024)
+     */
+    Set<Authority> getDefaultAuthoritiesStudent();
 
     /**
      * Retrieves a list of students.
@@ -48,7 +54,7 @@ public interface StudentService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    StudentResponseDetail updateStudentByUuid (String uuid , StudentRequestDetail studentRequest);
+    StudentResponseDetail updateStudentByUuid (String uuid , StudentRequestUpdate studentRequest);
 
 
 

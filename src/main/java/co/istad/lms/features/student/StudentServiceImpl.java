@@ -2,15 +2,10 @@ package co.istad.lms.features.student;
 
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
-import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
-import co.istad.lms.features.student.dto.StudentRequest;
-import co.istad.lms.features.student.dto.StudentRequestDetail;
-import co.istad.lms.features.student.dto.StudentResponse;
-import co.istad.lms.features.student.dto.StudentResponseDetail;
+import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.user.UserRepository;
-import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +35,9 @@ public class StudentServiceImpl implements StudentService {
     private final UserMapper userMapper;
 
 
-    private Set<Authority> getDefaultAuthorities() {
+
+    @Override
+    public Set<Authority> getDefaultAuthoritiesStudent() {
         // Set default authorities
         Set<Authority> authorities = new HashSet<>();
         authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
@@ -50,145 +47,149 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
-
-
-    private BirthPlace toBirthPlace(JsonBirthPlace birthPlaceRequest) {
-        BirthPlace birthPlace = new BirthPlace();
-        birthPlace.setCityOrProvince(birthPlaceRequest.cityOrProvince());
-        birthPlace.setKhanOrDistrict(birthPlaceRequest.khanOrDistrict());
-        birthPlace.setSangkatOrCommune(birthPlaceRequest.sangkatOrCommune());
-        birthPlace.setVillageOrPhum(birthPlaceRequest.villageOrPhum());
-        birthPlace.setStreet(birthPlaceRequest.street());
-        birthPlace.setHouseNumber(birthPlaceRequest.houseNumber());
-        return birthPlace;
-    }
-
-
-
-
-    //Private method to find student by uuid
-    private Student findStudentByUuid(String uuid) {
-        return studentRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
-    }
-
-
     @Override
     public Page<StudentResponse> getStudents(int page, int limit) {
-        // Create page request with sort by createdAt
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        // Create page request with sort by id
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         // Find all students that in studentRepository
         Page<Student> students = studentRepository.findAll(pageRequest);
         // Filter students that is not deleted and not status
         List<Student> filteredStudents = students.stream()
-                .filter(student -> !student.isDeleted())
-                .filter(student -> !student.isStatus())
+                .filter(student -> !student.getUser().getIsDeleted())
+                .filter(student -> !student.getUser().getStatus())
                 .toList();
 
         return new PageImpl<>(filteredStudents, pageRequest, filteredStudents.size())
                 .map(studentMapper::toResponse);
 
+
     }
+
 
     @Override
     public Page<StudentResponseDetail> getStudentsDetail(int page, int limit) {
 
-        // Create page request with sort by createdAt
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        // Create page request with sort by id
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
 
         // Find all students that in studentRepository
         Page<Student> students = studentRepository.findAll(pageRequest);
 
         // Filter students that is not deleted and not status
         List<Student> filteredStudents = students.stream()
-                .filter(student -> !student.isDeleted())
-                .filter(student -> !student.isStatus())
+                .filter(student -> !student.getUser().getIsDeleted())
+                .filter(student -> !student.getUser().getStatus())
                 .toList();
 
         // Return page of students
         return new PageImpl<>(filteredStudents, pageRequest, filteredStudents.size())
                 .map(studentMapper::toResponseDetail);
+
     }
+
 
     @Override
     public void createStudent(StudentRequest studentRequest) {
 
         // Check if user exists by email or username that find in userRepository if not throw exception
-        if (userRepository.existsByEmailOrUsername(studentRequest.user().email() , studentRequest.user().username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.user().email()));
+        if (userRepository.existsByEmailOrUsername(studentRequest.email(), studentRequest.username())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.email()));
         }
 
-        // Map student request to student
-        Student student = studentMapper.toRequest(studentRequest);
-        student.setUuid(UUID.randomUUID().toString());
-        student.setStatus(false);
-        student.setDeleted(false);
 
         // Map user request to user
-        User user = userMapper.fromUserRequest(studentRequest.user());
+        User user = userMapper.fromStudentRequest(studentRequest);
 
         user.setUuid(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
+        user.setPassword(passwordEncoder.encode(studentRequest.password()));
         user.setIsDeleted(false);
-        user.setIsBlocked(false);
+        user.setStatus(false);
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-        user.setAuthorities(getDefaultAuthorities());
+        user.setAuthorities(getDefaultAuthoritiesStudent());
+
+        //Save user
+        userRepository.save(user);
+
+        // Map student request to student
+        Student student = studentMapper.toRequest(studentRequest);
+        student.setUuid(UUID.randomUUID().toString());
 
         // Save user
-        student.setUser(userRepository.save(user));
+        student.setUser(user);
+
         // Save student
         studentRepository.save(student);
 
     }
 
 
-
-
     @Override
-    public StudentResponseDetail updateStudentByUuid(String uuid, StudentRequestDetail studentRequest) {
+    public StudentResponseDetail updateStudentByUuid(String uuid, StudentRequestUpdate studentRequest) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
 
         // Check if user exists by email or username that find in userRepository if not throw exception
-        if (userRepository.existsByEmailOrUsername(studentRequest.user().email() , studentRequest.user().username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.user().email()));
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(studentRequest.email(), studentRequest.username(), uuid)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.email()));
         }
 
-        // Find student by uuid that find in studentRepository if not throw exception
-        Student student = studentRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s not found", uuid)));
+        // Update user from student request
+        userMapper.updateUserFromStudentRequest(user, studentRequest);
 
-        // Find user by id that find in userRepository if not throw exception
-        User user = userRepository.findById(student.getUser().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id = %s not found", student.getUser().getId())));
-
-        // Update user and student entities using mappers
-        studentMapper.updateStudentFromRequest(student, studentRequest);
-
-        // Set default authorities
-        user.setAuthorities(getDefaultAuthorities());
-
-        // Handle password encoding separately as it's not mapped directly
-        if (studentRequest.user().password() != null) {
-            user.setPassword(passwordEncoder.encode(studentRequest.user().password()));
-        }
-
-        // Save updated user
+        // Save user
         userRepository.save(user);
+
+        // Find student by user
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        // Update student from student request
         student.setUser(user);
 
-        studentRepository.save(student);
+        // Save student
+        Student savedStudent = studentRepository.save(student);
 
-        return studentMapper.toResponseDetail(student);
+        // Return student response detail
+        studentMapper.updateStudentFromRequest(savedStudent, studentRequest);
+
+        return studentMapper.toResponseDetail(savedStudent);
+
 
     }
 
     @Override
     public void deleteStudentByUuid(String uuid) {
 
-        // find student by uuid
-        Student student = findStudentByUuid(uuid);
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
         // delete student that found by uuid
         studentRepository.delete(student);
 
@@ -196,53 +197,137 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponseDetail getStudentDetailByUuid(String uuid) {
-        return studentMapper.toResponseDetail(findStudentByUuid(uuid));
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        return studentMapper.toResponseDetail(student);
     }
+
 
     @Override
     public StudentResponse getStudentByUuid(String uuid) {
-        return studentMapper.toResponse(findStudentByUuid(uuid));
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        return studentMapper.toResponse(student);
+
+
     }
-
-
 
 
     @Override
     public void disableStudentByUuid(String uuid) {
 
-        Student student = findStudentByUuid(uuid);
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
 
-        student.setStatus(true);
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
 
+        // Set status to true
+        user.setStatus(true);
+
+        // Save user
         studentRepository.save(student);
+
+
     }
-
-
 
 
     @Override
     public void enableStudentByUuid(String uuid) {
 
-        Student student = findStudentByUuid(uuid);
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
 
-        student.setStatus(false);
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
 
+        // Set status to false
+        user.setStatus(false);
+
+        // Save user
         studentRepository.save(student);
-    }
 
+
+    }
 
 
     @Override
     public void blockStudentByUuid(String uuid) {
 
-        Student student = findStudentByUuid(uuid);
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
 
-        student.setDeleted(true);
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
 
-studentRepository.save(student);
+        // Set isDeleted to true
+        user.setIsDeleted(true);
+
+        // Save user
+        studentRepository.save(student);
+
+
     }
-
-
 
 
 }
