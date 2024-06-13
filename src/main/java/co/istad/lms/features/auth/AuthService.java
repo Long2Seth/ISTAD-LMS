@@ -4,8 +4,9 @@ import co.istad.lms.features.auth.dto.AuthRequest;
 import co.istad.lms.features.auth.dto.AuthRequestResetPassword;
 import co.istad.lms.features.auth.dto.AuthResponse;
 import co.istad.lms.features.auth.dto.RefreshTokenRequest;
-import co.istad.lms.security.CustomUserDetails;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import co.istad.lms.features.auth.dto.RequestPasswordByUsernameOrEmail;
+import co.istad.lms.features.auth.dto.ResetPasswordResponse;
+import co.istad.lms.features.password.dto.ResponsePassword;
 
 
 /**
@@ -49,6 +50,26 @@ public interface AuthService {
     void changePassword(AuthRequestResetPassword authRequestResetPassword);
 
 
+
+
+    /**
+     * Reset password.
+     *
+     * @param request the request
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     *
+     */
+    void resetPassword(RequestPasswordByUsernameOrEmail request);
+
+    /**
+     * View password by username or email.
+     *
+     * @param request the request
+     * @author Long Piseth
+     * @return the response password by username or email
+     */
+    ResponsePassword viewPasswordByUsernameOrEmail(RequestPasswordByUsernameOrEmail request);
 
     /**
      * Logout.

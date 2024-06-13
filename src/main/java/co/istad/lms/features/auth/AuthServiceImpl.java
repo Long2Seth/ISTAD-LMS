@@ -2,15 +2,15 @@ package co.istad.lms.features.auth;
 
 
 import co.istad.lms.domain.User;
-import co.istad.lms.features.auth.dto.AuthRequest;
-import co.istad.lms.features.auth.dto.AuthRequestResetPassword;
-import co.istad.lms.features.auth.dto.AuthResponse;
-import co.istad.lms.features.auth.dto.RefreshTokenRequest;
+import co.istad.lms.features.auth.dto.*;
+import co.istad.lms.features.password.dto.ResponsePassword;
 import co.istad.lms.features.user.UserRepository;
-import co.istad.lms.security.CustomUserDetails;
+import co.istad.lms.features.user.UserService;
+import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.security.TokenGenerator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,10 +31,12 @@ public class AuthServiceImpl implements AuthService {
 
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenGenerator tokenGenerator;
     private final UserDetailsService userDetailsService;
+    private final UserMapper userMapper;
 
     @Override
     public AuthResponse login(AuthRequest request) {
@@ -72,7 +74,6 @@ public class AuthServiceImpl implements AuthService {
             }
         }
     }
-
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         Authentication authentication = jwtAuthenticationProvider.authenticate(
@@ -101,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
 
         UserDetails userDetails = (UserDetails) principal;
         String email = userDetails.getUsername();
-        System.out.println("email: " + email);
+
 
         // Fetch the user from the repository
         User user = userRepository.findByEmail(email)
@@ -120,11 +121,46 @@ public class AuthServiceImpl implements AuthService {
 
         // Set the new password
         user.setPassword(passwordEncoder.encode(authRequestResetPassword.newPassword()));
+        user.setRawPassword(null);
 
         // Save the updated user
         userRepository.save(user);
 
 
+    }
+
+    @Override
+    public void resetPassword(RequestPasswordByUsernameOrEmail request) {
+        // Fetch the user by email or username
+        User user = userRepository.findByEmailOrUsername(request.usernameOrEmail(), request.usernameOrEmail())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email or username %s not found", request.usernameOrEmail())
+                ));
+
+        // Generate a new strong random password
+        String newRawPassword = userService.generateStrongPassword(10);
+
+        // Update the user entity with the new password
+        user.setRawPassword(newRawPassword);
+        user.setPassword(passwordEncoder.encode(newRawPassword));
+        userRepository.save(user);
+
+    }
+
+
+
+    @Override
+    public ResponsePassword viewPasswordByUsernameOrEmail(RequestPasswordByUsernameOrEmail request) {
+
+        // Find the user by email or username
+        User user = userRepository.findByEmailOrUsername(request.usernameOrEmail(), request.usernameOrEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with email or username %s not found", request.usernameOrEmail())));
+
+//        user.setPassword(Decoder(user.getPassword());
+
+        return userMapper.toResponsePassword(user);
     }
 
     @Override

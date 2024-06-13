@@ -1,4 +1,4 @@
-package co.istad.lms.features.password.dto;
+package co.istad.lms.features.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
