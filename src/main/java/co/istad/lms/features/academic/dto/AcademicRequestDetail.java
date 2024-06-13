@@ -40,8 +40,6 @@ public record AcademicRequestDetail
 
                 String email,
 
-                String password,
-
                 String profileImage,
 
                 String phoneNumber,

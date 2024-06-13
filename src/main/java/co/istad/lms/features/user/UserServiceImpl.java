@@ -5,6 +5,8 @@ import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.user.dto.*;
 import co.istad.lms.mapper.UserMapper;
 import jakarta.transaction.Transactional;
@@ -31,12 +33,20 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityRepository authorityRepository;
+    private final MediaService mediaService;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
     @Override
     public Page<UserResponse> getAllUsers(int page, int limit) {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<User> users = userRepository.findAll(pageRequest);
+
+        users.forEach(user -> {
+            if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+                user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
+            }
+        });
 
         List<User> filteredUsers = users.stream()
                 .filter(user -> !user.getIsDeleted())
@@ -51,6 +61,12 @@ public class UserServiceImpl implements UserService {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<User> users = userRepository.findAll(pageRequest);
+
+        users.forEach(user -> {
+            if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+                user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
+            }
+        });
 
         List<User> filteredUsers = users.stream()
                 .filter(user -> !user.getIsDeleted())
@@ -68,6 +84,12 @@ public class UserServiceImpl implements UserService {
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<User> users = userRepository.findAllUsersWithAdminRole(pageRequest);
 
+        users.forEach(user -> {
+            if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+                user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
+            }
+        });
+
         return users.map(userMapper::toUserResponse);
     }
 
@@ -79,6 +101,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with alias = %s was not found.", uuid)));
+
+        if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+            user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
+        }
 
         return userMapper.toUserResponse(user);
 
@@ -92,6 +118,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with alias = %s was not found.", uuid)));
 
+        user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
+
         return userMapper.toUserResponseDetail(user);
 
     }
@@ -103,6 +131,11 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmailOrUsername(userRequest.email(), userRequest.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format("User email = %s has already been existed!", userRequest.email()));
+        }
+
+        if (userRequest.profileImage() != null && !userRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(userRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", userRequest.profileImage()));
         }
 
 

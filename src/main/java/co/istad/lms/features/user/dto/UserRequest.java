@@ -43,7 +43,7 @@ public record UserRequest(
                 message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
         String password,
 
-        @NotBlank(message = "Profile image is required")
+
         @Size(max = 255, message = "Profile image must be less than or equal to 255 characters")
         String profileImage,
 

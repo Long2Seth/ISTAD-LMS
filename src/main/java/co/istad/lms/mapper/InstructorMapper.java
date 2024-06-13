@@ -7,6 +7,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring",uses = {UserMapper.class})
 public interface InstructorMapper {
 
+    @Mapping(target = "user.dob" , ignore = true)
     Instructor toRequest(InstructorRequest request);
 
     @Mapping(source = "user.uuid", target = "uuid")

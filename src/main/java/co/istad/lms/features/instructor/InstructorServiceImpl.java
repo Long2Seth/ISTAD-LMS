@@ -12,6 +12,7 @@ import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.InstructorMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -52,8 +54,10 @@ public class InstructorServiceImpl implements InstructorService {
 
         // Create new user for the instructor
         User user = userMapper.fromInstructorRequest(instructorRequest);
+        LocalDate dob = DateTimeUtil.stringToLocalDate(instructorRequest.dob(),"dob");
+        user.setDob(dob);
         user.setUuid(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(instructorRequest.password()));
+//        user.setPassword(passwordEncoder.encode(instructorRequest.password()));
         user.setIsDeleted(false);
         user.setStatus(false);
         user.setIsChangePassword(false);

@@ -52,7 +52,6 @@ public class User extends Auditable {
     @Column(nullable = false, length = 100)
     private String email;
 
-
     private String password;
 
     private String rawPassword;

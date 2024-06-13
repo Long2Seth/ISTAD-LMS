@@ -20,6 +20,7 @@ public class Staff {
     @Column(unique = true)
     private String uuid;
 
+    @Column(columnDefinition = "TEXT")
     private String position;
 
     @OneToOne
