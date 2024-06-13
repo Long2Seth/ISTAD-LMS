@@ -74,6 +74,7 @@ public class InstructorServiceImpl implements InstructorService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
+        user.setUsername(instructorRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + instructorRequest.dob());
         user.setAuthorities(getDefaultAuthorities());
         // Save the user and instructor
         userRepository.save(user);
@@ -310,7 +311,7 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     @Override
-    public Page<InstructorResponse> getAllInstructor(String search, int page, int limit) {
+    public Page<InstructorResponse> getAllInstructor(int page, int limit) {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<Instructor> instructorsRequest = instructorRepository.findAll(pageRequest);

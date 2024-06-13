@@ -20,6 +20,7 @@ public interface AcademicMapper {
     @Mapping(source = "user.gender", target = "gender")
     @Mapping(source = "user.dob", target = "dob")
     @Mapping(source = "user.email", target = "email")
+    @Mapping(source = "user.currentAddress", target = "currentAddress")
     @Mapping(source = "user.profileImage", target = "profileImage")
     @Mapping(source = "user.phoneNumber", target = "phoneNumber")
     AcademicResponse toResponse(Academic academic);

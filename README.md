@@ -8,7 +8,6 @@ Welcome to the official documentation for the ISTAD LMS API. This documentation 
 2. [Security Management](#security-management)🔐
 - [auth](#auth)
 - [password](#password)
-- [authority](#authority)
 3. [Faculty Management](#faculty-management)👩‍🏫
 - [faculty](#faculty)
 - [degree](#degree)
@@ -73,6 +72,20 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 - **Auth type:** bearer token
 
 ---
+
+
+## File  <a name=""></a>
+
+
+- **All field that use image or file must be uploaded first**
+- **copy fileName that return from uploaded** 
+- **password:** Admin@123
+- **paste to field that use file or image**
+- **for upload endpoint goto Material management -> medias**
+
+---
+
+
 ## Authorities <a name=""></a>
 ```json
 [

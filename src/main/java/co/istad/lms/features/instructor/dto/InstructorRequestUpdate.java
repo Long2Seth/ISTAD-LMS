@@ -41,6 +41,17 @@ public record InstructorRequestUpdate(
         String phoneNumber,
 
         String currentAddress,
+        String bio,
+
+        String linkGit,
+
+        String linkLinkedin,
+
+        String linkTelegram,
+
+        String uploadCv,
+
+        String identity,
 
         JsonBirthPlace birthPlace
 

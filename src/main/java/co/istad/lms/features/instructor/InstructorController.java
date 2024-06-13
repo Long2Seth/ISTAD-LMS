@@ -35,11 +35,10 @@ public class InstructorController {
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read')")
     @GetMapping
     public Page<InstructorResponse> getAllInstructor(
-            @RequestParam(defaultValue = "") String search,
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize
     ){
-        return instructorService.getAllInstructor(search, pageNumber, pageSize);
+        return instructorService.getAllInstructor( pageNumber, pageSize);
     }
 
 

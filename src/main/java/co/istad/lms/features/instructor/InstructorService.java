@@ -118,14 +118,13 @@ public interface InstructorService {
     /**
      * Retrieves a paginated list of all instructors.
      *
-     * @param search is the search keyword to filter the list of instructors
      * @param page is the pageNumber number to retrieve
      * @param limit is the pageSize of the pageNumber to retrieve
      * @return {@link Page<InstructorResponse>}
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    Page<InstructorResponse> getAllInstructor(String search, int page, int limit);
+    Page<InstructorResponse> getAllInstructor(int page, int limit);
 
 
 }
