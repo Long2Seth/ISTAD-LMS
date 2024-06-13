@@ -10,6 +10,7 @@ import co.istad.lms.features.lecture.dto.LectureRequest;
 import co.istad.lms.features.lecture.dto.LectureResponse;
 import co.istad.lms.features.lecture.dto.LectureUpdateRequest;
 import co.istad.lms.mapper.LectureMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,37 +44,20 @@ public class LectureServiceImpl implements LectureService {
 
         //check course from DTO by uuid
         Course course =
-                courseRepository.findByUuid(lectureRequest.courseUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Course = %s has not been found",lectureRequest.courseUuid())));
+                courseRepository.findByUuid(lectureRequest.courseUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Course = %s has not been found", lectureRequest.courseUuid())));
 
         // map DTO to entity
         Lecture lecture = lectureMapper.fromLectureRequest(lectureRequest);
 
-        LocalTime startTime = null;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            startTime = LocalTime.parse(lectureRequest.startTime(), formatter);
-        } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("StartTime = %s is not valid", lectureRequest.startTime()));
+        LocalTime startTime = DateTimeUtil.stringToLocalTime(lectureRequest.startTime(), "startTime");
+
+        LocalTime endTime = DateTimeUtil.stringToLocalTime(lectureRequest.endTime(), "endTime");
+
+        if (endTime.isBefore(startTime)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endTime must be after startTime");
         }
 
-        LocalTime endTime = null;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            endTime = LocalTime.parse(lectureRequest.endTime(), formatter);
-        } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("EndTime = %s is not valid", lectureRequest.endTime()));
-        }
-
-        LocalDate lectureDate = null;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            lectureDate = LocalDate.parse(lectureRequest.lectureDate(), formatter);
-        } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("lectureDate = %s is not valid", lectureRequest.lectureDate()));
-        }
+        LocalDate lectureDate = DateTimeUtil.stringToLocalDate(lectureRequest.lectureDate(), "lectureDate");
 
         //set isDeleted to false(enable)
         lecture.setIsDeleted(false);
@@ -115,7 +99,7 @@ public class LectureServiceImpl implements LectureService {
     public Page<LectureDetailResponse> getAllLectures(int pageNumber, int pageSize) {
 
         //create sort order
-        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "lectureDate");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
@@ -138,6 +122,30 @@ public class LectureServiceImpl implements LectureService {
 
         //map DTO to entity
         lectureMapper.updateLectureFromRequest(lecture, lectureUpdateRequest);
+
+        //check startTime null or empty
+        if (lectureUpdateRequest.startTime() != null && !lectureUpdateRequest.startTime().trim().isEmpty()) {
+            LocalTime startTime = DateTimeUtil.stringToLocalTime(lectureUpdateRequest.startTime(), "startTime");
+            lecture.setStartTime(startTime);
+        }
+
+        if (lectureUpdateRequest.endTime() != null && !lectureUpdateRequest.endTime().trim().isEmpty()) {
+            LocalTime endTime = DateTimeUtil.stringToLocalTime(lectureUpdateRequest.endTime(), "endTime");
+            lecture.setEndTime(endTime);
+        }
+
+        //validate end time must be after start time
+        if (lecture.getEndTime().isBefore(lecture.getStartTime())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endTime must be after startTime");
+        }
+
+        //check lectureDate from DTO null or not
+        if (lectureUpdateRequest.lectureDate() != null && !lectureUpdateRequest.lectureDate().trim().isEmpty()) {
+
+            //update lectureDate from DTO
+            LocalDate lectureDate = DateTimeUtil.stringToLocalDate(lectureUpdateRequest.lectureDate(), "lectureDate");
+            lecture.setLectureDate(lectureDate);
+        }
 
         //save to database
         lectureRepository.save(lecture);
@@ -194,7 +202,7 @@ public class LectureServiceImpl implements LectureService {
     public Page<LectureDetailResponse> filterLectures(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         //create sort order
-        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "lectureDate");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);

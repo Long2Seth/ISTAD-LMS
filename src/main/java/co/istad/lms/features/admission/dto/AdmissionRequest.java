@@ -16,5 +16,6 @@ public record AdmissionRequest(
         String openDate,
         String endDate,
 
+        @Size(max = 100,message = "telegram link must shorter than 100")
         String telegramLink
 ) {}

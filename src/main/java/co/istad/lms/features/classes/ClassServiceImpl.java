@@ -351,7 +351,7 @@ public class ClassServiceImpl implements ClassService {
 
                         //get student from student table
                         Student student =
-                                studentRepository.findByUuid(studentAdmission.getUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",studentAdmission.getStudentUuid())));
+                                studentRepository.findByUuid(studentAdmission.getStudentUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",studentAdmission.getStudentUuid())));
 
 
                         //get all class that student study
@@ -392,7 +392,7 @@ public class ClassServiceImpl implements ClassService {
                         user.setStatus(false);
 
                         //set userName to user
-                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s", "-") + "-" + studentAdmission.getDob());
+                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s+", "-") + "-" + studentAdmission.getDob());
 
                         //set user information
                         user.setIsChangePassword(false);
@@ -511,7 +511,7 @@ public class ClassServiceImpl implements ClassService {
 
         PasswordGenerator generator = new PasswordGenerator();
 
-        return generator.generatePassword(8, Arrays.asList(
+        return generator.generatePassword(10, Arrays.asList(
                 lowercaseRule,
                 uppercaseRule,
                 digitRule,

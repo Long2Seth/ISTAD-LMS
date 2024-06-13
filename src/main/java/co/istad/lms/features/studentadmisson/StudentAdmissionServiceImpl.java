@@ -93,7 +93,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         studentAdmissionRepository.save(studentAdmission);
 
 //         Send a notification to Telegram
-        telegramBotService.sendAdmissionResponse(studentAdmission);
+//        telegramBotService.sendAdmissionResponse(studentAdmission);
     }
 
     @Override

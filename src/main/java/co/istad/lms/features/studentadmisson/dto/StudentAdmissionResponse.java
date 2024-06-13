@@ -3,7 +3,7 @@ package co.istad.lms.features.studentadmisson.dto;
 import java.time.LocalDate;
 
 public record StudentAdmissionResponse(
-        Long id,
+
         String uuid,
         String nameEn,
         String nameKh,
