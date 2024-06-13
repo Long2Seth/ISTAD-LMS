@@ -26,7 +26,7 @@ public class DateTimeUtil {
     public static LocalDate stringToLocalDate(String timeString,String field){
         LocalDate date = null;
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             date = LocalDate.parse(timeString, formatter);
         } catch (DateTimeParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -38,7 +38,7 @@ public class DateTimeUtil {
     public static LocalDateTime stringToLocalDateTime(String timeString, String field){
         LocalDateTime dateTime = null;
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             dateTime = LocalDateTime.parse(timeString, formatter);
         } catch (DateTimeParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
