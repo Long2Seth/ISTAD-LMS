@@ -3,6 +3,7 @@ package co.istad.lms.features.instructor.dto;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public record InstructorRequestUpdate(
 
@@ -10,11 +11,11 @@ public record InstructorRequestUpdate(
 
         LocalDate highSchoolGraduationDate,
 
-        String degree,
+        Set<String> degree,
 
         LocalDate degreeGraduationDate,
 
-        String major,
+        Set<String> major,
 
         String studyAtUniversityOrInstitution,
 
@@ -34,7 +35,6 @@ public record InstructorRequestUpdate(
 
         String email,
 
-        String password,
 
         String profileImage,
 

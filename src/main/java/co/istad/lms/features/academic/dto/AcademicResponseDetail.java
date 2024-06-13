@@ -38,8 +38,6 @@ public record AcademicResponseDetail(
 
         String email,
 
-        String password,
-
         String profileImage,
 
         String phoneNumber,

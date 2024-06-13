@@ -32,7 +32,7 @@ public class Student {
     private String bacIiGrade;
 
     @Column(columnDefinition = "TEXT")
-    private String avatar;
+    private String avatar; // image
 
     @Column(length = 50)
     private String guardianContact;
@@ -44,7 +44,7 @@ public class Student {
     private String knownIstad;
 
     @Column(columnDefinition = "TEXT")
-    private String identity;
+    private String identity; // image
 
     @Column(columnDefinition = "TEXT")
     private String biography;
@@ -63,7 +63,5 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private Set<Course> courses;
-
-    // New fields that are not in User
 
 }

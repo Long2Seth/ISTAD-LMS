@@ -34,8 +34,6 @@ public record AcademicRequestUpdate(
 
         String email,
 
-        String password,
-
         String profileImage,
 
         String phoneNumber,

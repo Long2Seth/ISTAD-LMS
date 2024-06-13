@@ -1,9 +1,7 @@
 package co.istad.lms.features.auth;
 
-import co.istad.lms.features.auth.dto.AuthRequest;
-import co.istad.lms.features.auth.dto.AuthRequestResetPassword;
-import co.istad.lms.features.auth.dto.AuthResponse;
-import co.istad.lms.features.auth.dto.RefreshTokenRequest;
+import co.istad.lms.features.auth.dto.*;
+import co.istad.lms.features.password.dto.ResponsePassword;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
@@ -40,6 +38,19 @@ public class AuthController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword (@Valid @RequestBody AuthRequestResetPassword authRequestResetPassword) {
         authService.changePassword(authRequestResetPassword);
+    }
+
+
+    @PutMapping("/passwords/reset")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resetPassword(@Valid @RequestBody RequestPasswordByUsernameOrEmail authRequestResetPassword) {
+          authService.resetPassword(authRequestResetPassword);
+    }
+
+    @GetMapping("/passwords")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponsePassword viewPasswordByUsernameOrEmail(@RequestBody RequestPasswordByUsernameOrEmail authRequestResetPassword) {
+        return authService.viewPasswordByUsernameOrEmail(authRequestResetPassword);
     }
 
     @PostMapping("/register")

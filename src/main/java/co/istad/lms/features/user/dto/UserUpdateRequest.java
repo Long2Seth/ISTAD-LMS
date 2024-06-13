@@ -12,7 +12,6 @@ public record UserUpdateRequest(
         String gender,
         LocalDate dob,
         String email,
-        String password,
         String profileImage,
         String phoneNumber,
         String currentAddress,

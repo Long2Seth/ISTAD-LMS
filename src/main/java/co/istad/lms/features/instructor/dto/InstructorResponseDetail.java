@@ -4,6 +4,7 @@ import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.user.dto.UserResponseDetail;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public record InstructorResponseDetail(
         String uuid,
@@ -12,11 +13,11 @@ public record InstructorResponseDetail(
 
         String highSchoolGraduationDate,
 
-        String degree,
+        Set<String> degree,
 
         String degreeGraduationDate,
 
-        String major,
+        Set<String> major,
 
         String studyAtUniversityOrInstitution,
 

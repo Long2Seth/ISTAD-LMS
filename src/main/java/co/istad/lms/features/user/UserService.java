@@ -18,6 +18,8 @@ import java.util.List;
 public interface UserService {
 
 
+    String generateStrongPassword(int length);
+
     /**
      * Retrieves a paginated list of all users.
      *
