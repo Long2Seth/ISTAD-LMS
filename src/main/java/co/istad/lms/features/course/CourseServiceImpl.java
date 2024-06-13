@@ -14,6 +14,7 @@ import co.istad.lms.features.course.dto.CourseUpdateRequest;
 import co.istad.lms.features.instructor.InstructorRepository;
 import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.CourseMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.exec.spi.StandardEntityInstanceResolver;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 
 
 @Service
@@ -48,6 +51,14 @@ public class CourseServiceImpl implements CourseService {
         Class aClass =
                 classRepository.findByUuid(courseRequest.classUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", courseRequest.classUuid())));
 
+        LocalDate courseStart=null;
+        //validate courseStart null or not
+        if(courseRequest.courseStart()!=null&&!courseRequest.courseStart().trim().isEmpty()){
+
+            //validate format for course start
+            courseStart= DateTimeUtil.stringToLocalDate(courseRequest.courseStart(),"courseStart");
+        }
+
         //validate subject from DTO by subject alias
         Subject subject=
                 subjectRepository.findByAlias(courseRequest.subjectAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Subject = %s has not been found",courseRequest.subjectAlias())));
@@ -66,6 +77,9 @@ public class CourseServiceImpl implements CourseService {
         }
         //set class to course
         course.setOneClass(aClass);
+
+        //set courseStart to curse
+        course.setCourseStart(courseStart);
 
         //set subject to course
         course.setSubject(subject);
@@ -113,6 +127,16 @@ public class CourseServiceImpl implements CourseService {
         Course course =
                 courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Course = %s has not been found.", uuid)));
+
+        //validate courseStart null or not
+        if(courseUpdateRequest.courseStart()!=null&&!courseUpdateRequest.courseStart().trim().isEmpty()){
+
+            //validate format for course start
+            LocalDate courseStart= DateTimeUtil.stringToLocalDate(courseUpdateRequest.courseStart(),"courseStart");
+
+            //set courseStart
+            course.setCourseStart(courseStart);
+        }
 
         //map DTO to entity
         courseMapper.updateCourseFromRequest(course, courseUpdateRequest);

@@ -7,6 +7,7 @@ import co.istad.lms.features.admission.AdmissionService;
 import co.istad.lms.features.admission.dto.AdmissionRequest;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.degree.dto.DegreeResponse;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
@@ -52,12 +53,28 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
     private final MediaService mediaService;
 
+    private final FileMetaDataRepository fileMetaDataRepository;
+
 
     @Override
     public void createStudentAdmission(StudentAdmissionRequest studentAdmissionRequest) {
 
+        //validate avatar from dto(for image must be upload first and use name from upload to put in)
+        if (studentAdmissionRequest.avatar() != null && !studentAdmissionRequest.avatar().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionRequest.avatar())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("avatar = %s has not been found",
+                    studentAdmissionRequest.avatar()));
+        }
+
+        //validate identity from dto
+        if (studentAdmissionRequest.identity() != null && !studentAdmissionRequest.identity().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionRequest.identity())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("identity = %s has not been found",
+                    studentAdmissionRequest.identity()));
+        }
+
         //find admission that open
-        Admission admission = admissionRepository.findByStatus(1).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
+        Admission admission = admissionRepository.findByStatus(1).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
 
         //validate degree by degree alias
         Degree degree = degreeRepository.findByAlias(studentAdmissionRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found", studentAdmissionRequest.degreeAlias())));
@@ -144,6 +161,21 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //map data from DTO to entity
         studentAdmissionMapper.updateStudentAdmissionFromRequest(studentAdmission, studentAdmissionUpdateRequest);
+
+        //validate avatar from dto(for image must be upload first and use name from upload to put in)
+        if (studentAdmissionUpdateRequest.avatar() != null && !studentAdmissionUpdateRequest.avatar().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionUpdateRequest.avatar())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("avatar = %s has not been found",
+                    studentAdmissionUpdateRequest.avatar()));
+
+        }
+
+        //validate identity from dto
+        if (studentAdmissionUpdateRequest.identity() != null && !studentAdmissionUpdateRequest.identity().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionUpdateRequest.identity())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("identity = %s has not been found",
+                    studentAdmissionUpdateRequest.identity()));
+        }
 
         //validate degree from dto with entity
         //if the same, don't update

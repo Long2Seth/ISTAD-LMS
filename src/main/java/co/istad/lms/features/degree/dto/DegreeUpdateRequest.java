@@ -6,14 +6,12 @@ public record DegreeUpdateRequest(
 
 
 
+        @Size(max = 100,message = "alias can not be longer than 100 characters")
         String alias,
-        @Size(max = 50, message = "Level cannot be longer than 50 characters")
+        @Size(max = 100, message = "Level can not be longer than 100 characters")
         String level,
 
-        String description,
-        String subjectLogo,
-        Integer credit,
-        Integer duration
+        String description
 ) {
 }
 

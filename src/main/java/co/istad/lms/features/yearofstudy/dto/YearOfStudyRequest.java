@@ -17,6 +17,7 @@ public record YearOfStudyRequest(
         Integer semester,
 
         @NotBlank(message = "Study Program ID is required")
+        @Size(max = 100,message = "studyProgramAlias cannot be longer than 100 characters")
         String studyProgramAlias,
         @NotNull(message = "isDraft is required")
         Boolean isDraft

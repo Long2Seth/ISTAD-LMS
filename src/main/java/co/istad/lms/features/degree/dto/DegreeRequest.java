@@ -6,11 +6,11 @@ import jakarta.validation.constraints.Size;
 
 public record DegreeRequest(
         @NotBlank(message = "Alias is required")
-        @Size(max = 50, message = "Alias cannot be longer than 50 characters")
+        @Size(max = 100, message = "Alias can not be longer than 100 characters")
         String alias,
 
         @NotBlank(message = "Level is required")
-        @Size(max = 50, message = "Level cannot be longer than 50 characters")
+        @Size(max = 100, message = "Level can not be longer than 100 characters")
         String level,
 
         String description,

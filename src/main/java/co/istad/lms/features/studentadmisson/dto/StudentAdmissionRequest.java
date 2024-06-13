@@ -1,20 +1,17 @@
 package co.istad.lms.features.studentadmisson.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public record StudentAdmissionRequest(
 
-        @NotBlank(message = "Name (English) is required")
-        @Size(max = 50, message = "Name (English) cannot be longer than 50 characters")
+        @NotBlank(message = "nameEn is required")
+        @Size(max = 100, message = "nameEn cannot be longer than 100 characters")
         String nameEn,
 
-        @NotBlank(message = "Name (Khmer) is required")
-        @Size(max = 50, message = "Name (Khmer) cannot be longer than 50 characters")
+        @NotBlank(message = "nameKh is required")
+        @Size(max = 100, message = "nameKh cannot be longer than 100 characters")
         String nameKh,
 
         @NotBlank(message = "Email is required")
@@ -25,13 +22,14 @@ public record StudentAdmissionRequest(
         @NotBlank(message = "High School is required")
         String highSchool,
 
-        @Size(max = 50, message = "Phone Number cannot be longer than 50 characters")
+        @Size(max = 20, message = "Phone Number cannot be longer than 20 characters")
+        @Pattern(regexp = "(\\+855[0-9]+|0[0-9]+)", message = "format: +855(number) or 0(number)")
         String phoneNumber,
 
         @NotBlank(message = "Date of Birth is required")
         String dob,
 
-        String pob,
+        String birthPlace,
 
         @Size(max = 10, message = "Bac II Grade cannot be longer than 10 characters")
         String bacIiGrade,
@@ -39,8 +37,6 @@ public record StudentAdmissionRequest(
         @NotBlank(message = "Gender is required")
         @Size(max = 20, message = "Gender cannot be longer than 20 characters")
         String gender,
-
-        String avatar,
 
         String address,
 
@@ -53,19 +49,20 @@ public record StudentAdmissionRequest(
         String knownIstad,
 
         String identity,
+        String avatar,
 
         String biography,
 
         @NotBlank(message = "Shift alias is required")
-        @Size(max = 100)
+        @Size(max = 100,message = "shiftAlias can not be longer than 100 characters")
         String shiftAlias,
 
         @NotBlank(message = "Study Program alias is required")
-        @Size(max = 100)
+        @Size(max = 100,message = "studyProgramAlias can not be longer than 100 characters")
         String studyProgramAlias,
 
         @NotBlank(message = "Degree alias is required")
-        @Size(max = 100)
+        @Size(max = 100,message = "degreeAlias can not be longer than 100 characters")
         String degreeAlias
 ) {
 }

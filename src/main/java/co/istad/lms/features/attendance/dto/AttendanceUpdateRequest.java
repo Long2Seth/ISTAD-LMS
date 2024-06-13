@@ -8,8 +8,8 @@ import lombok.Builder;
 @Builder
 public record AttendanceUpdateRequest(
 
-        @Min(value = 1, message = "Status must be 1, 2, or 3")
-        @Max(value = 3, message = "Status must be 1, 2, or 3")
+        @Max(value = 3,message = "max value is 3")
+        @Min(value = 1,message = "min value is 1")
         Integer status,
         String note
 

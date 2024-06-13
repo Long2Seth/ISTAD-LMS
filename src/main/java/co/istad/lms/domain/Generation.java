@@ -21,7 +21,7 @@ public class Generation extends Auditable {
     @Column(nullable = false,unique = true,length = 100)
     private String alias;
 
-    @Column(nullable = false , length = 50)
+    @Column(nullable = false , length = 100)
     private String name;
 
     @Column(columnDefinition = "TEXT")

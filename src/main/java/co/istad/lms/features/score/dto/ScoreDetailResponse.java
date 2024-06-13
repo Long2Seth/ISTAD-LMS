@@ -6,7 +6,6 @@ import co.istad.lms.features.student.dto.StudentResponse;
 
 public record ScoreDetailResponse(
         String uuid,
-        Integer semester,
         Double activityScore,
         Double attendanceScore,
         Double midtermExamScore,

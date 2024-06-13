@@ -11,11 +11,11 @@ import org.mapstruct.*;
 public interface ClassMapper {
 
 
-//    @Mapping(target = "instructor",ignore = true)
-    @Mapping(target = "studyProgram",ignore = true)
-    @Mapping(target = "shift",ignore = true)
-    @Mapping(target = "generation",ignore = true)
-    @Mapping(target = "students",ignore = true)
+    //    @Mapping(target = "instructor",ignore = true)
+    @Mapping(target = "studyProgram", ignore = true)
+    @Mapping(target = "shift", ignore = true)
+    @Mapping(target = "generation", ignore = true)
+    @Mapping(target = "students", ignore = true)
     Class fromClassRequest(ClassRequest classRequest);
 
 
@@ -23,10 +23,10 @@ public interface ClassMapper {
 
     ClassResponse toClassResponse(Class classes);
 
-//    @Mapping(target = "instructor",ignore = true)
-    @Mapping(target = "studyProgram",ignore = true)
-    @Mapping(target = "shift",ignore = true)
-    @Mapping(target = "generation",ignore = true)
+    //    @Mapping(target = "instructor",ignore = true)
+    @Mapping(target = "studyProgram", ignore = true)
+    @Mapping(target = "shift", ignore = true)
+    @Mapping(target = "generation", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateClassFromRequest(@MappingTarget Class classes, ClassUpdateRequest classUpdateRequest);
 

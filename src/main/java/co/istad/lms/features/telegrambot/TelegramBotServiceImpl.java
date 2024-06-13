@@ -62,7 +62,7 @@ public class TelegramBotServiceImpl implements TelegramBotService{
 
                 admission.getHighSchool(),
 
-                admission.getPob(),
+                admission.getBirthPlace(),
 
 
                 admission.getKnownIstad());

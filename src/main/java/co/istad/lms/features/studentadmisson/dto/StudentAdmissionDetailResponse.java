@@ -20,7 +20,7 @@ public record StudentAdmissionDetailResponse(
         String highSchool,
         String phoneNumber,
         LocalDate dob,
-        String pob,
+        String birthPlace,
         String bacIiGrade,
         String gender,
         String avatar,

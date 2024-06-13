@@ -10,8 +10,9 @@ import java.util.Set;
 
 public record ClassRequest(
 
-        @NotBlank(message = "Class name cannot be null")
-        String className,
+        @NotBlank(message = "classCode is require")
+        @Size(max = 100, message = "classCode cannot be longer than 100 characters")
+        String classCode,
 
         @NotNull(message = "Year is require")
         @Positive(message = "year must be positive")
@@ -19,22 +20,22 @@ public record ClassRequest(
 
         String description,
 
-        @Size(max = 100, message = "instructorUuid must be shorter than 100")
+        @Size(max = 100, message = "instructorUuid cannot be longer than 100 characters")
         String instructorUuid,
 
         @NotBlank(message = "Study Program alias cannot be null")
-        @Size(max = 100, message = "studyProgramAlias must shorter than 100")
+        @Size(max = 100, message = "studyProgramAlias cannot be longer than 100 characters")
         String studyProgramAlias,
 
         @NotBlank(message = "Shift alias cannot be null")
-        @Size(max = 100, message = "shiftAlias must shorter than 100")
+        @Size(max = 100, message = "shiftAlias cannot be longer than 100 characters")
         String shiftAlias,
 
         @NotBlank(message = "Generation alias cannot be null")
-        @Size(max = 100,message = "generationAlias must shorter than 100")
+        @Size(max = 100, message = "generationAlias cannot be longer than 100 characters")
         String generationAlias,
 
-        @Size(max = 100,message = "studentUuid must shorter than 100")
+        @Size(max = 100, message = "studentUuid cannot be longer than 100 characters")
         Set<String> studentUuid,
 
         @NotNull(message = "isDraft is require")
