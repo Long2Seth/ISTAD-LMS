@@ -36,17 +36,27 @@ public class InstructorServiceImpl implements InstructorService {
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
+
+
+    public Set<Authority> getDefaultAuthorities() {
+        // Set default authorities
+        Set<Authority> authorities = new HashSet<>();
+        authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("user:read"));
+
+        return authorities;
+
+    }
 
 
     @Override
     public void createInstructor(InstructorRequest instructorRequest) {
 
         // Check if the username or email already exists from database
-        if (userRepository.existsByEmailOrUsername(instructorRequest.email(), instructorRequest.username())) {
+        if (userRepository.existsByEmailOrUsername(instructorRequest.email(), instructorRequest.email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s have already exists", instructorRequest.email(), instructorRequest.username())
+                    String.format("User with email = %s or username = %s have already exists", instructorRequest.email(), instructorRequest.email())
             );
         }
 
@@ -64,17 +74,7 @@ public class InstructorServiceImpl implements InstructorService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-
-        // Set the authorities for the user
-        Set<Authority> allAuthorities = new HashSet<>();
-        for (String authorityName : instructorRequest.authorityNames()) {
-            Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
-            if (foundAuthorities.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Authority with name = %s not found!", authorityName));
-            }
-            allAuthorities.addAll(foundAuthorities);
-        }
+        user.setAuthorities(getDefaultAuthorities());
         // Save the user and instructor
         userRepository.save(user);
 
