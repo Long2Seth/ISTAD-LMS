@@ -43,7 +43,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     public void createAttendance(AttendanceRequest attendanceRequest) {
 
         //validate lecture from DTO by alias
-        Lecture lecture = lectureRepository.findByAlias(attendanceRequest.lectureAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found", attendanceRequest.lectureAlias())));
+        Lecture lecture =
+                lectureRepository.findByUuid(attendanceRequest.lectureUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found", attendanceRequest.lectureUuid())));
 
         //validate student from DTO by uuid
         Student student = studentRepository.findByUuid(attendanceRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", attendanceRequest.studentUuid())));

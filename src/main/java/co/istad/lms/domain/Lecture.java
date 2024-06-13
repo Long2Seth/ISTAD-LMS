@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Setter
@@ -21,14 +22,14 @@ public class Lecture extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,unique = true)
-    private String alias;
+    @Column(nullable = false,unique = true,length = 100)
+    private String uuid;
 
     @Column(nullable = false)
-    private String startTime;
+    private LocalTime startTime;
 
     @Column(nullable = false)
-    private String endTime;
+    private LocalTime endTime;
 
     @Column(columnDefinition = "TEXT")
     private String description;

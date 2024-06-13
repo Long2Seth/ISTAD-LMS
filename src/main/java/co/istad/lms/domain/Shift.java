@@ -22,7 +22,7 @@ public class Shift extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true,length = 100)
     private String alias;
 
     @Column(nullable = false)

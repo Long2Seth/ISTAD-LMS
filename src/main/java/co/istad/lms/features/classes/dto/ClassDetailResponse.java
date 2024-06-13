@@ -13,7 +13,7 @@ import java.util.Set;
 
 public record ClassDetailResponse(
 
-        String alias,
+        String uuid,
         String className,
         String description,
         Boolean isDeleted,

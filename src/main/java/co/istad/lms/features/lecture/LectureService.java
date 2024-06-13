@@ -20,14 +20,14 @@ public interface LectureService {
     void createLecture(LectureRequest lectureRequest);
 
     /**
-     * Retrieves the details of a lecture by its alias.
+     * Retrieves the details of a lecture by its uuid.
      *
-     * @param alias is the unique name of lecture
+     * @param uuid is the unique name of lecture
      * @return {@link LectureDetailResponse}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    LectureDetailResponse getLectureByAlias(String alias);
+    LectureDetailResponse getLectureByUuid(String uuid);
 
     /**
      * Retrieves a paginated list of all lectures.
@@ -41,43 +41,43 @@ public interface LectureService {
     Page<LectureDetailResponse> getAllLectures(int pageNumber, int pageSize);
 
     /**
-     * Updates an existing lecture by its alias.
+     * Updates an existing lecture by its uuid.
      *
-     * @param alias                is the unique name of lecture
+     * @param uuid                is the unique name of lecture
      * @param lectureUpdateRequest is the request object containing the updated lecture details
      * @return {@link LectureDetailResponse}
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    LectureDetailResponse updateLectureByAlias(String alias, LectureUpdateRequest lectureUpdateRequest);
+    LectureDetailResponse updateLectureByUuid(String uuid, LectureUpdateRequest lectureUpdateRequest);
 
     /**
-     * Deletes a lecture by its alias.
+     * Deletes a lecture by its uuid.
      *
-     * @param alias is the unique name of lecture
+     * @param uuid is the unique name of lecture
      * @author Nouth chanraksa
      * @since 1.0 (2024)
      */
-    void deleteLectureByAlias(String alias);
+    void deleteLectureByUuid(String uuid);
 
 
     /**
-     * Enable lecture by alias
+     * Enable lecture by uuid
      *
-     * @param alias is the unique name of lecture
+     * @param uuid is the unique name of lecture
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    void enableLectureByAlias(String alias);
+    void enableLectureByUuid(String uuid);
 
     /**
-     * Disable lecture by alias
+     * Disable lecture by uuid
      *
-     * @param alias is the unique name of lecture
+     * @param uuid is the unique name of lecture
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    void disableLectureByAlias(String alias);
+    void disableLectureByUuid(String uuid);
 
     /**
      * Filters lecture based on the specified criteria and retrieves a paginated list of results.

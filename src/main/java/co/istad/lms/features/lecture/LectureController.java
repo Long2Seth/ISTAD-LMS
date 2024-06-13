@@ -29,11 +29,11 @@ public class LectureController {
 
     }
 
-    @GetMapping("/{alias}")
+    @GetMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('session:read')")
-    LectureDetailResponse getLectureByAlias(@PathVariable String alias) {
+    LectureDetailResponse getLectureByUuid(@PathVariable String uuid) {
 
-        return lectureService.getLectureByAlias(alias);
+        return lectureService.getLectureByUuid(uuid);
 
     }
 
@@ -49,37 +49,37 @@ public class LectureController {
     }
 
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('session:update')")
-    public LectureDetailResponse updateLecture(@PathVariable String alias,
+    public LectureDetailResponse updateLecture(@PathVariable String uuid,
                                                @Valid @RequestBody LectureUpdateRequest lectureUpdateRequest) {
 
-        return lectureService.updateLectureByAlias(alias, lectureUpdateRequest);
+        return lectureService.updateLectureByUuid(uuid, lectureUpdateRequest);
     }
 
 
-    @DeleteMapping("/{alias}")
+    @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('session:delete')")
-    public void deleteLecture(@PathVariable String alias) {
+    public void deleteLecture(@PathVariable String uuid) {
 
-        lectureService.deleteLectureByAlias(alias);
+        lectureService.deleteLectureByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/enable")
+    @PutMapping("/{uuid}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('session:update')")
-    void enableLecture(@PathVariable String alias) {
+    void enableLecture(@PathVariable String uuid) {
 
-        lectureService.enableLectureByAlias(alias);
+        lectureService.enableLectureByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/disable")
+    @PutMapping("/{uuid}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('session:update')")
-    void disableLecture(@PathVariable String alias) {
+    void disableLecture(@PathVariable String uuid) {
 
-        lectureService.disableLectureByAlias(alias);
+        lectureService.disableLectureByUuid(uuid);
     }
 
     @GetMapping("/filter")

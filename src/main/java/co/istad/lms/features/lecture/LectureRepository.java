@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface LectureRepository extends JpaRepository<Lecture, Long>, JpaSpecificationExecutor<Lecture>{
 
-    Optional<Lecture> findByAlias(String alias);
+    Optional<Lecture> findByUuid(String alias);
 
-    Boolean existsByAlias(String alias);
+    Boolean existsByUuid(String alias);
 
 
 }

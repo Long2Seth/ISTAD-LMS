@@ -7,7 +7,7 @@ import co.istad.lms.features.classes.dto.ClassResponse;
 import co.istad.lms.features.classes.dto.ClassUpdateRequest;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = StudentMapper.class)
 public interface ClassMapper {
 
 
@@ -17,6 +17,7 @@ public interface ClassMapper {
     @Mapping(target = "generation",ignore = true)
     @Mapping(target = "students",ignore = true)
     Class fromClassRequest(ClassRequest classRequest);
+
 
     ClassDetailResponse toClassDetailResponse(Class classes);
 

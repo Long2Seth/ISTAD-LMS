@@ -1,8 +1,8 @@
 package co.istad.lms.features.classes;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.classes.dto.ClassAddStudentRequest;
@@ -14,21 +14,30 @@ import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.instructor.InstructorRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.student.StudentService;
+import co.istad.lms.features.studentadmisson.StudentAdmissionRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
+import co.istad.lms.mapper.StudentAdmissionMapper;
 import lombok.RequiredArgsConstructor;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -52,7 +61,18 @@ public class ClassServiceImpl implements ClassService {
 
     private final StudentRepository studentRepository;
 
+    private final StudentService studentService;
+
     private final YearOfStudyRepository yearOfStudyRepository;
+
+    private final StudentAdmissionRepository studentAdmissionRepository;
+
+    private final StudentAdmissionMapper studentAdmissionMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
 
     private final CourseRepository courseRepository;
 
@@ -60,11 +80,6 @@ public class ClassServiceImpl implements ClassService {
     @Transactional
     public void createClass(ClassRequest classRequest) {
 
-        //validate class by alias
-        if (classRepository.existsByAlias(classRequest.alias())) {
-
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Class = %s has already existed", classRequest.alias()));
-        }
 
         //map from DTO to entity
         Class aClass = classMapper.fromClassRequest(classRequest);
@@ -78,8 +93,8 @@ public class ClassServiceImpl implements ClassService {
                 studyProgram);
 
         //check year of study available or not
-        if(yearOfStudies.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Year = %s has not been found",
+        if (yearOfStudies.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Year = %s has not been found",
                     classRequest.year()));
         }
 
@@ -93,8 +108,8 @@ public class ClassServiceImpl implements ClassService {
                     Course course = new Course();
                     course.setOneClass(aClass);
                     course.setSubject(subject);
-                    course.setAlias(subject.getAlias() + "-" + aClass.getAlias());
-                    course.setTitle(subject.getTitle() + " " + aClass.getClassName());
+                    course.setUuid(UUID.randomUUID().toString());
+                    course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
                     course.setIsStarted(false);
@@ -141,8 +156,8 @@ public class ClassServiceImpl implements ClassService {
         //set all course to cass
         aClass.setCourses(allCourse);
 
-        //set year of study to class
-
+        //set uuid of study to class
+        aClass.setUuid(UUID.randomUUID().toString());
 
         //set generation to entity
         aClass.setGeneration(generation);
@@ -159,10 +174,12 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassDetailResponse getClassByAlias(String alias) {
+    public ClassDetailResponse getClassByUuid(String alias) {
 
-        //find class by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found.", alias)));
+        //find class by uuid
+        Class aClass =
+                classRepository.findByUuid(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found.", alias)));
 
         //return degree detail
         return classMapper.toClassDetailResponse(aClass);
@@ -185,10 +202,12 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassDetailResponse updateClassByAlias(String alias, ClassUpdateRequest classUpdateRequest) {
+    public ClassDetailResponse updateClassByUuid(String uuid, ClassUpdateRequest classUpdateRequest) {
 
         //validate class from DTO
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", alias)));
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", uuid)));
 
         //check studyProgram from update DTO
         if (classUpdateRequest.studyProgramAlias() != null) {
@@ -244,20 +263,24 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public void deleteClassByAlias(String alias) {
+    public void deleteClassByUuid(String uuid) {
 
-        //find class in database by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found.", alias)));
+        //find class in database by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found.", uuid)));
 
         //delete class in database
         classRepository.delete(aClass);
     }
 
     @Override
-    public void enableClassByAlias(String alias) {
+    public void enableClassByUuid(String uuid) {
 
-        //validate class from dto by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
+        //validate class from dto by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
 
         //set isDeleted to false(enable)
         aClass.setIsDeleted(false);
@@ -267,10 +290,12 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public void disableClassByAlias(String alias) {
+    public void disableClassByUuid(String uuid) {
 
         //validate class from dto by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
 
         //set isDeleted to true(disable)
         aClass.setIsDeleted(true);
@@ -301,19 +326,106 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public ClassDetailResponse addStudent(String alias, ClassAddStudentRequest classAddStudentRequest) {
+    public ClassDetailResponse addStudent(String uuid, ClassAddStudentRequest classAddStudentRequest) {
 
-        //validate class from DTO by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found", alias)));
+        //validate class from DTO by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", uuid)));
 
-        //find all student from DTO in database to add by student uuid
-        Set<Student> students =
-                classAddStudentRequest.studentUuid().stream().map(studentUuid -> studentRepository.findByUuid(studentUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studentUuid)))).collect(Collectors.toSet());
-        //check shift, studyProgram, degree from admission match with clas or not
+        //find all studentAdmission from DTO in database to add by student uuid
+        Set<StudentAdmission> studentAdmissions =
+                classAddStudentRequest.studentAdmissionUuid().stream().peek(studentAdmissionUuid -> {
+                    if (studentAdmissionUuid.length() > 100) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("StudentAdmission UUID = %s exceeds the maximum length of 100 characters", studentAdmissionUuid));
+                    }
+                }).map(studentAdmissionUuid ->
+                        studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
 
-        students.forEach(student -> {
-            student.setCourses(aClass.getCourses());
-        });
+        //add all studentAdmission to student
+        Set<Student> students = studentAdmissions.stream()
+                .map( studentAdmission ->  {
+
+                    //if studentAdmission already add to class(also has in student and user table)
+                    if (studentAdmission.isStudent()) {
+
+                        //get student from student table
+                        Student student =
+                                studentRepository.findByUuid(studentAdmission.getUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",studentAdmission.getStudentUuid())));
+
+
+                        //get all class that student study
+                        Set<Class> classes=student.getClasses();
+
+                        //add new class to set of class of student
+                        classes.add(aClass);
+
+                        //set classes to student
+                        student.setClasses(classes);
+
+                        return student;
+                    }
+                    //admission that doesn't add to class yet(not student)
+                    else{
+
+                        //map from student admission
+                        Student student = studentAdmissionMapper.toStudent(studentAdmission);
+
+                        if (userRepository.existsByEmailOrUsername(student.getUser().getEmail(), student.getUser().getUsername())) {
+                            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("UserName = %s or %s has " +
+                                    "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
+                        }
+
+                        //set uuid to student
+                        student.setUuid(UUID.randomUUID().toString());
+
+                        // Map user request to user
+                        User user = student.getUser();
+
+                        //set uuid to user
+                        user.setUuid(UUID.randomUUID().toString());
+
+                        //random password for user(student)
+                        user.setPassword(passwordEncoder.encode(generateStrongPassword()));
+
+                        user.setIsDeleted(false);
+                        user.setStatus(false);
+
+                        //set userName to user
+                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s", "-") + "-" + studentAdmission.getDob());
+
+                        //set user information
+                        user.setIsChangePassword(false);
+                        user.setAccountNonExpired(true);
+                        user.setAccountNonLocked(true);
+                        user.setCredentialsNonExpired(true);
+
+                        //set default authorities to user
+                        user.setAuthorities(studentService.getDefaultAuthoritiesStudent());
+
+                        // set user to student
+                        student.setUser(userRepository.save(user));
+
+
+                        //set student uuid to admission
+                        studentAdmission.setStudentUuid(student.getUuid());
+
+                        //set isStudent true(mark for admission that already add to student)
+                        studentAdmission.setStudent(true);
+
+
+                        return student;
+                    }
+
+                })
+                .collect(Collectors.toSet());
+
+        //save student to database
+        studentRepository.saveAll(students);
+
+        //save all studentAdmission to database
+        studentAdmissionRepository.saveAll(studentAdmissions);
+
         //get all student in class
         Set<Student> allStudents = aClass.getStudents();
 
@@ -331,17 +443,17 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public void deleteStudent(String alias, String uuid) {
+    public void deleteStudent(String uuid, String studentUuid) {
 
         //validate class from DTO
         Class aClass =
-                classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Class = %s has not been found", alias)));
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", uuid)));
 
-        //find all student in database by uuid
+        //find all student in database by  student uuid
         Student student =
-                studentRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Student = %s has not been found in database", uuid)));
+                studentRepository.findStudentByUserUuid(studentUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student = %s has not been found in database", studentUuid)));
 
         //get all student from class
         Set<Student> allStudents = aClass.getStudents();
@@ -349,7 +461,7 @@ public class ClassServiceImpl implements ClassService {
         //check for student is existed in class or not
         if (allStudents == null || !allStudents.contains(student)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found " +
-                    "in class %s", uuid, alias));
+                    "in class %s", studentUuid, uuid));
         }
         //remove student from class
         allStudents.remove(student);
@@ -362,10 +474,12 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public void publicClassByAlias(String alias) {
+    public void publicClassByUuid(String uuid) {
 
-        //validate class from dto by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
+        //validate class from dto by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
 
         //set isDraft to false(public)
         aClass.setIsDraft(false);
@@ -375,10 +489,12 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public void draftClassByAlias(String alias) {
+    public void draftClassByUuid(String uuid) {
 
-        //validate class from dto by alias
-        Class aClass = classRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Class = %s has not been found ! ", alias)));
+        //validate class from dto by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
 
         //set isDraft to true(draft)
         aClass.setIsDraft(true);
@@ -386,4 +502,21 @@ public class ClassServiceImpl implements ClassService {
         //save to database
         classRepository.save(aClass);
     }
+
+    private static String generateStrongPassword() {
+        CharacterRule lowercaseRule = new CharacterRule(EnglishCharacterData.LowerCase, 1);
+        CharacterRule uppercaseRule = new CharacterRule(EnglishCharacterData.UpperCase, 1);
+        CharacterRule digitRule = new CharacterRule(EnglishCharacterData.Digit, 1);
+        CharacterRule specialCharRule = new CharacterRule(EnglishCharacterData.Special, 1);
+
+        PasswordGenerator generator = new PasswordGenerator();
+
+        return generator.generatePassword(8, Arrays.asList(
+                lowercaseRule,
+                uppercaseRule,
+                digitRule,
+                specialCharRule
+        ));
+    }
+
 }

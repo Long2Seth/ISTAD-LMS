@@ -28,8 +28,8 @@ public record StudentAdmissionRequest(
         @Size(max = 50, message = "Phone Number cannot be longer than 50 characters")
         String phoneNumber,
 
-        @NotNull(message = "Date of Birth is required")
-        LocalDate dob,
+        @NotBlank(message = "Date of Birth is required")
+        String dob,
 
         String pob,
 
@@ -57,12 +57,15 @@ public record StudentAdmissionRequest(
         String biography,
 
         @NotBlank(message = "Shift alias is required")
+        @Size(max = 100)
         String shiftAlias,
 
         @NotBlank(message = "Study Program alias is required")
+        @Size(max = 100)
         String studyProgramAlias,
 
         @NotBlank(message = "Degree alias is required")
+        @Size(max = 100)
         String degreeAlias
 ) {
 }

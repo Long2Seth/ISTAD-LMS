@@ -4,6 +4,6 @@ import java.util.Set;
 
 public record ClassAddStudentRequest(
 
-        Set<String> studentUuid
+        Set<String> studentAdmissionUuid
 ) {
 }

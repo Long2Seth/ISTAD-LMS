@@ -31,11 +31,11 @@ public class CourseController {
 
     }
 
-    @GetMapping("/{alias}")
+    @GetMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('course:read')")
-    CourseDetailResponse getCourseByAlias(@PathVariable String alias) {
+    CourseDetailResponse getCourseByAlias(@PathVariable String uuid) {
 
-        return courseService.getCourseByAlias(alias);
+        return courseService.getCourseByUuid(uuid);
 
     }
 
@@ -50,36 +50,36 @@ public class CourseController {
         return courseService.getAllCourses(pageNumber, pageSize);
     }
 
-    @PutMapping("/{alias}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('course:update')")
-    public CourseDetailResponse updateCourse(@PathVariable String alias,
+    public CourseDetailResponse updateCourse(@PathVariable String uuid,
                                              @Valid @RequestBody CourseUpdateRequest courseUpdateRequest) {
 
-        return courseService.updateCourseByAlias(alias, courseUpdateRequest);
+        return courseService.updateCourseByUuid(uuid, courseUpdateRequest);
     }
 
-    @DeleteMapping("/{alias}")
+    @DeleteMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('course:delete')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCourse(@PathVariable String alias) {
+    public void deleteCourse(@PathVariable String uuid) {
 
-        courseService.deleteCourseByAlias(alias);
+        courseService.deleteCourseByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/enable")
+    @PutMapping("/{uuid}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('course:delete')")
-    void enableCourse(@PathVariable String alias) {
+    void enableCourse(@PathVariable String uuid) {
 
-        courseService.enableCourseByAlias(alias);
+        courseService.enableCourseByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/disable")
+    @PutMapping("/{uuid}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('course:delete')")
-    void disableCourse(@PathVariable String alias) {
+    void disableCourse(@PathVariable String uuid) {
 
-        courseService.disableCourseByAlias(alias);
+        courseService.disableCourseByUuid(uuid);
     }
 
     @GetMapping("/filter")
@@ -94,24 +94,24 @@ public class CourseController {
         return courseService.filterCourses(filterDto, pageNumber, pageSize);
     }
 
-    @PostMapping("/{alias}/instructors/{uuid}")
+    @PostMapping("/{uuid}/instructors/{iuuid}")
     @PreAuthorize("hasAnyAuthority('course:update')")
     public CourseDetailResponse addInstructorToCourse(
-            @PathVariable String alias,
-            @PathVariable String uuid) {
+            @PathVariable String uuid,
+            @PathVariable String iuuid) {
 
-        return courseService.addInstructorToCourse(alias,uuid );
+        return courseService.addInstructorToCourse(uuid,iuuid );
 
     }
 
-    @DeleteMapping("/{alias}/instructor/{uuid}")
+    @DeleteMapping("/{uuid}/instructor/{iuuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('course:delete')")
     public void deleteInstructorFromCourse(
-            @PathVariable String alias,
-            @PathVariable String uuid) {
+            @PathVariable String uuid,
+            @PathVariable String iuuid) {
 
-        courseService.deleteInstructorFromCourse(alias,uuid);
+        courseService.deleteInstructorFromCourse(uuid,iuuid);
 
     }
 }

@@ -46,7 +46,7 @@ public class ScoreController {
         return scoreService.getAllScores(pageNumber, pageSize);
     }
 
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('assessment:update')")
     public ScoreDetailResponse updateScore(@PathVariable String uuid,
                                            @Valid @RequestBody ScoreUpdateRequest scoreUpdateRequest) {

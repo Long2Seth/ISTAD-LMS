@@ -47,7 +47,7 @@ public class AttendanceController {
         return attendanceService.getAllAttendances(page, size);
     }
 
-    @PutMapping("/{uuid}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('assessment:update')")
     public AttendanceResponse updateAttendance(@PathVariable String uuid,
                                                @Valid @RequestBody AttendanceUpdateRequest attendanceUpdateRequest) {

@@ -67,7 +67,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 - **Please Login first:** 
   - **username:** admin@gmail.com
-  - **password:** admin
+  - **password:** admin@123
 - **Access token expire:** 1 day
 - **Refresh token expire:** 3 day
 

@@ -18,7 +18,7 @@ public class Faculty extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false,unique = true,length = 100)
     private String alias;
 
     @Column(nullable = false, length = 50)
@@ -34,7 +34,7 @@ public class Faculty extends Auditable {
     private String address;
 
     @Column( nullable = false)
-    private Boolean isDeleted=false;
+    private Boolean isDeleted;
 
     @Column(nullable = false)
     private Boolean isDraft;
