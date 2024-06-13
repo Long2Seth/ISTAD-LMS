@@ -23,83 +23,65 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+
+
     UserResponse toUserResponse(User user);
+
+
 
     UserResponseDetail toUserResponseDetail(User user);
 
+
+
     User fromUserRequest(UserRequest userRequest);
+
+
+
 
     ResponsePassword toResponsePassword(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromRequest(@MappingTarget User user, UserUpdateRequest userRequest);
 
-    @Named("updateUserDetailFromRequest")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUserDetailFromRequest(@MappingTarget User user, UserRequestDetail userRequest);
 
 
-    @Mapping(target = "uuid", ignore = true) // UUID will be set in the service layer
-    @Mapping(target = "password", ignore = true) // Password will be encoded in the service layer
-    @Mapping(target = "accountNonExpired", constant = "true")
-    @Mapping(target = "accountNonLocked", constant = "true")
-    @Mapping(target = "credentialsNonExpired", constant = "true")
-    @Mapping(target = "isDeleted", constant = "false")
-    @Mapping(target = "status", constant = "true")
-    @Mapping(target = "isChangePassword", constant = "false")
+
+
     User fromAdminRequest(AdminRequest adminRequest);
-
-    @Mapping(target = "uuid", ignore = true) // UUID will be set in the service layer
-    @Mapping(target = "password", ignore = true) // Password will be encoded in the service layer
-    @Mapping(target = "accountNonExpired", constant = "true")
-    @Mapping(target = "accountNonLocked", constant = "true")
-    @Mapping(target = "credentialsNonExpired", constant = "true")
-    @Mapping(target = "isDeleted", constant = "false")
-    @Mapping(target = "status", constant = "true")
-    @Mapping(target = "isChangePassword", constant = "false")
-    User fromAcademicRequest(AcademicRequest academicRequest);
-
-    @Mapping(target = "uuid", ignore = true) // UUID will be set in the service layer
-    @Mapping(target = "password", ignore = true) // Password will be encoded in the service layer
-    @Mapping(target = "accountNonExpired", constant = "true")
-    @Mapping(target = "accountNonLocked", constant = "true")
-    @Mapping(target = "credentialsNonExpired", constant = "true")
-    @Mapping(target = "isDeleted", constant = "false")
-    @Mapping(target = "status", constant = "true")
-    @Mapping(target = "isChangePassword", constant = "false")
-    User fromInstructorRequest(InstructorRequest instructorRequest);
-
-    @Mapping(target = "uuid", ignore = true) // UUID will be set in the service layer
-    @Mapping(target = "password", ignore = true) // Password will be encoded in the service layer
-    @Mapping(target = "accountNonExpired", constant = "true")
-    @Mapping(target = "accountNonLocked", constant = "true")
-    @Mapping(target = "credentialsNonExpired", constant = "true")
-    @Mapping(target = "isDeleted", constant = "false")
-    @Mapping(target = "status", constant = "true")
-    @Mapping(target = "isChangePassword", constant = "false")
-    User fromStaffRequest(StaffRequest staffRequest);
-
-
-
-    @Mapping(target = "uuid", ignore = true) // UUID will be set in the service layer
-    @Mapping(target = "password", ignore = true) // Password will be encoded in the service layer
-    @Mapping(target = "accountNonExpired", constant = "true")
-    @Mapping(target = "accountNonLocked", constant = "true")
-    @Mapping(target = "credentialsNonExpired", constant = "true")
-    @Mapping(target = "isDeleted", constant = "false")
-    @Mapping(target = "status", constant = "true")
-    @Mapping(target = "isChangePassword", constant = "false")
-    User fromStudentRequest(StudentRequest studentRequest);
 
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromAdminRequest(@MappingTarget User user, AdminRequestUpdate adminRequestUpdate);
 
+
+
+
+
+
+    User fromAcademicRequest(AcademicRequest academicRequest);
+
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromAcademicRequest(@MappingTarget User user, AcademicRequestUpdate academicRequestUpdate);
 
+
+
+
+
+
+
+    User fromInstructorRequest(InstructorRequest instructorRequest);
+
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromInstructorRequest(@MappingTarget User user, InstructorRequestUpdate instructorRequestUpdate);
+
+
+
+
+
+
+    User fromStaffRequest(StaffRequest staffRequest);
 
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -107,8 +89,16 @@ public interface UserMapper {
 
 
 
+
+
+
+    User fromStudentRequest(StudentRequest studentRequest);
+
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStudentRequest(@MappingTarget User user, StudentRequestUpdate studentRequestUpdate);
+
+
 
 
 }

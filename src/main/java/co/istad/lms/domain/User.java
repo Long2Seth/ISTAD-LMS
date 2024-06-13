@@ -52,19 +52,18 @@ public class User extends Auditable {
     @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 100)
+
     private String password;
+
+    private String rawPassword;
 
     private String profileImage;
 
     @Column(length = 20)
     private String phoneNumber;
 
-    private String cityOrProvince;
-    private String khanOrDistrict;
-    private String sangkatOrCommune;
-    private String villageOrPhum;
-    private String street;
+    @Column(columnDefinition = "TEXT")
+    private String currentAddress;
 
     @Column(name = "birth_place", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)

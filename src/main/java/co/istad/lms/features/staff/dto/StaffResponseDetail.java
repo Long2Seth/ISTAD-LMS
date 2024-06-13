@@ -18,10 +18,7 @@ public record StaffResponseDetail(
         String email,
         String profileImage,
         String phoneNumber,
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
+        String currentAddress,
         JsonBirthPlace birthPlace
 ) {
 }

@@ -34,6 +34,8 @@ public class StudentServiceImpl implements StudentService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
+
+
     @Override
     public Set<Authority> getDefaultAuthoritiesStudent() {
         // Set default authorities

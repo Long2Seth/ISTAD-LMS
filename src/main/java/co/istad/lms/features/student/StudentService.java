@@ -20,7 +20,7 @@ public interface StudentService {
 
 
     /**
-     * Retrieves a list of students detail.
+     * Retrieves a list of students detail.z
      * @return {@link Page<StudentResponse>}
      * @since 1.0 (2024)
      */

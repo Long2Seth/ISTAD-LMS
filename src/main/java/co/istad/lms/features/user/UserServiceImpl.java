@@ -105,6 +105,7 @@ public class UserServiceImpl implements UserService {
                     String.format("User email = %s has already been existed!", userRequest.email()));
         }
 
+
         // Map user request to user
         User user = userMapper.fromUserRequest(userRequest);
         // Set user uuid
@@ -121,6 +122,10 @@ public class UserServiceImpl implements UserService {
         Set<Authority> allAuthorities = new HashSet<>();
         for (String authorityName : userRequest.authorityNames()) {
             Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
+            if (foundAuthorities.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Authority with name = %s not found!", authorityName));
+            }
             allAuthorities.addAll(foundAuthorities);
         }
 
@@ -142,21 +147,6 @@ public class UserServiceImpl implements UserService {
 
         // Update user from request object that map user request to user
         userMapper.updateUserFromRequest(user, userRequest);
-
-        // Set the authorities of the user from the authorities of the adminRequest
-//        Set<Authority> allAuthorities = new HashSet<>();
-//        if (userRequest.authorities() == null || userRequest.authorities().isEmpty()) {
-//            for (Authority request : user.getAuthorities()) {
-//                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.getAuthorityName());
-//                allAuthorities.addAll(foundAuthorities);
-//            }
-//        } else {
-//            for (AuthorityRequestToUser request : userRequest.authorities()) {
-//                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(request.authorityName());
-//                allAuthorities.addAll(foundAuthorities);
-//            }
-//            user.setAuthorities(allAuthorities);
-//        }
 
         return userMapper.toUserResponse(userRepository.save(user));
 

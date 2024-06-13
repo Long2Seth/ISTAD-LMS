@@ -63,9 +63,12 @@ public class StaffServiceImpl implements StaffService {
         Set<Authority> allAuthorities = new HashSet<>();
         for (String authorityName : staffRequest.authorityNames()) {
             Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
+            if (foundAuthorities.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Authority with name = %s not found!", authorityName));
+            }
             allAuthorities.addAll(foundAuthorities);
         }
-        user.setAuthorities(allAuthorities);
 
         // Save the user
         userRepository.save(user);

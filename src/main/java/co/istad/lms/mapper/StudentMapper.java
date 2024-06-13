@@ -33,10 +33,7 @@ public interface StudentMapper {
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.profileImage", target = "profileImage")
     @Mapping(source = "user.phoneNumber", target = "phoneNumber")
-    @Mapping(source = "user.cityOrProvince", target = "cityOrProvince")
-    @Mapping(source = "user.khanOrDistrict", target = "khanOrDistrict")
-    @Mapping(source = "user.sangkatOrCommune", target = "sangkatOrCommune")
-    @Mapping(source = "user.street", target = "street")
+    @Mapping(source = "user.currentAddress", target = "currentAddress")
     @Mapping(source = "user.birthPlace", target = "birthPlace")
     StudentResponseDetail toResponseDetail(Student student);
 

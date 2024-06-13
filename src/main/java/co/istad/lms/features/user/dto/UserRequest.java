@@ -1,13 +1,11 @@
 package co.istad.lms.features.user.dto;
 
-import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
-import jakarta.validation.Valid;
+
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import org.checkerframework.checker.regex.qual.Regex;
+
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -50,6 +48,7 @@ public record UserRequest(
         String profileImage,
 
         @Size(max = 20, message = "Phone number must be less than or equal to 20 characters")
+        @Pattern(regexp = "\\d+", message = "Phone number must contain only digits")
         String phoneNumber,
 
         @NotNull(message = "authorities is required")
