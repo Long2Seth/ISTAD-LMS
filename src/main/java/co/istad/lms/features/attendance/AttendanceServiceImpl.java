@@ -49,6 +49,13 @@ public class AttendanceServiceImpl implements AttendanceService {
         //validate student from DTO by uuid
         Student student = studentRepository.findByUuid(attendanceRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", attendanceRequest.studentUuid())));
 
+        //check duplicate attendance by student and lecture
+        if (attendanceRepository.existsByStudentAndLecture(student, lecture)) {
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("attendance with student =n %s and " +
+                    "lecture  = %s has already existed", student.getUser().getUuid(), lecture.getUuid()));
+        }
+
         // map DTO to entity
         Attendance attendance = attendanceMapper.fromAttendanceRequest(attendanceRequest);
 

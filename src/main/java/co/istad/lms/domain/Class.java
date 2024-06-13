@@ -29,7 +29,7 @@ public class Class extends Auditable {
     private String uuid;
 
     @Column(nullable = false)
-    private String className;
+    private String classCode;
 
     @Column(nullable = false)
     Integer year;

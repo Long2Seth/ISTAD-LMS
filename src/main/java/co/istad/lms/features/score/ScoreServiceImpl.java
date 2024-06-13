@@ -47,6 +47,13 @@ public class ScoreServiceImpl implements ScoreService {
         //map from DTO to entity
         Score score = scoreMapper.fromScoreRequest(scoreRequest);
 
+        //validate duplicate score for a student by course
+        if(scorerRepository.existsByStudentAndCourse(student,course)){
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("score with student = %s and course  " +
+                    "= %s has already existed",student.getUser().getUuid(),course.getUuid()));
+        }
+
         //set student to score
         score.setStudent(student);
 

@@ -12,10 +12,10 @@ import java.time.LocalTime;
 
 public record ShiftUpdateRequest(
 
-        @Size(max = 50, message = "Alias cannot be longer than 50 characters")
+        @Size(max = 100, message = "alias cannot be longer than 100 characters")
         String alias,
 
-        @Size(max = 100, message = "Name cannot be longer than 100 characters")
+        @Size(max = 100, message = "name cannot be longer than 100 characters")
         String name,
 
         String startTime,

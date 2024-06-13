@@ -56,6 +56,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         //validate logo from DTO
         if (studyProgramRequest.logo() != null && !studyProgramRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studyProgramRequest.logo())) {
+
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     studyProgramRequest.logo()));
         }
@@ -150,6 +151,7 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         //update logo url for studyProgram
         if (studyProgramUpdateRequest.logo() != null && !studyProgramUpdateRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studyProgramUpdateRequest.logo())) {
+
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
                     studyProgramUpdateRequest.logo()));
         }

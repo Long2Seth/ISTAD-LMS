@@ -26,7 +26,7 @@ public class StudyProgram extends Auditable {
     @Column(nullable = false, length = 100, unique = true)
     private String alias;
 
-    @Column( length = 50,nullable = false)
+    @Column(nullable = false)
     private String studyProgramName;
 
     @Column(columnDefinition = "TEXT")

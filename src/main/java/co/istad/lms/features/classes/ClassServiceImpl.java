@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -333,6 +334,9 @@ public class ClassServiceImpl implements ClassService {
                 classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Class = %s has not been found", uuid)));
 
+        //get all course form class
+        Set<Course> courses = aClass.getCourses();
+
         //find all studentAdmission from DTO in database to add by student uuid
         Set<StudentAdmission> studentAdmissions =
                 classAddStudentRequest.studentAdmissionUuid().stream().peek(studentAdmissionUuid -> {
@@ -342,20 +346,22 @@ public class ClassServiceImpl implements ClassService {
                 }).map(studentAdmissionUuid ->
                         studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
 
+        Set<User> users=new HashSet<>();
+
         //add all studentAdmission to student
         Set<Student> students = studentAdmissions.stream()
-                .map( studentAdmission ->  {
+                .map(studentAdmission -> {
 
                     //if studentAdmission already add to class(also has in student and user table)
                     if (studentAdmission.isStudent()) {
 
                         //get student from student table
                         Student student =
-                                studentRepository.findByUuid(studentAdmission.getUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Student = %s has not been found",studentAdmission.getStudentUuid())));
+                                studentRepository.findByUuid(studentAdmission.getStudentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studentAdmission.getStudentUuid())));
 
 
                         //get all class that student study
-                        Set<Class> classes=student.getClasses();
+                        Set<Class> classes = student.getClasses();
 
                         //add new class to set of class of student
                         classes.add(aClass);
@@ -363,10 +369,23 @@ public class ClassServiceImpl implements ClassService {
                         //set classes to student
                         student.setClasses(classes);
 
+                        Set<Course> studentCourses=new HashSet<>();
+                        if(student.getCourses()!=null){
+
+                            //get all course that student enrolled
+                            studentCourses=student.getCourses();
+                        }
+
+                        //add all course in class to student course(appen on old course that student enrolled)
+                        studentCourses.addAll(courses);
+
+                        //set all course(include course that student enrolled before and new course from class)
+                        student.setCourses(studentCourses);
+
                         return student;
                     }
                     //admission that doesn't add to class yet(not student)
-                    else{
+                    else {
 
                         //map from student admission
                         Student student = studentAdmissionMapper.toStudent(studentAdmission);
@@ -386,13 +405,14 @@ public class ClassServiceImpl implements ClassService {
                         user.setUuid(UUID.randomUUID().toString());
 
                         //random password for user(student)
-                        user.setPassword(passwordEncoder.encode(generateStrongPassword()));
+                        user.setRawPassword(generateStrongPassword());
+
 
                         user.setIsDeleted(false);
                         user.setStatus(false);
 
                         //set userName to user
-                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s", "-") + "-" + studentAdmission.getDob());
+                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s+", "-") + "-" + studentAdmission.getDob());
 
                         //set user information
                         user.setIsChangePassword(false);
@@ -404,8 +424,10 @@ public class ClassServiceImpl implements ClassService {
                         user.setAuthorities(studentService.getDefaultAuthoritiesStudent());
 
                         // set user to student
-                        student.setUser(userRepository.save(user));
+                        student.setUser(user);
 
+                        //add user to user Set
+                        users.add(user);
 
                         //set student uuid to admission
                         studentAdmission.setStudentUuid(student.getUuid());
@@ -414,11 +436,27 @@ public class ClassServiceImpl implements ClassService {
                         studentAdmission.setStudent(true);
 
 
+                        Set<Course> studentCourses=new HashSet<>();
+                        if(student.getCourses()!=null){
+
+                            //get all course that student enrolled
+                            studentCourses=student.getCourses();
+                        }
+
+                        //add all course in class to student course(appen on old course that student enrolled)
+                        studentCourses.addAll(courses);
+
+                        //set all course(include course that student enrolled before and new course from class)
+                        student.setCourses(studentCourses);
+
                         return student;
                     }
 
                 })
                 .collect(Collectors.toSet());
+
+        //save user to database
+        userRepository.saveAll(users);
 
         //save student to database
         studentRepository.saveAll(students);
@@ -511,7 +549,7 @@ public class ClassServiceImpl implements ClassService {
 
         PasswordGenerator generator = new PasswordGenerator();
 
-        return generator.generatePassword(8, Arrays.asList(
+        return generator.generatePassword(10, Arrays.asList(
                 lowercaseRule,
                 uppercaseRule,
                 digitRule,

@@ -14,6 +14,6 @@ import java.util.Set;
     public record ClassResponse(
 
             String uuid,
-            String className
+            String classCode
     ) {
     }

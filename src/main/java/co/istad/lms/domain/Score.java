@@ -21,9 +21,7 @@ public class Score extends Auditable {
 
     @Column(  nullable = false,unique = true,length = 100)
     private String uuid;
-
-    @Column(nullable = false)
-    private Integer semester;
+    
 
     private Double activityScore;
 

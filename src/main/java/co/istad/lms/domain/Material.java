@@ -21,7 +21,7 @@ public class Material extends Auditable {
     @Column(nullable = false, unique = true,length = 100)
     private String alias;
 
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String title;
 
     private String contentType;

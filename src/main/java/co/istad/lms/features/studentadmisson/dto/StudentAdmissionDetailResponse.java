@@ -12,7 +12,7 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import java.time.LocalDate;
 
 public record StudentAdmissionDetailResponse(
-        Long id,
+
         String uuid,
         String nameEn,
         String nameKh,
@@ -20,7 +20,7 @@ public record StudentAdmissionDetailResponse(
         String highSchool,
         String phoneNumber,
         LocalDate dob,
-        String pob,
+        String birthPlace,
         String bacIiGrade,
         String gender,
         String avatar,

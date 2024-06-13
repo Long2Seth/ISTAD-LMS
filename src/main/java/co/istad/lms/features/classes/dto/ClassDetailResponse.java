@@ -14,7 +14,7 @@ import java.util.Set;
 public record ClassDetailResponse(
 
         String uuid,
-        String className,
+        String classCode,
         String description,
         Boolean isDeleted,
         Boolean isDraft,

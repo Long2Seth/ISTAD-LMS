@@ -6,8 +6,7 @@ import java.time.LocalDate;
 
 public record CourseUpdateRequest(
 
-        LocalDate courseStart,
-
+        String  courseStart,
         Integer status
 ) {
 }

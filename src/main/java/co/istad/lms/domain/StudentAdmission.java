@@ -24,26 +24,26 @@ public class StudentAdmission extends Auditable {
     @Column(nullable = false, unique = true,length = 100)
     private String uuid;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String nameEn;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String nameKh;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String email;
 
     @Column(nullable = false,columnDefinition = "TEXT")
     private String highSchool;
 
-    @Column(length = 50)
+    @Column(length = 100)
     private String phoneNumber;
 
     @Column(nullable = false)
     private LocalDate dob;
 
     @Column(columnDefinition = "TEXT")
-    private String pob;
+    private String birthPlace;
 
     @Column(length = 10)
     private String bacIiGrade;

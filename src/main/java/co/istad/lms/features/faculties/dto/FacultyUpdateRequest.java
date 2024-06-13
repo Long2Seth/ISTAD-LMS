@@ -8,10 +8,10 @@ import javax.swing.text.StyledEditorKit;
 
 public record FacultyUpdateRequest(
 
-
+        @Size(max = 100, message = "name cannot be longer than 100 characters")
         String alias,
 
-        @Size(max = 50, message = "Name cannot be longer than 50 characters")
+        @Size(max = 100, message = "name cannot be longer than 100 characters")
         String name,
 
         String description,

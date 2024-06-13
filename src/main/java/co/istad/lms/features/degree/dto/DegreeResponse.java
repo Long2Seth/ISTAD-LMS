@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public record DegreeResponse(
 
         String alias,
-        String level,
-        String description
+        String level
 ) {
 }
