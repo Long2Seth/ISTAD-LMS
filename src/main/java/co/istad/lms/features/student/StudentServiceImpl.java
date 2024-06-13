@@ -6,6 +6,7 @@ import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper;
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
@@ -90,40 +92,43 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void createStudent(StudentRequest studentRequest) {
-
-        // Check if user exists by email or username that find in userRepository if not throw exception
-        if (userRepository.existsByEmailOrUsername(studentRequest.email(), studentRequest.username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.email()));
+        // Check if the email already exists from the database
+        if (userRepository.existsByEmail(studentRequest.email())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with email = %s already exists", studentRequest.email())
+            );
         }
-
 
         // Map user request to user
         User user = userMapper.fromStudentRequest(studentRequest);
 
         user.setUuid(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(studentRequest.password()));
         user.setIsDeleted(false);
         user.setStatus(false);
+        user.setRawPassword(userService.generateStrongPassword(10));
+        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+        user.setUsername(studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob());
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setAuthorities(getDefaultAuthoritiesStudent());
 
-        //Save user
+        // Save user
         userRepository.save(user);
 
         // Map student request to student
         Student student = studentMapper.toRequest(studentRequest);
         student.setUuid(UUID.randomUUID().toString());
 
-        // Save user
+        // Save user in student
         student.setUser(user);
 
         // Save student
         studentRepository.save(student);
-
     }
+
 
 
     @Override
@@ -138,7 +143,7 @@ public class StudentServiceImpl implements StudentService {
                 );
 
         // Check if user exists by email or username that find in userRepository if not throw exception
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(studentRequest.email(), studentRequest.username(), uuid)) {
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(studentRequest.email(), user.getUsername(), uuid)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.email()));
         }
 

@@ -8,7 +8,6 @@ public record StudentRequestUpdate(
 
         String nameEn,
         String nameKh,
-        String username,
         String gender,
         LocalDate dob,
         String email,

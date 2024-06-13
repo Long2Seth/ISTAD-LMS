@@ -27,7 +27,6 @@ public record AdminRequestUpdate(
 
         String nameKh,
 
-        String username,
 
         String gender,
 

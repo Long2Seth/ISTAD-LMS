@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(UserRequest userRequest) {
 
         // Validate if user exists by email or username
-        if (userRepository.existsByEmailOrUsername(userRequest.email(), userRequest.username())) {
+        if (userRepository.existsByEmail(userRequest.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     String.format("User email = %s has already been existed!", userRequest.email()));
         }
@@ -179,6 +179,7 @@ public class UserServiceImpl implements UserService {
 
         user.setRawPassword(generateStrongPassword(10));
         user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+        user.setUsername(userRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + userRequest.dob());
         user.setIsDeleted(false);
         user.setStatus(false);
         user.setIsChangePassword(false);

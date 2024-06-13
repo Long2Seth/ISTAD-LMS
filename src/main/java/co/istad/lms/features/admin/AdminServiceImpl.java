@@ -9,6 +9,7 @@ import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequest;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.mapper.AdminMapper;
@@ -39,13 +40,17 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
 
     public void createAdmin(@Valid AdminRequest adminRequest) {
-        // Check if the user already exists
-        if (userRepository.existsByEmailOrUsername(adminRequest.email(), adminRequest.username())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s already exists", adminRequest.email(), adminRequest.username()));
+
+        // Check if the email already exists from database
+        if (userRepository.existsByEmail(adminRequest.email())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with email = %s have already exists", adminRequest.email())
+            );
         }
 
         // Map adminRequest to Admin entity using MapStruct
@@ -55,7 +60,9 @@ public class AdminServiceImpl implements AdminService {
         // Map adminRequest to User entity using MapStruct
         User user = userMapper.fromAdminRequest(adminRequest);
         user.setUuid(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(adminRequest.password()));
+        user.setRawPassword(userService.generateStrongPassword(10));
+        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+        user.setUsername(adminRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + adminRequest.dob());
         user.setStatus(false);
         user.setIsDeleted(false);
         user.setIsChangePassword(false);
@@ -89,9 +96,9 @@ public class AdminServiceImpl implements AdminService {
                         String.format("User with UUID = %s not found", uuid)));
 
         // Check if the user with the provided email or username already exists (excluding current user)
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(adminRequestDetail.email(), adminRequestDetail.username(), user.getUuid())) {
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(adminRequestDetail.email(), user.getUsername(), user.getUuid())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s already exists", adminRequestDetail.email(), adminRequestDetail.username()));
+                    String.format("User with email = %s or username = %s already exists", adminRequestDetail.email(), user.getUsername()));
         }
 
         // Update the user fields from the admin request

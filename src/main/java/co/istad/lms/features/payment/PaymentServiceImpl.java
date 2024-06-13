@@ -87,6 +87,14 @@ public class PaymentServiceImpl implements PaymentService {
         // Set the status based on the balance due
         payment.setStatus(Boolean.valueOf(balanceDue == 0 ? "Paid" : "Unpaid"));
 
+        if (paymentRequest.paidAmount() > payment.getCourseFee()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Paid amount must be less than course fee");
+        }
+
+//        if (paymentRequest.paidAmount() > payment.getBalanceDue()) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Paid amount must be less than balance due");
+//        }
+
         // Save the payment to the repository
         paymentRepository.save(payment);
 
@@ -133,7 +141,7 @@ public class PaymentServiceImpl implements PaymentService {
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 String.format("Payment with uuid = %s have been not found", uuid))
                 );
-        
+
         // update payment
         paymentMapper.updatePaymentFromRequest(payment, paymentRequest);
 

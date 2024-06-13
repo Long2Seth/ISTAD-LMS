@@ -32,7 +32,6 @@ public record AcademicRequestDetail
 
                 String nameKh,
 
-                String username,
 
                 String gender,
 

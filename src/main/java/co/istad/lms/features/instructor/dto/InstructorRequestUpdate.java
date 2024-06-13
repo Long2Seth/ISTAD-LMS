@@ -27,8 +27,6 @@ public record InstructorRequestUpdate(
 
         String nameKh,
 
-        String username,
-
         String gender,
 
         LocalDate dob,

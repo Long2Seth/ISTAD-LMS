@@ -15,8 +15,6 @@ public record StaffRequestUpdate(
 
         String nameKh,
 
-        String username,
-
         String gender,
 
         LocalDate dob,

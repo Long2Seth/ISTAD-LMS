@@ -31,8 +31,6 @@ public record AdminRequestDetail(
 
         String nameKh,
 
-        String username,
-
         String gender,
 
         LocalDate dob,

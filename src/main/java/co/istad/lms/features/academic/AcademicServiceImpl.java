@@ -10,6 +10,7 @@ import co.istad.lms.features.academic.dto.*;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.AcademicMapper;
 import co.istad.lms.mapper.UserMapper;
@@ -37,6 +38,7 @@ public class AcademicServiceImpl implements AcademicService {
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final UserService userService;
 
 
 
@@ -44,10 +46,11 @@ public class AcademicServiceImpl implements AcademicService {
     public void createAcademic(AcademicRequest academicRequest) {
 
         // check if user with email or username already exists in the database
-        if (userRepository.existsByEmailOrUsername(academicRequest.email(), academicRequest.username())) {
+        // Check if the email already exists from database
+        if (userRepository.existsByEmail(academicRequest.email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with email = %s and username = %s already exists", academicRequest.email(), academicRequest.username())
+                    String.format("User with email = %s have already exists", academicRequest.email())
             );
         }
 
@@ -59,8 +62,9 @@ public class AcademicServiceImpl implements AcademicService {
         User user = userMapper.fromAcademicRequest(academicRequest);
         // set user details
         user.setUuid(UUID.randomUUID().toString());
-        user.setPassword(passwordEncoder.encode(academicRequest.password()));
-        user.setStatus(false);
+        user.setRawPassword(userService.generateStrongPassword(10));
+        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+        user.setUsername(academicRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + academicRequest.dob());        user.setStatus(false);
         user.setIsDeleted(false);
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
@@ -98,9 +102,9 @@ public class AcademicServiceImpl implements AcademicService {
                         String.format("User with UUID = %s not found", uuid)));
 
         // Check if the user with the provided email or username already exists (excluding current user)
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(academicRequestDetail.email(), academicRequestDetail.username(), user.getUuid())) {
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(academicRequestDetail.email(), user.getUsername(), user.getUuid())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s already exists", academicRequestDetail.email(), academicRequestDetail.username()));
+                    String.format("User with email = %s or username = %s already exists", academicRequestDetail.email(), user.getUsername()));
         }
 
         // Update the user fields from the academic request

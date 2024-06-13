@@ -27,8 +27,6 @@ public record InstructorRequestDetail(
 
         String nameKh,
 
-        String username,
-
         String gender,
 
         LocalDate dob,

@@ -20,10 +20,6 @@ public record UserRequest(
         @Size(max = 50, message = "Khmer name must be less than or equal to 50 characters")
         String nameKh,
 
-        @NotBlank(message = "Username is required")
-        @Size(max = 50, message = "Username must be less than or equal to 50 characters")
-        @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]*$", message = "Username must start with a letter and contain only letters and numbers")
-        String username,
 
         @NotBlank(message = "Gender is required")
         @Size(max = 10, message = "Gender must be less than or equal to 10 characters")

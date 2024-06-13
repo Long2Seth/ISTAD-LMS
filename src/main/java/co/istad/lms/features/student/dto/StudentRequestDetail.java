@@ -11,7 +11,6 @@ import java.util.Set;
 public record StudentRequestDetail (
         String nameEn,
         String nameKh,
-        String username,
         String gender,
         LocalDate dob,
         String email,

@@ -1,15 +1,9 @@
 package co.istad.lms.features.student.dto;
 
-import co.istad.lms.features.user.dto.UserRequest;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-
 import java.time.LocalDate;
-import java.util.Set;
 
 public record StudentRequest(
-
-
         @NotBlank(message = "English name is required")
         @Size(max = 50, message = "English name must be less than or equal to 50 characters")
         String nameEn,
@@ -17,11 +11,6 @@ public record StudentRequest(
         @NotBlank(message = "Khmer name is required")
         @Size(max = 50, message = "Khmer name must be less than or equal to 50 characters")
         String nameKh,
-
-        @NotBlank(message = "Username is required")
-        @Size(max = 50, message = "Username must be less than or equal to 50 characters")
-        @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]*$", message = "Username must start with a letter and contain only letters and numbers")
-        String username,
 
         @NotBlank(message = "Gender is required")
         @Size(max = 10, message = "Gender must be less than or equal to 10 characters")
@@ -35,17 +24,16 @@ public record StudentRequest(
         @Size(max = 100, message = "Email must be less than or equal to 100 characters")
         String email,
 
-        @NotBlank(message = "Password is required")
-        @Size(min = 8, message = "Password must be at least 8 characters")
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-                message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
-        String password,
-
         @NotBlank(message = "Profile image is required")
         @Size(max = 255, message = "Profile image must be less than or equal to 255 characters")
         String profileImage,
 
         @Size(max = 20, message = "Phone number must be less than or equal to 20 characters")
-        String phoneNumber
+        String phoneNumber,
+
+        @NotBlank(message = "High school is required")
+        String highSchool
+
+        // Add other necessary fields here with appropriate validation
 ) {
 }

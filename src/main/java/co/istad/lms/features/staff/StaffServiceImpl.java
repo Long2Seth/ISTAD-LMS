@@ -9,6 +9,7 @@ import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.staff.dto.*;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.StaffMapper;
 import co.istad.lms.mapper.UserMapper;
@@ -36,22 +37,25 @@ public class StaffServiceImpl implements StaffService {
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
 
     @Override
     public void createStaff(StaffRequest staffRequest) {
 
-
-        if (userRepository.existsByUsername(staffRequest.username())) {
+        // Check if the email already exists from database
+        if (userRepository.existsByEmail(staffRequest.email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with username = %s already exists", staffRequest.username())
+                    String.format("User with email = %s have already exists", staffRequest.email())
             );
         }
 
         // Save the user first
         User user = userMapper.fromStaffRequest(staffRequest);
-        user.setPassword(passwordEncoder.encode(staffRequest.password()));
+        user.setRawPassword(userService.generateStrongPassword(10));
+        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+        user.setUsername(staffRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + staffRequest.dob());
         user.setUuid(UUID.randomUUID().toString());
         user.setIsDeleted(false);
         user.setStatus(false);
@@ -99,10 +103,10 @@ public class StaffServiceImpl implements StaffService {
 
 
         // Check if the user exists
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(staffRequestUpdate.email(), staffRequestUpdate.username() ,uuid)) {
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(staffRequestUpdate.email(), user.getUsername() ,uuid)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("User with email = %s or username = %s already exists", staffRequestUpdate.email(), staffRequestUpdate.username())
+                    String.format("User with email = %s or username = %s already exists", staffRequestUpdate.email(), user.getUsername())
             );
         }
 

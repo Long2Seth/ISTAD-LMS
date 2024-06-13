@@ -26,8 +26,6 @@ public record AcademicRequestUpdate(
 
         String nameKh,
 
-        String username,
-
         String gender,
 
         LocalDate dob,
