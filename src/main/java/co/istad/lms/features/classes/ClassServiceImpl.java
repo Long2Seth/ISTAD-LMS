@@ -386,7 +386,7 @@ public class ClassServiceImpl implements ClassService {
                         user.setUuid(UUID.randomUUID().toString());
 
                         //random password for user(student)
-                        user.setPassword(passwordEncoder.encode(generateStrongPassword()));
+                        user.setRawPassword(generateStrongPassword());
 
                         user.setIsDeleted(false);
                         user.setStatus(false);
