@@ -31,20 +31,12 @@ public interface AdminMapper {
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.profileImage", target = "profileImage")
     @Mapping(source = "user.phoneNumber", target = "phoneNumber")
-    @Mapping(source = "user.cityOrProvince", target = "cityOrProvince")
-    @Mapping(source = "user.khanOrDistrict", target = "khanOrDistrict")
-    @Mapping(source = "user.sangkatOrCommune", target = "sangkatOrCommune")
-    @Mapping(source = "user.street", target = "street")
     @Mapping(source = "user.birthPlace", target = "birthPlace")
     AdminResponseDetail toAdminResponseDetail(Admin admin);
 
-    AdminRequestUpdate toAdminRequestUpdate(Admin admin);
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateAdminFromRequest(@MappingTarget Admin admin, AdminRequestUpdate adminRequestUpdate);
-
-//    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-//    @Mapping(target = "admin.user", source = "adminRequestDetail.user",qualifiedByName = "updateUserDetailFromRequest")
-//    void updateAdminFromRequest( @MappingTarget Admin admin, AdminRequestDetail adminRequestDetail );
 
 }

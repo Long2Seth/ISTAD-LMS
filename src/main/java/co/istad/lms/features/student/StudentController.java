@@ -105,6 +105,7 @@ public class StudentController {
     @GetMapping("/profile")
     @PreAuthorize("hasAnyAuthority('academic:read')")
     public String getProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        System.out.println(" User deatil : " + userDetails.getUsername());
         return userDetails.getUsername();
     }
 

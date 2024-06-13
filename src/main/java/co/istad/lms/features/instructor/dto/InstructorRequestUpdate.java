@@ -40,13 +40,7 @@ public record InstructorRequestUpdate(
 
         String phoneNumber,
 
-        String cityOrProvince,
-
-        String khanOrDistrict,
-
-        String sangkatOrCommune,
-
-        String street,
+        String currentAddress,
 
         JsonBirthPlace birthPlace
 

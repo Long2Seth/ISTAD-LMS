@@ -13,6 +13,7 @@ import java.util.Set;
 public record InstructorRequest(
 
         @NotBlank(message = "Position is required")
+        @Size(max = 255, message = "Position must be less than or equal to 255 characters")
         String position,
 
         @NotBlank(message = "English name is required")

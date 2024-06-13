@@ -1,6 +1,7 @@
 package co.istad.lms.features.user;
 
 
+import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,12 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmailOrUsername(String email, String username);
+
 
     boolean existsByUsername(String username);
 
@@ -25,6 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailOrUsername(String email, String username);
 
     Optional<User> findByUuid(String uuid);
+
+    Optional<User> findByEmail(String email);
 
     Optional<User> findByUsername(String username);
 

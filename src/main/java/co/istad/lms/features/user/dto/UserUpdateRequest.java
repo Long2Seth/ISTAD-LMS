@@ -15,10 +15,7 @@ public record UserUpdateRequest(
         String password,
         String profileImage,
         String phoneNumber,
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
+        String currentAddress,
         JsonBirthPlace birthPlace
 ) {
 }

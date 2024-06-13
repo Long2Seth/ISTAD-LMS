@@ -27,13 +27,7 @@ public record StaffRequestUpdate(
 
         String phoneNumber,
 
-        String cityOrProvince,
-
-        String khanOrDistrict,
-
-        String sangkatOrCommune,
-
-        String street,
+        String currentAddress,
 
         JsonBirthPlace birthPlace
 

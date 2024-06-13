@@ -4,6 +4,7 @@ import co.istad.lms.domain.User;
 import co.istad.lms.features.password.dto.*;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.mapper.UserMapper;
+import jakarta.websocket.Decoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,10 +54,14 @@ public class PasswordServiceImpl implements PasswordService {
 
     @Override
     public ResponsePassword viewPasswordByUsernameOrEmail(RequestPasswordByUsernameOrEmail request) {
+
         // Find the user by email or username
         User user = userRepository.findByEmailOrUsername(request.usernameOrEmail(), request.usernameOrEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with email or username %s not found", request.usernameOrEmail())));
+
+//        user.setPassword(Decoder(user.getPassword());
+
         return userMapper.toResponsePassword(user);
     }
 

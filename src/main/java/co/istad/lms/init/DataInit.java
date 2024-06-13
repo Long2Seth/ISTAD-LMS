@@ -114,11 +114,7 @@ public class DataInit {
             user.setProfileImage("https://newogle.com");
             user.setPhoneNumber("0123456789");
             user.setDob(LocalDate.parse("1990-01-01"));
-            user.setCityOrProvince("Phnom Penh");
-            user.setKhanOrDistrict("Dangkao");
-            user.setSangkatOrCommune("Dangkao");
-            user.setVillageOrPhum("Dangkao");
-            user.setStreet("Dangkao");
+            user.setCurrentAddress("House 123 , Street 310 , Phum 4 , Boeung Keng Kang 1 , Chamkarmon , Phnom Penh , Cambodia");
             user.setStatus(false);
             user.setIsDeleted(false);
             user.setIsChangePassword(false);

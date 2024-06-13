@@ -71,6 +71,10 @@ public class AcademicServiceImpl implements AcademicService {
         Set<Authority> allAuthorities = new HashSet<>();
         for (String authorityName : academicRequest.authorityNames()) {
             Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
+            if (foundAuthorities.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Authority with name = %s not found!", authorityName));
+            }
             allAuthorities.addAll(foundAuthorities);
         }
         // set user to academic
