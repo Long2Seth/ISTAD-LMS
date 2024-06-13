@@ -66,14 +66,72 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 
 - **Please Login first:** 
-  - **username:** admin@gmail.com
+  - **username:** admin
   - **password:** Admin@123
 - **Access token expire:** 1 day
 - **Refresh token expire:** 3 day
+- **Auth type:** bearer token
+
+---
+## Authorities <a name=""></a>
+```json
+[
+  "faculty:write",
+  "faculty:update",
+  "faculty:delete",
+  "generation:read",
+  "generation:write",
+  "generation:update",
+  "generation:delete",
+  "shift:read",
+  "shift:write",
+  "shift:update",
+  "shift:delete",
+  "academic:read",
+  "academic:write",
+  "academic:update",
+  "academic:delete",
+  "assessment:read",
+  "assessment:write",
+  "assessment:update",
+  "assessment:delete",
+  "class:read",
+  "class:write",
+  "class:update",
+  "class:delete",
+  "course:read",
+  "course:write",
+  "course:update",
+  "course:delete",
+  "session:read",
+  "session:write",
+  "session:update",
+  "session:delete",
+  "material:read",
+  "material:write",
+  "material:update",
+  "material:delete",
+  "admission:read",
+  "admission:write",
+  "admission:update",
+  "admission:delete",
+  "payment:read",
+  "payment:write",
+  "payment:update",
+  "payment:delete",
+  "user:read",
+  "user:write",
+  "user:update",
+  "user:delete",
+  "admin:control"
+]
+
+
+```
 
 ---
 ## DownLoad postman document <a name=""></a>
-- **Link:** https://drive.google.com/file/d/1f_HXE7LdqyFopPTr-r8ZhKKoR1yhE7U5/view?usp=sharing
+- **Link:** https://drive.google.com/file/d/14ogd3xXHBqXQWbZesgamNOcTHLV1Kw6v/view?usp=sharing
 ---
 ## ISTAD LMS API <a name="istad-lms-api"></a>
 
@@ -87,7 +145,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **login** 
+- **login**
   - **Description:** Endpoint to login.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/auth/login`
@@ -96,9 +154,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "emailOrUsername": "admin@gmail.com",
+  "emailOrUsername": "johndoe11",
 
-  "password": "admin"
+  "password": "PZ19G?%khX"
+  
 
 }
 
@@ -106,7 +165,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **register(not use)** 
+- **register(not use)**
   - **Description:** Endpoint to register(not use).
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/auth/register`
@@ -155,7 +214,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **refresh** 
+- **refresh**
   - **Description:** Endpoint to refresh.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/auth/refresh`
@@ -164,7 +223,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "refreshToken": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJJVFNBRC1MTVMiLCJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE3MTg1NTE4NTQsImlhdCI6MTcxNzk0NzA1NH0.fuj9CvC0k6-oPjbqDAA5ypQAdhtRetA5oriQrTrBopgUTiETbNdHI08QvHu4lCOxYfthxnn-2ZhhyvjBjUdXlNi1DqNjLPaya-p-P4sEA8KkjwaE8avtUs4NY7MZolbik0tTgRlhhIex0Y9PMVc3OmQH9XUS8u37XqlDnoygYjM_e5rK13IckGCpva9mapUPTMq-_rE7lueiQu0NcuknOvnT-OcSFM2n6zYjGn7ajEApOjtPUE2smGAZjQytUOQpYg-NfMXM8CMBfXIUDvF0I00idw5DpdSoDnKQXA5vwp4ruIdiJD7pFmB3OPpIHzRU9fWBN63PnHlzjXoMOzEOiw"
+  "refreshToken": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJJVFNBRC1MTVMiLCJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE3MTgyNDYwMTUsImlhdCI6MTcxNzk4NjgxNX0.naoW81giheIX23Va9BnOg23rdfaO00TRkfDECVS9rL-tYOR4wvyh09j9BevWb2uQ7AgsHqsE-1Mft5V_Rh6_-ZhM_h9CxEO1WHEaFGoBlo1nk2SbZgaxk37y41FU3LFVASWueCSryyh8g0G5XuEDEePgQ88yzB3C-cHBMRbprTdS0wRgPnL0DA5SwoDeVt5NmrHIuYs6hKTZiq2ZqswDtiAwAkpEPn19et154zI6h6TdWGqlJ4-zxccQGBTQBNMnBhE4KkEK9add9ON0JKFEV5ZZYHRYJ6JbzC_y7e0BshbbJLVJhO-FS4tmQTghkI-4QubE7YbyM12bMk0o8FMOwA"
 
 }
 ```
@@ -176,37 +235,33 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getPassword** 
+- **getPassword**
   - **Description:** Endpoint to getpassword.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/password/view`
+  - **Endpoint:** `/api/v1/auth/passwords`
   - **Request Body:**
 
 ```json
 {
 
-    "usernameOrEmail" : "admin"
+    "usernameOrEmail" : "johndoe11"
 
 }
 ```
 - **Response:** No examples available
 
-- **changePassword** 
+- **changePassword**
   - **Description:** Endpoint to changepassword.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/password/change`
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/auth/passwords`
   - **Request Body:**
 
 ```json
 {
 
-  "emailOrUsername": "it.chhaya@gmail.com",
+    "newPassword": "NewPassword@123",
 
-  "oldPassword": "securepassword123",
-
-  "newPassword": "ChhayaISTAD@12",
-
-  "confirmNewPassword": "ChhayaISTAD@12"
+    "confirmPassword": "NewPassword@123"
 
 }
 
@@ -214,50 +269,16 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **resetPassword** 
+- **resetPassword**
   - **Description:** Endpoint to resetpassword.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/password/reset`
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/auth/passwords/reset`
   - **Request Body:**
 
 ```json
 {
 
-    "usernameOrEmail" : "john_doe"
-
-}
-```
-- **Response:** No examples available
-
-</details>
-
-## authority <a name="authority"></a>
-
-<details><summary>Show/Hide</summary>
-
-- **getAll** 
-  - **Description:** Endpoint to getall.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/authorities?pageNum=0&pageSize=50`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **create** 
-  - **Description:** Endpoint to create.
-  - **HTTP Method:** POST
-  - **Endpoint:** `/api/v1/authorities`
-  - **Request Body:**
-
-```json
-{
-
-    "authorityName": "student:read",
-
-    "description": null
+    "usernameOrEmail" : "johndoe11"
 
 }
 ```
@@ -275,7 +296,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/faculties`
@@ -284,23 +305,23 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-    "alias": "sciences-and-technologies",
+    "alias": "sciences-and-technologies-2",
 
     "name": "Sciences and Technologies",
 
     "description": "Sciences and technologies are interconnected fields that aim to understand and apply the natural and physical laws of the universe to develop innovative solutions and improve human life. The following information provides an overview of the various fields of sciences and technologies.",
 
-    "logo": "",
+     "logo": "e1d4a8de-43e2-4e46-ab9d-e2cfd8eb2ea3.png",
 
     "address": "123 University Ave",
 
-    "isDraft": false
+    "isDraft": "tr"
 
 }
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/faculties/sciences-and-technologies`
@@ -311,50 +332,50 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/faculties?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/faculties/business-management-i`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/faculties/sciences-and-technologies`
   - **Request Body:**
 
 ```json
 {
 
-    "name": "Business Management",
+    "name": "Sciences and Technologies",
 
     "description": "This department now also includes courses on artificial intelligence and machine learning.",
 
     "address": "456 College St",
 
-    "logo": ""
+    "logo": "d882cc3e-81bf-4c17-b9cc-7bdf31c7c2d0.png"
 
 }
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/faculties/mis`
+  - **Endpoint:** `/api/v1/faculties/business-management`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/faculties/filter?pageNumber=0&pageSize=25`
@@ -385,47 +406,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/faculties/business-management/enable`
+  - **Endpoint:** `/api/v1/faculties/sciences-and-technologies/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/faculties/business-management/public`
+  - **Endpoint:** `/api/v1/faculties/sciences-and-technologies/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/faculties/business-management/draft`
+  - **Endpoint:** `/api/v1/faculties/sciences-and-technologies/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/faculties/business-management/disable`
+  - **Endpoint:** `/api/v1/faculties/sciences-and-technologies/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -435,7 +456,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/degrees`
@@ -444,73 +465,69 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-    "alias":"bachelor",
+    "alias": "associate",
 
-    "level": "Bachelor Degree",
+    "level": "Associate Degree",
 
-    "description": "This is master degree for student who finished bachelor",
+    "description": "This is associate degree for student who finished bachelor",
 
-    "isDraft":false
+    "isDraft": false
 
 }
-
-
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/degrees/bachelor`
+  - **Endpoint:** `/api/v1/degrees/associate`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/degrees?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/degrees/master`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/degrees/associate`
   - **Request Body:**
 
 ```json
 {
 
-    "alias":"master-i",
+    "level": "Association",
 
-    "level": "Level 1",
-
-    "description": "This is the first level for master."
+    "description": "2 years of degree"
 
 }
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/degrees/master`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/degrees/filter?pageNumber=0&pageSize=25`
@@ -541,47 +558,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/degrees/master-i/enable`
+  - **Endpoint:** `/api/v1/degrees/associate/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/degrees/master-i/disable`
+  - **Endpoint:** `/api/v1/degrees/associate/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/degrees/master-i/public`
+  - **Endpoint:** `/api/v1/degrees/associate/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/degrees/master-i/draft`
+  - **Endpoint:** `/api/v1/degrees/associate/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -591,7 +608,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/study-programs`
@@ -600,49 +617,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-    "alias": "management-information-systems-master-i",
+    "alias": "software-engineering-bachelor",
 
-    "studyProgramName": "Master of Management Information Systems",
+    "studyProgramName": "Bachelor of Software Engineering",
+  
 
-    "logo":"",
+    "description": "The Bachelor of Management Information Systems (MIS) is a degree program that focuses on the application of technology to solve business problems.",
 
-    "description": "The Master of Management Information Systems (MIS) is a degree program that focuses on the application of technology to solve business problems.",
+    "facultyAlias": "sciences-and-technologies",
 
-    "facultyAlias": "business-management",
+    "degreeAlias": "associate",
 
-    "degreeAlias": "master-i",
-
-    "isDraft":false
+    "isDraft": false
 
 }
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master-i`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/study-programs/software-engineering-bachelor`
   - **Request Body:**
 
 ```json
 {
 
-    "alias": "management-information-systems-master-iii",
 
-    "studyProgramName": "Bachelor of MIS",
+    "studyProgramName": "Bachelor of Software Engineering",
 
-    "description": "Find out who's wearing what number in the Aston Villa squad this season, plus appearance and goal statistics.",
+    "logo": "9e520333-0a1d-4bcd-90aa-8e9582fb8c6f.jpeg",
 
-    "logo": ""
+    "description": "Bachelor of Software Engineering (SE) is a degree program that focuses on the application of technology to solve business problems."
 
 }
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/study-programs/management-information-systems-master-ii`
+  - **Endpoint:** `/api/v1/study-programs/software-engineering-bachelor`
   - **Request Body:**
 
 ```json
@@ -650,29 +665,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/study-programs?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/study-programs/{uuid}`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/study-programs/filter?pageNumber=0&pageSize=25`
@@ -703,47 +718,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/study-programs/management-information-systems-master/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -757,10 +772,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **addSubjectsByAlias** 
+- **addSubjectsByAlias**
   - **Description:** Endpoint to addsubjectsbyalias.
   - **HTTP Method:** POST
-  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/subjects`
+  - **Endpoint:** `/api/v1/year-of-studies/793b9f6c-f58a-4d10-9e95-e54ab4a5ab16/subjects`
   - **Request Body:**
 
 ```json
@@ -768,7 +783,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     "aliasOfSubjects": [
 
-        "java-programming","reactJs"
+        "java-programming","html","github"
 
     ]
 
@@ -776,10 +791,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deletedSubjectFromYearOfStudy** 
+- **deletedSubjectFromYearOfStudy**
   - **Description:** Endpoint to deletedsubjectfromyearofstudy.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/year-of-studies/84f538cf-b65d-43e7-94ce-2842431f4395/subjects/java-programming`
+  - **Endpoint:** `/api/v1/year-of-studies/130b64e4-f2e4-4474-a7e5-d19d6a51ad6e/subjects/java-programming`
   - **Request Body:**
 
 ```json
@@ -789,7 +804,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 </details>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/year-of-studies`
@@ -798,69 +813,69 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "year": 1,
+    "year": "",
 
-  "semester": 2,
+    "semester": "",
 
-  "studyProgramAlias": "management-information-systems-master",
+    "studyProgramAlias": "software-engineering-bachelor",
 
-  "isDraft":false
+    "isDraft": false
 
 }
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/year-of-studies/793b9f6c-f58a-4d10-9e95-e54ab4a5ab16`
   - **Request Body:**
 
 ```json
 {
 
-  "year": 1,
+  "year": null,
 
-  "semester": 1
+  "semester":null 
 
 }
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915`
+  - **Endpoint:** `/api/v1/year-of-studies/130b64e4-f2e4-4474-a7e5-d19d6a51ad6e`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/year-of-studies?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByUuid(not use)** 
+- **deleteByUuid(not use)**
   - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/year-of-studies/f9286264-e902-431b-a837-22b95e8afaf6`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/year-of-studies/filter?pageNumber=0&pageSize=25`
@@ -891,47 +906,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/year-of-studies/94a6a16c-7c76-47da-abba-352716070915/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -941,7 +956,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/subjects`
@@ -950,11 +965,11 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "alias": "java-programming",
+  "alias": "github",
 
-  "title": "java programing",
+  "title": "git control version",
 
-  "logo":"",
+  "logo":"1623cc23-948d-4f2b-8c57-65e0b7bfcc4b.png",
 
   "internship":1,
 
@@ -1000,10 +1015,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/subjects/reactJs`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/subjects/java-programming`
   - **Request Body:**
 
 ```json
@@ -1015,15 +1030,14 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
      "description": "The Spring Framework is an application framework and inversion of control container for the Java platform.",
 
-    "logo": "1f49fc23-3da5-4fe0-a50f-7140ff29cffa.png",
-
-    "duration": 80
+    "logo": "1f49fc23-3da5-4fe0-a50f-7140ff29cffa.png"
+  
 
 }
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/subjects/reactJs`
@@ -1034,29 +1048,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/subjects?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/subbjects/java-basic`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/subjects/filter?pageNumber=0&pageSize=25`
@@ -1087,47 +1101,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/subjects/reactJs/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/subjects/java-basic/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/subjects/java-basic/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **private** 
+- **private**
   - **Description:** Endpoint to private.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/subjects/java-basic/private`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -1137,7 +1151,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/shifts`
@@ -1146,13 +1160,13 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "alias": "weekday-morning",
+  "alias": "weekday-morning-1",
 
   "name": "Weekday morning",
 
   "startTime": "08:00:00",
 
-  "endTime": "12:00:00",
+  "endTime": "90:00:00",
 
   "weekday": true,
 
@@ -1166,9 +1180,9 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
+  - **HTTP Method:** PATCH
   - **Endpoint:** `/api/v1/shifts/weekday-evening`
   - **Request Body:**
 
@@ -1191,7 +1205,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/shifts/weekday-morning`
@@ -1202,29 +1216,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/shifts?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/shifts/weekday-evening`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/shifts/filter?pageNumber=0&pageSize=25`
@@ -1255,47 +1269,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/shifts/weekday-morning/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/shifts/weekday-morning/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/shifts/weekday-morning/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/shifts/weekday-morning/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -1311,7 +1325,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/admissions`
@@ -1324,9 +1338,9 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
   "remark": "this admission for first generation",
 
-  "openDate": "2027-05-30",
+  "openDate": "2028-05-30",
 
-   "endDate": "2028-05-30",
+   "endDate": "2029-05-30",
 
   "telegramLink": "https://t.me/admission_group"
 
@@ -1336,10 +1350,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931`
+  - **Endpoint:** `/api/v1/admissions/f284241c-70cf-4469-bef3-3cb5e47cac04`
   - **Request Body:**
 
 ```json
@@ -1347,46 +1361,48 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/admissions?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/admissions/f284241c-70cf-4469-bef3-3cb5e47cac04`
   - **Request Body:**
 
 ```json
-{ "remark": "update",
+{
 
-  "endDate": "2028-02-02",
+    "remark": "update",
 
-  "telegramLink":"no link yet"
+    "endDate": "2028-02-02",
+
+    "telegramLink": "no link yet"
 
 }
 ```
 - **Response:** No examples available
 
-- **deleteByUuid(not use)** 
+- **deleteByUuid(not use)**
   - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/admissions/filter?pageNumber=0&pageSize=25`
@@ -1417,38 +1433,38 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/disable`
+  - **Endpoint:** `/api/v1/admissions/f284241c-70cf-4469-bef3-3cb5e47cac04/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/enable`
+  - **Endpoint:** `/api/v1/admissions/f284241c-70cf-4469-bef3-3cb5e47cac04/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateStatusByUuid** 
+- **updateStatusByUuid**
   - **Description:** Endpoint to updatestatusbyuuid.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/admissions/68eb704f-eed1-4e52-949a-ecc0f9b42931/status`
+  - **Endpoint:** `/api/v1/admissions/f284241c-70cf-4469-bef3-3cb5e47cac04/status`
   - **Request Body:**
 
 ```json
 {
 
-    "status":1
+    "status": 1
 
 }
 ```
@@ -1460,7 +1476,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/student-admissions`
@@ -1469,25 +1485,25 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "nameEn": "pov soknem",
+  "nameEn": "the flash",
 
-  "nameKh": "ពៅ​ សុខណែម",
+  "nameKh": "ដឺ ហ្លាស្ស",
 
-  "email": "soknem@gmail.com",
+  "email": "theflash@gmail.com",
 
-  "highSchool": "snoul highSchool",
+  "highSchool": "snoul takeo highSchool",
 
   "phoneNumber": "021456894",
 
   "dob": "2003-01-01",
 
-  "pob": "karatie province",
+  "pob": "kratie province",
 
   "bacIiGrade": "A",
 
   "gender": "Male",
 
-  "avatar": "",
+  "avatar": "bb0a9242-89fe-44e7-884e-aa392909af11.jpg",
 
   "address": "123 Main Street",
 
@@ -1497,15 +1513,15 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
   "knownIstad": "By social media",
 
-  "identity": "123ABC",
+  "identity": "",
 
-  "biography": ".",
+  "biography": "ដោយសារខ្ញុំចង់ចឹង teacher , ពេល disabled ចឹងខ្ញុំអោយវា draft  ដែរ, ព្រោះយើងអត់អាច public  degree ដែល disabled",
 
   "shiftAlias": "weekday-morning",
 
-  "studyProgramAlias": "management-information-systems-master",
+  "studyProgramAlias": "software-engineering-bachelor",
 
-  "degreeAlias": "master-i"
+  "degreeAlias": "associate"
 
 }
 
@@ -1515,10 +1531,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/student-admissions/736b0871-2c04-4dc9-a8d7-6d2d8bd9fee3`
+  - **Endpoint:** `/api/v1/student-admissions/bc1f9d0d-0f2a-43ba-9602-bef6674e8b99`
   - **Request Body:**
 
 ```json
@@ -1526,50 +1542,50 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/student-admissions?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/student-admissions/2eef8ea3-158b-4ad6-890a-58cfd12133d1`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/student-admissions/4aaab4dc-cd67-48f0-96e2-76a1416dc5db`
   - **Request Body:**
 
 ```json
-{ "nameEn": "soknem",
+{ "nameEn": "hidra",
 
-  "email": "soknem@example.com",
+  "email": "hidra@example.com",
 
   "dob": "1990-01-01",
 
   "gender": "Males",
 
-  "avatar": "https://example.com/avatar.jpg"
+  "avatar": ""
 
 }
 ```
 - **Response:** No examples available
 
-- **deleteByUuid(not use)** 
+- **deleteByUuid(not use)**
   - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/student-admissions/beb2fcee-0e2f-4377-88dd-04221a56dcb4`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/student-admissions/filter?pageNumber=0&pageSize=25`
@@ -1594,13 +1610,13 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     {
 
-      "column": "level",
+      "column": "alias",
 
       "value": "level2",
 
       "operation": "EQUAL",
 
-      "joinTable": "degree"
+       "joinTable": "degree"
 
     }
 
@@ -1624,7 +1640,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/generations`
@@ -1633,50 +1649,48 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "alias": "gen1",
+    "alias": "generation-2",
 
-  "name": "Generation ",
+    "name": "Generation 2",
 
-  "description": "This is the first generation.",
+    "description": "This is the second generation.",
 
-  "startYear": 2025,
+    "startYear": 2026,
 
-  "endYear": 2026,
+    "endYear": 2027,
 
-  "isDraft":false
+    "isDraft": false
 
 }
-
-
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/generations/gen1`
+  - **Endpoint:** `/api/v1/generations/generation-1`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/generations?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/generations/gen1`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/generations/generation-1`
   - **Request Body:**
 
 ```json
@@ -1698,18 +1712,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/generations/gen1`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/generations/filter?pageNumber=0&pageSize=25`
@@ -1740,47 +1754,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/generations/gen1/enable`
+  - **Endpoint:** `/api/v1/generations/generation-1/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/generations/gen1/enable`
+  - **Endpoint:** `/api/v1/generations/generation-1/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/generations/gen1/public`
+  - **Endpoint:** `/api/v1/generations/generation-1/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/generations/gen1/draft`
+  - **Endpoint:** `/api/v1/generations/generation-1/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -1794,18 +1808,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **addStudentByUuid** 
+- **addStudentByUuid**
   - **Description:** Endpoint to addstudentbyuuid.
   - **HTTP Method:** POST
-  - **Endpoint:** `/api/v1/classes/dev-op/students`
+  - **Endpoint:** `/api/v1/classes/1546f137-30e5-4f8f-8328-e0d26bd3647f/students`
   - **Request Body:**
 
 ```json
 {
 
-    "studentUuid":[
+    "studentAdmissionUuid":[
 
-        "dd87eb8f-974a-4f9d-874a-1d2daad5f7a0"
+        "b11d7b76-bdb1-4fd5-ae3f-1e8bdd86de3f"
 
     ]
 
@@ -1813,20 +1827,20 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteStudentByUuid** 
+- **deleteStudentByUuid**
   - **Description:** Endpoint to deletestudentbyuuid.
   - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/classes/{alias}/students/{uuid}`
+  - **Endpoint:** `/api/v1/classes/0919d156-6bdb-49ba-8e35-b665bec783b9/students/847ead5b-bc03-484c-9c37-b8987248ef3f`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
 </details>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/classes`
@@ -1835,62 +1849,54 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "alias": "f6",
+    "classCode": "G1-Y1-S1",
 
-  "className": "data",
+    "description": "Generation 1 (Year 1 Semester 1)",
 
-  "description": "data analytics class",
+    "year": 1,
 
-  "year":1,
+    "instructorUuid": null,
 
-   "instructorUuid": null,
+    "studyProgramAlias": "software-engineering-bachelor",
 
-  "studyProgramAlias": "management-information-systems-master",
+    "shiftAlias": "weekday-morning",
 
-  "shiftAlias": "weekday-morning",
+    "generationAlias": "generation-2",
 
-  "generationAlias": "gen1",
+    "studentUuid": [],
 
-  "studentUuid": [
-
-        
-
-  ],
-
-  "isDraft":false
+    "isDraft": false
 
 }
-
-
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
-  - **Description:** Endpoint to getbyalias.
+- **getByUuid**
+  - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/classes/dev-op2`
+  - **Endpoint:** `/api/v1/classes/g1-y1-s1`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/classes?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
-  - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/classes/beginners.`
+- **updateByUuid**
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/classes/g1-y1-s1`
   - **Request Body:**
 
 ```json
@@ -1906,18 +1912,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
-  - **Description:** Endpoint to deletebyalias(not use).
+- **deleteByUuid(not use)**
+  - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/classes/e2`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/classes/filter?pageNumber=0&pageSize=25`
@@ -1934,11 +1940,11 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
       "column": "alias",
 
-      "value": "gen1",
+      "value": "g",
 
-      "operation": "EQUAL",
+      "operation": "LIKE",
 
-      "joinTable": "generation"
+      "joinTable": "shift"
 
     }
 
@@ -1950,47 +1956,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/classes/alias/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/classes/alias/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **public** 
+- **public**
   - **Description:** Endpoint to public.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/classes/alias/public`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **draft** 
+- **draft**
   - **Description:** Endpoint to draft.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/classes/alias/draft`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -2004,31 +2010,31 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **addInstructorByUuid** 
+- **addInstructorByUuid**
   - **Description:** Endpoint to addinstructorbyuuid.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/courses/{alias}/instructors/{uuid}`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteInstructorByUuid** 
+- **deleteInstructorByUuid**
   - **Description:** Endpoint to deleteinstructorbyuuid.
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/courses/{alias}/instructors/{uuid}`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
 </details>
 
-- **createNew(not use)** 
+- **createNew(not use)**
   - **Description:** Endpoint to createnew(not use).
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/courses`
@@ -2057,31 +2063,31 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
-  - **Description:** Endpoint to getbyalias.
+- **getByUuid**
+  - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/courses/java-advance-data`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/courses?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
-  - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
+- **updateByUuid**
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PATCH
   - **Endpoint:** `/api/v1/courses/java2`
   - **Request Body:**
 
@@ -2098,18 +2104,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
-  - **Description:** Endpoint to deletebyalias(not use).
+- **deleteByUuid(not use)**
+  - **Description:** Endpoint to deletebyuuid(not use).
   - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/course/{alias}`
+  - **Endpoint:** `/api/v1/course/{uuid}`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/courses/filter?pageNumber=0&pageSize=25`
@@ -2124,37 +2130,26 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     {
 
-      "column": "alias",
+      "column": "isDeleted",
 
-      "value": "java",
+      "value": "false",
 
-      "operation": "LIKE"
+      "operation": "EQUAL"
 
     },
 
     {
 
-      "column": "alias",
+      "column": "className",
 
-      "value": "d",
+      "value": "g",
 
       "operation": "LIKE",
 
       "joinTable":"oneClass"
 
-    },
-
-    {
-
-      "column": "alias",
-
-      "value": "gen2",
-
-      "operation": "LIKE",
-
-      "joinTable":"oneClass.generation"
-
     }
+    
 
   ]
 
@@ -2164,25 +2159,25 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/courses/{uuid}/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/courses/{uuid}/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -2192,7 +2187,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/lectures`
@@ -2203,9 +2198,9 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     "alias": "Introduction to Java",
 
-    "startTime": "09:00 AM",
+    "startTime": "10:00 AM",
 
-    "endTime": "11:00 AM",
+    "endTime": "12:00 PM",
 
     "description": "This lecture covers the basics of Java programming.",
 
@@ -2213,20 +2208,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     "status": true,
 
-    "courseAlias": "JAVA101",
+    "courseAlias": "java-programming-g1-y1-s1",
 
-    "isDraft":false
+    "isDraft": false
 
 }
-
-
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/lectures`
+  - **Endpoint:** `/api/v1/lectures/Introduction to Java`
   - **Request Body:**
 
 ```json
@@ -2234,20 +2227,20 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/faculties?pageNumber=0&pageSize=25`
+  - **Endpoint:** `/api/v1/lectures?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
+  - **HTTP Method:** PATCH
   - **Endpoint:** `/api/v1/lectures/Introduction to Java`
   - **Request Body:**
 
@@ -2274,18 +2267,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/lectures/Introduction to Java`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/lectures/filter?pageNumber=0&pageSize=25`
@@ -2316,25 +2309,25 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/faculties/{uuid}/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/faculties/{uuid}/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -2344,7 +2337,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/scores`
@@ -2352,8 +2345,6 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 ```json
 {
-
-    "semester": 1,
 
     "activityScore": 85.5,
 
@@ -2367,9 +2358,9 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     "assignmentScore": 80.0,
 
-    "studentUuid": "c11bef99-b3a9-4e99-a15f-ac7cae8726ad",
+    "studentUuid": "fdbee7ea-9811-490b-8cf0-79f2815482c3",
 
-    "courseAlias": "java1"
+    "courseAlias": "java-programming-g1-y1-s1"
 
 }
 
@@ -2379,10 +2370,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/scores/{uuid}`
+  - **Endpoint:** `/api/v1/scores/32d4402e-d2f6-44ec-a340-678515dfa602`
   - **Request Body:**
 
 ```json
@@ -2390,20 +2381,20 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/scores?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
+  - **HTTP Method:** PATCH
   - **Endpoint:** `/api/v1/scores/{uuid}`
   - **Request Body:**
 
@@ -2426,18 +2417,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/scores/{uuid}`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/scores/filter?pageNumber=0&pageSize=25`
@@ -2468,25 +2459,25 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/scores/{uuid}/enable`
+  - **Endpoint:** `/api/v1/scores/32d4402e-d2f6-44ec-a340-678515dfa602/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/scores/{uuid}/enable`
+  - **Endpoint:** `/api/v1/scores/32d4402e-d2f6-44ec-a340-678515dfa602/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -2496,7 +2487,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/attendances`
@@ -2523,7 +2514,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/attendances/{uuid}`
@@ -2534,20 +2525,20 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/attendances?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
+  - **HTTP Method:** PATCH
   - **Endpoint:** `/api/v1/attendances/{uuid}`
   - **Request Body:**
 
@@ -2564,18 +2555,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/attendances/{uuid}`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/scores/filter?pageNumber=0&pageSize=25`
@@ -2618,127 +2609,103 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/users?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAllDetail** 
+- **getAllDetail**
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/users/details?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/users/8e221fd6-14d5-4e65-8704-d1a79f5abac8`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getDetailByUuid** 
+- **getDetailByUuid**
   - **Description:** Endpoint to getdetailbyuuid.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/users/details/412201d1-27a1-481a-8573-28daa9a3f8ea`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAllAdminUser** 
+- **getAllAdminUser**
   - **Description:** Endpoint to getalladminuser.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/users/admins?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/users/17d0c6b8-5671-479b-898d-e633795ce7ab`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/users/15e91d10-1f3c-4394-afb5-d2aed2922210`
   - **Request Body:**
 
 ```json
 {
 
-   "nameEn": "Jane Smith",
+  "nameEn": "John",
 
-   "nameKh": "ជេន ស្ម៊ីត",
+  "nameKh": "ចន់",
 
-   "username": "janesmith",
+  "username": "john123",
 
-   "gender": "Female",
+  "gender": "Male",
 
-   "dob": "1985-07-23",
+  "dob": "1990-05-15",
 
-   "email": "jane.smith@example.com",
+  "email": "john@example.com",
 
-   "password": "newSecurePassword456",
+  "profileImage": "https://example.com/profile.jpg",
 
-   "profileImage": "http://example.com/jane.jpg",
+  "phoneNumber": "+1234567890",
 
-   "phoneNumber": "0987654321",
-
-  "cityOrProvince": "Siem Reap",
-
-  "khanOrDistrict": "Svay Dangkum",
-
-  "sangkatOrCommune": "Sangkat Svay Dangkum",
-
-  "street": "456 Avenue",
+  "currentAddress": "House 123, Street 310, Phum 4, Boeung Keng Kang 1, Chamkarmon, Phnom Penh, Cambodia",
 
   "birthPlace": {
 
-    "cityOrProvince": "Siem Reap",
+    "cityOrProvince": "Phnom Penh",
 
-    "khanOrDistrict": "Svay Dangkum",
+    "khanOrDistrict": "Chamkarmon",
 
-    "sangkatOrCommune": "Sangkat Svay Dangkum",
+    "sangkatOrCommune": "Boeung Keng Kang 1",
 
-    "villageOrPhum": "Phum Chong Kaosou",
+    "villageOrPhum": "Phum 4",
 
-    "street": "123 Street",
+    "street": "Street 310",
 
-    "houseNumber": "789"
+    "houseNumber": "House 123"
 
-  },
-
-  "authorities": [
-
-    {
-
-      "authorityName": "user:read"
-
-    },
-
-    {
-
-      "authorityName": "user:write"
-
-    }
-
-  ]
+  }
 
 }
 
@@ -2746,18 +2713,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByUuid** 
-  - **Description:** Endpoint to deletebyuuid.
-  - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **createUser** 
+- **createUser**
   - **Description:** Endpoint to createuser.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/users`
@@ -2766,39 +2722,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "nameEn": "Chan Chhaya",
+    "nameEn": "John Doe",
 
-  "nameKh": "ចាន់ ឆៃយ៉ា",
+    "nameKh": "ជន ដូ",
 
-  "username": "chhaya",
+    "username": "johndoe",
 
-  "gender": "Male",
+    "gender": "Male",
 
-  "dob": "1990-01-01",
+    "dob": "1990-05-15",
 
-  "email": "it.chhaya@gmail.com",
+    "email": "johndoe@gmail.com",
 
-  "password": "securepassword123",
+    "profileImage": "",
 
-  "profileImage": "http://example.com/images/johndoe.jpg",
+    "phoneNumber": "1234567890",
 
-  "phoneNumber": "1234567890",
+    "authorityNames": [
 
-  "authorities": [
+        "user:update", 
 
-    {
+        "admin:control"
 
-      "authorityName": "admin:control"
-
-    },
-
-    {
-
-      "authorityName": "user:write"
-
-    }
-
-  ]
+    ]
 
 }
 
@@ -2806,36 +2752,47 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **block** 
+- **block**
   - **Description:** Endpoint to block.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08/block`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **deleteByUuid(not use)**
+  - **Description:** Endpoint to deletebyuuid(not use).
+  - **HTTP Method:** DELETE
+  - **Endpoint:** `/api/v1/users/dec226e7-fd71-4d6b-827f-391d0be6bd08`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -2845,51 +2802,51 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/admins?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAllAdminDetail** 
+- **getAllAdminDetail**
   - **Description:** Endpoint to getalladmindetail.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/admins/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0`
+  - **Endpoint:** `/api/v1/admins/c03ab5e8-ab75-4d1e-bf12-37feac4151e6`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAdminDetailByUuid** 
+- **getAdminDetailByUuid**
   - **Description:** Endpoint to getadmindetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/admins/detail/bd47c1ee-b6d1-46c7-bcda-0e8acaecdeab`
+  - **Endpoint:** `/api/v1/admins/detail/c03ab5e8-ab75-4d1e-bf12-37feac4151e6`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **create** 
+- **create**
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/admins`
@@ -2898,43 +2855,123 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-    "user": {
+  "nameEn": "Jonh Son",
 
-        "nameEn": "Chan Chhaya",
+  "nameKh": "ជន សាន់",
 
-        "nameKh": "ចាន់ ឆៃយ៉ា",
+  "username": "jonhson",
 
-        "username": "chhaya",
+  "gender": "Male",
 
-        "gender": "Male",
+  "dob": "1985-06-15",
 
-        "dob": "1990-01-01",
+  "email": "jonhson@gmail.com",
 
-        "email": "it.chhaya@gmail.com",
+  "password": "Password123!",
 
-        "password": "iSTAD@10",
+  "profileImage": "https://example.com/images/profile/johndoe.jpg",
 
-        "profileImage": "johndoe.jpg",
+  "phoneNumber": "1234567890",
 
-        "phoneNumber": "123452514",
+  "authorityNames": [
 
-        "authorities": [
+    "faculty:write",
 
-            {
+    "faculty:update",
 
-                "authorityName": "user:read"
+    "faculty:delete",
 
-            },
+    "generation:read",
 
-            {
+    "generation:write",
 
-                "authorityName": "user:write"
+    "generation:update",
 
-            }
+    "generation:delete",
 
-        ]
+    "shift:read",
 
-    }
+    "shift:write",
+
+    "shift:update",
+
+    "shift:delete",
+
+    "academic:read",
+
+    "academic:write",
+
+    "academic:update",
+
+    "academic:delete",
+
+    "assessment:read",
+
+    "assessment:write",
+
+    "assessment:update",
+
+    "assessment:delete",
+
+    "class:read",
+
+    "class:write",
+
+    "class:update",
+
+    "class:delete",
+
+    "course:read",
+
+    "course:write",
+
+    "course:update",
+
+    "course:delete",
+
+    "session:read",
+
+    "session:write",
+
+    "session:update",
+
+    "session:delete",
+
+    "material:read",
+
+    "material:write",
+
+    "material:update",
+
+    "material:delete",
+
+    "admission:read",
+
+    "admission:write",
+
+    "admission:update",
+
+    "admission:delete",
+
+    "payment:read",
+
+    "payment:write",
+
+    "payment:update",
+
+    "payment:delete",
+
+    "user:read",
+
+    "user:write",
+
+    "user:update",
+
+    "user:delete",
+
+    "admin:control"
+
+  ]
 
 }
 
@@ -2942,542 +2979,62 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/admins/6086e407-02e2-48e2-8005-ce646acbd617`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/admins/409442bb-068b-4fc3-8a7f-78fb5eaeb125`
   - **Request Body:**
 
 ```json
 {
 
-  "highSchool": "string",
+  "highSchool": "International School of Phnom Penh",
 
-  "highSchoolGraduationDate": "2010-05-23",
+  "highSchoolGraduationDate": "2010-06-30",
 
-  "degree": "string",
+  "degree": "Bachelor of Science",
 
-  "degreeGraduationDate": "2014-05-23",
+  "degreeGraduationDate": "2014-06-30",
 
-  "major": "string",
+  "major": "Computer Science",
 
-  "studyAtUniversityOrInstitution": "string",
+  "studyAtUniversityOrInstitution": "University of Phnom Penh",
 
-  "experienceAtWorkingPlace": "string",
+  "experienceAtWorkingPlace": "Software Engineer",
 
-  "experienceYear": 5,
+  "experienceYear": 8,
 
-  "user": {
+  "nameEn": "John Doe",
 
-     "nameEn": "string",
+  "nameKh": "សេចក្តីពិភពលោក",
 
-     "nameKh": "ជេម",
+  "username": "johndoe123",
 
-     "username": "string",
+  "gender": "Male",
 
-     "gender": "Male",
+  "dob": "1990-05-15",
 
-     "email": "john@example.com",
+  "email": "john.doe@example.com",
 
-     "password": "password123",
+  "profileImage": "https://example.com/profile.jpg",
 
-     "profileImage": "johndoe.jpg",
+  "phoneNumber": "+1234567890",
 
-     "phoneNumber": "123",
+  "currentAddress": "House 123, Street 310, Phum 4, Boeung Keng Kang 1, Chamkarmon, Phnom Penh, Cambodia",
 
-    "cityOrProvince": "Phnom Penh",
-
-    "khanOrDistrict": "Chamkar Mon",
-
-    "sangkatOrCommune": "Toul Tompoung",
-
-    "street": "Street 123",
-
-    "birthPlace": {
-
-      "cityOrProvince": "string",
-
-      "khanOrDistrict": "string",
-
-      "sangkatOrCommune": "string",
-
-      "villageOrPhum":"string",
-
-      "street":"string",
-
-      "houseNumber":"string"
-
-    },
-
-    "authorities": [
-
-      {
-
-        "authorityName": "user:read"
-
-      },
-
-      {
-
-        "authorityName": "user:write"
-
-      },
-
-      {
-
-        "authorityName": "user:update"
-
-      }
-
-    ]
-
-  }
-
-}
-
-
-```
-- **Response:** No examples available
-
-- **disable** 
-  - **Description:** Endpoint to disable.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/disable`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **enable** 
-  - **Description:** Endpoint to enable.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d/enable`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **block** 
-  - **Description:** Endpoint to block.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/admins/97ecfe35-b4cb-4aec-a037-e5ee93a895c0/block`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **deleteByUuid** 
-  - **Description:** Endpoint to deletebyuuid.
-  - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/admins/8e20e24b-6000-4c9a-bb68-e6c020bb718d`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-</details>
-
-## instructor <a name="instructor"></a>
-
-<details><summary>Show/Hide</summary>
-
-- **getAll** 
-  - **Description:** Endpoint to getall.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/instructors?pageNumber=0&pageSize=25`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **getAllDetail** 
-  - **Description:** Endpoint to getalldetail.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/instructors/detail?pageNumber=0&pageSize=25`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **getByUuid** 
-  - **Description:** Endpoint to getbyuuid.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/instructors/66d30761-cdc6-41f9-98fb-07a52b121331`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **getDetailByUuid** 
-  - **Description:** Endpoint to getdetailbyuuid.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/instructors/detail/abde37f5-aa3d-4123-8121-2782fde7e706`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **create** 
-  - **Description:** Endpoint to create.
-  - **HTTP Method:** POST
-  - **Endpoint:** `/api/v1/instructors`
-  - **Request Body:**
-
-```json
-{
-
-    "user": {
-
-        "nameEn": "Long Piseth",
-
-        "nameKh": "ឡុង ពិសិដ្ឋ",
-
-        "username": "Seth new",
-
-        "gender": "Male",
-
-        "dob": "1990-01-01",
-
-        "email": "seth.121new@gmail.com",
-
-        "password": "iSTAD@STU",
-
-        "profileImage": "johndoe.jpg",
-
-        "phoneNumber": "123452514",
-
-        "authorities": [
-
-            {
-
-                "authorityName": "user:read"
-
-            },
-
-            {
-
-                "authorityName": "user:write"
-
-            }
-
-        ]
-
-    }
-
-}
-
-
-```
-- **Response:** No examples available
-
-- **updateByUuid** 
-  - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/instructors/187e91d9-ddc3-4f5c-9051-c9a02e5241d2`
-  - **Request Body:**
-
-```json
-{
-
-  "highSchool": "string",
-
-  "highSchoolGraduationDate": "2010-05-23",
-
-  "degree": "string",
-
-  "degreeGraduationDate": "2014-05-23",
-
-  "major": "string",
-
-  "studyAtUniversityOrInstitution": "string",
-
-  "experienceAtWorkingPlace": "string",
-
-  "experienceYear": 3 ,
-
-  "user": {
-
-     "nameEn": "John",
-
-     "nameKh": "ជេម",
-
-     "username": "john",
-
-     "gender": "Male",
-
-     "dob": "1990-01-01",
-
-     "email": "john@example1.com",
-
-     "password": "password123",
-
-     "profileImage": "http://example.com/images/johndoe.jpg",
-
-     "phoneNumber": "12345",
-
-    "cityOrProvince": "Phnom Penh",
-
-    "khanOrDistrict": "Chamkar Mon",
-
-    "sangkatOrCommune": "Toul Tompoung",
-
-    "street": "Street 123",
-
-    "birthPlace": {
-
-      "cityOrProvince": "Phnom Penh",
-
-      "khanOrDistrict": "Chamkar Mon",
-
-      "sangkatOrCommune": "Toul Tompoung",
-
-      "villageOrPhum":"string",
-
-      "street":"Street 123",
-
-      "houseNumber":"string"
-
-    },
-
-    "authorities": [
-
-      {
-
-        "authorityName": "user:read"
-
-      },
-
-      {
-
-        "authorityName": "user:update"
-
-      },
-
-      {
-
-        "authorityName": "user:write"
-
-      },
-
-      {
-
-        "authorityName": "user:delete"
-
-      }
-
-    ]
-
-  }
-
-}
-
-
-```
-- **Response:** No examples available
-
-- **enable** 
-  - **Description:** Endpoint to enable.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/enable`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **disable** 
-  - **Description:** Endpoint to disable.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/disable`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **block** 
-  - **Description:** Endpoint to block.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf/block`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **deleteByUuid** 
-  - **Description:** Endpoint to deletebyuuid.
-  - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/instructors/82f56a18-0ffd-4e88-93c5-a3966e2bc3cf`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-</details>
-
-## student <a name="student"></a>
-
-<details><summary>Show/Hide</summary>
-
-- **getAll** 
-  - **Description:** Endpoint to getall.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/students?pageNumber=0&pageSize=25`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **getAllDetail** 
-  - **Description:** Endpoint to getalldetail.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/students/detail?pageNumber=0&pageSize=25`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **getByUuid** 
-  - **Description:** Endpoint to getbyuuid.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/students/80da63ce-84f7-42bd-a1f1-426c7ca3bd5c`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **geDetailByUuid** 
-  - **Description:** Endpoint to gedetailbyuuid.
-  - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/students/detail/f0b5dd7e-4397-4cd1-8785-dd0e683fa9e6`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **create** 
-  - **Description:** Endpoint to create.
-  - **HTTP Method:** POST
-  - **Endpoint:** `/api/v1/students`
-  - **Request Body:**
-
-```json
-{
-
-  "user": {
-
-    "nameEn": "tota",
-
-    "nameKh": "តូតា",
-
-    "username": "totakh",
-
-    "gender": "Male",
-
-    "dob": "2000-01-01",
-
-    "email": "tota@mail.com",
-
-    "password": "securepassword",
-
-    "profileImage": "https://example.com/profile/johndoe.jpg",
-
-    "phoneNumber": "1234567890",
-
-    "authorities": [
-
-    ]
-
-  }
-
-}
-
-
-```
-- **Response:** No examples available
-
-- **updateByUuid** 
-  - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/students/0764bf00-ff0b-4ef0-8253-14afc348ac90`
-  - **Request Body:**
-
-```json
-{
-
-  "user": {
-
-     "nameEn": "John Doe",
-
-     "nameKh": "ចន ដូ",
-
-     "username": "john.doe",
-
-     "gender": "Male",
-
-     "dob": "2000-01-01",
-
-     "email": "john@example.com",
-
-     "password": "securepassword",
-
-     "profileImage": "johndoe.jpg",
-
-     "phoneNumber": "1234567890",
+  "birthPlace": {
 
     "cityOrProvince": "Phnom Penh",
 
     "khanOrDistrict": "Chamkarmon",
 
-    "sangkatOrCommune": "Tonle Bassac",
+    "sangkatOrCommune": "Boeung Keng Kang 1",
 
-    "street": "Street 123",
+    "villageOrPhum": "Phum 4",
 
-    "birthPlace": {
+    "street": "Street 310",
 
-      "cityOrProvince": "Phnom Penh",
-
-      "khanOrDistrict": "Chamkarmon",
-
-      "sangkatOrCommune": "Tonle Bassac",
-
-      "villageOrPhum": "Village 1",
-
-      "street": "Street 456",
-
-      "houseNumber": "123A"
-
-    }
+    "houseNumber": "House 123"
 
   }
 
@@ -3487,47 +3044,36 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/disable`
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/admins/19598b74-6be4-4833-b420-6c60a0c8038b/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/enable`
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/admins/19598b74-6be4-4833-b420-6c60a0c8038b/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **block** 
+- **block**
   - **Description:** Endpoint to block.
-  - **HTTP Method:** PATCH
-  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/block`
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/admins/19598b74-6be4-4833-b420-6c60a0c8038b/block`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
-```
-- **Response:** No examples available
-
-- **deleteByUuid** 
-  - **Description:** Endpoint to deletebyuuid.
-  - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9`
-  - **Request Body:**
-
-```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -3537,51 +3083,51 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/academics?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAllDetail** 
+- **getAllDetail**
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/academics/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/academics/75ce2581-4698-4ae3-b2a7-35c76d6ab435`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getacademicDetailByUuid** 
+- **getacademicDetailByUuid**
   - **Description:** Endpoint to getacademicdetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `UNKNOWN`
+  - **Endpoint:** `/api/v1/academics/detail/e4c96f54-4141-4d1c-b73a-ba8411f37b35`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **create** 
+- **create**
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/academics`
@@ -3590,43 +3136,32 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-    "user": {
+  "nameEn": "Panha",
 
-        "nameEn": "Long Piseth",
+  "nameKh": "បញ្ញា",
 
-        "nameKh": "ឡុង ពិសិដ្ឋ",
+  "username": "panha",
 
-        "username": "Seth new1",
+  "gender": "Male",
 
-        "gender": "Male",
+  "dob": "1985-06-15",
 
-        "dob": "1990-01-01",
+  "email": "panha12@gmail.com",
 
-        "email": "seth.121new1@gmail.com",
+  "password": "Password123!",
 
-        "password": "iSTAD@STU",
+  "profileImage": "https://example.com/images/profile/johndoe.jpg",
 
-        "profileImage": "johndoe.jpg",
+  "phoneNumber": "1234567890",
 
-        "phoneNumber": "123452514",
+  "authorityNames": [
 
-        "authorities": [
+    "faculty:write",
 
-            {
+    "faculty:update"
+    
 
-                "authorityName": "user:read"
-
-            },
-
-            {
-
-                "authorityName": "user:write"
-
-            }
-
-        ]
-
-    }
+  ]
 
 }
 
@@ -3634,96 +3169,52 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/academics/72177f77-9053-4e30-a3c7-80b704333c47`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/academics/e4c96f54-4141-4d1c-b73a-ba8411f37b35`
   - **Request Body:**
 
 ```json
 {
 
-  "highSchool": "string",
+  "highSchool": "ABC High School",
 
-  "highSchoolGraduationDate": "2010-05-23",
+  "highSchoolGraduationDate": "2003-05-25",
 
-  "degree": "string",
+  "degree": "Bachelor of Science",
 
-  "degreeGraduationDate": "2014-05-23",
+  "degreeGraduationDate": "2007-06-15",
 
-  "major": "string",
+  "major": "Computer Science",
 
-  "studyAtUniversityOrInstitution": "string",
+  "studyAtUniversityOrInstitution": "XYZ University",
 
-  "experienceAtWorkingPlace": "string",
+  "experienceAtWorkingPlace": "Tech Solutions Inc.",
 
-  "experienceYear": 3 ,
+  "experienceYear": 10,
 
-  "user": {
+  "cityOrProvince": "Phnom Penh",
 
-     "nameEn": "John",
+  "khanOrDistrict": "Chamkar Mon",
 
-     "nameKh": "ជេម",
+  "sangkatOrCommune": "Toul Tom Poung",
 
-     "username": "john11",
+  "street": "Street 123",
 
-     "gender": "Male",
-
-     "dob": "1990-01-01",
-
-     "email": "john@example11.com",
-
-     "password": "password123",
-
-     "profileImage": "http://example.com/images/johndoe.jpg",
-
-     "phoneNumber": "12345",
+  "birthPlace": {
 
     "cityOrProvince": "Phnom Penh",
 
-    "khanOrDistrict": "Chamkar Mon",
+    "khanOrDistrict": "Daun Penh",
 
-    "sangkatOrCommune": "Toul Tompoung",
+    "sangkatOrCommune": "Wat Phnom",
 
-    "street": "Street 123",
+    "villageOrPhum": "Phum 1",
 
-    "birthPlace": {
+    "street": "Street 58",
 
-      "cityOrProvince": "Phnom Penh",
-
-      "khanOrDistrict": "Chamkar Mon",
-
-      "sangkatOrCommune": "Toul Tompoung",
-
-      "villageOrPhum":"string",
-
-      "street":"Street 123",
-
-      "houseNumber":"string"
-
-    },
-
-    "authorities": [
-
-      {
-
-        "authorityName": "user:read"
-
-      },
-
-      {
-
-        "authorityName": "user:update"
-
-      },
-
-      {
-
-        "authorityName": "user:write"
-
-      }
-
-    ]
+    "houseNumber": "No. 123"
 
   }
 
@@ -3733,47 +3224,215 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **block** 
+- **block**
   - **Description:** Endpoint to block.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd/block`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByUuid** 
-  - **Description:** Endpoint to deletebyuuid.
-  - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/academics/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+</details>
+
+## instructor <a name="instructor"></a>
+
+<details><summary>Show/Hide</summary>
+
+- **getAll**
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/instructors?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **getAllDetail**
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/instructors/detail?pageNumber=0&pageSize=25`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **getByUuid**
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/instructors/7a4e8775-6dab-4c3b-b517-8b25b66adfb1`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **getDetailByUuid**
+  - **Description:** Endpoint to getdetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/instructors/detail/7a4e8775-6dab-4c3b-b517-8b25b66adfb1`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **create**
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `/api/v1/instructors`
+  - **Request Body:**
+
+```json
+{
+
+    "nameEn": "SokNem",
+
+    "nameKh": "សុខនែម",
+
+    "username": "soknem",
+
+    "gender": "Male",
+
+    "dob": "1990-05-15",
+
+    "email": "soknem@gmail.com",
+
+    "password": "Password@123",
+
+    "profileImage": "http://example.com/profile/johndoe.jpg",
+
+    "phoneNumber": "1234567890",
+
+    "authorityNames": [
+
+        "user:update", 
+
+        "admin:control"
+
+    ]
+
+}
+
+
+```
+- **Response:** No examples available
+
+- **updateByUuid**
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/instructors/0a1bbafb-4e0f-4394-8770-5fb7fad76466`
+  - **Request Body:**
+
+```json
+{
+
+  "highSchool": "ABC High School",
+
+  "highSchoolGraduationDate": "2003-05-25",
+
+  "degree": "Bachelor of Science",
+
+  "degreeGraduationDate": "2007-06-15",
+
+  "major": "Computer Science",
+
+  "studyAtUniversityOrInstitution": "XYZ University",
+
+  "experienceAtWorkingPlace": "Tech Solutions Inc.",
+
+  "experienceYear": 10,
+
+  "cityOrProvince": "Phnom Penh",
+
+  "khanOrDistrict": "Chamkar Mon",
+
+  "sangkatOrCommune": "Toul Tom Poung",
+
+  "street": "Street 123",
+
+  "birthPlace": {
+
+    "cityOrProvince": "Phnom Penh",
+
+    "khanOrDistrict": "Daun Penh",
+
+    "sangkatOrCommune": "Wat Phnom",
+
+    "villageOrPhum": "Phum 1",
+
+    "street": "Street 58",
+
+    "houseNumber": "No. 123"
+
+  }
+
+}
+
+
+```
+- **Response:** No examples available
+
+- **enable**
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/instructors/7a4e8775-6dab-4c3b-b517-8b25b66adfb1/enable`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **disable**
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/instructors/7a4e8775-6dab-4c3b-b517-8b25b66adfb1/disable`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **block**
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/instructors/7a4e8775-6dab-4c3b-b517-8b25b66adfb1/block`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -3783,51 +3442,51 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/staffs?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getAllDetail** 
+- **getAllDetail**
   - **Description:** Endpoint to getalldetail.
   - **HTTP Method:** GET
-  - **Endpoint:** `UNKNOWN`
+  - **Endpoint:** `/api/v1/staffs/detail?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getDetailByUuid** 
+- **getDetailByUuid**
   - **Description:** Endpoint to getdetailbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `UNKNOWN`
+  - **Endpoint:** `/api/v1/staffs/detail/245286d0-a365-47a9-b42f-936daaaa9b7f`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **create** 
+- **create**
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/staffs`
@@ -3836,63 +3495,36 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "position": "Updated Staff Position",
+  "position": "Senior Lecturer",
 
-  "user": {
+  "nameEn": "John Doe",
 
-    "nameEn": "John",
+  "nameKh": "ជូន ដូ",
 
-    "nameKh": "ជេម",
+  "username": "johndoe123",
 
-    "username": "john_doe",
+  "gender": "Male",
 
-    "gender": "Male",
+  "dob": "1985-06-15",
 
-    "dob": "1990-01-01",
+  "email": "johndoe@example.com",
 
-    "email": "updated_email@example.com",
+  "password": "Password123!",
 
-    "password": "updatedPassword123",
+  "profileImage": "https://example.com/images/profile/johndoe.jpg",
 
-    "profileImage": "john_doe_updated.jpg",
+  "phoneNumber": "1234567890",
 
-    "phoneNumber": "987654321",
+  "authorityNames": [
 
-    "cityOrProvince": "Updated City",
+    "faculty:write",
 
-    "khanOrDistrict": "Updated District",
+    "faculty:update",
 
-    "sangkatOrCommune": "Updated Commune",
+    "faculty:delete"
+    
 
-    "street": "Updated Street",
-
-    "birthPlace": {
-
-      "cityOrProvince": "Updated City",
-
-      "khanOrDistrict": "Updated District",
-
-      "sangkatOrCommune": "Updated Commune",
-
-      "villageOrPhum": "Updated Village",
-
-      "street": "Updated Street",
-
-      "houseNumber": "123"
-
-    },
-
-    "authorities": [
-
-      {
-
-        "authorityName": "user:write"
-
-      }
-
-    ]
-
-  }
+  ]
 
 }
 
@@ -3900,134 +3532,239 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/staffs/05732c9c-e1d2-4382-bfdc-c3ebab215da0`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/staffs/245286d0-a365-47a9-b42f-936daaaa9b7f`
   - **Request Body:**
 
 ```json
 {
 
-  "position": "Updated",
+  "position": "Administrative Assistant",
 
-  "user": {
+  "nameEn": "Jane Doe",
 
-     "nameEn": "John",
+  "nameKh": "ជេន ដូ",
 
-     "nameKh": "ជេម",
+  "username": "janedoe123",
 
-     "username": "john_doe2",
+  "gender": "Female",
 
-     "gender": "Male",
+  "dob": "1990-04-20",
 
-     "dob": "1990-01-01",
+  "email": "janedoe@example.com",
 
-     "email": "updated_email2@example.com",
+  "profileImage": "https://example.com/images/profile/janedoe.jpg",
 
-    "profileImage": "john_doe_updated.jpg",
+  "phoneNumber": "0987654321",
 
-    "phoneNumber": "987654321",
+  "cityOrProvince": "Phnom Penh",
 
-    "cityOrProvince": "Updated City",
+  "khanOrDistrict": "Chamkar Mon",
 
-    "khanOrDistrict": "Updated District",
+  "sangkatOrCommune": "Toul Tom Poung",
 
-    "sangkatOrCommune": "Updated Commune",
+  "street": "Street 456",
 
-    "street": "Updated Street",
+  "birthPlace": {
 
-    "birthPlace": {
+    "cityOrProvince": "Phnom Penh",
 
-      "cityOrProvince": "Updated City",
+    "khanOrDistrict": "Daun Penh",
 
-      "khanOrDistrict": "Updated District",
+    "sangkatOrCommune": "Wat Phnom",
 
-      "sangkatOrCommune": "Updated Commune",
+    "villageOrPhum": "Phum 2",
 
-      "villageOrPhum": "Updated Village",
+    "street": "Street 58",
 
-      "street": "Updated Street",
-
-      "houseNumber": "123"
-
-    },
-
-    "authorities": [
-
-      
-
-      {
-
-        "authorityName":"user:read"
-
-      },
-
-      {
-
-        "authorityName":"user:write"
-
-      },
-
-      {
-
-        "authorityName":"user:update"
-
-      }
-
-    ]
+    "houseNumber": "No. 456"
 
   }
 
 }
 
 
-
-
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **block** 
+- **block**
   - **Description:** Endpoint to block.
-  - **HTTP Method:** PATCH
+  - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/staffs/99efc622-5a59-4731-8c3c-1a1fbdd4e3ba/block`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByUuid** 
-  - **Description:** Endpoint to deletebyuuid.
-  - **HTTP Method:** DELETE
-  - **Endpoint:** `/api/v1/staffs/76be6907-9f1d-48a0-9906-3b1b9aee37cd`
+</details>
+
+## student <a name="student"></a>
+
+<details><summary>Show/Hide</summary>
+
+- **getAll**
+  - **Description:** Endpoint to getall.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/students?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **getAllDetail**
+  - **Description:** Endpoint to getalldetail.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/students/detail?pageNumber=0&pageSize=25`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **getByUuid**
+  - **Description:** Endpoint to getbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/students/80da63ce-84f7-42bd-a1f1-426c7ca3bd5c`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **geDetailByUuid**
+  - **Description:** Endpoint to gedetailbyuuid.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/students/detail/f0b5dd7e-4397-4cd1-8785-dd0e683fa9e6`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **create**
+  - **Description:** Endpoint to create.
+  - **HTTP Method:** POST
+  - **Endpoint:** `/api/v1/students`
+  - **Request Body:**
+
+```json
+{
+
+  "position": "Senior Lecturer",
+
+  "nameEn": "John Doe",
+
+  "nameKh": "ជូន ដូ",
+
+  "username": "johndoe123",
+
+  "gender": "Male",
+
+  "dob": "1985-06-15",
+
+  "email": "johndoe@example.com",
+
+  "password": "Password123!",
+
+  "profileImage": "https://example.com/images/profile/johndoe.jpg",
+
+  "phoneNumber": "1234567890"
+
+}
+
+
+```
+- **Response:** No examples available
+
+- **updateByUuid**
+  - **Description:** Endpoint to updatebyuuid.
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/students/0049ff77-f220-4cc5-a4df-e664280313fc`
+  - **Request Body:**
+
+```json
+{
+
+
+
+}
+
+
+```
+- **Response:** No examples available
+
+- **disable**
+  - **Description:** Endpoint to disable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/students/64fceae5-b097-4eb2-a3ed-b58a90b81600/disable`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **enable**
+  - **Description:** Endpoint to enable.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/students/d52e56e6-73c2-4c01-8962-741ad491095d/enable`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **block**
+  - **Description:** Endpoint to block.
+  - **HTTP Method:** PUT
+  - **Endpoint:** `/api/v1/students/af92b40a-88c8-4829-8039-c776ea0a31b9/block`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **New Request**
+  - **Description:** Endpoint to new request.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/students/profile`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -4043,32 +3780,32 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **upload-single** 
+- **upload-single**
   - **Description:** Endpoint to upload-single.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/medias/upload-single`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **upload-multiple** 
+- **upload-multiple**
   - **Description:** Endpoint to upload-multiple.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/medias/upload-multiple`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getByName** 
+- **getByName**
   - **Description:** Endpoint to getbyname.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/medias/a75e2608-efc8-45e7-8d87-238c66f564b1.jpg`
+  - **Endpoint:** `/api/v1/medias/38c5c6c4-f7f1-41e2-b4c4-a4b5222215d7.jpeg`
   - **Request Body:**
 
 ```json
@@ -4076,25 +3813,36 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByName(not use)** 
+- **deleteByName(not use)**
   - **Description:** Endpoint to deletebyname(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/medias/e9d6f354-677f-4021-8cdc-7192d999d4ca.png`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **downloadByName** 
+- **downloadByName**
   - **Description:** Endpoint to downloadbyname.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/medias/b4ca30ea-acfd-4c9b-8a09-79777c79da51.png/download`
+  - **Endpoint:** `/api/v1/medias/download/38c5c6c4-f7f1-41e2-b4c4-a4b5222215d7.jpeg`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
+```
+- **Response:** No examples available
+
+- **view**
+  - **Description:** Endpoint to view.
+  - **HTTP Method:** GET
+  - **Endpoint:** `/api/v1/medias/view/d7f6e815-0d3b-46b4-b70b-e52c8c26a801.png`
+  - **Request Body:**
+
+```json
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -4104,7 +3852,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **createNew** 
+- **createNew**
   - **Description:** Endpoint to createnew.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/materials`
@@ -4127,7 +3875,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
   "description": "This is an example description of the material.",
 
-  "subjectAlias": "web basic",
+  "subjectAlias": "java-programming",
 
   "isDraft": false
 
@@ -4137,10 +3885,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByAlias** 
+- **updateByAlias**
   - **Description:** Endpoint to updatebyalias.
-  - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/materials/java-introduction-slide-1`
+  - **HTTP Method:** PATCH
+  - **Endpoint:** `/api/v1/materials/web-basic-slide`
   - **Request Body:**
 
 ```json
@@ -4162,10 +3910,10 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByAlias** 
+- **getByAlias**
   - **Description:** Endpoint to getbyalias.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/materials/java-introduction-slide-1`
+  - **Endpoint:** `/api/v1/materials/web-basic-slide`
   - **Request Body:**
 
 ```json
@@ -4173,29 +3921,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/materials?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **deleteByAlias(not use)** 
+- **deleteByAlias(not use)**
   - **Description:** Endpoint to deletebyalias(not use).
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/materials/java-introduction-slide-1`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/materials/filter?pageNumber=0&pageSize=25`
@@ -4226,25 +3974,25 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **disable** 
+- **disable**
   - **Description:** Endpoint to disable.
   - **HTTP Method:** PUT
-  - **Endpoint:** `/api/v1/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/disable`
+  - **Endpoint:** `/api/v1/materials/web-basic-slide/disable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **enable** 
+- **enable**
   - **Description:** Endpoint to enable.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/subjects/2eef8ea3-158b-4ad6-890a-58cfd12133d1/enable`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -4260,29 +4008,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/payments?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/payments/012ab18c-b6bc-4d7d-8bcc-8d1a0e67c437`
+  - **Endpoint:** `/api/v1/payments/3bb68852-bd8c-4909-9ffc-1118a79b0034`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **filter** 
+- **filter**
   - **Description:** Endpoint to filter.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/payments/filter?pageNumber=0&pageSize=25`
@@ -4313,7 +4061,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **createPayment** 
+- **createPayment**
   - **Description:** Endpoint to createpayment.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/payments`
@@ -4322,13 +4070,13 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-  "studentName": "soknem",
+  "studentName": "pov_soknem",
 
   "originalPayment": 1000.0,
 
   "discount": 10.0,
 
-  "paidAmount": 450.0,
+  "paidAmount": 750.0,
 
   "paidDate": "2024-06-05",
 
@@ -4342,7 +4090,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/payments/1a5cc4c2-8c76-4743-aca7-cd5876dbf411`
@@ -4373,14 +4121,14 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByUuid** 
+- **deleteByUuid**
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/payments/9d865cc6-3bfb-41a3-a986-aca05c64b455`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -4390,18 +4138,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAll** 
+- **getAll**
   - **Description:** Endpoint to getall.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/receipts?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **create** 
+- **create**
   - **Description:** Endpoint to create.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/receipts`
@@ -4410,13 +4158,13 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```json
 {
 
-    "remarks": "new",
+    "remarks": "new payment",
 
     "payments": [
 
         {
 
-            "uuid": "1531c438-1f06-4153-8282-c5702b07968e"
+            "uuid": "3bb68852-bd8c-4909-9ffc-1118a79b0034"
 
         }
 
@@ -4428,18 +4176,18 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **getByUuid** 
+- **getByUuid**
   - **Description:** Endpoint to getbyuuid.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
+  - **Endpoint:** `/api/v1/receipts/da6cc91e-487d-4a54-8d72-431d3e51f229`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/receipts/107a919e-7a25-42ce-b18b-505b4d8d7183`
@@ -4464,14 +4212,14 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByUuid** 
+- **deleteByUuid**
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/receipts/cf10f40b-2d4c-448a-b5f0-06fee5c1aacc`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -4487,29 +4235,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **getAllGraduation** 
+- **getAllGraduation**
   - **Description:** Endpoint to getallgraduation.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/graduations?pageNumber=1&pageSize=22`
+  - **Endpoint:** `/api/v1/graduations?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getgraduationByUuid** 
+- **getgraduationByUuid**
   - **Description:** Endpoint to getgraduationbyuuid.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/graduations/74f1b8ef-831a-41ac-ad04-7aadafd32400`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **updateByUuid** 
+- **updateByUuid**
   - **Description:** Endpoint to updatebyuuid.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
@@ -4530,14 +4278,14 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByUuid** 
+- **deleteByUuid**
   - **Description:** Endpoint to deletebyuuid.
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/graduations/b6a94a56-8473-4744-bda8-48544bec2752`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
@@ -4547,29 +4295,29 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
 <details><summary>Show/Hide</summary>
 
-- **allCurriculum** 
+- **allCurriculum**
   - **Description:** Endpoint to allcurriculum.
   - **HTTP Method:** GET
   - **Endpoint:** `/api/v1/curriculums?pageNumber=0&pageSize=25`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **getCurriculumByYearAndSemester** 
+- **getCurriculumByYearAndSemester**
   - **Description:** Endpoint to getcurriculumbyyearandsemester.
   - **HTTP Method:** GET
-  - **Endpoint:** `/api/v1/curriculums/2024/Fall`
+  - **Endpoint:** `/api/v1/curriculums/2024/semester one`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
-- **createCurriculum** 
+- **createCurriculum**
   - **Description:** Endpoint to createcurriculum.
   - **HTTP Method:** POST
   - **Endpoint:** `/api/v1/curriculums`
@@ -4580,7 +4328,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 
     "year": "2024",
 
-    "semester": "Fall",
+    "semester": "semester one",
 
     "subjectsOfSemester": [
 
@@ -4622,7 +4370,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **addSubjectToCurriculum** 
+- **addSubjectToCurriculum**
   - **Description:** Endpoint to addsubjecttocurriculum.
   - **HTTP Method:** PATCH
   - **Endpoint:** `/api/v1/curriculums/Foundation/one`
@@ -4671,7 +4419,7 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **updateByYearAndSemester** 
+- **updateByYearAndSemester**
   - **Description:** Endpoint to updatebyyearandsemester.
   - **HTTP Method:** PUT
   - **Endpoint:** `/api/v1/curriculums/Foundation/Semester one`
@@ -4704,14 +4452,14 @@ ISTAD LMS API is a comprehensive platform designed to support school management 
 ```
 - **Response:** No examples available
 
-- **deleteByYearAndSemester** 
+- **deleteByYearAndSemester**
   - **Description:** Endpoint to deletebyyearandsemester.
   - **HTTP Method:** DELETE
   - **Endpoint:** `/api/v1/curriculums/Foundation/one`
   - **Request Body:**
 
 ```json
-{"noBody": "noBody"}
+{"body": "nobody"}
 ```
 - **Response:** No examples available
 
