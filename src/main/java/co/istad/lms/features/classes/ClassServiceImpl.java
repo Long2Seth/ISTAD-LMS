@@ -22,6 +22,7 @@ import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
 import co.istad.lms.mapper.StudentAdmissionMapper;
+import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.SecretKey;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -406,9 +408,21 @@ public class ClassServiceImpl implements ClassService {
                         //set uuid to user
                         user.setUuid(UUID.randomUUID().toString());
 
-                        //random password for user(student)
-                        user.setRawPassword(userService.generateStrongPassword(10));
+                        String rawPassword = userService.generateStrongPassword(10);
+                        try {
+                            //generate key for encrypt
+                            SecretKey key = OtpUtil.generateKey();
 
+                            //encrypt password
+                            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+                            //set raw password with encrypt password
+                            user.setRawPassword(rawPassword);
+                            user.setPassword(rawPassword);
+
+                        } catch (Exception e) {
+                            throw new RuntimeException("Error generating or encrypting password", e);
+                        }
 
                         user.setIsDeleted(false);
                         user.setStatus(false);
