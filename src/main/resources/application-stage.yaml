@@ -31,7 +31,7 @@ MINIO_BUCKET: minio-test-bucket-1
 
 DOMAIN: http://152.42.220.220:7777
 
-MEDIA_BASE_URI: http://localhost:8080
+MEDIA_BASE_URI: http://152.42.220.220:7777
 MEDIA_ENDPOINT: /api/v1/medias
 
 URL-EXPIRY-TIME : 24
