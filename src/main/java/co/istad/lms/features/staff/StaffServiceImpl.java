@@ -7,6 +7,7 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Staff;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.staff.dto.*;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
@@ -38,6 +39,7 @@ public class StaffServiceImpl implements StaffService {
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
     @Override
@@ -49,6 +51,10 @@ public class StaffServiceImpl implements StaffService {
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s have already exists", staffRequest.email())
             );
+        }
+        if (staffRequest.profileImage() != null && !staffRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(staffRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", staffRequest.profileImage()));
         }
 
         // Save the user first
@@ -99,6 +105,12 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("User with uuid = %s was not found.", uuid)
                         )
                 );
+
+
+        if (staffRequestUpdate.profileImage() != null && !staffRequestUpdate.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(staffRequestUpdate.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", staffRequestUpdate.profileImage()));
+        }
 
 
 

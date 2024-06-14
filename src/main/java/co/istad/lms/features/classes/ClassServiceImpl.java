@@ -408,6 +408,7 @@ public class ClassServiceImpl implements ClassService {
 
                         //random password for user(student)
                         user.setRawPassword(userService.generateStrongPassword(10));
+                        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
 
 
                         user.setIsDeleted(false);
