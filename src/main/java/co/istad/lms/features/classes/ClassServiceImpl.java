@@ -18,6 +18,7 @@ import co.istad.lms.features.student.StudentService;
 import co.istad.lms.features.studentadmisson.StudentAdmissionRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
 import co.istad.lms.mapper.StudentAdmissionMapper;
@@ -74,6 +75,7 @@ public class ClassServiceImpl implements ClassService {
 
     private final UserRepository userRepository;
 
+    private final UserService userService;
 
     private final CourseRepository courseRepository;
 
@@ -405,7 +407,7 @@ public class ClassServiceImpl implements ClassService {
                         user.setUuid(UUID.randomUUID().toString());
 
                         //random password for user(student)
-                        user.setRawPassword(generateStrongPassword());
+                        user.setRawPassword(userService.generateStrongPassword(10));
 
 
                         user.setIsDeleted(false);
