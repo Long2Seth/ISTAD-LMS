@@ -69,7 +69,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //validate identity from dto
         if (studentAdmissionRequest.identity() != null && !studentAdmissionRequest.identity().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionRequest.identity())) {
 
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("identity = %s has not been found",
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("identity = %s has not been found",
                     studentAdmissionRequest.identity()));
         }
 
@@ -110,7 +110,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         studentAdmissionRepository.save(studentAdmission);
 
 //         Send a notification to Telegram
-//        telegramBotService.sendAdmissionResponse(studentAdmission);
+        telegramBotService.sendAdmissionResponse(studentAdmission);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //validate identity from dto
         if (studentAdmissionUpdateRequest.identity() != null && !studentAdmissionUpdateRequest.identity().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentAdmissionUpdateRequest.identity())) {
 
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("identity = %s has not been found",
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("identity = %s has not been found",
                     studentAdmissionUpdateRequest.identity()));
         }
 

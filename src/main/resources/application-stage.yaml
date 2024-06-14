@@ -8,7 +8,7 @@ ACT_PRIVATE: access-refresh-token-keys/access-token-private.key
 ACT_PUBLIC: access-refresh-token-keys/access-token-public.key
 # This is for the refresh token
 RET_PRIVATE: access-refresh-token-keys/refresh-token-private.key
-RET_PUBLIC: access-refresh-tokgen-keys/refresh-token-public.key
+RET_PUBLIC: access-refresh-token-keys/refresh-token-public.key
 
 SERVER_PORT: 7777
 
