@@ -13,7 +13,7 @@ public record AuthRequest(
 
         @NotBlank(message = "Password is required")
         @Size(min = 8, message = "Password must be at least 8 characters")
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#^*-+])[A-Za-z\\d@$!%*?&#^*-+]{8,}$",
                 message = "Password must be strong password with at least one uppercase, one lowercase, one digit and one special character")
         String password
 ) {
