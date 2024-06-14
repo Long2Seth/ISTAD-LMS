@@ -10,28 +10,10 @@ public interface InstructorMapper {
     @Mapping(target = "user.dob" , ignore = true)
     Instructor toRequest(InstructorRequest request);
 
-    @Mapping(source = "user.uuid", target = "uuid")
-    @Mapping(source = "user.nameEn", target = "nameEn")
-    @Mapping(source = "user.nameKh", target = "nameKh")
-    @Mapping(source = "user.username", target = "username")
-    @Mapping(source = "user.gender", target = "gender")
-    @Mapping(source = "user.dob", target = "dob")
-    @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "user.profileImage", target = "profileImage")
-    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
+    @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
     InstructorResponse toResponse(Instructor instructor);
 
-    @Mapping(source = "user.uuid", target = "uuid")
-    @Mapping(source = "user.nameEn", target = "nameEn")
-    @Mapping(source = "user.nameKh", target = "nameKh")
-    @Mapping(source = "user.username", target = "username")
-    @Mapping(source = "user.gender", target = "gender")
-    @Mapping(source = "user.dob", target = "dob")
-    @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "user.profileImage", target = "profileImage")
-    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
-    @Mapping(source = "user.currentAddress", target = "currentAddress")
-    @Mapping(source = "user.birthPlace", target = "birthPlace")
+    @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     InstructorResponseDetail toResponseDetail(Instructor instructor);
 
 

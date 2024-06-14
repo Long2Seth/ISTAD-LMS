@@ -39,8 +39,8 @@ public record InstructorRequest(
         @Size(max = 100, message = "Email must be less than or equal to 100 characters")
         String email,
 
-        @NotBlank(message = "Profile image is required")
-        @Size(max = 255, message = "Profile image must be less than or equal to 255 characters")
+
+        
         String profileImage,
 
         @NotBlank(message = "Phone number is required")
@@ -60,7 +60,7 @@ public record InstructorRequest(
 
         String uploadCv,
 
-        String identity,
+        String identityCard,
 
         @ElementCollection
         Set<@NotBlank(message = "Degree is required") String> degree,

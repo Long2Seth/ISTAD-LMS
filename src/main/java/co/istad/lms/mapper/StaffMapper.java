@@ -9,30 +9,12 @@ public interface StaffMapper {
 
     Staff toRequest(StaffRequest staffRequest);
 
-    @Mapping(source = "user.uuid", target = "uuid")
-    @Mapping(source = "user.nameEn", target = "nameEn")
-    @Mapping(source = "user.nameKh", target = "nameKh")
-    @Mapping(source = "user.username", target = "username")
-    @Mapping(source = "user.gender", target = "gender")
-    @Mapping(source = "user.dob", target = "dob")
-    @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "user.profileImage", target = "profileImage")
-    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
+    @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
     StaffResponse toResponse(Staff staff);
 
 
 
-    @Mapping(source = "user.uuid", target = "uuid")
-    @Mapping(source = "user.nameEn", target = "nameEn")
-    @Mapping(source = "user.nameKh", target = "nameKh")
-    @Mapping(source = "user.username", target = "username")
-    @Mapping(source = "user.gender", target = "gender")
-    @Mapping(source = "user.dob", target = "dob")
-    @Mapping(source = "user.email", target = "email")
-    @Mapping(source = "user.profileImage", target = "profileImage")
-    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
-    @Mapping(source = "user.currentAddress", target = "currentAddress")
-    @Mapping(source = "user.birthPlace", target = "birthPlace")
+    @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     StaffResponseDetail toResponseDetail(Staff staff);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService {
         passwordChars.add((char) (random.nextInt(26) + 'A')); // Uppercase letter
         passwordChars.add((char) (random.nextInt(26) + 'a')); // Lowercase letter
         passwordChars.add((char) (random.nextInt(10) + '0')); // Digit
-        passwordChars.add("@$!%*?&#^+".charAt(random.nextInt("@$!%*?&#^+".length()))); // Special character
+        passwordChars.add("@$!%*?&".charAt(random.nextInt("@$!%*?&".length()))); // Special character
 
         // Fill the rest of the password length with random characters from the allowed set
-        String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&#^us+";
+        String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&";
         for (int i = 4; i < length; i++) {
             passwordChars.add(allowedChars.charAt(random.nextInt(allowedChars.length())));
         }
@@ -213,6 +213,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with alias = %s was not found.", uuid)));
+
+        if (userRequest.profileImage() != null && !userRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(userRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", userRequest.profileImage()));
+        }
+
 
         // Update user from request object that map user request to user
         userMapper.updateUserFromRequest(user, userRequest);
