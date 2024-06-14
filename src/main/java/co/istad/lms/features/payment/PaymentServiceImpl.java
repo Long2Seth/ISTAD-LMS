@@ -91,9 +91,6 @@ public class PaymentServiceImpl implements PaymentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Paid amount must be less than course fee");
         }
 
-//        if (paymentRequest.paidAmount() > payment.getBalanceDue()) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Paid amount must be less than balance due");
-//        }
 
         // Save the payment to the repository
         paymentRepository.save(payment);
@@ -111,12 +108,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     }
 
-
-//    @Override
-//    public Page<PaymentResponse> getLatestPaymentsForAllStudents(int page, int limit) {
-//        PageRequest<Payment> latestPayments = paymentRepository.findLatestPaymentsForAllStudents();
-//        return latestPayments.map(paymentMapper::toPaymentResponse);
-//    }
 
 
     @Override
