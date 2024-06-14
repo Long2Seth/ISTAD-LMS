@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService {
         passwordChars.add((char) (random.nextInt(26) + 'A')); // Uppercase letter
         passwordChars.add((char) (random.nextInt(26) + 'a')); // Lowercase letter
         passwordChars.add((char) (random.nextInt(10) + '0')); // Digit
-        passwordChars.add("@$!%*?&#^*-+".charAt(random.nextInt("@$!%*?&#^*-+".length()))); // Special character
+        passwordChars.add("@$!%*?&#^+".charAt(random.nextInt("@$!%*?&#^+".length()))); // Special character
 
         // Fill the rest of the password length with random characters from the allowed set
-        String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&#^*-+";
+        String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&#^us+";
         for (int i = 4; i < length; i++) {
             passwordChars.add(allowedChars.charAt(random.nextInt(allowedChars.length())));
         }
