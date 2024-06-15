@@ -11,4 +11,4 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 7777
 VOLUME /home/istad/media
 VOLUME /keys
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=stage", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
