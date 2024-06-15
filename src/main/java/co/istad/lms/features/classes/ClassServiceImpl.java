@@ -417,8 +417,8 @@ public class ClassServiceImpl implements ClassService {
                             String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
 
                             //set raw password with encrypt password
-                            user.setRawPassword(rawPassword);
-                            user.setPassword(rawPassword);
+                            user.setRawPassword(encryptedPassword);
+                            user.setPassword(encryptedPassword);
 
                         } catch (Exception e) {
                             throw new RuntimeException("Error generating or encrypting password", e);
