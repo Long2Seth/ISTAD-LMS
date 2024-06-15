@@ -1,6 +1,7 @@
 package co.istad.lms.util;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -20,12 +21,13 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Component
 public class KeyUtil {
 
 
-    @Autowired
-    Environment environment;
+
+   private final Environment environment;
 
 
     @Value("${ACCESS_TOKEN_PRIVATE_KEY_PATH}")
@@ -44,8 +46,8 @@ public class KeyUtil {
     private String refreshTokenPublicKey;
 
 
-    KeyPair accessTokenKeyPair;
-    KeyPair refreshTokenKeyPair;
+    private KeyPair accessTokenKeyPair;
+    private KeyPair refreshTokenKeyPair;
 
 
     private KeyPair getAccessTokenKeyPair(){
