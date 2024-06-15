@@ -7,6 +7,7 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
@@ -39,6 +40,7 @@ public class InstructorServiceImpl implements InstructorService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
     public Set<Authority> getDefaultAuthorities() {
@@ -68,6 +70,11 @@ public class InstructorServiceImpl implements InstructorService {
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s have already exists", instructorRequest.email())
             );
+        }
+
+        if (instructorRequest.profileImage() != null && !instructorRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(instructorRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", instructorRequest.profileImage()));
         }
 
 
@@ -106,24 +113,25 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public InstructorResponseDetail updateInstructorByUuid(String uuid, InstructorRequestUpdate instructorRequestUpdate) {
-
         // Find the user by its UUID
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        String.format("User with uuid = %s not found",uuid)
+                        String.format("User with uuid = %s not found", uuid)
                 ));
 
+        if (instructorRequestUpdate.profileImage() != null && !instructorRequestUpdate.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(instructorRequestUpdate.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", instructorRequestUpdate.profileImage()));
+        }
 
-
-        // Check if the username or email already exists from database except the current user
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(user.getUsername(), instructorRequestUpdate.email() , user.getUuid())) {
+        // Check if the email already exists in the database except for the current user
+        if (userRepository.existsByEmail(instructorRequestUpdate.email())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s already exists", instructorRequestUpdate.email())
             );
         }
-
 
         // Update the user from the instructor request
         userMapper.updateUserFromInstructorRequest(user, instructorRequestUpdate);
@@ -131,26 +139,21 @@ public class InstructorServiceImpl implements InstructorService {
         // Save the updated user to the database
         userRepository.save(user);
 
-        // Find the instructor by its UUID and user
+        // Find the instructor by its user
         Instructor instructor = instructorRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        String.format("Instructor with uuid = %s not found",uuid)
+                        String.format("Instructor associated with user uuid = %s not found", uuid)
                 ));
 
-        // Save the updated user and instructor
-        instructor.setUser(user);
-
-        // Save the updated instructor to the database
-        Instructor savedAdmin = instructorRepository.save(instructor);
-
         // Update the instructor from the instructor request
-        instructorMapper.updateInstructorFromRequest(savedAdmin, instructorRequestUpdate);
+        instructorMapper.updateInstructorFromRequest(instructor, instructorRequestUpdate);
 
         // Save the updated instructor to the database
-        return instructorMapper.toResponseDetail(savedAdmin);
+        Instructor savedInstructor = instructorRepository.save(instructor);
 
-
+        // Return the updated instructor details
+        return instructorMapper.toResponseDetail(savedInstructor);
     }
 
     @Override

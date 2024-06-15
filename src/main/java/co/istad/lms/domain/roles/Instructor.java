@@ -16,24 +16,31 @@ import java.util.Set;
 @Entity
 public class Instructor {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
 
     @Column(unique = true)
     private String uuid;
 
 
+
     @Column(columnDefinition = "TEXT")
     private String position;
+
 
 
     @Column(length = 50)
     private String highSchool;
 
 
+
     private LocalDate highSchoolGraduationDate;
+
 
 
     @ElementCollection
@@ -42,7 +49,9 @@ public class Instructor {
     private Set<String> degree;
 
 
+
     private LocalDate degreeGraduationDate;
+
 
 
     @ElementCollection
@@ -51,42 +60,55 @@ public class Instructor {
     private Set<String> major;
 
 
+
     @Column(length = 50)
     private String studyAtUniversityOrInstitution;
+
 
 
     @Column(length = 50)
     private String experienceAtWorkingPlace;
 
 
+
     private Integer experienceYear;
+
 
 
     @Column(columnDefinition = "TEXT")
     private String linkGit;
 
 
+
     @Column(columnDefinition = "TEXT")
     private String linkLinkedin;
+
 
 
     @Column(columnDefinition = "TEXT")
     private String linkTelegram;
 
 
+
     @Column(columnDefinition = "TEXT")
     private String uploadCv;
 
 
+
     @Column(columnDefinition = "TEXT")
-    private String identity;
+    private String identityCard;
+
 
 
     @Column(columnDefinition = "TEXT")
     private String bio;
 
 
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
+
 }

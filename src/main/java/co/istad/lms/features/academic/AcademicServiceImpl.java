@@ -9,6 +9,7 @@ import co.istad.lms.domain.roles.Admin;
 import co.istad.lms.features.academic.dto.*;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
@@ -39,6 +40,7 @@ public class AcademicServiceImpl implements AcademicService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final UserService userService;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
 
@@ -54,6 +56,10 @@ public class AcademicServiceImpl implements AcademicService {
             );
         }
 
+        if (academicRequest.profileImage() != null && !academicRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(academicRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", academicRequest.profileImage()));
+        }
         // Create academic by mapping
         Academic academic = academicMapper.toRequest(academicRequest);
         academic.setUuid(UUID.randomUUID().toString());
@@ -100,6 +106,13 @@ public class AcademicServiceImpl implements AcademicService {
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with UUID = %s not found", uuid)));
+
+
+        if (academicRequestDetail.profileImage() != null && !academicRequestDetail.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(academicRequestDetail.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", academicRequestDetail.profileImage()));
+        }
+
 
         // Check if the user with the provided email or username already exists (excluding current user)
         if (userRepository.existsByEmailOrUsernameAndUuidNot(academicRequestDetail.email(), user.getUsername(), user.getUuid())) {

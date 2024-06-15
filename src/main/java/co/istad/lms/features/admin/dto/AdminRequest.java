@@ -33,8 +33,7 @@ public record AdminRequest(
         String email,
 
 
-        @NotBlank(message = "Profile image is required")
-        @Size(max = 255, message = "Profile image must be less than or equal to 255 characters")
+
         String profileImage,
 
         @Size(max = 20, message = "Phone number must be less than or equal to 20 characters")

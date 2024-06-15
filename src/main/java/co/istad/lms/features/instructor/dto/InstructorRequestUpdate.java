@@ -49,7 +49,7 @@ public record InstructorRequestUpdate(
 
         String uploadCv,
 
-        String identity,
+        String identityCard,
 
         JsonBirthPlace birthPlace
 

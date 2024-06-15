@@ -56,7 +56,7 @@ public record InstructorResponse(
 
         String uploadCv,
 
-        String identity,
+        String identityCard,
 
 
         Set<@NotBlank(message = "Degree is required") String> degree,

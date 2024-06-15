@@ -4,6 +4,7 @@ import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
@@ -35,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
     @Override
@@ -100,6 +101,12 @@ public class StudentServiceImpl implements StudentService {
             );
         }
 
+        if (studentRequest.profileImage() != null && !studentRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", studentRequest.profileImage()));
+        }
+
+
         // Map user request to user
         User user = userMapper.fromStudentRequest(studentRequest);
 
@@ -141,6 +148,11 @@ public class StudentServiceImpl implements StudentService {
                                 String.format("User with uuid = %s not found", uuid)
                         )
                 );
+
+        if (studentRequest.profileImage() != null && !studentRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", studentRequest.profileImage()));
+        }
 
         // Check if user exists by email or username that find in userRepository if not throw exception
         if (userRepository.existsByEmailOrUsernameAndUuidNot(studentRequest.email(), user.getUsername(), uuid)) {

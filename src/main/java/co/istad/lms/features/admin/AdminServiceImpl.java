@@ -8,6 +8,7 @@ import co.istad.lms.features.admin.dto.*;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequest;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
@@ -41,6 +42,7 @@ public class AdminServiceImpl implements AdminService {
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
 
     public void createAdmin(@Valid AdminRequest adminRequest) {
@@ -51,6 +53,11 @@ public class AdminServiceImpl implements AdminService {
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s have already exists", adminRequest.email())
             );
+        }
+
+        if (adminRequest.profileImage() != null && !adminRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(adminRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", adminRequest.profileImage()));
         }
 
         // Map adminRequest to Admin entity using MapStruct
@@ -94,6 +101,13 @@ public class AdminServiceImpl implements AdminService {
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with UUID = %s not found", uuid)));
+
+
+        if (adminRequestDetail.profileImage() != null && !adminRequestDetail.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(adminRequestDetail.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", adminRequestDetail.profileImage()));
+        }
+
 
         // Check if the user with the provided email or username already exists (excluding current user)
         if (userRepository.existsByEmailOrUsernameAndUuidNot(adminRequestDetail.email(), user.getUsername(), user.getUuid())) {
