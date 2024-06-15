@@ -31,9 +31,9 @@ MINIO_ACCESS_KEY: 5xLImtnQfrmIHTzwsOLI
 MINIO_SECRETE_KEY: pMllkpDpFTKJKUdXTK5Uq3J9TK2jV687XiIeggUU
 MINIO_BUCKET: lms-bucket-1
 
-DOMAIN: http://152.42.220.220:7777
+DOMAIN: https://lms-api.istad.co
 
-MEDIA_BASE_URI: http://152.42.220.220:7777
+MEDIA_BASE_URI: https://lms-api.istad.co
 MEDIA_ENDPOINT: /api/v1/medias
 
 URL-EXPIRY-TIME : 24
