@@ -55,5 +55,8 @@ public class Course extends Auditable {
     @ManyToMany(mappedBy = "courses")
     Set<Student> students;
 
+    @ManyToOne
+    @JoinColumn(name = "year_of_study_id", nullable = false)
+    private YearOfStudy yearOfStudy;
 
 }

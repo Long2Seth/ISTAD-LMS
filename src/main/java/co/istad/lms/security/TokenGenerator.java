@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-
+import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -44,12 +45,14 @@ public class TokenGenerator {
 
         Instant now = Instant.now();
 
+        Set<String> roles = userDetails.getRoles();
         //  we can also create scope for the token from the userDetails object here !
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
+                .claim("roles", roles)
                 .build();
         return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
@@ -62,12 +65,14 @@ public class TokenGenerator {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Instant now = Instant.now();
+        List<String> roles = List.of("admin", "student");
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(now.plus(3, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
+                .claim("roles", roles)
                 .build();
 
         return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

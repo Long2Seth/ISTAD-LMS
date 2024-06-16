@@ -20,7 +20,6 @@ public class StudentAdmissionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('admission:write')")
     public void createStudentAdmission(@Valid @RequestBody StudentAdmissionRequest studentAdmissionRequest) {
         studentAdmissionService.createStudentAdmission(studentAdmissionRequest);
     }
