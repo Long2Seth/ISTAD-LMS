@@ -97,11 +97,10 @@ public class KeyUtil {
 
         }else {
 
-            if(Arrays.asList(environment.getActiveProfiles()).contains("prod")){
-                throw new RuntimeException("public and private key doesn't exist !");
-            }
+//            if(Arrays.asList(environment.getActiveProfiles()).contains("prod")){
+//                throw new RuntimeException("public and private key doesn't exist !");
+//            }
         }
-
 
 
 
