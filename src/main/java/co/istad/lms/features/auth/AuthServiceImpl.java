@@ -39,8 +39,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
 
-
-
     @Override
     public AuthResponse login(AuthRequest request) {
         try {
@@ -77,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
             }
         }
     }
+
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         Authentication authentication = jwtAuthenticationProvider.authenticate(
@@ -87,15 +86,18 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public void changePassword( @Valid AuthRequestResetPassword authRequestResetPassword) {
+    public void changePassword(@Valid AuthRequestResetPassword authRequestResetPassword) {
 
 
         // Get the current authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    String.format("User is not authenticated")
+            );
         }
+
 
         // Get the user details from authentication
         Object principal = authentication.getPrincipal();
@@ -103,6 +105,8 @@ public class AuthServiceImpl implements AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
         }
 
+
+        // Get the email from the user details
         UserDetails userDetails = (UserDetails) principal;
         String email = userDetails.getUsername();
 
@@ -114,6 +118,7 @@ public class AuthServiceImpl implements AuthService {
                         String.format("User with username %s not found", email)
                 ));
 
+
         // Validate the new password and confirm password
         if (!authRequestResetPassword.newPassword().equals(authRequestResetPassword.confirmPassword())) {
             throw new ResponseStatusException(
@@ -122,9 +127,11 @@ public class AuthServiceImpl implements AuthService {
             );
         }
 
+
         // Set the new password
         user.setPassword(passwordEncoder.encode(authRequestResetPassword.newPassword()));
         user.setRawPassword(null);
+
 
         // Save the updated user
         userRepository.save(user);
@@ -150,7 +157,6 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
     }
-
 
 
     @Override

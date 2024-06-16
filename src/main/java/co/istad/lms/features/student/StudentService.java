@@ -59,6 +59,17 @@ public interface StudentService {
 
 
     /**
+     * Updates an existing student.
+     *
+     * @param studentSettingRequest the request object containing the updated student details
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void updateSettingStudent(StudentSettingRequest studentSettingRequest);
+
+
+
+    /**
      * Deletes an existing student.
      *
      * @param uuid    is the unique identifier of student
@@ -66,6 +77,10 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     void deleteStudentByUuid(String uuid);
+
+
+
+
 
 
     /**
