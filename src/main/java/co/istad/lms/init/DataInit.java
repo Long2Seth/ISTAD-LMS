@@ -26,6 +26,7 @@ public class DataInit {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final GraduationRepository graduationRepository;
+    private final AdminRepository adminRepository;
 
     @PostConstruct
     void initRole() {
@@ -103,6 +104,10 @@ public class DataInit {
     void initUser() {
         // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
         if (userRepository.count() < 1) {
+
+            Admin admin=new Admin();
+            admin.setUuid(UUID.randomUUID().toString());
+
             User user = new User();
             user.setUuid(UUID.randomUUID().toString());
             user.setNameEn("admin");
@@ -136,7 +141,11 @@ public class DataInit {
             // Authorities
             Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
             user.setAuthorities(authorities);
+
             userRepository.save(user);
+
+            admin.setUser(user);
+            adminRepository.save(admin);
         }
     }
 
