@@ -28,6 +28,10 @@ public class Staff {
     private String uuid;
 
 
+    @Column(columnDefinition = "TEXT")
+    private String position;
+
+
 
     @Column(length = 50)
     private String highSchool;
