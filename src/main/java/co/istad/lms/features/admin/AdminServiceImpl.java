@@ -93,6 +93,7 @@ public class AdminServiceImpl implements AdminService {
         //set authorities to user
         user.setAuthorities(allAuthorities);
 
+
         userRepository.save(user);
         admin.setUser(user);
         adminRepository.save(admin);
