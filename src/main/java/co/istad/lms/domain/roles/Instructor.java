@@ -33,6 +33,12 @@ public class Instructor {
 
 
 
+
+    @Column(columnDefinition = "TEXT")
+    private String position;
+
+
+
     private LocalDate highSchoolGraduationDate;
 
 
