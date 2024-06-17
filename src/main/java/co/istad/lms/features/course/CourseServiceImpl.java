@@ -70,7 +70,7 @@ public class CourseServiceImpl implements CourseService {
         if(courseRequest.instructorUuid()!=null){
 
             Instructor instructor=
-                    instructorRepository.findByUuid(courseRequest.instructorUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Instructor = %s has not been found", courseRequest.instructorUuid())));
+                    instructorRepository.findInstructorByUserUuid(courseRequest.instructorUuid()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Instructor = %s has not been found", courseRequest.instructorUuid())));
 
             //set instructor to course
             course.setInstructor(instructor);
@@ -219,7 +219,7 @@ public class CourseServiceImpl implements CourseService {
 
         //validate instructor from DTO by uuid
         Instructor instructor=
-                instructorRepository.findByUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Instructor = %s has not been found",uuid)));
+                instructorRepository.findInstructorByUserUuid(uuid).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Instructor = %s has not been found",uuid)));
 
         //add instructor to course
         course.setInstructor(instructor);
