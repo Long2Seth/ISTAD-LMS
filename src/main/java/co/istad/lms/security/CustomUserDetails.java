@@ -8,9 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -21,11 +19,32 @@ public class CustomUserDetails implements UserDetails {
     private User user;
     private String rawPassword;
 
-    // Constructor to initialize user and rawPassword
-    public CustomUserDetails(User user, String rawPassword) {
-        this.user = user;
+    public CustomUserDetails(User user , String rawPassword) {
         this.rawPassword = rawPassword;
+        this.user = user;
     }
+
+
+    //method for get role of user
+    public Set<String> getRoles() {
+        Set<String> roles = new HashSet<>();
+
+        if (user.getAdmin() != null) {
+            roles.add("admin");
+        }
+        if (user.getStudent() != null) {
+            roles.add("student");
+        }
+        if (user.getInstructor() != null) {
+            roles.add("instructor");
+        }
+        if (user.getAcademic() != null) {
+            roles.add("academic");
+        }
+
+        return roles;
+    }
+
 
 
     // make the proper format for the authorities

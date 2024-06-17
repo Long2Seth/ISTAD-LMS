@@ -89,6 +89,10 @@ public class AdminServiceImpl implements AdminService {
         }
 
         // Save the user and admin to the database
+
+        //set authorities to user
+        user.setAuthorities(allAuthorities);
+
         userRepository.save(user);
         admin.setUser(user);
         adminRepository.save(admin);

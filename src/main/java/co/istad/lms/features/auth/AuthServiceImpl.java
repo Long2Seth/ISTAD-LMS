@@ -33,6 +33,9 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+
+
+
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserService userService;
@@ -43,8 +46,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
 
+
+
+
     @Override
     public AuthResponse login(AuthRequest request) {
+
+
+
         try {
             // Load user details using the provided email or username
             User user = userRepository.findByEmailOrUsername(request.emailOrUsername(), request.emailOrUsername())
@@ -101,6 +110,8 @@ public class AuthServiceImpl implements AuthService {
 
 
 
+
+
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         Authentication authentication = jwtAuthenticationProvider.authenticate(
@@ -108,6 +119,9 @@ public class AuthServiceImpl implements AuthService {
         );
         return tokenGenerator.generateTokens(authentication);
     }
+
+
+
 
 
     @Override
@@ -164,6 +178,9 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+
+
+
     @Override
     public void resetPassword(RequestPasswordByUsernameOrEmail request) {
         // Fetch the user by email or username
@@ -195,6 +212,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+
+
     @Override
     public ResponsePassword viewPasswordByUsernameOrEmail(RequestPasswordByUsernameOrEmail request) {
 
@@ -207,6 +226,9 @@ public class AuthServiceImpl implements AuthService {
 
         return userMapper.toResponsePassword(user);
     }
+
+
+
 
     @Override
     public void logout(String token) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -27,10 +28,6 @@ public class DataInit {
     private final PasswordEncoder passwordEncoder;
     private final GraduationRepository graduationRepository;
     private final AdminRepository adminRepository;
-
-
-
-
 
     @PostConstruct
     void initRole() {
@@ -116,6 +113,10 @@ public class DataInit {
     void initUser() {
         // Auto generate user (USER, CUSTOMER, STAFF, ADMIN)
         if (userRepository.count() < 1) {
+
+            Admin admin=new Admin();
+            admin.setUuid(UUID.randomUUID().toString());
+
             User user = new User();
             user.setUuid(UUID.randomUUID().toString());
             user.setNameEn("admin");
@@ -131,6 +132,7 @@ public class DataInit {
             user.setStatus(false);
             user.setIsDeleted(false);
             user.setIsChangePassword(false);
+
 
             // BirthPlace
             BirthPlace birthPlace = new BirthPlace();
@@ -148,33 +150,13 @@ public class DataInit {
             // Authorities
             Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
             user.setAuthorities(authorities);
+
             userRepository.save(user);
 
-            // Set Admin Relationship
-            Admin admin = new Admin();
-            admin.setUuid(UUID.randomUUID().toString());
-            admin.setHighSchool("High School");
-            admin.setHighSchoolGraduationDate(LocalDate.parse("2022-01-01"));
-            admin.setStudyAtUniversityOrInstitution("University");
-            admin.setMajor("Major");
-            admin.setDegreeGraduationDate(LocalDate.parse("2022-01-01"));
-            admin.setDegree("Bachelor");
-            admin.setExperienceAtWorkingPlace("ISTAD");
-            admin.setExperienceYear(5);
             admin.setUser(user);
             adminRepository.save(admin);
-
-            // Save User
-            userRepository.save(user);
-
-
         }
     }
-
-
-
-
-
 
 
     @PostConstruct
@@ -230,7 +212,25 @@ public class DataInit {
     }
 
 
-
-
-
+//    @PostConstruct
+//    void initAdmin() {
+//        if ( adminRepository.count()< 1) {
+//            Optional<User> user = userRepository.findByUsername("admin");
+//            Admin admin = new Admin();
+//            admin.setUuid(UUID.randomUUID().toString());
+//            admin.setHighSchool("High School");
+//            admin.setHighSchoolGraduationDate(LocalDate.parse("2022-01-01"));
+//            admin.setStudyAtUniversityOrInstitution("University");
+//            admin.setMajor("Major");
+//            admin.setDegreeGraduationDate(LocalDate.parse("2022-01-01"));
+//            admin.setDegree("Bachelor");
+//            admin.setExperienceAtWorkingPlace("ISTAD");
+//            admin.setExperienceYear(5);
+//            admin.setDeleted(false);
+//            admin.setStatus(false);
+//            admin.setUser(user.get());
+//            adminRepository.save(admin);
+//
+//        }
+//    }
 }

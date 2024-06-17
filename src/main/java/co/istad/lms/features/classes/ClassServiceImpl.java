@@ -93,26 +93,31 @@ public class ClassServiceImpl implements ClassService {
         StudyProgram studyProgram =
                 studyProgramRepository.findByAliasAndIsDeletedFalse(classRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram = %s has not been found", classRequest.studyProgramAlias())));
 
-        //find yearOfStudy of studyProgram and semester1
-        Set<YearOfStudy> yearOfStudies = yearOfStudyRepository.findByYearAndStudyProgram(classRequest.year(),
-                studyProgram);
+        //find year of study by year and semester 1
+        YearOfStudy yearOfStudy1=yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(),1,
+                studyProgram).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(
+                        "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
+                classRequest.year(),1,studyProgram.getAlias())));
 
-        //check year of study available or not
-        if (yearOfStudies.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Year = %s has not been found",
-                    classRequest.year()));
-        }
+        //find year of study by year and semester 2
+        YearOfStudy yearOfStudy2=yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(),2,
+                studyProgram).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(
+                "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
+                classRequest.year(),2,studyProgram.getAlias())));
 
-        //get all subject in semester
-        Set<Subject> subjects = yearOfStudies.stream()
-                .flatMap(yearOfStudy -> yearOfStudy.getSubjects().stream())
-                .collect(Collectors.toSet());
+        //get all subject in semester 1
+        Set<Subject> subjects1=yearOfStudy1.getSubjects();
 
-        Set<Course> allCourse = subjects.stream()
+        //get all subject in semester2
+        Set<Subject> subjects2=yearOfStudy2.getSubjects();
+
+
+        Set<Course> coursesSemester1 = subjects1.stream()
                 .map(subject -> {
                     Course course = new Course();
                     course.setOneClass(aClass);
                     course.setSubject(subject);
+                    course.setYearOfStudy(yearOfStudy1);
                     course.setUuid(UUID.randomUUID().toString());
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
@@ -122,6 +127,25 @@ public class ClassServiceImpl implements ClassService {
                 })
                 .collect(Collectors.toSet());
 
+        Set<Course> coursesSemester2 = subjects2.stream()
+                .map(subject -> {
+                    Course course = new Course();
+                    course.setOneClass(aClass);
+                    course.setSubject(subject);
+                    course.setYearOfStudy(yearOfStudy2);
+                    course.setUuid(UUID.randomUUID().toString());
+                    course.setTitle(subject.getTitle());
+                    course.setIsDeleted(false);
+                    course.setIsDraft(true);
+                    course.setIsStarted(false);
+                    return course;
+                })
+                .collect(Collectors.toSet());
+
+        //all course in class
+        Set<Course> allCourse=new HashSet<>();
+        allCourse.addAll(coursesSemester1);
+        allCourse.addAll(coursesSemester2);
 
 //        find instructor by instructorUuid in classRequest
         if (classRequest.instructorUuid() != null) {
@@ -150,9 +174,12 @@ public class ClassServiceImpl implements ClassService {
 
             aClass.setStudents(students);
 
-            allCourse.forEach(course -> course.setStudents(students));
+            //set student to course in semester1
+            coursesSemester1.forEach(course -> course.setStudents(students));
 
-            //set student to class
+            //set student to course in semester2
+            coursesSemester2.forEach(course -> course.setStudents(students));
+
         }
 
         //set shift to entity
@@ -418,7 +445,7 @@ public class ClassServiceImpl implements ClassService {
 
                             //set raw password with encrypt password
                             user.setRawPassword(encryptedPassword);
-//                            user.setPassword(passwordEncoder.encode(rawPassword));
+                            user.setPassword(passwordEncoder.encode(encryptedPassword));
 
                         } catch (Exception e) {
                             throw new RuntimeException("Error generating or encrypting password", e);

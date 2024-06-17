@@ -1,9 +1,6 @@
 package co.istad.lms.features.yearofstudy.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.Set;
 
@@ -14,6 +11,7 @@ public record YearOfStudyRequest(
 
         @NotNull(message = "Semester is required")
         @Positive(message = "Semester must be a positive number")
+                @Max(value = 2,message = "Semester is must between 1-2")
         Integer semester,
 
         @NotBlank(message = "Study Program ID is required")

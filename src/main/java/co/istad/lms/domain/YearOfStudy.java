@@ -52,5 +52,8 @@ public class YearOfStudy extends Auditable {
     @Column(nullable = false)
     private Boolean isDraft;
 
+    @OneToMany(mappedBy = "yearOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Course> courses;
+
 
 }
