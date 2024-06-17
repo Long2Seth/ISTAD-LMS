@@ -19,7 +19,13 @@ public class CustomUserDetails implements UserDetails {
 
 
     private User user;
+    private String rawPassword;
 
+    // Constructor to initialize user and rawPassword
+    public CustomUserDetails(User user, String rawPassword) {
+        this.user = user;
+        this.rawPassword = rawPassword;
+    }
 
 
     // make the proper format for the authorities

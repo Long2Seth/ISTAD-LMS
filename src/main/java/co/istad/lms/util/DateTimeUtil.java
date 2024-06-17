@@ -44,6 +44,7 @@ public class DateTimeUtil {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format("%s = %s is not valid format", field,timeString));
         }
+
         return dateTime;
     }
 }

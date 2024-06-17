@@ -60,13 +60,6 @@ public class Staff {
 
 
 
-
-    @Column(columnDefinition = "TEXT")
-    private String position;
-
-
-
-
     @ElementCollection
     @CollectionTable(name = "staff_degrees", joinColumns = @JoinColumn(name = "staff_id"))
     @Column(name = "staff", length = 50)

@@ -1,16 +1,16 @@
-DB_USERNAME: istadlms
-DB_PASSWORD: ISTAD@LMS
-DB_HOST: 152.42.220.220
-DB_PORT: 5434
-DB_NAME: istad_lms_db
+DB_USERNAME: postgres
+DB_PASSWORD: 14022002
+DB_HOST: localhost
+DB_PORT: 5433
+DB_NAME: istad-lms-db
 
 ACT_PRIVATE: access-refresh-token-keys/access-token-private.key
 ACT_PUBLIC: access-refresh-token-keys/access-token-public.key
 # This is for the refresh token
 RET_PRIVATE: access-refresh-token-keys/refresh-token-private.key
-RET_PUBLIC: access-refresh-tokgen-keys/refresh-token-public.key
+RET_PUBLIC: access-refresh-token-keys/refresh-token-public.key
 
-SERVER_PORT: 7777
+SERVER_PORT: 8080
 
 MAIL_USERNAME: sokname56@gmail.com
 MAIL_PASSWORD: ehis ldbm otct hykc
@@ -20,10 +20,13 @@ MAIL_HOST_PORT: 587
 SECURITY_NAME: soknem
 SECURITY_PASSWORD: 12345
 
+
 TELEGRAM_TOKEN: 7241005023:AAFWXOc957x3OVrfr4KuyWhnueKl1RHwmEI
 #TELEGRAM_USERNAME: istad_admission_bot
 TELEGRAM_ID: -1002229493417
 
+#https://lms-minio.istad.co/minio
+#http://136.228.158.126:3129
 MINIO_URL: http://152.42.220.220:9000
 MINIO_ACCESS_KEY: oDoNzywQ1izDAGesaewc
 MINIO_SECRETE_KEY: OloMCKeWUuEbxMieFO5cOMWTRsTseKiF3kmislhU
@@ -32,6 +35,7 @@ MINIO_BUCKET: minio-test-bucket-1
 DOMAIN: http://localhost:8080
 
 MEDIA_BASE_URI: http://localhost:8080
+
 MEDIA_ENDPOINT: /api/v1/medias
 
 URL-EXPIRY-TIME : 24

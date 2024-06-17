@@ -1,8 +1,6 @@
 package co.istad.lms.init;
 
-import co.istad.lms.domain.Authority;
-import co.istad.lms.domain.Graduation;
-import co.istad.lms.domain.User;
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Admin;
 import co.istad.lms.features.admin.AdminRepository;
@@ -16,16 +14,23 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class DataInit {
 
+
+
+
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final GraduationRepository graduationRepository;
+    private final AdminRepository adminRepository;
+
+
+
+
 
     @PostConstruct
     void initRole() {
@@ -91,12 +96,20 @@ public class DataInit {
         }
     }
 
+
+
     private Authority createAuthority(String authorityName) {
         Authority authority = new Authority();
         authority.setAuthorityName(authorityName);
         authority.setUuid(UUID.randomUUID().toString());
         return authority;
     }
+
+
+
+
+
+
 
 
     @PostConstruct
@@ -119,7 +132,6 @@ public class DataInit {
             user.setIsDeleted(false);
             user.setIsChangePassword(false);
 
-
             // BirthPlace
             BirthPlace birthPlace = new BirthPlace();
             birthPlace.setCityOrProvince("Phnom Penh");
@@ -137,8 +149,32 @@ public class DataInit {
             Set<Authority> authorities = new HashSet<>(authorityRepository.findAll());
             user.setAuthorities(authorities);
             userRepository.save(user);
+
+            // Set Admin Relationship
+            Admin admin = new Admin();
+            admin.setUuid(UUID.randomUUID().toString());
+            admin.setHighSchool("High School");
+            admin.setHighSchoolGraduationDate(LocalDate.parse("2022-01-01"));
+            admin.setStudyAtUniversityOrInstitution("University");
+            admin.setMajor("Major");
+            admin.setDegreeGraduationDate(LocalDate.parse("2022-01-01"));
+            admin.setDegree("Bachelor");
+            admin.setExperienceAtWorkingPlace("ISTAD");
+            admin.setExperienceYear(5);
+            admin.setUser(user);
+            adminRepository.save(admin);
+
+            // Save User
+            userRepository.save(user);
+
+
         }
     }
+
+
+
+
+
 
 
     @PostConstruct
@@ -194,25 +230,7 @@ public class DataInit {
     }
 
 
-//    @PostConstruct
-//    void initAdmin() {
-//        if ( adminRepository.count()< 1) {
-//            Optional<User> user = userRepository.findByUsername("admin");
-//            Admin admin = new Admin();
-//            admin.setUuid(UUID.randomUUID().toString());
-//            admin.setHighSchool("High School");
-//            admin.setHighSchoolGraduationDate(LocalDate.parse("2022-01-01"));
-//            admin.setStudyAtUniversityOrInstitution("University");
-//            admin.setMajor("Major");
-//            admin.setDegreeGraduationDate(LocalDate.parse("2022-01-01"));
-//            admin.setDegree("Bachelor");
-//            admin.setExperienceAtWorkingPlace("ISTAD");
-//            admin.setExperienceYear(5);
-//            admin.setDeleted(false);
-//            admin.setStatus(false);
-//            admin.setUser(user.get());
-//            adminRepository.save(admin);
-//
-//        }
-//    }
+
+
+
 }

@@ -7,7 +7,9 @@ import co.istad.lms.features.password.dto.ResponsePassword;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.security.CustomUserDetails;
 import co.istad.lms.security.TokenGenerator;
+import co.istad.lms.util.OtpUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,6 +26,8 @@ import org.springframework.security.oauth2.server.resource.authentication.Bearer
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.crypto.SecretKey;
 
 @Service
 @RequiredArgsConstructor
@@ -42,39 +46,60 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(AuthRequest request) {
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(request.emailOrUsername());
-            if (!userDetails.isAccountNonLocked() || !userDetails.isEnabled()) {
+            // Load user details using the provided email or username
+            User user = userRepository.findByEmailOrUsername(request.emailOrUsername(), request.emailOrUsername())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            String.format("User with email or username %s not found", request.emailOrUsername())
+                    ));
+
+            // Create a custom UserDetails object
+            CustomUserDetails customUserDetails = new CustomUserDetails(user, user.getRawPassword());
+
+            // Check if the account is locked or disabled
+            if (!customUserDetails.isAccountNonLocked() || !customUserDetails.isEnabled()) {
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
-                        String.format("Invalid email or username and password . Please try again.")
+                        "Invalid email or username and password. Please try again."
                 );
-
             }
 
+            // Check if password is null, if so, assign rawPassword to password
+            if (customUserDetails.getPassword() == null) {
+                user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+                user.setRawPassword(null);
+                 // Save the user with the updated password
+                userRepository.save(user);
+            }
+
+            // Authenticate using the provided email or username and password
             Authentication authentication = daoAuthenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.emailOrUsername(),
                             request.password()
                     )
             );
+
+            // Generate tokens upon successful authentication
             return tokenGenerator.generateTokens(authentication);
 
         } catch (AuthenticationException ex) {
-
-            //Handle invalid credentials exception with password
-            if (ex.getMessage().equalsIgnoreCase("Bad credentials")) {
+            // Handle invalid credentials exception
+            if ("Bad credentials".equalsIgnoreCase(ex.getMessage())) {
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
-                        String.format("Invalid password. Please try again.")
+                        "Invalid password. Please try again."
                 );
             } else {
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
-                        String.format("Invalid email or username. Please try again.")
+                        "Invalid email or username. Please try again."
                 );
             }
         }
     }
+
+
 
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
@@ -148,12 +173,23 @@ public class AuthServiceImpl implements AuthService {
                         String.format("User with email or username %s not found", request.usernameOrEmail())
                 ));
 
-        // Generate a new strong random password
-        String newRawPassword = userService.generateStrongPassword(10);
-
         // Update the user entity with the new password
-        user.setRawPassword(newRawPassword);
-        user.setPassword(passwordEncoder.encode(newRawPassword));
+        String rawPassword = userService.generateStrongPassword(10);
+        try {
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+            user.setPassword(null);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
         userRepository.save(user);
 
     }

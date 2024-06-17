@@ -10,6 +10,7 @@ import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.SecretKey;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -116,10 +118,26 @@ public class StudentServiceImpl implements StudentService {
         User user = userMapper.fromStudentRequest(studentRequest);
 
         user.setUuid(UUID.randomUUID().toString());
+
+        // Generate password
+        String rawPassword = userService.generateStrongPassword(10);
+        try {
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+//                            user.setPassword(passwordEncoder.encode(rawPassword));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
         user.setIsDeleted(false);
         user.setStatus(false);
-        user.setRawPassword(userService.generateStrongPassword(10));
-        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
         user.setUsername(studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob());
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
@@ -195,8 +213,12 @@ public class StudentServiceImpl implements StudentService {
 
 
 
+
+
     @Override
     public void updateSettingStudent(StudentSettingRequest studentSettingRequest) {
+
+
         // Get authentication from security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -215,15 +237,17 @@ public class StudentServiceImpl implements StudentService {
         UserDetails userDetails = (UserDetails) principal;
         String email = userDetails.getUsername();
 
+        // Find user by email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("User with username %s not found", email)
                 ));
 
-        // Log the existing user details
-        log.info("Existing User: {}", user);
-        log.info("Existing Student: {}", user.getStudent());
+        userMapper.updateUserFromStudentSettingRequest(user, studentSettingRequest);
+
+        // Save user
+        userRepository.save(user);
 
         if(userRepository.existsByEmail(studentSettingRequest.email()) && !user.getEmail().equals(studentSettingRequest.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentSettingRequest.email()));
@@ -232,19 +256,15 @@ public class StudentServiceImpl implements StudentService {
         // Update user from student request
         studentMapper.updateStudentSettingRequest(user.getStudent(), studentSettingRequest);
 
-        // Log the updated user details
-        log.info("Updated Student: {}", user.getStudent());
-
         // Save student
         studentRepository.save(user.getStudent());
 
-        // Save user
-        userRepository.save(user);
 
-        // Log final saved user details
-        log.info("Saved User: {}", user);
-        log.info("Saved Student: {}", user.getStudent());
+
+
     }
+
+
 
 
 
@@ -320,6 +340,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+
+
+
+
     @Override
     public void disableStudentByUuid(String uuid) {
 
@@ -347,6 +371,10 @@ public class StudentServiceImpl implements StudentService {
 
 
     }
+
+
+
+
 
 
     @Override
@@ -378,6 +406,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+
+
+
+
     @Override
     public void blockStudentByUuid(String uuid) {
 
@@ -407,4 +439,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+
+
+
+    
 }
