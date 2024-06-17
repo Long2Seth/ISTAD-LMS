@@ -17,6 +17,13 @@ public class CustomUserDetails implements UserDetails {
 
 
     private User user;
+    private String rawPassword;
+
+    public CustomUserDetails(User user , String rawPassword) {
+        this.rawPassword = rawPassword;
+        this.user = user;
+    }
+
 
     //method for get role of user
     public Set<String> getRoles() {

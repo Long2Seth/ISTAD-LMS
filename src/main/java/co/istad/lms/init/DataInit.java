@@ -1,8 +1,6 @@
 package co.istad.lms.init;
 
-import co.istad.lms.domain.Authority;
-import co.istad.lms.domain.Graduation;
-import co.istad.lms.domain.User;
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Admin;
 import co.istad.lms.features.admin.AdminRepository;
@@ -21,6 +19,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class DataInit {
+
+
+
 
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
@@ -92,12 +93,20 @@ public class DataInit {
         }
     }
 
+
+
     private Authority createAuthority(String authorityName) {
         Authority authority = new Authority();
         authority.setAuthorityName(authorityName);
         authority.setUuid(UUID.randomUUID().toString());
         return authority;
     }
+
+
+
+
+
+
 
 
     @PostConstruct

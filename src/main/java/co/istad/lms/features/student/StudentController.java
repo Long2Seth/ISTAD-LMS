@@ -70,6 +70,13 @@ public class StudentController {
     }
 
 
+
+    @PatchMapping("/setting")
+    public void updateStudentSetting(@RequestBody StudentSettingRequest studentSettingRequest) {
+        studentService.updateSettingStudent(studentSettingRequest);
+    }
+
+
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{uuid}/enable")

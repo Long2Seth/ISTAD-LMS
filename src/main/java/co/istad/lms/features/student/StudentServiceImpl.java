@@ -10,16 +10,22 @@ import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.SecretKey;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +33,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
@@ -111,10 +118,26 @@ public class StudentServiceImpl implements StudentService {
         User user = userMapper.fromStudentRequest(studentRequest);
 
         user.setUuid(UUID.randomUUID().toString());
+
+        // Generate password
+        String rawPassword = userService.generateStrongPassword(10);
+        try {
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+//                            user.setPassword(passwordEncoder.encode(rawPassword));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
         user.setIsDeleted(false);
         user.setStatus(false);
-        user.setRawPassword(userService.generateStrongPassword(10));
-        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
         user.setUsername(studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob());
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
@@ -188,6 +211,63 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
+
+
+
+
+    @Override
+    public void updateSettingStudent(StudentSettingRequest studentSettingRequest) {
+
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        userMapper.updateUserFromStudentSettingRequest(user, studentSettingRequest);
+
+        // Save user
+        userRepository.save(user);
+
+        if(userRepository.existsByEmail(studentSettingRequest.email()) && !user.getEmail().equals(studentSettingRequest.email())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentSettingRequest.email()));
+        }
+
+        // Update user from student request
+        studentMapper.updateStudentSettingRequest(user.getStudent(), studentSettingRequest);
+
+        // Save student
+        studentRepository.save(user.getStudent());
+
+
+
+
+    }
+
+
+
+
+
     @Override
     public void deleteStudentByUuid(String uuid) {
 
@@ -260,6 +340,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+
+
+
+
     @Override
     public void disableStudentByUuid(String uuid) {
 
@@ -287,6 +371,10 @@ public class StudentServiceImpl implements StudentService {
 
 
     }
+
+
+
+
 
 
     @Override
@@ -318,6 +406,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+
+
+
+
     @Override
     public void blockStudentByUuid(String uuid) {
 
@@ -347,4 +439,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
+
+
+
+    
 }
