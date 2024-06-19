@@ -46,6 +46,14 @@ public class YearOfStudy extends Auditable {
     )
     private Set<Subject> subjects;
 
+
+    @ManyToMany
+    @JoinTable(
+            name = "yearofstudy_class",
+            joinColumns = @JoinColumn(name = "yearofstudy_id"),
+            inverseJoinColumns = @JoinColumn(name = "class_id"))
+    private Set<Class> classes;
+
     @Column(nullable = false)
     private Boolean isDeleted = false;
 

@@ -7,6 +7,8 @@ import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.user.dto.*;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.SecretKey;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,11 +181,35 @@ public class UserServiceImpl implements UserService {
 
         // Map user request to user
         User user = userMapper.fromUserRequest(userRequest);
+
         // Set user uuid
         user.setUuid(UUID.randomUUID().toString());
 
-        user.setRawPassword(generateStrongPassword(10));
-        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+        // Generate password rawPassword to encrypt
+        String rawPassword = generateStrongPassword(10);
+
+        try {
+
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+
+            // Set password to null
+            user.setPassword(null);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
+        // Set dob from string to LocalDate that comes from the request validation
+        LocalDate dob = DateTimeUtil.stringToLocalDate(userRequest.dob(),"dob");
+        user.setDob(dob);
+
         user.setUsername(userRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + userRequest.dob());
         user.setIsDeleted(false);
         user.setStatus(false);

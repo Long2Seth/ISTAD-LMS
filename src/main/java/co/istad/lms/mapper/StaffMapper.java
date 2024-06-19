@@ -7,6 +7,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface StaffMapper {
 
+
+    @Mapping(target = "user.dob" , ignore = true)
     Staff toRequest(StaffRequest staffRequest);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")

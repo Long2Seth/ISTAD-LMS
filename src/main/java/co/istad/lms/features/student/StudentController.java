@@ -2,10 +2,6 @@ package co.istad.lms.features.student;
 
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.security.CustomUserDetails;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -60,6 +56,12 @@ public class StudentController {
     @PostMapping
     public void createStudent(@Valid @RequestBody StudentRequest studentRequest) {
         studentService.createStudent(studentRequest);
+    }
+
+
+    @GetMapping("/achievement")
+    public StudentAchievementResponse getStudentAchievement() {
+        return studentService.getStudentAchievement();
     }
 
 

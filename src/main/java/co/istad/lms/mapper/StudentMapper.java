@@ -7,10 +7,14 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface StudentMapper {
 
+    @Mapping(target = "user.dob" , ignore = true)
     Student toRequest(StudentRequest studentRequest);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
     StudentResponse toResponse(Student student);
+
+//    @Mapping(source = "")
+    StudentAchievementResponse toStudentAchievementResponse(Student student);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     StudentResponseDetail toResponseDetail(Student student);

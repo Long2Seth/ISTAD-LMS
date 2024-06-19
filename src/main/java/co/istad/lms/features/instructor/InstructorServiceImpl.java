@@ -15,6 +15,7 @@ import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.InstructorMapper;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.SecretKey;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -81,12 +83,31 @@ public class InstructorServiceImpl implements InstructorService {
 
         // Create new user for the instructor
         User user = userMapper.fromInstructorRequest(instructorRequest);
+
+        user.setUuid(UUID.randomUUID().toString());
+
+        // Generate password rawPassword to encrypt
+        String rawPassword = userService.generateStrongPassword(10);
+        try {
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+            // Set password to null
+            user.setPassword(null);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
+        // Set dob from string to LocalDate that comes from the request validation
         LocalDate dob = DateTimeUtil.stringToLocalDate(instructorRequest.dob(),"dob");
         user.setDob(dob);
-        user.setUuid(UUID.randomUUID().toString());
-        user.setRawPassword(userService.generateStrongPassword(10));
-        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
-        user.setUsername(instructorRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + instructorRequest.dob());
+
         user.setIsDeleted(false);
         user.setStatus(false);
         user.setIsChangePassword(false);

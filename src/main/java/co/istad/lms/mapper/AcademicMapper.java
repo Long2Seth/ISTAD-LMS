@@ -10,6 +10,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring",uses = {UserMapper.class})
 public interface AcademicMapper {
 
+
+    @Mapping(target = "user.dob" , ignore = true)
     Academic toRequest(AcademicRequest academicRequest);
 
 

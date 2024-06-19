@@ -68,6 +68,17 @@ public interface StudentService {
     void updateSettingStudent(StudentSettingRequest studentSettingRequest);
 
 
+    /**
+     * Retrieves the details of a student by its UUID.
+     *
+     *
+     * @return {@link StudentResponseDetail} the response object containing the student details
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    StudentAchievementResponse getStudentAchievement();
+
+
 
     /**
      * Deletes an existing student.

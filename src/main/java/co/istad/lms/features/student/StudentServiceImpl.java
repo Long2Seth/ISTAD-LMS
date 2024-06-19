@@ -1,15 +1,21 @@
 package co.istad.lms.features.student;
 
-import co.istad.lms.domain.Authority;
-import co.istad.lms.domain.User;
+import co.istad.lms.domain.*;
+import co.istad.lms.domain.Class;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.classes.ClassRepository;
+import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.student.dto.*;
+import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyStudentAchievementResponse;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.DateTimeUtil;
 import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,15 +27,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,9 +45,11 @@ public class StudentServiceImpl implements StudentService {
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final FileMetaDataRepository fileMetaDataRepository;
+    private final ClassRepository classRepository;
+    private final YearOfStudyRepository yearOfStudyRepository;
+    private final StudyProgramRepository studyProgramRepository;
 
 
     @Override
@@ -56,6 +62,7 @@ public class StudentServiceImpl implements StudentService {
         return authorities;
 
     }
+
 
     @Override
     public Page<StudentResponse> getStudents(int page, int limit) {
@@ -119,7 +126,7 @@ public class StudentServiceImpl implements StudentService {
 
         user.setUuid(UUID.randomUUID().toString());
 
-        // Generate password
+        // Generate password rawPassword to encrypt
         String rawPassword = userService.generateStrongPassword(10);
         try {
             //generate key for encrypt
@@ -130,11 +137,16 @@ public class StudentServiceImpl implements StudentService {
 
             //set raw password with encrypt password
             user.setRawPassword(encryptedPassword);
-//                            user.setPassword(passwordEncoder.encode(rawPassword));
+            // Set password to null
+            user.setPassword(null);
 
         } catch (Exception e) {
             throw new RuntimeException("Error generating or encrypting password", e);
         }
+
+        // Set dob from string to LocalDate that comes from the request validation
+        LocalDate dob = DateTimeUtil.stringToLocalDate(studentRequest.dob(), "dob");
+        user.setDob(dob);
 
         user.setIsDeleted(false);
         user.setStatus(false);
@@ -158,7 +170,6 @@ public class StudentServiceImpl implements StudentService {
         // Save student
         studentRepository.save(student);
     }
-
 
 
     @Override
@@ -212,9 +223,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-
-
-
     @Override
     public void updateSettingStudent(StudentSettingRequest studentSettingRequest) {
 
@@ -246,10 +254,11 @@ public class StudentServiceImpl implements StudentService {
 
         userMapper.updateUserFromStudentSettingRequest(user, studentSettingRequest);
 
+
         // Save user
         userRepository.save(user);
 
-        if(userRepository.existsByEmail(studentSettingRequest.email()) && !user.getEmail().equals(studentSettingRequest.email())) {
+        if (userRepository.existsByEmail(studentSettingRequest.email()) && !user.getEmail().equals(studentSettingRequest.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentSettingRequest.email()));
         }
 
@@ -260,13 +269,82 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(user.getStudent());
 
 
-
-
     }
 
 
+    @Override
+    public StudentAchievementResponse getStudentAchievement() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        System.out.println("User: " + user);
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+        System.out.println("Student: " + student);
+
+        Set<Class> studentClasses = student.getClasses();
+
+        Set<Course> course = student.getCourses();
 
 
+        StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Study program not found"
+                ));
+
+
+        Set<YearOfStudy> yearOfStudies = new HashSet<>();
+        for (Course c : course) {
+            yearOfStudies.addAll(yearOfStudyRepository.findByCourses(c));
+        }
+        if (yearOfStudies.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Year of study not found");
+        }
+
+
+        Set<YearOfStudyStudentAchievementResponse> yearOfStudyResponses = yearOfStudies.stream()
+                .map(yearOfStudy -> new YearOfStudyStudentAchievementResponse(
+                        yearOfStudy.getYear(),
+                        yearOfStudy.getSemester(),
+                        yearOfStudy.getCourses().stream()
+                                .map(courses -> new CourseResponse(courses.getUuid(), courses.getTitle(), courses.getCredit()))
+                                .collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toSet());
+
+        return new StudentAchievementResponse(
+                user.getNameEn(),
+                user.getNameKh(),
+                user.getDob(),
+                studyProgram.getDegree().getLevel(),
+                studyProgram.getStudyProgramName(),
+                student.getAvatar(),
+                yearOfStudyResponses
+        );
+    }
 
     @Override
     public void deleteStudentByUuid(String uuid) {
@@ -291,6 +369,7 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.delete(student);
 
     }
+
 
     @Override
     public StudentResponseDetail getStudentDetailByUuid(String uuid) {
@@ -340,10 +419,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-
-
-
-
     @Override
     public void disableStudentByUuid(String uuid) {
 
@@ -371,10 +446,6 @@ public class StudentServiceImpl implements StudentService {
 
 
     }
-
-
-
-
 
 
     @Override
@@ -406,10 +477,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-
-
-
-
     @Override
     public void blockStudentByUuid(String uuid) {
 
@@ -439,8 +506,4 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-
-
-
-    
 }

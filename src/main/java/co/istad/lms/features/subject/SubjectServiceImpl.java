@@ -54,6 +54,8 @@ public class SubjectServiceImpl implements SubjectService {
         // map DTO to entity
         Subject subject = subjectMapper.fromDegreeRequest(subjectRequest);
 
+        subject.setCredit(subjectRequest.internship() + subjectRequest.practice() + subjectRequest.theory());
+
 
         // Save the subject entity
         subjectRepository.save(subject);
@@ -131,6 +133,9 @@ public class SubjectServiceImpl implements SubjectService {
 
         //map DTO to entity
         subjectMapper.updateSubjectFromRequest(subject, subjectUpdateRequest);
+
+
+        subject.setCredit(subjectUpdateRequest.internship() + subjectUpdateRequest.practice() + subjectUpdateRequest.theory());
 
         //save to database
         subjectRepository.save(subject);

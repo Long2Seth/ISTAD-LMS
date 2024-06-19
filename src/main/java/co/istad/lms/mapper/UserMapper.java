@@ -19,38 +19,59 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-//    UserResponse toUserResponse(User user);
 
-//    UserResponseDetail toUserResponseDetail(User user);
-
+    @Mapping(target = "dob" , ignore = true)
     User fromUserRequest(UserRequest userRequest);
 
+
     ResponsePassword toResponsePassword(User user);
+
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromRequest(@MappingTarget User user, UserUpdateRequest userRequest);
 
+
+
     User fromAdminRequest(AdminRequest adminRequest);
+
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromAdminRequest(@MappingTarget User user, AdminRequestUpdate adminRequestUpdate);
 
+
+
     User fromAcademicRequest(AcademicRequest academicRequest);
+
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromAcademicRequest(@MappingTarget User user, AcademicRequestUpdate academicRequestUpdate);
 
+
+
     User fromInstructorRequest(InstructorRequest instructorRequest);
+
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromInstructorRequest(@MappingTarget User user, InstructorRequestUpdate instructorRequestUpdate);
 
+
+
     User fromStaffRequest(StaffRequest staffRequest);
+
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStaffRequest(@MappingTarget User user, StaffRequestUpdate staffRequestUpdate);
 
+
+
     User fromStudentRequest(StudentRequest studentRequest);
+
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStudentRequest(@MappingTarget User user, StudentRequestUpdate studentRequestUpdate);

@@ -26,7 +26,7 @@ public record UserRequest(
         String gender,
 
         @NotNull(message = "Date of birth is required")
-        LocalDate dob,
+        String dob,
 
         @NotBlank(message = "Email is required")
         @Email(message = "Email should be valid")

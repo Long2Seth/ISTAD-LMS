@@ -38,6 +38,8 @@ public class Course extends Auditable {
     @Column(nullable = false)
     private Boolean isStarted;
 
+    Integer credit;
+
     private LocalDate courseStart;
 
     @ManyToOne

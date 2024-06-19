@@ -170,6 +170,7 @@ public class AuthServiceImpl implements AuthService {
         // Set the new password
         user.setPassword(passwordEncoder.encode(authRequestResetPassword.newPassword()));
         user.setRawPassword(null);
+        user.setIsChangePassword(true);
 
 
         // Save the updated user

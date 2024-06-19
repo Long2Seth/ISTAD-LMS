@@ -53,6 +53,7 @@ public class TokenGenerator {
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
                 .claim("roles", roles)
+                .claim("isChangePassword", userDetails.getUser().getIsChangePassword())
                 .build();
         return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
@@ -73,6 +74,7 @@ public class TokenGenerator {
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
                 .claim("roles", roles)
+                .claim("isChangePassword", userDetails.getUser().getIsChangePassword())
                 .build();
 
         return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

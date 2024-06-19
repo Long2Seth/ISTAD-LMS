@@ -21,7 +21,7 @@ public record StudentResponseDetail(
         String currentAddress,
         JsonBirthPlace birthPlace,
 
-        Set<ClassResponse> classes,
+//        Set<ClassResponse> classes,
         Set<CourseResponse> courses
 ) {
 }

@@ -15,6 +15,8 @@ import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.mapper.AdminMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.OtpUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.SecretKey;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -67,8 +71,29 @@ public class AdminServiceImpl implements AdminService {
         // Map adminRequest to User entity using MapStruct
         User user = userMapper.fromAdminRequest(adminRequest);
         user.setUuid(UUID.randomUUID().toString());
-        user.setRawPassword(userService.generateStrongPassword(10));
-        user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+
+        // Generate password rawPassword to encrypt
+        String rawPassword = userService.generateStrongPassword(10);
+        try {
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+            // Set password to null
+            user.setPassword(null);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
+        // Set dob from string to LocalDate that comes from the request validation
+        LocalDate dob = DateTimeUtil.stringToLocalDate(adminRequest.dob(),"dob");
+        user.setDob(dob);
+
         user.setUsername(adminRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + adminRequest.dob());
         user.setStatus(false);
         user.setIsDeleted(false);

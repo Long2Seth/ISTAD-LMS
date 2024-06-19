@@ -42,12 +42,15 @@ public class StudyProgram extends Auditable {
     private Boolean isDraft;
 
     @ManyToOne
-    @JoinColumn(name = "degree_alias",nullable = false)
+    @JoinColumn(name = "degree_id",nullable = false)
     private Degree degree;
 
     @ManyToOne
-    @JoinColumn(name = "faculty_alias",nullable = false)
+    @JoinColumn(name = "faculty_id",nullable = false)
     private Faculty faculty;
+
+    @ManyToMany(mappedBy = "studyPrograms")
+    private Set<Class> classes;
 
 
 }

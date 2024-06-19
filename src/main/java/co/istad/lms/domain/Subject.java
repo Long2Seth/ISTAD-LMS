@@ -45,6 +45,8 @@ public class Subject extends Auditable {
     @Column(nullable = false)
     private Integer internship;
 
+    private Integer credit;
+
     @Column(nullable = false)
     private Integer duration;
 

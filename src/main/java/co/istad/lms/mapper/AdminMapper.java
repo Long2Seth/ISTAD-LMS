@@ -9,6 +9,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring",uses = {UserMapper.class})
 public interface AdminMapper {
 
+
+    @Mapping(target = "user.dob" , ignore = true)
     Admin toRequestAdmin(AdminRequest adminRequest);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
