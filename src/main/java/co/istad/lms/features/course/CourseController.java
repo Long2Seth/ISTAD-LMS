@@ -82,7 +82,7 @@ public class CourseController {
         courseService.disableCourseByUuid(uuid);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('course:read')")
     public Page<CourseDetailResponse> filterCourses(
 
