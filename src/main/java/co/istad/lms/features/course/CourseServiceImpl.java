@@ -12,6 +12,7 @@ import co.istad.lms.features.course.dto.CourseRequest;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.course.dto.CourseUpdateRequest;
 import co.istad.lms.features.instructor.InstructorRepository;
+import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.mapper.CourseMapper;
 import co.istad.lms.util.DateTimeUtil;
@@ -43,6 +44,8 @@ public class CourseServiceImpl implements CourseService {
     private final ClassRepository classRepository;
 
     private final BaseSpecification<Course> baseSpecification;
+
+    private final MediaService mediaService;
 
     @Override
     public void createCourse(CourseRequest courseRequest) {
@@ -99,7 +102,11 @@ public class CourseServiceImpl implements CourseService {
                 courseRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Course = %s has not been found", uuid)));
 
-        System.out.println("class Alias = "+course.getOneClass().getGeneration());
+        if(course.getSubject().getLogo()!=null&&!course.getSubject().getLogo().trim().isEmpty()){
+            Subject subject=course.getSubject();
+            subject.setLogo(mediaService.getUrl(subject.getLogo()));
+            course.setSubject(subject);
+        }
         //map to dto and return
         return courseMapper.toCourseDetailResponse(course);
     }
@@ -115,6 +122,14 @@ public class CourseServiceImpl implements CourseService {
 
         //find all courses in database
         Page<Course> courses = courseRepository.findAll(pageRequest);
+
+        courses.forEach(course -> {
+            if(course.getSubject().getLogo()!=null&&!course.getSubject().getLogo().trim().isEmpty()){
+                Subject subject=course.getSubject();
+                subject.setLogo(mediaService.getUrl(subject.getLogo()));
+                course.setSubject(subject);
+            }
+        });
 
         //map entity to DTO and return
         return courses.map(courseMapper::toCourseDetailResponse);
@@ -143,6 +158,12 @@ public class CourseServiceImpl implements CourseService {
 
         //save to database
         courseRepository.save(course);
+
+        if(course.getSubject().getLogo()!=null&&!course.getSubject().getLogo().trim().isEmpty()){
+            Subject subject=course.getSubject();
+            subject.setLogo(mediaService.getUrl(subject.getLogo()));
+            course.setSubject(subject);
+        }
 
         //return Degree DTO
         return courseMapper.toCourseDetailResponse(course);
@@ -205,6 +226,14 @@ public class CourseServiceImpl implements CourseService {
         //get all entity that match with filter condition
         Page<Course> courses = courseRepository.findAll(specification, pageRequest);
 
+        courses.forEach(course -> {
+            if(course.getSubject().getLogo()!=null&&!course.getSubject().getLogo().trim().isEmpty()){
+                Subject subject=course.getSubject();
+                subject.setLogo(mediaService.getUrl(subject.getLogo()));
+                course.setSubject(subject);
+            }
+        });
+
         //map to DTO and return
         return courses.map(courseMapper::toCourseDetailResponse);
     }
@@ -226,6 +255,12 @@ public class CourseServiceImpl implements CourseService {
 
         //save to database
         courseRepository.save(course);
+
+        if(course.getSubject().getLogo()!=null&&!course.getSubject().getLogo().trim().isEmpty()){
+            Subject subject=course.getSubject();
+            subject.setLogo(mediaService.getUrl(subject.getLogo()));
+            course.setSubject(subject);
+        }
 
         return courseMapper.toCourseDetailResponse(course);
     }
