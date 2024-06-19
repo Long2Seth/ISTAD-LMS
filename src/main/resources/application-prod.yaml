@@ -34,7 +34,7 @@ TELEGRAM_TOKEN: 7241005023:AAFWXOc957x3OVrfr4KuyWhnueKl1RHwmEI
 #TELEGRAM_USERNAME: istad_admission_bot
 TELEGRAM_ID: -1002229493417
 
-MEDIA_BASE_URI: https://lms-api.istad.co/
+MEDIA_BASE_URI: https://lms-api.istad.co
 MEDIA_ENDPOINT: /api/v1/medias
 
 URL-EXPIRY-TIME : 24
