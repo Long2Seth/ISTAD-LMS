@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "classes")
 @Entity
-public class Class extends Auditable {
+public class  Class extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,15 +78,7 @@ public class Class extends Auditable {
     private Set<YearOfStudy> yearOfStudies;
 
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "classes_study_programs",
-            joinColumns = @JoinColumn(name = "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "study_program_id"))
-    private Set<StudyProgram> studyPrograms;
-
-
-    @OneToMany(mappedBy = "oneClass", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
+    @OneToMany(mappedBy = "oneClass", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     Set<Course> courses;
 
 

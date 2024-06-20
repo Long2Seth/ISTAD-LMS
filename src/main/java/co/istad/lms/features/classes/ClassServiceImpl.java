@@ -445,7 +445,9 @@ public class ClassServiceImpl implements ClassService {
 
                             //set raw password with encrypt password
                             user.setRawPassword(encryptedPassword);
-                            user.setPassword(passwordEncoder.encode(encryptedPassword));
+
+                            //set password to null
+                            user.setPassword(null);
 
                         } catch (Exception e) {
                             throw new RuntimeException("Error generating or encrypting password", e);
