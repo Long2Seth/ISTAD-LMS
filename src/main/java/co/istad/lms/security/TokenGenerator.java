@@ -74,7 +74,7 @@ public class TokenGenerator {
                 .subject(userDetails.getUsername())
                 .issuer("ITSAD-LMS")
                 .claim("roles", roles)
-                .claim("isChangePassword", userDetails.getUser().getIsChangePassword())
+                .claim("isChangedPassword", userDetails.getUser().getIsChangePassword())
                 .build();
 
         return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

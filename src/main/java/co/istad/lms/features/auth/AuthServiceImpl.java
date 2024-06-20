@@ -73,13 +73,13 @@ public class AuthServiceImpl implements AuthService {
                 );
             }
 
-            // Check if password is null, if so, assign rawPassword to password
-            if (customUserDetails.getPassword() == null) {
-                user.setPassword(passwordEncoder.encode(user.getRawPassword()));
-                user.setRawPassword(null);
-                 // Save the user with the updated password
-                userRepository.save(user);
-            }
+//            // Check if password is null, if so, assign rawPassword to password
+//            if (customUserDetails.getPassword() == null) {
+//                user.setPassword(passwordEncoder.encode(user.getRawPassword()));
+//                user.setRawPassword(null);
+//                 // Save the user with the updated password
+//                userRepository.save(user);
+//            }
 
             // Authenticate using the provided email or username and password
             Authentication authentication = daoAuthenticationProvider.authenticate(
