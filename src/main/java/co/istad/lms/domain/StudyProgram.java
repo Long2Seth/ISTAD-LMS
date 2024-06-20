@@ -49,7 +49,7 @@ public class StudyProgram extends Auditable {
     @JoinColumn(name = "faculty_id",nullable = false)
     private Faculty faculty;
 
-    @OneToMany(mappedBy = "studyPrograms",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "studyProgram",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Class> classes;
 
 
