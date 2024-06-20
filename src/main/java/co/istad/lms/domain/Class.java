@@ -81,8 +81,8 @@ public class Class extends Auditable {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "classes_study_programs",
-            joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "study_program_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "study_program_id"))
     private Set<StudyProgram> studyPrograms;
 
 

@@ -203,6 +203,7 @@ public class AuthServiceImpl implements AuthService {
             //set raw password with encrypt password
             user.setRawPassword(encryptedPassword);
             user.setPassword(null);
+            user.setIsChangePassword(false);
 
         } catch (Exception e) {
             throw new RuntimeException("Error generating or encrypting password", e);
