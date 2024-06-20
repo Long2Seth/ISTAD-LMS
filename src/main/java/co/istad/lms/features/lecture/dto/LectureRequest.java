@@ -15,7 +15,7 @@ public record LectureRequest(
         @NotBlank(message = "lectureDate is required")
         String lectureDate,
 
-        @NotBlank(message = "status is require")
+        @NotNull(message = "status is require")
         Boolean status,
 
         @Size(max = 100, message = "curseUuid cannot be longer than 100 characters")
