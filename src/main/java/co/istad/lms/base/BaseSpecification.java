@@ -20,6 +20,12 @@ public class BaseSpecification<T> {
     public Specification<T> filter(FilterDto filterDto) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
+
+            //if null or empty return all data
+            if (filterDto==null|| filterDto.getSpecsDto() == null || filterDto.getSpecsDto().isEmpty()) {
+                return criteriaBuilder.conjunction(); // Return all data
+            }
+
             for (SpecsDto specs : filterDto.getSpecsDto()) {
                 try {
                     if (specs.getJoinTable() != null) {
@@ -40,7 +46,8 @@ public class BaseSpecification<T> {
                     throw e; // Re-throw specific exception
                 } catch (Exception e) {
                     // Catch general exceptions and log them for debugging
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while processing the request", e);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request",
+                            e);
                 }
             }
 
