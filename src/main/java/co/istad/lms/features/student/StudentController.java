@@ -37,6 +37,12 @@ public class StudentController {
     }
 
 
+    @GetMapping("/view-profile")
+    public StudentProfile viewProfile(){
+        return  studentService.viewProfile();
+    }
+
+
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update','user:read')")
     @GetMapping("/detail/{uuid}")
     public StudentResponseDetail getStudentsDetailByUuid(@PathVariable String uuid) {

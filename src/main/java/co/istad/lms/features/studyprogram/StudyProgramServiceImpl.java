@@ -262,4 +262,6 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         //map to DTO and return
         return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);
     }
+
+
 }

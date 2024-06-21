@@ -1,10 +1,10 @@
 package co.istad.lms.features.student;
 
+import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
-import co.istad.lms.features.classes.ClassRepository;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.student.dto.*;
@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,7 +48,7 @@ public class StudentServiceImpl implements StudentService {
     private final UserService userService;
     private final UserMapper userMapper;
     private final FileMetaDataRepository fileMetaDataRepository;
-    private final ClassRepository classRepository;
+    private final BaseSpecification<Student> baseSpecification;
     private final YearOfStudyRepository yearOfStudyRepository;
     private final StudyProgramRepository studyProgramRepository;
 
@@ -103,6 +104,54 @@ public class StudentServiceImpl implements StudentService {
                 .map(studentMapper::toResponseDetail);
 
     }
+
+
+
+    @Override
+    public StudentProfile viewProfile(){
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        return new StudentProfile(
+                user.getProfileImage(),
+                user.getNameEn()
+        );
+    }
+
+
+    @Override
+    public Page<StudentCourseResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        Specification<Student> specification = baseSpecification.filter(filterDto);
+
+        Page<Student> students = studentRepository.findAll(specification,pageRequest);
+
+        //map to DTO and return
+        return students.map(studentMapper::toResponseCourse);
+
+    }
+
 
 
     @Override
@@ -274,6 +323,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentAchievementResponse  getStudentAchievement() {
+
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
