@@ -85,6 +85,11 @@ public class ClassServiceImpl implements ClassService {
     @Transactional
     public void createClass(ClassRequest classRequest) {
 
+        if(classRepository.existsByClassCode(classRequest.classCode())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("Class with classCode = %s has " +
+                            "already existed",
+                    classRequest.classCode()));
+        }
 
         //map from DTO to entity
         Class aClass = classMapper.fromClassRequest(classRequest);
@@ -240,6 +245,22 @@ public class ClassServiceImpl implements ClassService {
         Class aClass =
                 classRepository.findByUuidAndIsDeletedFalse(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Class = %s has not been found", uuid)));
+
+        //check null alias from DTO
+        if (classUpdateRequest.classCode()!=null) {
+
+            //validate classCode from dto with original classCode
+            if (!aClass.getClassCode().equalsIgnoreCase(classUpdateRequest.classCode())) {
+
+                //validate new alias is conflict with other alias or not
+                if (classRepository.existsByClassCode(classUpdateRequest.classCode())) {
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Class with classCode = %s " +
+                            "already " +
+                            "exist.", classUpdateRequest.classCode()));
+                }
+            }
+        }
 
         //check studyProgram from update DTO
         if (classUpdateRequest.studyProgramAlias() != null) {

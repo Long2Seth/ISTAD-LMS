@@ -135,8 +135,11 @@ public class SubjectServiceImpl implements SubjectService {
         //map DTO to entity
         subjectMapper.updateSubjectFromRequest(subject, subjectUpdateRequest);
 
+        int internship=subject.getInternship()==null?0: subject.getInternship();
+        int theory=subject.getTheory()==null?0: subject.getTheory();
+        int practice=subject.getPractice()==null?0: subject.getPractice();
 
-        subject.setCredit(subjectUpdateRequest.internship() + subjectUpdateRequest.practice() + subjectUpdateRequest.theory());
+        subject.setCredit(internship+theory+practice);
 
         //save to database
         subjectRepository.save(subject);

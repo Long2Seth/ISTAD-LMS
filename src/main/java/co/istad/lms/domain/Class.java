@@ -28,7 +28,7 @@ public class  Class extends Auditable {
     @Column(nullable = false, unique = true, length = 100)
     private String uuid;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String classCode;
 
     @Column(nullable = false)

@@ -15,6 +15,10 @@ public interface ClassRepository extends JpaRepository<Class,Long>, JpaSpecifica
 
     Optional<Class> findByUuid(String uuid);
 
+    Optional<Class> findByClassCode(String classCode);
+
+    Boolean existsByClassCode(String classCode);
+
     Optional<Class> findByUuidAndIsDeletedFalse(String uuid);
 
     Optional<Class> findByStudyProgramAndYearOfStudies(StudyProgram studyProgram, Set<YearOfStudy> yearOfStudies);

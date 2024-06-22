@@ -37,6 +37,7 @@ public record ClassRequest(
 
         @NotNull(message = "isDraft is require")
         Boolean isDraft,
+        @NotNull(message = "status is require")
         @Positive(message = "status must be 1-3")
         @Max(value = 3, message = "status must be 1-3")
         @Min(value = 1, message = "status must be 1-3")

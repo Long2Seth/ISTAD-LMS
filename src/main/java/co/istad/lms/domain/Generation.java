@@ -40,7 +40,7 @@ public class Generation extends Auditable {
     private Boolean isDraft;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private Boolean isActive;
 
 
 }

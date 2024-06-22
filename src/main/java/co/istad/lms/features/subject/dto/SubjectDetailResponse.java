@@ -14,6 +14,8 @@ public record SubjectDetailResponse(
         Integer theory,
         Integer duration,
 
+        Integer credit,
+
         JsonNode curriculum,
 
         Boolean isDeleted,
