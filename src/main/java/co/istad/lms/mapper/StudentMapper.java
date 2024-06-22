@@ -10,11 +10,13 @@ public interface StudentMapper {
     @Mapping(target = "user.dob" , ignore = true)
     Student toRequest(StudentRequest studentRequest);
 
+
+    StudentProfile toProfile(Student student);
+
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
     StudentResponse toResponse(Student student);
 
-//    @Mapping(source = "")
-    StudentAchievementResponse toStudentAchievementResponse(Student student);
+StudentCourseResponse toResponseCourse(Student student);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     StudentResponseDetail toResponseDetail(Student student);

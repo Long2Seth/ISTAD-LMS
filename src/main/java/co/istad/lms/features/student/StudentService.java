@@ -1,5 +1,6 @@
 package co.istad.lms.features.student;
 
+import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Authority;
 import co.istad.lms.features.student.dto.*;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,17 @@ import org.springframework.data.domain.Page;
 import java.util.Set;
 
 public interface StudentService {
+
+
+    /**
+     * Retrieves a list of students detail.z
+     * @return {@link Page<StudentResponse>}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    Set<Authority> getDefaultAuthoritiesStudent();
+
+
 
     /**
      * Retrieves a list of students detail.
@@ -19,21 +31,39 @@ public interface StudentService {
     Page<StudentResponseDetail> getStudentsDetail(int page, int limit);
 
 
-    /**
-     * Retrieves a list of students detail.z
-     * @return {@link Page<StudentResponse>}
-     * @since 1.0 (2024)
-     */
-    Set<Authority> getDefaultAuthoritiesStudent();
+
 
     /**
      * Retrieves a list of students.
      * @param page the current page number
      * @param limit is the size of record per page
      * @return {@link Page<StudentResponse>}
+     * @author Long Piseth
      * @since 1.0 (2024)
      */
     Page<StudentResponse> getStudents(int page, int limit);
+
+
+    /**
+     * Retrieves a list of students.
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    StudentProfile viewProfile();
+
+
+
+    /**
+     * Retrieves a list of students.
+     * @param filterDto the current page number
+     * @param pageNumber is the size of record per page
+     * @param pageSize is the size of record per page
+     * @return {@link Page<StudentCourseResponse>} the response object containing the student details
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    Page<StudentCourseResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+
 
 
     /**
@@ -111,6 +141,7 @@ public interface StudentService {
      *
      * @param uuid is the unique identifier of student
      * @return {@link StudentResponse}
+     * @author Long Piseth
      * @since 1.0 (2024)
      */
     StudentResponse getStudentByUuid(String uuid);

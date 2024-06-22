@@ -77,8 +77,6 @@ public class AuthServiceImpl implements AuthService {
             if (customUserDetails.getPassword() == null) {
                 user.setPassword(passwordEncoder.encode(user.getRawPassword()));
                 user.setRawPassword(null);
-                 // Save the user with the updated password
-                userRepository.save(user);
             }
 
             // Authenticate using the provided email or username and password
@@ -167,10 +165,21 @@ public class AuthServiceImpl implements AuthService {
         }
 
 
+        // Check if isChangePassword is true can change password
+        if (user.getIsChangePassword()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    String.format("You have already changed your password.")
+            );
+        }
+
+
         // Set the new password
         user.setPassword(passwordEncoder.encode(authRequestResetPassword.newPassword()));
         user.setRawPassword(null);
         user.setIsChangePassword(true);
+
+
 
 
         // Save the updated user
