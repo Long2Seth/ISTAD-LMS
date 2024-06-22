@@ -105,7 +105,7 @@ public class StudyProgramController {
     }
 
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('admin:control')")
     public Page<StudyProgramDetailResponse> filterStudyPrograms(
 

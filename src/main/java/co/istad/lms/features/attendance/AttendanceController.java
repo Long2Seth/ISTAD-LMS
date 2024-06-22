@@ -79,7 +79,7 @@ public class AttendanceController {
         attendanceService.disableAttendanceByUuid(uuid);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('assessment:update')")
     public Page<AttendanceDetailResponse> filterAttendances(
 

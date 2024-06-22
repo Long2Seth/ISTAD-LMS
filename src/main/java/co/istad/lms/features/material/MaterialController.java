@@ -81,7 +81,7 @@ public class MaterialController {
         materialService.disableMaterialByAlias(alias);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('material:read')")
     public Page<MaterialDetailResponse> filterMaterials(
 

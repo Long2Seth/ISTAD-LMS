@@ -125,7 +125,7 @@ public class YearOfStudyController {
 
     }
 
-    @PutMapping("/{uuid}/draft")
+    @PostMapping("/{uuid}/draft")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('faculty:update')")
     public void draftYearOfStudy(@PathVariable String uuid){

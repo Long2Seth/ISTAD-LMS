@@ -61,7 +61,7 @@ public class StudentAdmissionController {
         studentAdmissionService.deleteStudentAdmission(uuid);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('admission:read')")
     public Page<StudentAdmissionDetailResponse> filterStudentAdmissions(
 

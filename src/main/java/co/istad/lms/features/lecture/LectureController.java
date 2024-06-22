@@ -82,7 +82,7 @@ public class LectureController {
         lectureService.disableLectureByUuid(uuid);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('session:read')")
     public Page<LectureDetailResponse> filterLectures(
 

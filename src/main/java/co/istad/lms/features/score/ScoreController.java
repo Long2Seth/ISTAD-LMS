@@ -62,7 +62,7 @@ public class ScoreController {
         scoreService.deleteScoreByUuid(uuid);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('assessment:read')")
     public Page<ScoreDetailResponse> filterScores(
 
