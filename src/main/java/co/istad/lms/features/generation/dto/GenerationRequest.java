@@ -22,7 +22,11 @@ public record GenerationRequest(
         @NotNull(message = "End year cannot be null")
         @Positive(message = "endYear must be positive")
         Integer endYear,
+
         @NotNull(message = "isDraft is required")
-        Boolean isDraft
+        Boolean isDraft,
+
+        @NotNull(message = "isActive is required")
+        Boolean isActive
 ) {
 }

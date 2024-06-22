@@ -104,7 +104,8 @@ public class FacultyServiceImpl implements FacultyService {
     public FacultyDetailResponse updateFacultyByAlias(String alias, FacultyUpdateRequest facultyUpdateRequest) {
 
         //validate faculty from DTO with alias
-        Faculty faculty = facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", alias)));
+        Faculty faculty =
+                facultyRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", alias)));
 
         //check null alias from DTO
         if (facultyUpdateRequest.alias() != null) {
@@ -133,6 +134,7 @@ public class FacultyServiceImpl implements FacultyService {
                         facultyUpdateRequest.logo()));
             }
         }
+
 
         //save to database
         facultyRepository.save(faculty);
@@ -188,7 +190,7 @@ public class FacultyServiceImpl implements FacultyService {
 
         //validate from dto by alias
         Faculty faculty =
-                facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found ! ", alias)));
+                facultyRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found ! ", alias)));
 
         //set isDraft to false(public)
         faculty.setIsDraft(false);

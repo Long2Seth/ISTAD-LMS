@@ -11,7 +11,8 @@ public record DegreeUpdateRequest(
         @Size(max = 100, message = "Level can not be longer than 100 characters")
         String level,
 
-        String description
+        String description,
+        Boolean isDraft
 ) {
 }
 

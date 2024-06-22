@@ -17,7 +17,8 @@ public record StudyProgramUpdateRequest(
 
         String description,
 
-        String logo
+        String logo,
+        Boolean isDraft
 
 
 ) {

@@ -28,7 +28,8 @@ public record SubjectUpdateRequest(
         Integer practice,
 
         @Positive(message = "internship must be positive")
-        Integer internship
+        Integer internship,
+        Boolean isDraft
 
 
 ) {

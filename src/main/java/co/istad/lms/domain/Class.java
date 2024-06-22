@@ -38,6 +38,9 @@ public class  Class extends Auditable {
     private String description;
 
     @Column(nullable = false)
+    private Integer status;
+
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @Column(nullable = false)

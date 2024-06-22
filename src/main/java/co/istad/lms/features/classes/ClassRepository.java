@@ -14,6 +14,9 @@ import java.util.Set;
 public interface ClassRepository extends JpaRepository<Class,Long>, JpaSpecificationExecutor<Class> {
 
     Optional<Class> findByUuid(String uuid);
+
+    Optional<Class> findByUuidAndIsDeletedFalse(String uuid);
+
     Optional<Class> findByStudyProgramAndYearOfStudies(StudyProgram studyProgram, Set<YearOfStudy> yearOfStudies);
 
     Boolean existsByUuid(String uuid);

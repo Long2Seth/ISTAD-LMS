@@ -2,13 +2,14 @@ package co.istad.lms.features.classes.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
 public record ClassUpdateRequest(
 
-        @Size(max = 100,message = "classCode cannot be longer than 100 characters")
+        @Size(max = 100, message = "classCode cannot be longer than 100 characters")
         String classCode,
 
         String description,
@@ -23,7 +24,11 @@ public record ClassUpdateRequest(
         String shiftAlias,
 
         @Size(max = 100, message = "generationAlias cannot be longer than 100 characters")
-        String generationAlias
+        String generationAlias,
+
+        Boolean isDraft,
+        @Positive
+        Integer status
 
 ) {
 }

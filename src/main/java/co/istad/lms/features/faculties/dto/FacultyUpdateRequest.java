@@ -18,7 +18,8 @@ public record FacultyUpdateRequest(
 
         String logo,
 
-        String address
+        String address,
+        Boolean isDraft
 
 ) {
 }

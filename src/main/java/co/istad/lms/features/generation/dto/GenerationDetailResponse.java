@@ -17,6 +17,7 @@ public record GenerationDetailResponse (
 
         Boolean isDeleted,
 
-        Boolean isDraft
+        Boolean isDraft,
+        Boolean isActive
 ){
 }

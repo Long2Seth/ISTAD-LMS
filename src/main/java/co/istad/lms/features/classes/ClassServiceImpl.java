@@ -238,7 +238,7 @@ public class ClassServiceImpl implements ClassService {
 
         //validate class from DTO
         Class aClass =
-                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                classRepository.findByUuidAndIsDeletedFalse(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Class = %s has not been found", uuid)));
 
         //check studyProgram from update DTO
@@ -331,6 +331,9 @@ public class ClassServiceImpl implements ClassService {
 
         //set isDeleted to true(disable)
         aClass.setIsDeleted(true);
+
+        //set is draft to true
+        aClass.setIsDraft(true);
 
         //save to database
         classRepository.save(aClass);
@@ -561,7 +564,7 @@ public class ClassServiceImpl implements ClassService {
 
         //validate class from dto by uuid
         Class aClass =
-                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                classRepository.findByUuidAndIsDeletedFalse(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Class = %s has not been found ! ", uuid)));
 
         //set isDraft to false(public)

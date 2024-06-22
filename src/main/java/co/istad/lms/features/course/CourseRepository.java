@@ -12,6 +12,8 @@ public interface CourseRepository extends JpaRepository<Course,Long>, JpaSpecifi
 
     Optional<Course> findByUuid(String uuid);
 
+    Optional<Course> findByUuidAndIsDeletedFalse(String uuid);
+
 
 //    Optional<Course> finByOneClass(String oneClass);
  }

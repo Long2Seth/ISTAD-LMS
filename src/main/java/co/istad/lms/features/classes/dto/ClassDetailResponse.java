@@ -18,6 +18,7 @@ public record ClassDetailResponse(
         String description,
         Boolean isDeleted,
         Boolean isDraft,
+        Integer status,
         InstructorResponse instructor,
         StudyProgramResponse studyProgram,
         ShiftResponse shift,

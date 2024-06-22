@@ -1,9 +1,6 @@
 package co.istad.lms.features.classes.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import javax.swing.text.StyledEditorKit;
 import java.util.Set;
@@ -39,6 +36,10 @@ public record ClassRequest(
         Set<String> studentUuid,
 
         @NotNull(message = "isDraft is require")
-        Boolean isDraft
+        Boolean isDraft,
+        @Positive(message = "status must be 1-3")
+        @Max(value = 3, message = "status must be 1-3")
+        @Min(value = 1, message = "status must be 1-3")
+        Integer status
 ) {
 }
