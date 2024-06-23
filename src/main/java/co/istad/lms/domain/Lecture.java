@@ -42,6 +42,13 @@ public class Lecture extends Auditable {
 
     @Column(nullable = false)
     private Boolean isDraft;
+
+    @Column(nullable = false)
+    private String teachingType;
+
+    @Column(nullable = false)
+    private Integer status;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;

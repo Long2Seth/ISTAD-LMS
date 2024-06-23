@@ -15,7 +15,9 @@ public record LectureDetailResponse(
         LocalDate lectureDate,
         Boolean isDeleted,
         Boolean isDraft,
-        CourseResponse courseResponse
+        Integer status,
+        String teachingType,
+        CourseResponse course
 
 ) {}
 

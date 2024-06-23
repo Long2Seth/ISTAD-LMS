@@ -8,7 +8,9 @@ public record LectureUpdateRequest(
         String startTime,
         String endTime,
         String description,
-        String lectureDate
+        String lectureDate,
+        Integer status,
+        String teachingType
 
 ) {
 }

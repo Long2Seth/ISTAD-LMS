@@ -7,7 +7,7 @@ import co.istad.lms.features.classes.dto.ClassResponse;
 import co.istad.lms.features.classes.dto.ClassUpdateRequest;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = StudentMapper.class)
+@Mapper(componentModel = "spring", uses = {StudentMapper.class, InstructorMapper.class})
 public interface ClassMapper {
 
 

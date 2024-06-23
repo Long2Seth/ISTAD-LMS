@@ -15,7 +15,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {StudentMapper.class, })
 public interface ScoreMapper {
 
     Score fromScoreRequest(ScoreRequest scoreRequest);
