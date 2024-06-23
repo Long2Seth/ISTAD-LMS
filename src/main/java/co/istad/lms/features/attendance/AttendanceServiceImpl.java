@@ -5,10 +5,7 @@ import co.istad.lms.domain.Attendance;
 
 import co.istad.lms.domain.Lecture;
 import co.istad.lms.domain.roles.Student;
-import co.istad.lms.features.attendance.dto.AttendanceDetailResponse;
-import co.istad.lms.features.attendance.dto.AttendanceRequest;
-import co.istad.lms.features.attendance.dto.AttendanceResponse;
-import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
+import co.istad.lms.features.attendance.dto.*;
 import co.istad.lms.features.lecture.LectureRepository;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.student.dto.StudentResponse;
@@ -195,5 +192,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         //map entity to DTO and return
         return attendance.map(attendanceMapper::toAttendanceDetailResponse);
 
+    }
+
+    @Override
+    public void createAttendanceMultipleRows(AttendanceMultipleRowCreateRequest attendanceRequests) {
+        attendanceRequests.attendances().forEach(this::createAttendance);
     }
 }
