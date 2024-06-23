@@ -107,7 +107,8 @@ public class SubjectServiceImpl implements SubjectService {
     public SubjectDetailResponse updateSubjectByAlias(String alias, SubjectUpdateRequest subjectUpdateRequest) {
 
         //find subject by alias
-        Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found.", alias)));
+        Subject subject =
+                subjectRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found.", alias)));
 
         //check null alias from DTO
         if (subjectUpdateRequest.alias() != null) {
@@ -134,8 +135,11 @@ public class SubjectServiceImpl implements SubjectService {
         //map DTO to entity
         subjectMapper.updateSubjectFromRequest(subject, subjectUpdateRequest);
 
+        int internship=subject.getInternship()==null?0: subject.getInternship();
+        int theory=subject.getTheory()==null?0: subject.getTheory();
+        int practice=subject.getPractice()==null?0: subject.getPractice();
 
-        subject.setCredit(subjectUpdateRequest.internship() + subjectUpdateRequest.practice() + subjectUpdateRequest.theory());
+        subject.setCredit(internship+theory+practice);
 
         //save to database
         subjectRepository.save(subject);
@@ -183,6 +187,9 @@ public class SubjectServiceImpl implements SubjectService {
         //set isDeleted to true(disable)
         subject.setIsDeleted(true);
 
+        //set isDraft to true(private)
+        subject.setIsDraft(true);
+
         //save to database
         subjectRepository.save(subject);
 
@@ -192,7 +199,8 @@ public class SubjectServiceImpl implements SubjectService {
     public void publicSubjectByAlias(String alias) {
 
         //validate subject from dto by alias
-        Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));
+        Subject subject =
+                subjectRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found ! ", alias)));
 
         //set isDraft to false(public)
         subject.setIsDraft(false);

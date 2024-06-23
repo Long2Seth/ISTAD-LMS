@@ -19,6 +19,8 @@ public record GenerationUpdateRequest(
         Integer startYear,
 
         @Positive(message = "endYear must be positive")
-        Integer endYear
+        Integer endYear,
+
+        Boolean isActive
 
 ) {}

@@ -129,7 +129,8 @@ public class StudyProgramServiceImpl implements StudyProgramService {
     public StudyProgramDetailResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest) {
 
         //validate studyProgram from DTO by alias
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", alias)));
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", alias)));
 
         //check null alias from DTO
         if (studyProgramUpdateRequest.alias() != null) {

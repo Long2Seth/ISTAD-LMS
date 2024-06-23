@@ -18,17 +18,18 @@ public record SubjectUpdateRequest(
         String description,
         String logo,
 
-        @Positive(message = "duration must be positive")
+//        @Positive(message = "duration must be positive")
         Integer duration,
 
-        @Positive(message = "theory must be positive")
+//        @Positive(message = "theory must be positive")
         Integer theory,
 
-        @Positive(message = "practice must be positive")
+//        @Positive(message = "practice must be positive")
         Integer practice,
 
-        @Positive(message = "internship must be positive")
-        Integer internship
+//        @Positive(message = "internship must be positive")
+        Integer internship,
+        Boolean isDraft
 
 
 ) {

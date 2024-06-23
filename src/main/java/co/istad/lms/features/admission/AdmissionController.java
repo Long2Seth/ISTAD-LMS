@@ -89,7 +89,7 @@ public class AdmissionController {
 
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('admission:read')")
     public Page<AdmissionDetailResponse> filterAdmissions(
 

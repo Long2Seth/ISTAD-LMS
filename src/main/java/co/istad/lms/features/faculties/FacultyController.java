@@ -105,7 +105,7 @@ public class FacultyController {
     }
 
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<FacultyDetailResponse> filterFaculties(
 

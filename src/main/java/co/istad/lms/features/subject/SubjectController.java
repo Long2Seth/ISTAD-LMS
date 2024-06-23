@@ -97,7 +97,7 @@ public class SubjectController {
         subjectService.draftSubjectByAlias(alias);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<SubjectDetailResponse> filterSubjects(
 

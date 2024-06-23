@@ -77,7 +77,8 @@ public class DegreeServiceImpl implements DegreeService {
     public DegreeDetailResponse updateDegreeByAlias(String alias, DegreeUpdateRequest degreeUpdateRequest) {
 
         //find degree by alias
-        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
+        Degree degree =
+                degreeRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found.", alias)));
 
         //check null alias from DTO
         if (degreeUpdateRequest.alias() != null) {
@@ -131,7 +132,7 @@ public class DegreeServiceImpl implements DegreeService {
     public void publicDegreeByAlias(String alias) {
 
         //validate degree from dto by alias
-        Degree degree = degreeRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
+        Degree degree = degreeRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Degree = %s has not been found ! ", alias)));
 
         //set isDraft to false(public)
         degree.setIsDraft(false);

@@ -28,7 +28,7 @@ public class  Class extends Auditable {
     @Column(nullable = false, unique = true, length = 100)
     private String uuid;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String classCode;
 
     @Column(nullable = false)
@@ -36,6 +36,9 @@ public class  Class extends Auditable {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(nullable = false)
+    private Integer status;
 
     @Column(nullable = false)
     private Boolean isDeleted;

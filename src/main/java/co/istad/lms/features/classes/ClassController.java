@@ -78,7 +78,7 @@ public class ClassController {
         classService.disableClassByUuid(uuid);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('class:read')")
     public Page<ClassDetailResponse> filterClasses(
 

@@ -99,7 +99,7 @@ public class DegreeController {
         degreeService.disableDegreeByAlias(alias);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<DegreeDetailResponse> filterDegrees(
 

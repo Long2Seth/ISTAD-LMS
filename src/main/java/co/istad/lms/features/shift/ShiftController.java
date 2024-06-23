@@ -85,7 +85,7 @@ public class ShiftController {
         shiftService.disableShiftByAlias(alias);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('shift:read')")
     public Page<ShiftDetailResponse> filterShifts(
 

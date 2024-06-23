@@ -87,7 +87,7 @@ public class GenerationController {
         generationService.draftGenerationByAlias(alias);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     @PreAuthorize("hasAnyAuthority('faculty:read')")
     public Page<GenerationDetailResponse> filterGenerations(
 
