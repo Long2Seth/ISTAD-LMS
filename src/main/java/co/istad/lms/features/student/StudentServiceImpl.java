@@ -3,9 +3,11 @@ package co.istad.lms.features.student;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
+import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.course.dto.CourseResponse;
+import co.istad.lms.features.course.dto.CourseStudentResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
@@ -395,6 +397,84 @@ public class StudentServiceImpl implements StudentService {
                 student.getAvatar(),
                 yearOfStudyResponses
         );
+    }
+
+    @Override
+    public StudentCourseResponse studentCourse() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        System.out.println("User: " + user);
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+
+        Set<Course> course = student.getCourses();
+
+        Set<YearOfStudy> yearOfStudies = new HashSet<>();
+        for (Course c : course) {
+            yearOfStudies.addAll(yearOfStudyRepository.findByCourses(c));
+        }
+        if (yearOfStudies.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Year of study not found");
+        }
+
+
+        Set<CourseStudentResponse> courseStudentResponses = course.stream()
+                .map(courses -> {
+                    Instructor instructor = courses.getInstructor();
+                    String instructorProfileImage = null;
+                    String instructorName = null;
+                    if (instructor != null && instructor.getUser() != null) {
+                        instructorProfileImage = instructor.getUser().getProfileImage();
+                        instructorName = instructor.getUser().getNameEn();
+                    }
+                    return new CourseStudentResponse(
+                            courses.getUuid(),
+                            courses.getTitle(),
+                            courses.getCredit(),
+                            courses.getSubject().getLogo(),
+                            courses.getSubject().getDescription(),
+                            instructorProfileImage,
+                            instructorName,
+                            courses.getYearOfStudy().getYear(),
+                            courses.getYearOfStudy().getSemester()
+                    );
+                })
+                .collect(Collectors.toSet());
+
+
+        return new StudentCourseResponse(
+                user.getUuid(),
+                user.getNameEn(),
+                user.getNameKh(),
+                user.getUsername(),
+                user.getGender(),
+                courseStudentResponses
+        );
+
     }
 
     @Override

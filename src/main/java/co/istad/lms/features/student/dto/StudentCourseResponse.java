@@ -2,6 +2,7 @@ package co.istad.lms.features.student.dto;
 
 import co.istad.lms.features.classes.dto.ClassResponse;
 import co.istad.lms.features.course.dto.CourseResponse;
+import co.istad.lms.features.course.dto.CourseStudentResponse;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 
 import java.time.LocalDate;
@@ -13,6 +14,6 @@ public record StudentCourseResponse(
         String nameKh,
         String username,
         String gender,
-        Set<CourseResponse> courses
+        Set<CourseStudentResponse> courses
 ) {
 }
