@@ -277,7 +277,8 @@ public class ClassServiceImpl implements ClassService {
         if (classUpdateRequest.instructorUuid() != null) {
 
             //find instructor by instructorUuid in classRequest
-            Instructor instructor = instructorRepository.findByUuid(classUpdateRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classUpdateRequest.instructorUuid())));
+            Instructor instructor =
+                    instructorRepository.findInstructorByUserUuid(classUpdateRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classUpdateRequest.instructorUuid())));
 
 //            set instructor to entity
             aClass.setInstructor(instructor);
