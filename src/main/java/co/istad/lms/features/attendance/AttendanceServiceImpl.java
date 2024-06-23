@@ -47,7 +47,8 @@ public class AttendanceServiceImpl implements AttendanceService {
                 lectureRepository.findByUuid(attendanceRequest.lectureUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found", attendanceRequest.lectureUuid())));
 
         //validate student from DTO by uuid
-        Student student = studentRepository.findByUuid(attendanceRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", attendanceRequest.studentUuid())));
+        Student student =
+                studentRepository.findStudentByUserUuid(attendanceRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", attendanceRequest.studentUuid())));
 
         //check duplicate attendance by student and lecture
         if (attendanceRepository.existsByStudentAndLecture(student, lecture)) {
@@ -67,6 +68,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         //set student to attendance
         attendance.setStudent(student);
+
+        //set isDeleted
+        attendance.setIsDeleted(false);
 
         //save to database
         attendanceRepository.save(attendance);
