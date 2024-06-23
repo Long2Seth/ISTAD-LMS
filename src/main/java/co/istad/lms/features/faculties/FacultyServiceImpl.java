@@ -65,7 +65,8 @@ public class FacultyServiceImpl implements FacultyService {
 
 
         //find faculty in database by alias
-        Faculty faculty = facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", alias)));
+        Faculty faculty =
+                facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found1.", alias)));
 
         //set logo url to faculty
         if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
