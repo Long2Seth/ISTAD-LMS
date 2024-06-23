@@ -2,10 +2,7 @@ package co.istad.lms.features.attendance;
 
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.attendance.dto.AttendanceDetailResponse;
-import co.istad.lms.features.attendance.dto.AttendanceRequest;
-import co.istad.lms.features.attendance.dto.AttendanceResponse;
-import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
+import co.istad.lms.features.attendance.dto.*;
 import org.springframework.data.domain.Page;
 
 /**
@@ -24,6 +21,8 @@ public interface AttendanceService {
      * @since 1.0 (2024)
      */
     void createAttendance(AttendanceRequest attendanceRequest);
+
+
 
     /**
      * Retrieves the details of an attendance by its uuid.
@@ -97,4 +96,25 @@ public interface AttendanceService {
      */
     Page<AttendanceDetailResponse> filterAttendances(BaseSpecification.FilterDto filterDto, int page, int size);
 
+
+    /**
+     * Retrieves a paginated list of all attendance.
+     *
+     * @param page is the current page number to retrieve
+     * @param size is the size of record per page to retrieve
+     * @return {@link Page<AttendanceDetailResponse>}
+     * @author Nouth Chanraksa
+     * @since 1.0 (2024)
+     */
+    Page<AttendanceDetailResponse> getAllAttendancesByLecture(int page, int size,String lectureUuid);
+
+
+    /**
+     * Creates a new attendance.
+     *
+     * @param attendanceRequests is the request object containing attendance details
+     * @author Nouth Chanraksa
+     * @since 1.0 (2024)
+     */
+    void createAttendanceMultipleRows(AttendanceMultipleRowCreateRequest attendanceRequests);
 }

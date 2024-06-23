@@ -5,10 +5,7 @@ import co.istad.lms.domain.Attendance;
 
 import co.istad.lms.domain.Lecture;
 import co.istad.lms.domain.roles.Student;
-import co.istad.lms.features.attendance.dto.AttendanceDetailResponse;
-import co.istad.lms.features.attendance.dto.AttendanceRequest;
-import co.istad.lms.features.attendance.dto.AttendanceResponse;
-import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
+import co.istad.lms.features.attendance.dto.*;
 import co.istad.lms.features.lecture.LectureRepository;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.student.dto.StudentResponse;
@@ -47,7 +44,8 @@ public class AttendanceServiceImpl implements AttendanceService {
                 lectureRepository.findByUuid(attendanceRequest.lectureUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Lecture = %s has not been found", attendanceRequest.lectureUuid())));
 
         //validate student from DTO by uuid
-        Student student = studentRepository.findByUuid(attendanceRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", attendanceRequest.studentUuid())));
+        Student student =
+                studentRepository.findStudentByUserUuid(attendanceRequest.studentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", attendanceRequest.studentUuid())));
 
         //check duplicate attendance by student and lecture
         if (attendanceRepository.existsByStudentAndLecture(student, lecture)) {
@@ -68,6 +66,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         //set student to attendance
         attendance.setStudent(student);
 
+        //set isDeleted
+        attendance.setIsDeleted(false);
+
         //save to database
         attendanceRepository.save(attendance);
 
@@ -78,7 +79,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     public AttendanceDetailResponse getAttendanceByUuid(String Uuid) {
 
         //find attendance by uuid
-        Attendance attendance = attendanceRepository.findByUuid(Uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Attendance = %s has not been found.", Uuid)));
+        Attendance attendance =
+                attendanceRepository.findByUuid(Uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Attendance = %s has not been found.", Uuid)));
 
         //return attendance detail
         return attendanceMapper.toAttendanceDetailResponse(attendance);
@@ -173,5 +175,27 @@ public class AttendanceServiceImpl implements AttendanceService {
         //map to DTO and return
         return attendances.map(attendanceMapper::toAttendanceDetailResponse);
 
+    }
+
+    @Override
+    public Page<AttendanceDetailResponse> getAllAttendancesByLecture(int page, int size, String lectureUuid) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current page and size of page
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        //find all attendance in database
+        Page<Attendance> attendance = attendanceRepository.findAllByLectureUuid(lectureUuid,pageRequest);
+
+        //map entity to DTO and return
+        return attendance.map(attendanceMapper::toAttendanceDetailResponse);
+
+    }
+
+    @Override
+    public void createAttendanceMultipleRows(AttendanceMultipleRowCreateRequest attendanceRequests) {
+        attendanceRequests.attendances().forEach(this::createAttendance);
     }
 }

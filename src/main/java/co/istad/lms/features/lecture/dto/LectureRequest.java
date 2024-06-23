@@ -1,9 +1,6 @@
 package co.istad.lms.features.lecture.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record LectureRequest(
 
@@ -16,7 +13,12 @@ public record LectureRequest(
         String lectureDate,
 
         @NotNull(message = "status is require")
-        Boolean status,
+        @Min(value = 1, message = "status must be between 1-3")
+        @Max(value = 3, message = "status must be between 1-3")
+        Integer status,
+
+        @NotBlank(message = "teachingType is require")
+        String teachingType,
 
         @Size(max = 100, message = "curseUuid cannot be longer than 100 characters")
         String courseUuid,

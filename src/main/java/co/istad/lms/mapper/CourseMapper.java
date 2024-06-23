@@ -12,7 +12,7 @@ import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {StudentMapper.class, InstructorMapper.class})
 public interface CourseMapper {
 
     @Mapping(target = "subject",ignore = true)

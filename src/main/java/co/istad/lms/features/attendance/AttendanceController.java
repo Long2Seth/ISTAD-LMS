@@ -1,10 +1,7 @@
 package co.istad.lms.features.attendance;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.attendance.dto.AttendanceDetailResponse;
-import co.istad.lms.features.attendance.dto.AttendanceRequest;
-import co.istad.lms.features.attendance.dto.AttendanceResponse;
-import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
+import co.istad.lms.features.attendance.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -91,5 +88,24 @@ public class AttendanceController {
         return attendanceService.filterAttendances(filterDto, page, size);
     }
 
+    @GetMapping("/lectures/{uuid}")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
+    public Page<AttendanceDetailResponse> getAllAttendancesByLecture(
+
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size,
+            @PathVariable String uuid) {
+
+        return attendanceService.getAllAttendancesByLecture(page, size,uuid);
+    }
+
+    @PostMapping("/multiples")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('assessment:write')")
+    void creatAttendanceMultipleRow(@Valid @RequestBody AttendanceMultipleRowCreateRequest attendanceRequests) {
+
+        attendanceService.createAttendanceMultipleRows(attendanceRequests);
+
+    }
 
 }
