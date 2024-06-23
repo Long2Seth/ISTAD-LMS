@@ -82,7 +82,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     public AttendanceDetailResponse getAttendanceByUuid(String Uuid) {
 
         //find attendance by uuid
-        Attendance attendance = attendanceRepository.findByUuid(Uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Attendance = %s has not been found.", Uuid)));
+        Attendance attendance =
+                attendanceRepository.findByUuid(Uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Attendance = %s has not been found.", Uuid)));
 
         //return attendance detail
         return attendanceMapper.toAttendanceDetailResponse(attendance);
@@ -176,6 +177,23 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         //map to DTO and return
         return attendances.map(attendanceMapper::toAttendanceDetailResponse);
+
+    }
+
+    @Override
+    public Page<AttendanceDetailResponse> getAllAttendancesByLecture(int page, int size, String lectureUuid) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current page and size of page
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
+
+        //find all attendance in database
+        Page<Attendance> attendance = attendanceRepository.findAllByLectureUuid(lectureUuid,pageRequest);
+
+        //map entity to DTO and return
+        return attendance.map(attendanceMapper::toAttendanceDetailResponse);
 
     }
 }

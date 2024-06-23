@@ -91,5 +91,16 @@ public class AttendanceController {
         return attendanceService.filterAttendances(filterDto, page, size);
     }
 
+    @GetMapping("/lectures/{uuid}")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
+    public Page<AttendanceDetailResponse> getAllAttendancesByLecture(
+
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size,
+            @PathVariable String uuid) {
+
+        return attendanceService.getAllAttendancesByLecture(page, size,uuid);
+    }
+
 
 }

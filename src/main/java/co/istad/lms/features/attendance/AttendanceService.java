@@ -97,4 +97,15 @@ public interface AttendanceService {
      */
     Page<AttendanceDetailResponse> filterAttendances(BaseSpecification.FilterDto filterDto, int page, int size);
 
+
+    /**
+     * Retrieves a paginated list of all attendance.
+     *
+     * @param page is the current page number to retrieve
+     * @param size is the size of record per page to retrieve
+     * @return {@link Page<AttendanceDetailResponse>}
+     * @author Nouth Chanraksa
+     * @since 1.0 (2024)
+     */
+    Page<AttendanceDetailResponse> getAllAttendancesByLecture(int page, int size,String lectureUuid);
 }
