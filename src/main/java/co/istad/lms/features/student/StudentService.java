@@ -99,7 +99,7 @@ public interface StudentService {
 
 
     /**
-     * Retrieves the details of a student by its UUID.
+     * Retrieves the details of a student
      *
      *
      * @return {@link StudentResponseDetail} the response object containing the student details
@@ -107,6 +107,16 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     StudentAchievementResponse getStudentAchievement();
+
+
+    /**
+     *Retrieves the details of a student
+     *
+     * @return {@link StudentCourseResponse} the response object containing the student
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    StudentCourseResponse studentCourse();
 
 
 
@@ -118,6 +128,11 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     void deleteStudentByUuid(String uuid);
+
+
+
+
+
 
 
 
