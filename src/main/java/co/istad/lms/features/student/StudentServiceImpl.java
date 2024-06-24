@@ -383,7 +383,7 @@ public class StudentServiceImpl implements StudentService {
                         yearOfStudy.getYear(),
                         yearOfStudy.getSemester(),
                         yearOfStudy.getCourses().stream()
-                                .map(courses -> new CourseResponse(courses.getUuid(), courses.getTitle(), courses.getCredit()))
+                                .map(courses -> new CourseResponse(courses.getUuid(), courses.getTitle(), courses.getSubject().getCredit()))
                                 .collect(Collectors.toSet())
                 ))
                 .collect(Collectors.toSet());
@@ -454,7 +454,7 @@ public class StudentServiceImpl implements StudentService {
                     return new CourseStudentResponse(
                             courses.getUuid(),
                             courses.getTitle(),
-                            courses.getCredit(),
+                            courses.getSubject().getCredit(),
                             courses.getSubject().getLogo(),
                             courses.getSubject().getDescription(),
                             instructorProfileImage,
