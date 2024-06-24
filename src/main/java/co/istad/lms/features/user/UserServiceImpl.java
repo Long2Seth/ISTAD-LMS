@@ -5,7 +5,7 @@ import co.istad.lms.domain.User;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.media.MediaService;
-import co.istad.lms.features.student.dto.StudentProfile;
+import co.istad.lms.features.user.dto.UserProfile;
 import co.istad.lms.features.user.dto.*;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public StudentProfile viewProfile() {
+    public UserProfile viewProfile() {
 
         // Get authentication from security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
                         String.format("User with username %s not found", email)
                 ));
 
-        return new StudentProfile(
+        return new UserProfile(
                 user.getProfileImage(),
                 user.getNameEn()
         );

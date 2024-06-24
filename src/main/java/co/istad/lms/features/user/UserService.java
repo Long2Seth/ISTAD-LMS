@@ -2,14 +2,13 @@ package co.istad.lms.features.user;
 
 
 
-import co.istad.lms.features.student.dto.StudentProfile;
+
+import co.istad.lms.features.user.dto.UserProfile;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.features.user.dto.UserResponseDetail;
 import co.istad.lms.features.user.dto.UserUpdateRequest;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 /**
  * Business logic interface which contains to manage users
@@ -38,7 +37,7 @@ public interface UserService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    StudentProfile viewProfile();
+    UserProfile viewProfile();
 
 
 
