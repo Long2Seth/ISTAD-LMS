@@ -90,8 +90,10 @@ public class LectureServiceImpl implements LectureService {
                 lectureRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Lecture = %s has not been found.", uuid)));
 
+        String classCode = lecture.getCourse().getOneClass().getClassCode();
+
         //return lecture detail
-        return lectureMapper.toLectureDetailResponse(lecture);
+        return lectureMapper.toLectureDetailResponse(lecture,classCode);
     }
 
 
@@ -107,8 +109,12 @@ public class LectureServiceImpl implements LectureService {
         //find all lecture in database
         Page<Lecture> lectures = lectureRepository.findAll(pageRequest);
 
-        //map entity to DTO and return
-        return lectures.map(lectureMapper::toLectureDetailResponse);
+        // map to DTO and return
+        return lectures.map(lecture -> {
+            String classCode = lecture.getCourse().getOneClass().getClassCode();
+            return lectureMapper.toLectureDetailResponse(lecture, classCode);
+        });
+
     }
 
 
@@ -150,8 +156,10 @@ public class LectureServiceImpl implements LectureService {
         //save to database
         lectureRepository.save(lecture);
 
-        //return Lecture response
-        return lectureMapper.toLectureDetailResponse(lecture);
+        String classCode = lecture.getCourse().getOneClass().getClassCode();
+
+        //return lecture detail
+        return lectureMapper.toLectureDetailResponse(lecture,classCode);
     }
 
 
@@ -213,8 +221,12 @@ public class LectureServiceImpl implements LectureService {
         //get all entity that match with filter condition
         Page<Lecture> lectures = lectureRepository.findAll(specification, pageRequest);
 
-        //map to DTO and return
-        return lectures.map(lectureMapper::toLectureDetailResponse);
+        // map to DTO and return
+        return lectures.map(lecture -> {
+            String classCode = lecture.getCourse().getOneClass().getClassCode();
+            return lectureMapper.toLectureDetailResponse(lecture, classCode);
+        });
+
 
     }
 }

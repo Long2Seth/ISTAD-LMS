@@ -7,7 +7,7 @@ import co.istad.lms.features.lecture.dto.LectureResponse;
 import co.istad.lms.features.lecture.dto.LectureUpdateRequest;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CourseMapper.class, InstructorMapper.class})
 public interface LectureMapper {
 
     @Mapping(target = "startTime",ignore = true)
@@ -16,7 +16,7 @@ public interface LectureMapper {
     Lecture fromLectureRequest(LectureRequest lectureCreateRequest);
 
 
-    LectureDetailResponse toLectureDetailResponse(Lecture lecture);
+    LectureDetailResponse toLectureDetailResponse(Lecture lecture,String classCode);
 
     LectureResponse toLectureResponse(Lecture lecture);
 
