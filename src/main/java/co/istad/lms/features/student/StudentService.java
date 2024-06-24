@@ -10,6 +10,9 @@ import java.util.Set;
 public interface StudentService {
 
 
+
+
+
     /**
      * Retrieves a list of students detail.z
      * @return {@link Page<StudentResponse>}
@@ -17,6 +20,10 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     Set<Authority> getDefaultAuthoritiesStudent();
+
+
+
+
 
 
 
@@ -33,6 +40,8 @@ public interface StudentService {
 
 
 
+
+
     /**
      * Retrieves a list of students.
      * @param page the current page number
@@ -44,12 +53,6 @@ public interface StudentService {
     Page<StudentResponse> getStudents(int page, int limit);
 
 
-    /**
-     * Retrieves a list of students.
-     * @author Long Piseth
-     * @since 1.0 (2024)
-     */
-    StudentProfile viewProfile();
 
 
 
@@ -66,6 +69,8 @@ public interface StudentService {
 
 
 
+
+
     /**
      * Creates a new student.
      *
@@ -74,6 +79,10 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     void createStudent(StudentRequest studentRequest);
+
+
+
+
 
 
     /**
@@ -88,6 +97,9 @@ public interface StudentService {
 
 
 
+
+
+
     /**
      * Updates an existing student.
      *
@@ -96,6 +108,11 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     void updateSettingStudent(StudentSettingRequest studentSettingRequest);
+
+
+
+
+
 
 
     /**
@@ -109,6 +126,11 @@ public interface StudentService {
     StudentAchievementResponse getStudentAchievement();
 
 
+
+
+
+
+
     /**
      *Retrieves the details of a student
      *
@@ -120,6 +142,10 @@ public interface StudentService {
 
 
 
+
+
+
+
     /**
      * Deletes an existing student.
      *
@@ -128,8 +154,6 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     void deleteStudentByUuid(String uuid);
-
-
 
 
 
@@ -160,6 +184,9 @@ public interface StudentService {
      * @since 1.0 (2024)
      */
     StudentResponse getStudentByUuid(String uuid);
+
+
+
 
 
 

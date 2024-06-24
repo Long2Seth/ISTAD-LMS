@@ -37,10 +37,6 @@ public class StudentController {
     }
 
 
-    @GetMapping("/view-profile")
-    public StudentProfile viewProfile(){
-        return  studentService.viewProfile();
-    }
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update','user:read')")

@@ -1,5 +1,6 @@
 package co.istad.lms.features.user;
 
+import co.istad.lms.features.student.dto.StudentProfile;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.features.user.dto.UserResponseDetail;
@@ -20,6 +21,16 @@ public class UserController {
 
 
     private final UserService userService;
+
+
+
+    @GetMapping("/view-profile")
+    public StudentProfile viewProfile(){
+        return  userService.viewProfile();
+    }
+
+
+
 
 
     @PreAuthorize("hasAuthority('admin:control')")

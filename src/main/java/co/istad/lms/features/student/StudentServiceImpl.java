@@ -55,6 +55,24 @@ public class StudentServiceImpl implements StudentService {
     private final StudyProgramRepository studyProgramRepository;
 
 
+
+    public String calculateGrade(double score) {
+        if (score >= 90) {
+            return "A";
+        } else if (score >= 80) {
+            return "B";
+        } else if (score >= 70) {
+            return "C";
+        } else if (score >= 60) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
+
+
+
     @Override
     public Set<Authority> getDefaultAuthoritiesStudent() {
         // Set default authorities
@@ -110,50 +128,18 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public StudentProfile viewProfile(){
-
-        // Get authentication from security
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
-        }
-
-        Object principal = authentication.getPrincipal();
-        if (!(principal instanceof UserDetails)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
-        }
-
-        UserDetails userDetails = (UserDetails) principal;
-        String email = userDetails.getUsername();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        String.format("User with username %s not found", email)
-                ));
-
-        return new StudentProfile(
-                user.getProfileImage(),
-                user.getNameEn()
-        );
-    }
-
-
-    @Override
     public Page<StudentCourseResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
         Specification<Student> specification = baseSpecification.filter(filterDto);
 
-        Page<Student> students = studentRepository.findAll(specification,pageRequest);
+        Page<Student> students = studentRepository.findAll(specification, pageRequest);
 
         //map to DTO and return
         return students.map(studentMapper::toResponseCourse);
 
     }
-
 
 
     @Override
@@ -324,8 +310,7 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public StudentAchievementResponse  getStudentAchievement() {
-
+    public StudentAchievementResponse getStudentAchievement() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -347,20 +332,24 @@ public class StudentServiceImpl implements StudentService {
                         String.format("User with username %s not found", email)
                 ));
 
-        System.out.println("User: " + user);
-
         Student student = studentRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Student with username %s not found", email)
                 ));
 
-        System.out.println("Student: " + student);
-
         Set<Class> studentClasses = student.getClasses();
+        Set<Course> courses = student.getCourses();
 
-        Set<Course> course = student.getCourses();
+        List<Score> scores = new ArrayList<>();
+        for (Course c : courses) {
+            scores.addAll(c.getScores());
+        }
 
+        double totalScore = scores.stream()
+                .mapToDouble(score -> score.getFinalExamScore() + score.getMidtermExamScore() + score.getAssignmentScore() +
+                        score.getMiniProjectScore() + score.getAttendanceScore() + score.getActivityScore())
+                .sum();
 
         StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -368,22 +357,29 @@ public class StudentServiceImpl implements StudentService {
                         "Study program not found"
                 ));
 
-
         Set<YearOfStudy> yearOfStudies = new HashSet<>();
-        for (Course c : course) {
+        for (Course c : courses) {
             yearOfStudies.addAll(yearOfStudyRepository.findByCourses(c));
         }
         if (yearOfStudies.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Year of study not found");
         }
 
-
         Set<YearOfStudyStudentAchievementResponse> yearOfStudyResponses = yearOfStudies.stream()
                 .map(yearOfStudy -> new YearOfStudyStudentAchievementResponse(
                         yearOfStudy.getYear(),
                         yearOfStudy.getSemester(),
                         yearOfStudy.getCourses().stream()
-                                .map(courses -> new CourseResponse(courses.getUuid(), courses.getTitle(), courses.getSubject().getCredit()))
+                                .map(course -> {
+                                    double courseScore = course.getScores().stream()
+                                            .filter(score -> score.getStudent().equals(student))
+                                            .mapToDouble(score -> score.getFinalExamScore() + score.getMidtermExamScore() + score.getAssignmentScore() +
+                                                    score.getMiniProjectScore() + score.getAttendanceScore() + score.getActivityScore())
+                                            .sum();
+                                    double averageScore = courseScore / course.getScores().size();
+                                    String studentGrade = calculateGrade(courseScore);
+                                    return new CourseResponse(course.getTitle(), averageScore,course.getSubject().getCredit() , studentGrade );
+                                })
                                 .collect(Collectors.toSet())
                 ))
                 .collect(Collectors.toSet());
@@ -398,6 +394,9 @@ public class StudentServiceImpl implements StudentService {
                 yearOfStudyResponses
         );
     }
+
+
+
 
     @Override
     public StudentCourseResponse studentCourse() {

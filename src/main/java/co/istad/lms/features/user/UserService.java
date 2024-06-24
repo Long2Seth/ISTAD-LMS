@@ -2,6 +2,7 @@ package co.istad.lms.features.user;
 
 
 
+import co.istad.lms.features.student.dto.StudentProfile;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.features.user.dto.UserResponseDetail;
@@ -18,7 +19,32 @@ import java.util.List;
 public interface UserService {
 
 
+    /**
+     * Generates a strong password.
+     *
+     * @param length is the length of the password to generate
+     * @return {@link String} the generated password
+     * @since 1.0 (2024)
+     */
     String generateStrongPassword(int length);
+
+
+
+
+
+
+    /**
+     * Retrieves a list of students.
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    StudentProfile viewProfile();
+
+
+
+
+
+
 
     /**
      * Retrieves a paginated list of all users.
