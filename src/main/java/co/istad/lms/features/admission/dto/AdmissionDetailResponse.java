@@ -13,6 +13,8 @@ public record AdmissionDetailResponse(
         LocalDate openDate,
         LocalDate endDate,
 
+        String academicYear,
+
         String telegramLink,
         Boolean isDeleted
 ) {}
