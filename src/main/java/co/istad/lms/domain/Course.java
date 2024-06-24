@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -60,5 +61,8 @@ public class Course extends Auditable {
     @ManyToOne
     @JoinColumn(name = "year_of_study_id", nullable = false)
     private YearOfStudy yearOfStudy;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Score> scores;
 
 }

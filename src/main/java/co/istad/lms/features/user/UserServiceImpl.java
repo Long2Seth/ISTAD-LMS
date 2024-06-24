@@ -5,6 +5,7 @@ import co.istad.lms.domain.User;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.media.MediaService;
+import co.istad.lms.features.user.dto.UserProfile;
 import co.istad.lms.features.user.dto.*;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
@@ -16,7 +17,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,10 +37,42 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
     private final AuthorityRepository authorityRepository;
     private final MediaService mediaService;
     private final FileMetaDataRepository fileMetaDataRepository;
+
+
+
+
+    @Override
+    public UserProfile viewProfile() {
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        return new UserProfile(
+                user.getProfileImage(),
+                user.getNameEn()
+        );
+    }
 
 
 

@@ -2,13 +2,13 @@ package co.istad.lms.features.user;
 
 
 
+
+import co.istad.lms.features.user.dto.UserProfile;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.features.user.dto.UserResponseDetail;
 import co.istad.lms.features.user.dto.UserUpdateRequest;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 /**
  * Business logic interface which contains to manage users
@@ -18,7 +18,32 @@ import java.util.List;
 public interface UserService {
 
 
+    /**
+     * Generates a strong password.
+     *
+     * @param length is the length of the password to generate
+     * @return {@link String} the generated password
+     * @since 1.0 (2024)
+     */
     String generateStrongPassword(int length);
+
+
+
+
+
+
+    /**
+     * Retrieves a list of students.
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    UserProfile viewProfile();
+
+
+
+
+
+
 
     /**
      * Retrieves a paginated list of all users.

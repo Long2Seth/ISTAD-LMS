@@ -1,5 +1,6 @@
 package co.istad.lms.features.user;
 
+import co.istad.lms.features.user.dto.UserProfile;
 import co.istad.lms.features.user.dto.UserRequest;
 import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.features.user.dto.UserResponseDetail;
@@ -8,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +20,16 @@ public class UserController {
 
 
     private final UserService userService;
+
+
+
+        @GetMapping("/view-profile")
+    public UserProfile viewProfile(){
+        return  userService.viewProfile();
+    }
+
+
+
 
 
     @PreAuthorize("hasAuthority('admin:control')")

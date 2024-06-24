@@ -10,9 +10,13 @@ import java.util.Set;
 
 public record CourseResponse(
 
-        String uuid,
+
         String title,
-        Integer credit
+        Double score,
+        Integer credit,
+        String grade
+
+
 
 ) {
 }
