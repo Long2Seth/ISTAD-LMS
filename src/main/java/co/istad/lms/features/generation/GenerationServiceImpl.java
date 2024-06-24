@@ -43,6 +43,9 @@ public class GenerationServiceImpl implements GenerationService{
         //set isDeleted to false(enable)
         generation.setIsDeleted(false);
 
+        //set isActive true(active)
+        generation.setIsActive(true);
+
         //save to database
         generationRepository.save(generation);
     }

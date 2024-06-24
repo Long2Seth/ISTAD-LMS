@@ -16,6 +16,9 @@ public record AdmissionRequest(
         String openDate,
         String endDate,
 
+        @NotBlank(message = "academicYear if require")
+        String academicYear,
+
         @Size(max = 100,message = "telegramLink cannot be longer than 100 characters")
         String telegramLink
 ) {}

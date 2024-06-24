@@ -12,6 +12,7 @@ public record ScoreDetailResponse(
         Double finalExamScore,
         Double miniProjectScore,
         Double assignmentScore,
+        String classCode,
         StudentResponse student,
         CourseResponse course,
         Boolean isDeleted

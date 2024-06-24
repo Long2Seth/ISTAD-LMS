@@ -24,9 +24,7 @@ public record GenerationRequest(
         Integer endYear,
 
         @NotNull(message = "isDraft is required")
-        Boolean isDraft,
+        Boolean isDraft
 
-        @NotNull(message = "isActive is required")
-        Boolean isActive
 ) {
 }

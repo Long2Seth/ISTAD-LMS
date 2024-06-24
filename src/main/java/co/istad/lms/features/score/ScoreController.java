@@ -73,4 +73,15 @@ public class ScoreController {
 
         return scoreService.filterScores(filterDto, pageNumber, pageSize);
     }
+
+    @GetMapping("/semester/")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
+    public Page<ScoreDetailResponse> getAllScoresBySemester(
+
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return scoreService.getAllScores(pageNumber, pageSize);
+    }
 }

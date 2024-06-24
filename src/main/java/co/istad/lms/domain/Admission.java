@@ -27,6 +27,9 @@ public class Admission extends Auditable {
     @Column(nullable = false)
     private Integer status;
 
+    @Column(nullable = false)
+    private String academicYear;
+
     @Column(columnDefinition = "TEXT")
     private String remark;
 
