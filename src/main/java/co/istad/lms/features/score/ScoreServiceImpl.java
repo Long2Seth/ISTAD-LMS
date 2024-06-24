@@ -48,10 +48,10 @@ public class ScoreServiceImpl implements ScoreService {
         Score score = scoreMapper.fromScoreRequest(scoreRequest);
 
         //validate duplicate score for a student by course
-        if(scorerRepository.existsByStudentAndCourse(student,course)){
+        if (scorerRepository.existsByStudentAndCourse(student, course)) {
 
-            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("score with student = %s and course  " +
-                    "= %s has already existed",student.getUser().getUuid(),course.getUuid()));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("score with student = %s and course  " +
+                    "= %s has already existed", student.getUser().getUuid(), course.getUuid()));
         }
 
         //set student to score
@@ -78,8 +78,11 @@ public class ScoreServiceImpl implements ScoreService {
         Score score =
                 scorerRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
 
+        //get class code
+        String classCode = score.getCourse().getOneClass().getClassCode();
+
         //map and return to DTO
-        return scoreMapper.toScoreDetailResponse(score);
+        return scoreMapper.toScoreDetailResponse(score, classCode);
     }
 
     @Override
@@ -95,7 +98,13 @@ public class ScoreServiceImpl implements ScoreService {
         Page<Score> scores = scorerRepository.findAll(pageRequest);
 
         //map entity to DTO and return
-        return scores.map(scoreMapper::toScoreDetailResponse);
+        return scores.map(score -> {
+            //get class code
+            String classCode = score.getCourse().getOneClass().getClassCode();
+
+            //map and return to DTO
+            return scoreMapper.toScoreDetailResponse(score, classCode);
+        });
     }
 
     @Override
@@ -109,8 +118,11 @@ public class ScoreServiceImpl implements ScoreService {
         //save to database
         scorerRepository.save(score);
 
+        //get class Code
+        String classCode= score.getCourse().getOneClass().getClassCode();
+
         //map and return to DTO
-        return scoreMapper.toScoreDetailResponse(score);
+        return scoreMapper.toScoreDetailResponse(score,classCode);
     }
 
     @Override
@@ -138,8 +150,14 @@ public class ScoreServiceImpl implements ScoreService {
         //get all entity that match with filter condition
         Page<Score> scores = scorerRepository.findAll(specification, pageRequest);
 
-        //map to DTO and return
-        return scores.map(scoreMapper::toScoreDetailResponse);
+        //map entity to DTO and return
+        return scores.map(score -> {
+            //get class code
+            String classCode = score.getCourse().getOneClass().getClassCode();
+
+            //map and return to DTO
+            return scoreMapper.toScoreDetailResponse(score, classCode);
+        });
 
     }
 }

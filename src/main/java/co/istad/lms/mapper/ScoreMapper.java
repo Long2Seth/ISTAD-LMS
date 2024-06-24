@@ -20,7 +20,8 @@ public interface ScoreMapper {
 
     Score fromScoreRequest(ScoreRequest scoreRequest);
 
-    ScoreDetailResponse toScoreDetailResponse(Score score);
+    ScoreDetailResponse toScoreDetailResponse(Score score,String classCode);
+
 
     ScoreResponse toScoreResponse(Score score);
 
