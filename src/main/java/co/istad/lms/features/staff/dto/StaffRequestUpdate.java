@@ -27,7 +27,7 @@ public record StaffRequestUpdate(
 
         String currentAddress,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 
 

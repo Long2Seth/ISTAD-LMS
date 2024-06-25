@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,8 +24,11 @@ public class Academic {
 
 
 
+
+
     @Column(unique = true)
     private String uuid;
+
 
 
 
@@ -33,13 +37,10 @@ public class Academic {
 
 
 
+
+
     private LocalDate highSchoolGraduationDate;
 
-
-
-
-    @Column(length = 50)
-    private String degree;
 
 
 
@@ -48,8 +49,22 @@ public class Academic {
 
 
 
-    @Column(length = 50)
-    private String major;
+
+
+    @ElementCollection
+    @CollectionTable(name = "academic_educations", joinColumns = @JoinColumn(name = "academic_id"))
+    @Column(name = "educations", length = 50)
+    private Set<String> educations;
+
+
+
+
+    @ElementCollection
+    @CollectionTable(name = "academic_skills", joinColumns = @JoinColumn(name = "academic_id"))
+    @Column(name = "skills", length = 50)
+    private Set<String> skills;
+
+
 
 
 
@@ -58,12 +73,58 @@ public class Academic {
 
 
 
+
+
     @Column(length = 50)
     private String experienceAtWorkingPlace;
 
 
 
+
+
     private Integer experienceYear;
+
+
+
+
+
+    @Column(columnDefinition = "TEXT")
+    private String linkGit;
+
+
+
+
+
+    @Column(columnDefinition = "TEXT")
+    private String linkLinkedin;
+
+
+
+
+
+    @Column(columnDefinition = "TEXT")
+    private String linkTelegram;
+
+
+
+
+
+    @Column(columnDefinition = "TEXT")
+    private String uploadCv;
+
+
+
+
+
+    @Column(columnDefinition = "TEXT")
+    private String identityCard;
+
+
+
+
+
+    @Column(columnDefinition = "TEXT")
+    private String bio;
 
 
 

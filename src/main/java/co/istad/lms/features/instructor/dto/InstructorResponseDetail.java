@@ -43,7 +43,7 @@ public record InstructorResponseDetail(
 
         String currentAddress,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 
 ) {

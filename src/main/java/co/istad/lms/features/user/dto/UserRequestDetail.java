@@ -9,13 +9,14 @@ import java.util.Set;
 public record UserRequestDetail(
         String nameEn,
         String nameKh,
+        String position,
         String gender,
         LocalDate dob,
         String email,
         String profileImage,
         String phoneNumber,
         String currentAddress,
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 ) {
 }

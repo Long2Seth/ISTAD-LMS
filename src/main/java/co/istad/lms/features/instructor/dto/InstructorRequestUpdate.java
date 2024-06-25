@@ -51,7 +51,7 @@ public record InstructorRequestUpdate(
 
         String identityCard,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 ) {
 }

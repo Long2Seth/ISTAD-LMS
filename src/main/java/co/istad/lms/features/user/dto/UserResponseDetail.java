@@ -11,12 +11,13 @@ public record UserResponseDetail(
         String nameEn,
         String nameKh,
         String username,
+        String position,
         String gender,
         LocalDate dob,
         String email,
         String profileImage,
         String phoneNumber,
         String currentAddress,
-        JsonBirthPlace birthPlace
+        String birthPlace
 ) {
 }

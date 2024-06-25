@@ -110,7 +110,8 @@ public interface UserMapper {
             @Mapping(source = "profileImage", target = "profileImage"),
             @Mapping(source = "phoneNumber", target = "phoneNumber"),
             @Mapping(source = "currentAddress", target = "currentAddress"),
-            @Mapping(source = "birthPlace", target = "birthPlace")
+            @Mapping(source = "birthPlace", target = "birthPlace"),
+            @Mapping(source = "position", target = "position")
     })
     UserResponseDetail toUserResponseDetail(User user);
 }
