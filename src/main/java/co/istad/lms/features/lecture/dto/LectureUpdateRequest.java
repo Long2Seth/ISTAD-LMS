@@ -10,6 +10,7 @@ public record LectureUpdateRequest(
         String description,
         String lectureDate,
         Integer status,
+        Boolean isDraft,
         String teachingType
 
 ) {

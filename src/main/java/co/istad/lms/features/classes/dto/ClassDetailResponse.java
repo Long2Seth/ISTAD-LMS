@@ -1,6 +1,7 @@
 package co.istad.lms.features.classes.dto;
 
 import co.istad.lms.domain.Course;
+import co.istad.lms.features.course.dto.CourseClassResponse;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.generation.dto.GenerationResponse;
 import co.istad.lms.features.instructor.dto.InstructorResponse;
@@ -26,6 +27,6 @@ public record ClassDetailResponse(
 
         Set<StudentResponse> students,
 
-        Set<CourseResponse> courses
+        Set<CourseClassResponse> courses
 ) {
 }

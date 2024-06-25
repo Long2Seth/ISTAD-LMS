@@ -1,4 +1,7 @@
 package co.istad.lms.features.academicyear.dto;
 
-public record AcademicYearRequest() {
+public record AcademicYearRequest(
+
+        String academicYear
+) {
 }
