@@ -175,6 +175,8 @@ public interface StudentService {
 
 
 
+
+
     /**
      * Retrieves the details of a student by its UUID.
      *

@@ -57,6 +57,21 @@ public interface UserService {
     Page<UserResponse> getAllUsers(int page , int limit);
 
 
+
+
+
+    /**
+     * Retrieves a paginated list of all users.
+     *
+     * @param page is the pageNumber number to retrieve
+     * @param limit is the pageSize of the pageNumber to retrieve
+     * @return {@link Page<UserResponse>}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    Page<UserResponseDetail> getAllUsersExceptStudents(int page , int limit);
+
+
     /**
      * Retrieves a paginated list of all users.
      *

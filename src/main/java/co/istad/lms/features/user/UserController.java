@@ -44,13 +44,25 @@ public class UserController {
 
 
 
+    @PreAuthorize("hasAuthority('admin:control')")
+    @GetMapping("not-students")
+    public Page<UserResponseDetail> getAllUsersExceptStudents(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ){
+        return userService.getAllUsersExceptStudents(pageNumber, pageSize);
+    }
+
+
+
+
     @PreAuthorize("hasAuthority('user:read')")
     @GetMapping("/admins")
     public Page<UserResponse> getAllUsersWithAdminRole(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "25") int limit
+            @RequestParam(required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(required = false, defaultValue = "25") int pageSize
     ) {
-        return userService.getAllUsersWithAdminRole(page, limit);
+        return userService.getAllUsersWithAdminRole(pageNumber, pageSize);
     }
 
 

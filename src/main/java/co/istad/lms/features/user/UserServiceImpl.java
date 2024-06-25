@@ -35,11 +35,15 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
 
+
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
     private final MediaService mediaService;
     private final FileMetaDataRepository fileMetaDataRepository;
+
+
 
 
 
@@ -73,6 +77,9 @@ public class UserServiceImpl implements UserService {
                 user.getNameEn()
         );
     }
+
+
+
 
 
 
@@ -112,9 +119,12 @@ public class UserServiceImpl implements UserService {
 
 
 
+
+
     @Override
     public Page<UserResponse> getAllUsers(int page, int limit) {
-        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<User> users = userRepository.findAll(pageRequest);
 
         users.forEach(user -> {
@@ -130,6 +140,46 @@ public class UserServiceImpl implements UserService {
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponse);
     }
+
+
+
+
+
+
+
+    @Override
+    public Page<UserResponseDetail> getAllUsersExceptStudents(int page, int limit) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<User> users = userRepository.findAll(pageRequest);
+
+        users.forEach(user -> {
+            if (user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+                user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
+            }
+        });
+
+        List<User> filteredUsers = users.stream()
+                .filter(user -> !user.getIsDeleted())
+                .filter(user -> !user.getStatus())
+                .filter(user -> user.getStudent()==null)
+                .toList();
+
+        return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponseDetail);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public Page<UserResponseDetail> getAllUsersDetail(int page, int limit) {
@@ -152,6 +202,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+
+
+
+
+
     @Override
     public Page<UserResponse> getAllUsersWithAdminRole(int page, int limit) {
 
@@ -167,6 +223,10 @@ public class UserServiceImpl implements UserService {
 
         return users.map(userMapper::toUserResponse);
     }
+
+
+
+
 
 
     @Override
@@ -185,6 +245,10 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
+
+
+
     @Override
     public UserResponseDetail getUserDetailById(String uuid) {
 
@@ -199,6 +263,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
+
+
     @Override
     public UserResponse createUser(UserRequest userRequest) {
 
@@ -212,7 +279,6 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     String.format("File with name = %s not found!", userRequest.profileImage()));
         }
-
 
         // Map user request to user
         User user = userMapper.fromUserRequest(userRequest);
@@ -272,6 +338,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
+
+
+
+
     @Override
     public UserResponse updateUser(String uuid, UserUpdateRequest userRequest) {
 
@@ -293,6 +364,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
+
+
+
+
     @Override
     public void deleteUser(String uuid) {
 
@@ -307,6 +383,10 @@ public class UserServiceImpl implements UserService {
         userMapper.toUserResponse(user);
 
     }
+
+
+
+
 
     @Override
     public void disableUser(String alias) {
@@ -323,6 +403,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
+
+
+
+
     @Override
     public void enableUser(String alias) {
 
@@ -338,6 +423,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
+
+
     @Override
     public void isDeleted(String uuid) {
 
@@ -352,6 +440,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
     }
+
+
 
 
 }

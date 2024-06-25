@@ -22,39 +22,82 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+
     @Column(unique = true)
     private String uuid;
+
+
+
 
     @Column(nullable = false)
     private String highSchool;
 
+
+
+
+    @Column(length = 50)
+    private Integer familyPhoneNumber;
+
+
+
+
     @Column(length = 10)
     private String bacIiGrade;
 
-    @Column(columnDefinition = "TEXT")
-    private String avatar; // image
+
+    @Column()
+    private String diplomaSession;
+
+
 
     @Column(length = 50)
     private String guardianContact;
 
+
+
     @Column(length = 50)
     private String guardianRelationShip;
+
+
 
     @Column(columnDefinition = "TEXT")
     private String knownIstad;
 
+
+
     @Column(columnDefinition = "TEXT")
     private String identity; // image
 
+
+    @Column(columnDefinition = "TEXT")
+    private String highSchoolCertificate; // image
+
+
+    @Column(columnDefinition = "TEXT")
+    private String vocationTrainingCertificate;// image
+
+
+    @Column(columnDefinition = "TEXT")
+    private String anyValuableCertificate; // image
+
+
+
     @Column(columnDefinition = "TEXT")
     private String biography;
+
+
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+
+
     @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Class> classes;
+
+
 
     @ManyToMany
     @JoinTable(
@@ -63,5 +106,7 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private Set<Course> courses;
+
+
 
 }
