@@ -1,5 +1,6 @@
 package co.istad.lms.features.lecture.dto;
 
+import co.istad.lms.features.course.dto.CourseLectureResponse;
 import co.istad.lms.features.course.dto.CourseResponse;
 import jakarta.persistence.Column;
 
@@ -17,7 +18,8 @@ public record LectureDetailResponse(
         Boolean isDraft,
         Integer status,
         String teachingType,
-        CourseResponse course
+        CourseLectureResponse course,
+        String classCode
 
 ) {}
 

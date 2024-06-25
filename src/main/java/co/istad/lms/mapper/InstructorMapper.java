@@ -10,8 +10,14 @@ public interface InstructorMapper {
     @Mapping(target = "user.dob" , ignore = true)
     Instructor toRequest(InstructorRequest request);
 
+
+
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
     InstructorResponse toResponse(Instructor instructor);
+
+
+    @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
+    InstructorCourseResponse toCourseResponse(Instructor instructor);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     InstructorResponseDetail toResponseDetail(Instructor instructor);

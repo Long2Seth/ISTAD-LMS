@@ -23,12 +23,7 @@ public class AcademicYear {
     private String uuid;
 
     @Column(nullable = false , length = 50)
-    private String year;
+    private String academicYear;
 
-    @Column(nullable = false)
-    private LocalDate startYear;
-
-    @Column(nullable = false)
-    private LocalDate endYear;
 
 }

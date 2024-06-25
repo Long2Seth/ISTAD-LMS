@@ -2,10 +2,7 @@ package co.istad.lms.mapper;
 
 import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Degree;
-import co.istad.lms.features.course.dto.CourseDetailResponse;
-import co.istad.lms.features.course.dto.CourseRequest;
-import co.istad.lms.features.course.dto.CourseResponse;
-import co.istad.lms.features.course.dto.CourseUpdateRequest;
+import co.istad.lms.features.course.dto.*;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeResponse;
@@ -24,6 +21,7 @@ public interface CourseMapper {
     CourseDetailResponse toCourseDetailResponse(Course course);
 
     CourseResponse toCourseResponse(Course course);
+    CourseClassResponse toCourseClassResponse(Course course);
 
     @Mapping(target = "subject",ignore = true)
     @Mapping(target = "instructor",ignore = true)
