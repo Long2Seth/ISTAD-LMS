@@ -79,6 +79,7 @@ public class InstructorServiceImpl implements InstructorService {
         User user = userMapper.fromInstructorRequest(instructorRequest);
 
         user.setUuid(UUID.randomUUID().toString());
+        user.setPosition("INSTRUCTOR");
 
         // Generate password rawPassword to encrypt
         String rawPassword = userService.generateStrongPassword(10);

@@ -126,10 +126,15 @@ public class User extends Auditable {
     private boolean isCredentialsNonExpired;
 
 
+    private Boolean isChangePassword;
+
 
     private Boolean isDeleted;
     private Boolean status;
-    private Boolean isChangePassword;
+
+
+
+
 
 
 

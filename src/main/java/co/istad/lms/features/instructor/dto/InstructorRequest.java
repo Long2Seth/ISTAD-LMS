@@ -55,13 +55,6 @@ public record InstructorRequest(
 
 
 
-        @NotBlank(message = "Position is required")
-        @Size(max = 255, message = "Position must be less than or equal to 255 characters")
-        String position,
-
-
-
-
         @ElementCollection
         Set<@NotBlank(message = "Education is required") String> educations,
 

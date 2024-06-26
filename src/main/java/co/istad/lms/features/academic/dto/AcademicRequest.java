@@ -122,6 +122,9 @@ public record AcademicRequest(
         @Size(max = 255, message = "Experience at working place must be less than or equal to 255 characters")
         String identityCard,
 
+
+
+
         @NotNull(message = "authorities is required")
         Set<String> authorityNames
 
