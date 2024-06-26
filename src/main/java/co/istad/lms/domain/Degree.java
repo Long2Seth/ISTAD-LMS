@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,5 +33,10 @@ public class Degree extends Auditable {
 
     @Column(nullable = false)
     private Boolean isDraft;
+
+
+    @OneToMany(mappedBy = "degree", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<StudyProgram> studyPrograms;
+
 
 }

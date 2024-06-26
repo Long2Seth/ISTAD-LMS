@@ -388,9 +388,9 @@ public class StudentServiceImpl implements StudentService {
                 user.getNameEn(),
                 user.getNameKh(),
                 user.getDob(),
-                user.getAvatar(),
                 studyProgram.getDegree().getLevel(),
                 studyProgram.getStudyProgramName(),
+                user.getAvatar(),
                 yearOfStudyResponses
         );
     }
