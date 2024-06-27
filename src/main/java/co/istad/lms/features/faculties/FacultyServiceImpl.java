@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -137,7 +139,10 @@ public class FacultyServiceImpl implements FacultyService {
         }
         //set logo to faculty
         if (facultyUpdateRequest.logo() != null && !facultyUpdateRequest.logo().trim().isEmpty()) {
-            faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
+
+            if(!Objects.equals(faculty.getLogo(), facultyUpdateRequest.logo())){
+                faculty.setLogo(facultyUpdateRequest.logo());
+            }
         }
 
         //save to database

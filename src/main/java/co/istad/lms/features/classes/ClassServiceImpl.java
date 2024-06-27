@@ -426,6 +426,7 @@ public class ClassServiceImpl implements ClassService {
                         //set classes to student
                         student.setClasses(classes);
 
+
                         Set<Course> studentCourses=new HashSet<>();
                         if(student.getCourses()!=null){
 
@@ -454,6 +455,13 @@ public class ClassServiceImpl implements ClassService {
 
                         //set uuid to student
                         student.setUuid(UUID.randomUUID().toString());
+
+                        long numberOfStudent = studentRepository.count();
+
+                        //set classes to student
+                        student.setCardId(aClass.getGeneration().getAlias()+"-"+numberOfStudent);
+
+                        student.setStatus(1);
 
                         // Map user request to user
                         User user = student.getUser();
