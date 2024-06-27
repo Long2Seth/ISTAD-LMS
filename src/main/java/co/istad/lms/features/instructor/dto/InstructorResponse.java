@@ -64,7 +64,7 @@ public record InstructorResponse(
 
         Set<@NotBlank(message = "Major is required") String> major,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 ) {
 

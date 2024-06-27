@@ -131,17 +131,9 @@ public class DataInit {
             user.setCurrentAddress("House 123 , Street 310 , Phum 4 , Boeung Keng Kang 1 , Chamkarmon , Phnom Penh , Cambodia");
             user.setStatus(false);
             user.setIsDeleted(false);
-            user.setIsChangePassword(false);
-
-
-            // BirthPlace
-            BirthPlace birthPlace = new BirthPlace();
-            birthPlace.setCityOrProvince("Phnom Penh");
-            birthPlace.setKhanOrDistrict("Dangkao");
-            birthPlace.setSangkatOrCommune("Dangkao");
-            birthPlace.setVillageOrPhum("Dangkao");
-            birthPlace.setStreet("Dangkao");
-            user.setBirthPlace(birthPlace);
+            user.setIsChangePassword(true);
+            user.setPosition("ADMIN");
+            user.setBirthPlace("House 123 , Street 310 , Phum 4 , Boeung Keng Kang 1 , Chamkarmon , Phnom Penh , Cambodia");
 
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);

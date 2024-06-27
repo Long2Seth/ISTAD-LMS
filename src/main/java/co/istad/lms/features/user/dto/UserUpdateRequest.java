@@ -15,6 +15,6 @@ public record UserUpdateRequest(
         String profileImage,
         String phoneNumber,
         String currentAddress,
-        JsonBirthPlace birthPlace
+        String birthPlace
 ) {
 }

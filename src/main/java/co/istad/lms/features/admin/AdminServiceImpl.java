@@ -59,14 +59,7 @@ public class AdminServiceImpl implements AdminService {
             );
         }
 
-        if (adminRequest.profileImage() != null && !adminRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(adminRequest.profileImage())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("File with name = %s not found!", adminRequest.profileImage()));
-        }
 
-        // Map adminRequest to Admin entity using MapStruct
-        Admin admin = adminMapper.toRequestAdmin(adminRequest);
-        admin.setUuid(UUID.randomUUID().toString());
 
         // Map adminRequest to User entity using MapStruct
         User user = userMapper.fromAdminRequest(adminRequest);
@@ -113,15 +106,25 @@ public class AdminServiceImpl implements AdminService {
             allAuthorities.addAll(foundAuthorities);
         }
 
-        // Save the user and admin to the database
 
         //set authorities to user
         user.setAuthorities(allAuthorities);
 
-
+        // Save the user to the database
         userRepository.save(user);
+
+
+        // Map adminRequest to Admin entity using MapStruct
+        Admin admin = adminMapper.toRequestAdmin(adminRequest);
+        admin.setUuid(UUID.randomUUID().toString());
+
+        // Set the user to the admin and save
         admin.setUser(user);
+
+        // Save the admin to the database
         adminRepository.save(admin);
+
+
     }
 
     @Override

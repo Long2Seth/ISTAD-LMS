@@ -40,7 +40,7 @@ public record AdminRequestUpdate(
 
         String currentAddress,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 
 ) {

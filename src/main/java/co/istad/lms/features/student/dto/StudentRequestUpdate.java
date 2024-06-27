@@ -6,15 +6,13 @@ import java.time.LocalDate;
 
 public record StudentRequestUpdate(
 
-        String nameEn,
-        String nameKh,
         String gender,
-        LocalDate dob,
-        String email,
         String profileImage,
         String phoneNumber,
+        String familyPhoneNumber,
         String currentAddress,
-        JsonBirthPlace birthPlace
+        String birthPlace,
+        String bio
 
 ) {
 }

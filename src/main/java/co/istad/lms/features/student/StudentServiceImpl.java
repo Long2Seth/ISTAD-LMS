@@ -144,6 +144,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void createStudent(StudentRequest studentRequest) {
+
+
         // Check if the email already exists from the database
         if (userRepository.existsByEmail(studentRequest.email())) {
             throw new ResponseStatusException(
@@ -225,11 +227,6 @@ public class StudentServiceImpl implements StudentService {
                     String.format("File with name = %s not found!", studentRequest.profileImage()));
         }
 
-        // Check if user exists by email or username that find in userRepository if not throw exception
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(studentRequest.email(), user.getUsername(), uuid)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentRequest.email()));
-        }
-
         // Update user from student request
         userMapper.updateUserFromStudentRequest(user, studentRequest);
 
@@ -295,9 +292,6 @@ public class StudentServiceImpl implements StudentService {
         // Save user
         userRepository.save(user);
 
-        if (userRepository.existsByEmail(studentSettingRequest.email()) && !user.getEmail().equals(studentSettingRequest.email())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User with email = %s already exists", studentSettingRequest.email()));
-        }
 
         // Update user from student request
         studentMapper.updateStudentSettingRequest(user.getStudent(), studentSettingRequest);
@@ -388,9 +382,9 @@ public class StudentServiceImpl implements StudentService {
                 user.getNameEn(),
                 user.getNameKh(),
                 user.getDob(),
-                user.getAvatar(),
                 studyProgram.getDegree().getLevel(),
                 studyProgram.getStudyProgramName(),
+                user.getAvatar(),
                 yearOfStudyResponses
         );
     }

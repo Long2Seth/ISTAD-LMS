@@ -12,6 +12,6 @@ public record StudentSettingRequest(
         String phoneNumber,
         String bio,
         String currentAddress,
-        JsonBirthPlace birthPlace
+        String birthPlace
 ) {
 }

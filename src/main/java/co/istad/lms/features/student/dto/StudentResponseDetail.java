@@ -19,7 +19,7 @@ public record StudentResponseDetail(
         String profileImage,
         String phoneNumber,
         String currentAddress,
-        JsonBirthPlace birthPlace,
+        String birthPlace,
 
         Set<ClassResponse> classes,
         Set<CourseResponse> courses

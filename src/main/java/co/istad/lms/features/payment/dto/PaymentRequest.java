@@ -11,12 +11,18 @@ import java.time.LocalDate;
 
 @Builder
 public record PaymentRequest(
-        @NotNull(message = "Student name be required")
-        String studentName,
 
-        @NotNull(message = "Payment full be required")
-        @Positive(message = "Payment full must be positive")
-        double originalPayment,
+
+
+        @NotNull(message = "Student name be required")
+        String  userName,
+
+
+
+        @NotNull(message = "Payment fee be required")
+        @Positive(message = "Payment fee must be positive")
+        double academicFee,
+
 
 
         @NotNull(message = "Discount  be required")
@@ -30,7 +36,7 @@ public record PaymentRequest(
 
 
         @NotNull(message = "Due date  be required")
-        LocalDate paidDate,
+        String paidDate,
 
 
 
@@ -39,6 +45,7 @@ public record PaymentRequest(
         String paymentMethod,
 
 
+        @Size(max = 255 , message = "Remarks must be less than 255 characters")
         String remarks
 ) {
 }

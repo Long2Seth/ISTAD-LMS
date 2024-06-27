@@ -27,8 +27,6 @@ public class User extends Auditable {
     @Column(unique = true, nullable = false)
     private String uuid;
 
-    @Column( length = 50)
-    private String position;
 
     @Column(nullable = false, length = 50)
     private String nameEn;
@@ -48,6 +46,19 @@ public class User extends Auditable {
     @Column(length = 20)
     private String phoneNumber;
 
+
+    @Column(columnDefinition = "TEXT")
+    private String birthPlace;
+
+
+    @Column(columnDefinition = "TEXT")
+    private String currentAddress;
+
+
+
+
+
+
     @Column(name = "birth_of_date")
     private LocalDate dob;
 
@@ -64,13 +75,6 @@ public class User extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String avatar;
 
-
-
-    @Column(columnDefinition = "TEXT")
-    private String currentAddress;
-
-    @Column(columnDefinition = "TEXT")
-    private String birthPlace;
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;

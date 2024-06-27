@@ -60,10 +60,6 @@ public class AcademicServiceImpl implements AcademicService {
             );
         }
 
-        if (academicRequest.profileImage() != null && !academicRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(academicRequest.profileImage())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("File with name = %s not found!", academicRequest.profileImage()));
-        }
         // Create academic by mapping
         Academic academic = academicMapper.toRequest(academicRequest);
         academic.setUuid(UUID.randomUUID().toString());

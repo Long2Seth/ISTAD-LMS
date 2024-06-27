@@ -38,7 +38,7 @@ public record AcademicRequestUpdate(
 
         String currentAddress,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 
 ) {

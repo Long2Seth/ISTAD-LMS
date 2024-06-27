@@ -24,8 +24,12 @@ public class Instructor {
 
 
 
+
+
     @Column(unique = true)
     private String uuid;
+
+
 
 
     @Column(length = 50)
@@ -33,14 +37,11 @@ public class Instructor {
 
 
 
+
+
     private LocalDate highSchoolGraduationDate;
 
 
-
-    @ElementCollection
-    @CollectionTable(name = "instructor_degrees", joinColumns = @JoinColumn(name = "instructor_id"))
-    @Column(name = "degree", length = 50)
-    private Set<String> degree;
 
 
 
@@ -48,10 +49,22 @@ public class Instructor {
 
 
 
+
+
     @ElementCollection
-    @CollectionTable(name = "instructor_majors", joinColumns = @JoinColumn(name = "instructor_id"))
-    @Column(name = "major", length = 50)
-    private Set<String> major;
+    @CollectionTable(name = "instructor_educations", joinColumns = @JoinColumn(name = "instructor_id"))
+    @Column(name = "educations", length = 50)
+    private Set<String> educations;
+
+
+
+
+    @ElementCollection
+    @CollectionTable(name = "instructor_skills", joinColumns = @JoinColumn(name = "instructor_id"))
+    @Column(name = "skills", length = 50)
+    private Set<String> skills;
+
+
 
 
 
@@ -60,12 +73,18 @@ public class Instructor {
 
 
 
+
+
     @Column(length = 50)
     private String experienceAtWorkingPlace;
 
 
 
+
+
     private Integer experienceYear;
+
+
 
 
 
@@ -74,8 +93,12 @@ public class Instructor {
 
 
 
+
+
     @Column(columnDefinition = "TEXT")
     private String linkLinkedin;
+
+
 
 
 
@@ -84,8 +107,12 @@ public class Instructor {
 
 
 
+
+
     @Column(columnDefinition = "TEXT")
     private String uploadCv;
+
+
 
 
 
@@ -94,14 +121,19 @@ public class Instructor {
 
 
 
+
+
     @Column(columnDefinition = "TEXT")
     private String bio;
+
+
 
 
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 
 
 

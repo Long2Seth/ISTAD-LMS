@@ -44,7 +44,7 @@ public record AcademicResponseDetail(
 
         String currentAddress,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 
 ) {

@@ -56,10 +56,6 @@ public class StaffServiceImpl implements StaffService {
                     String.format("User with email = %s have already exists", staffRequest.email())
             );
         }
-        if (staffRequest.profileImage() != null && !staffRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(staffRequest.profileImage())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("File with name = %s not found!", staffRequest.profileImage()));
-        }
 
         // Save the user first
         User user = userMapper.fromStaffRequest(staffRequest);

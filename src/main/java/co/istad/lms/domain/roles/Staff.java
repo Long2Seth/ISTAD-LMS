@@ -24,8 +24,11 @@ public class Staff {
 
 
 
+
+
     @Column(unique = true)
     private String uuid;
+
 
 
 
@@ -34,11 +37,33 @@ public class Staff {
 
 
 
+
+
     private LocalDate highSchoolGraduationDate;
 
 
 
+
+
     private LocalDate degreeGraduationDate;
+
+
+
+
+
+    @ElementCollection
+    @CollectionTable(name = "staff_educations", joinColumns = @JoinColumn(name = "staff_id"))
+    @Column(name = "educations", length = 50)
+    private Set<String> educations;
+
+
+
+
+    @ElementCollection
+    @CollectionTable(name = "staff_skills", joinColumns = @JoinColumn(name = "staff_id"))
+    @Column(name = "skills", length = 50)
+    private Set<String> skills;
+
 
 
 
@@ -49,8 +74,10 @@ public class Staff {
 
 
 
+
     @Column(length = 50)
     private String experienceAtWorkingPlace;
+
 
 
 
@@ -60,22 +87,11 @@ public class Staff {
 
 
 
-    @ElementCollection
-    @CollectionTable(name = "staff_degrees", joinColumns = @JoinColumn(name = "staff_id"))
-    @Column(name = "staff", length = 50)
-    private Set<String> degree;
-
-
-
-    @ElementCollection
-    @CollectionTable(name = "staff_majors", joinColumns = @JoinColumn(name = "staff_id"))
-    @Column(name = "staff", length = 50)
-    private Set<String> major;
-
-
 
     @Column(columnDefinition = "TEXT")
     private String linkGit;
+
+
 
 
 
@@ -84,8 +100,12 @@ public class Staff {
 
 
 
+
+
     @Column(columnDefinition = "TEXT")
     private String linkTelegram;
+
+
 
 
 
@@ -94,8 +114,12 @@ public class Staff {
 
 
 
+
+
     @Column(columnDefinition = "TEXT")
     private String identityCard;
+
+
 
 
 

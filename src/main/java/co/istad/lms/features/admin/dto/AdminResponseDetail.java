@@ -45,7 +45,7 @@ public record AdminResponseDetail(
 
         String currentAddress,
 
-        JsonBirthPlace birthPlace
+        String birthPlace
 
 ) {
 }

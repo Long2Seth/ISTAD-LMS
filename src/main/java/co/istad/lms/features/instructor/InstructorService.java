@@ -17,7 +17,6 @@ public interface InstructorService {
      * Creates a new instructor.
      *
      * @param instructorRequest is the request object containing instructor details for create instructor
-     * @return {@link InstructorResponse}
      * @author Long Piseth
      * @since 1.0 (2024)
      */

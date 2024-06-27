@@ -40,7 +40,6 @@ public class InstructorServiceImpl implements InstructorService {
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final FileMetaDataRepository fileMetaDataRepository;
 
@@ -74,17 +73,13 @@ public class InstructorServiceImpl implements InstructorService {
             );
         }
 
-        if (instructorRequest.profileImage() != null && !instructorRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(instructorRequest.profileImage())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("File with name = %s not found!", instructorRequest.profileImage()));
-        }
-
 
 
         // Create new user for the instructor
         User user = userMapper.fromInstructorRequest(instructorRequest);
 
         user.setUuid(UUID.randomUUID().toString());
+        user.setPosition("INSTRUCTOR");
 
         // Generate password rawPassword to encrypt
         String rawPassword = userService.generateStrongPassword(10);
