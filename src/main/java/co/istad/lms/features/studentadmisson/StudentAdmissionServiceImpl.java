@@ -105,6 +105,8 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //set admission to student admission
         studentAdmission.setAdmission(admission);
+        //set admission to student admission
+        studentAdmission.setStudent(false);
 
         //save to database
         studentAdmissionRepository.save(studentAdmission);
