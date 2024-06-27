@@ -10,7 +10,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface FacultyMapper {
 
-    @Mapping(target = "logo",source = "logo",ignore = true)
+    @Mapping(target = "logo",ignore = true)
     Faculty fromFacultyRequest(FacultyRequest facultyRequest);
 
     FacultyDetailResponse toFacultyDetailResponse(Faculty faculty);
@@ -18,6 +18,7 @@ public interface FacultyMapper {
     FacultyResponse toFacultyResponse(Faculty faculty);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "logo",ignore = true)
     void updateFacultyFromRequest(@MappingTarget Faculty faculty, FacultyUpdateRequest facultyUpdateRequest);
 
 }
