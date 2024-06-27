@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DateTimeUtil {
 
@@ -46,5 +48,33 @@ public class DateTimeUtil {
         }
 
         return dateTime;
+    }
+
+    public static void validateAcademicYear(String academicYear) {
+        // Define the regex pattern for yyyy-yyyy
+        String regex = "^(\\d{4})-(\\d{4})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(academicYear);
+
+        if (!matcher.matches()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("academicYear = %s is not valid format(year-year+1),ex 2024-2025",academicYear));
+        }
+
+        // Extract years
+        int startYear = Integer.parseInt(matcher.group(1));
+        int endYear = Integer.parseInt(matcher.group(2));
+
+        // Check if end year is exactly one year greater than start year
+        if (endYear != startYear + 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("academicYear = %s is not valid format(year-year+1),ex 2024-2025",academicYear));
+        }
+
+    }
+
+    public static String localTimeToString(LocalTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return time.format(formatter);
     }
 }

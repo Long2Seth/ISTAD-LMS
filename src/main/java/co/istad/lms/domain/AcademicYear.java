@@ -1,6 +1,7 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "academic_years")
 @Entity
-public class AcademicYear {
+public class AcademicYear extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +25,12 @@ public class AcademicYear {
 
     @Column(nullable = false , length = 50)
     private String academicYear;
+
+    @Column(nullable = false)
+    Boolean isDraft;
+
+    @Column(nullable = false)
+    Boolean isDeleted;
 
 
 }

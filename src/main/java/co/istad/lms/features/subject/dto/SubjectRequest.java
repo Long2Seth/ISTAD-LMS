@@ -3,10 +3,7 @@ package co.istad.lms.features.subject.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.Set;
 
@@ -24,19 +21,19 @@ public record SubjectRequest(
         String logo,
 
         @NotNull(message = "theory is require")
-        @Positive(message = "theory must be positive")
+        @PositiveOrZero(message = "theory must be positive or zero")
         Integer theory,
 
         @NotNull(message = "practice is require")
-        @Positive(message = "practice must be positive")
+        @PositiveOrZero(message = "practice must be positive or zero")
         Integer practice,
 
         @NotNull(message = "internship is require")
-        @Positive(message = "internship must be positive")
+        @PositiveOrZero(message = "internship must be positive or zero")
         Integer internship,
 
         @NotNull(message = "duration is require")
-        @Positive(message = "duration must be positive")
+        @PositiveOrZero(message = "duration must be positive or zero")
         Integer duration,
 
         @JsonProperty("curriculum")

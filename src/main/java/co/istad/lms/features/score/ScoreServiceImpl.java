@@ -11,6 +11,7 @@ import co.istad.lms.features.score.dto.ScoreUpdateRequest;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
 import co.istad.lms.mapper.ScoreMapper;
+import co.istad.lms.util.AssesmentsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +54,25 @@ public class ScoreServiceImpl implements ScoreService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("score with student = %s and course  " +
                     "= %s has already existed", student.getUser().getUuid(), course.getUuid()));
         }
+
+        //get total score
+        Double total =
+                (score.getActivityScore()*0.1)+(score.getAttendanceScore()*0.1)+(score.getMidtermExamScore()*0.2)+(score.getFinalExamScore()*0.35)+(score.getMiniProjectScore()*0.15)+(score.getAssignmentScore()*0.10);
+
+        //get gpa
+        Double gpa = AssesmentsUtil.getGpa(total);
+
+        //get grade base on average
+        String grade= AssesmentsUtil.getGrade(total);
+
+        //set total to score
+        score.setTotal(total);
+
+        //set grade to score
+        score.setGrade(grade);
+
+        //set gpa to score
+        score.setGpa(gpa);
 
         //set student to score
         score.setStudent(student);

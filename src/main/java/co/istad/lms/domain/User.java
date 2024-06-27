@@ -69,9 +69,8 @@ public class User extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String currentAddress;
 
-    @Column(name = "birth_place", columnDefinition = "jsonb")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private BirthPlace birthPlace;
+    @Column(columnDefinition = "TEXT")
+    private String birthPlace;
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;

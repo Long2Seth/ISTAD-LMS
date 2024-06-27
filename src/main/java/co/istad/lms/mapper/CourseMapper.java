@@ -19,6 +19,7 @@ public interface CourseMapper {
     Course fromCourseRequest(CourseRequest courseRequest);
 
     CourseDetailResponse toCourseDetailResponse(Course course);
+    CourseSemesterScoreResponse toCourseSemesterScoreResponse(Course course);
 
     CourseResponse toCourseResponse(Course course);
     CourseClassResponse toCourseClassResponse(Course course);

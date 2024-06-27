@@ -5,10 +5,7 @@ import java.time.LocalTime;
 
 public record LectureResponse(
 
-        String uuid,
-        LocalTime startTime,
-        LocalTime endTime,
-        LocalDate lectureDate
+        String uuid
 
 ) {
 }

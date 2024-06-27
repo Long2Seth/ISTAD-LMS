@@ -13,7 +13,8 @@ public record ScoreDetailResponse(
         Double miniProjectScore,
         Double assignmentScore,
         String classCode,
-        StudentResponse student,
+        String grade,
+        Double total,
         CourseResponse course,
         Boolean isDeleted
 ) {

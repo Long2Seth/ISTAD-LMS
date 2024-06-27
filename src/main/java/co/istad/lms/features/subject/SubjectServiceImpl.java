@@ -70,7 +70,7 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found.", alias)));
 
         //set logo url to faculty
-        if (subject.getLogo() != null) {
+        if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
             subject.setLogo(mediaService.getUrl(subject.getLogo()));
         }
 
@@ -93,7 +93,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //set logo url to faculty
         subjects.forEach(subject -> {
-            if (subject.getLogo() != null) {
+            if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
                 subject.setLogo(mediaService.getUrl(subject.getLogo()));
             }
         });
@@ -135,17 +135,17 @@ public class SubjectServiceImpl implements SubjectService {
         //map DTO to entity
         subjectMapper.updateSubjectFromRequest(subject, subjectUpdateRequest);
 
-        int internship=subject.getInternship()==null?0: subject.getInternship();
-        int theory=subject.getTheory()==null?0: subject.getTheory();
-        int practice=subject.getPractice()==null?0: subject.getPractice();
+        int internship = subject.getInternship() == null ? 0 : subject.getInternship();
+        int theory = subject.getTheory() == null ? 0 : subject.getTheory();
+        int practice = subject.getPractice() == null ? 0 : subject.getPractice();
 
-        subject.setCredit(internship+theory+practice);
+        subject.setCredit(internship + theory + practice);
 
         //save to database
         subjectRepository.save(subject);
 
         //set logo url to faculty
-        if (subject.getLogo() != null) {
+        if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
             subject.setLogo(mediaService.getUrl((subject.getLogo())));
         }
 
@@ -239,7 +239,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         //set logo url to faculty
         subjects.forEach(subject -> {
-            if (subject.getLogo() != null) {
+            if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
                 subject.setLogo(mediaService.getUrl(subject.getLogo()));
             }
         });
