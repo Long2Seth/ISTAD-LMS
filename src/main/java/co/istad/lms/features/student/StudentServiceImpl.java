@@ -202,6 +202,12 @@ public class StudentServiceImpl implements StudentService {
         // Map student request to student
         Student student = studentMapper.toRequest(studentRequest);
         student.setUuid(UUID.randomUUID().toString());
+        // Generate the next cardId
+        Integer maxCardId = studentRepository.findMaxCardId();
+        int nextCardIdNumber = (maxCardId != null) ? maxCardId + 1 : 1;
+        String nextCardId = String.format("g-%04d", nextCardIdNumber);
+        student.setCardId(nextCardId);
+        student.setStatus(1);
 
         // Save user in student
         student.setUser(user);

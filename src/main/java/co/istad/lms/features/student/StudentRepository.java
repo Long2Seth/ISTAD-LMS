@@ -15,6 +15,10 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> , JpaSpecificationExecutor<Student> {
 
+
+    @Query("SELECT MAX(CAST(SUBSTRING(s.cardId, 3) AS int)) FROM Student s")
+    Integer findMaxCardId();
+
     Optional<Student> findByUuid(String uuid);
 
     Optional<Student> findStudentByUserUuid(String userUuid);
