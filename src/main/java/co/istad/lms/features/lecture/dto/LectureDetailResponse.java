@@ -10,8 +10,8 @@ import java.time.LocalTime;
 public record LectureDetailResponse(
 
         String uuid,
-        LocalTime startTime,
-        LocalTime endTime,
+        String startTime,
+        String endTime,
         String description,
         LocalDate lectureDate,
         Boolean isDeleted,

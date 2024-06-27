@@ -135,13 +135,20 @@ public class FacultyServiceImpl implements FacultyService {
                         facultyUpdateRequest.logo()));
             }
         }
-
+        //set logo to faculty
+        if (facultyUpdateRequest.logo() != null && !facultyUpdateRequest.logo().trim().isEmpty()) {
+            faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
+        }
 
         //save to database
         facultyRepository.save(faculty);
 
         //set logo to faculty
-        faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
+        if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
+            faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
+        }
+
+
 
         //return faculty detail
         return facultyMapper.toFacultyDetailResponse(faculty);

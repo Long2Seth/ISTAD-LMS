@@ -24,119 +24,65 @@ public class User extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
-
     @Column(unique = true, nullable = false)
     private String uuid;
-
-
-
 
 
     @Column(nullable = false, length = 50)
     private String nameEn;
 
-
-
     @Column(nullable = false, length = 50)
     private String nameKh;
 
-
+    @Column(nullable = false, length = 50, unique = true)
+    private String username;
 
     @Column(nullable = false, length = 10)
     private String gender;
 
-
-
-
     @Column( length = 50)
-    private String position; // priority for user role
-
+    private String position;
 
 
     @Column(nullable = false, length = 100)
     private String email;
 
-
-
     @Column(length = 20)
     private String phoneNumber;
-
-
 
 
     @Column(columnDefinition = "TEXT")
     private String birthPlace;
 
 
-
-
-
     @Column(columnDefinition = "TEXT")
     private String currentAddress;
-
-
-
-
 
 
     @Column(name = "birth_of_date")
     private LocalDate dob;
 
 
-
-
-
-    @Column(nullable = false, length = 50, unique = true)
-    private String username;
-
-
-
-
-
     private String password;
 
-
-
-
-
     private String rawPassword;
-
-
-
 
 
     @Column(columnDefinition = "TEXT")
     private String profileImage;
 
 
-
-
-
     @Column(columnDefinition = "TEXT")
     private String avatar;
-
-
-
 
 
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
 
-
-    private Boolean isChangePassword;
-
-
     private Boolean isDeleted;
     private Boolean status;
-
-
-
-
-
-
+    private Boolean isChangePassword;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -146,32 +92,19 @@ public class User extends Auditable {
     )
     private Set<Authority> authorities;
 
-
-
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Admin admin;
-
-
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Student student;
 
-
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Instructor instructor;
-
-
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Academic academic;
 
-
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Staff staff;
-
-
 
 }

@@ -92,8 +92,12 @@ public class LectureServiceImpl implements LectureService {
 
         String classCode = lecture.getCourse().getOneClass().getClassCode();
 
+        String startTime=DateTimeUtil.localTimeToString(lecture.getStartTime());
+
+        String endTime=DateTimeUtil.localTimeToString(lecture.getEndTime());
+
         //return lecture detail
-        return lectureMapper.toLectureDetailResponse(lecture,classCode);
+        return lectureMapper.toLectureDetailResponse(lecture,classCode,startTime,endTime);
     }
 
 
@@ -112,7 +116,10 @@ public class LectureServiceImpl implements LectureService {
         // map to DTO and return
         return lectures.map(lecture -> {
             String classCode = lecture.getCourse().getOneClass().getClassCode();
-            return lectureMapper.toLectureDetailResponse(lecture, classCode);
+            String startTime=DateTimeUtil.localTimeToString(lecture.getStartTime());
+
+            String endTime=DateTimeUtil.localTimeToString(lecture.getEndTime());
+            return lectureMapper.toLectureDetailResponse(lecture, classCode,startTime,endTime);
         });
 
     }
@@ -157,9 +164,12 @@ public class LectureServiceImpl implements LectureService {
         lectureRepository.save(lecture);
 
         String classCode = lecture.getCourse().getOneClass().getClassCode();
+        String startTime=DateTimeUtil.localTimeToString(lecture.getStartTime());
+
+        String endTime=DateTimeUtil.localTimeToString(lecture.getEndTime());
 
         //return lecture detail
-        return lectureMapper.toLectureDetailResponse(lecture,classCode);
+        return lectureMapper.toLectureDetailResponse(lecture,classCode,startTime,endTime);
     }
 
 
@@ -224,7 +234,10 @@ public class LectureServiceImpl implements LectureService {
         // map to DTO and return
         return lectures.map(lecture -> {
             String classCode = lecture.getCourse().getOneClass().getClassCode();
-            return lectureMapper.toLectureDetailResponse(lecture, classCode);
+            String startTime=DateTimeUtil.localTimeToString(lecture.getStartTime());
+
+            String endTime=DateTimeUtil.localTimeToString(lecture.getEndTime());
+            return lectureMapper.toLectureDetailResponse(lecture, classCode,startTime,endTime);
         });
 
 

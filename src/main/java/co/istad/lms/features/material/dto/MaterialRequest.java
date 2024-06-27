@@ -1,10 +1,7 @@
 package co.istad.lms.features.material.dto;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record MaterialRequest(
 
@@ -19,7 +16,7 @@ public record MaterialRequest(
         String contentType,
         @Size(max = 20, message = "extension cannot be longer than 20 characters")
         String extension,
-        @Positive(message = "size must be positive")
+        @Min(value = 0,message = "size is 0 or positive")
         Long size,
         String description,
         @NotBlank(message = "Subject alias is required")

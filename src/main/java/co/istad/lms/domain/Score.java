@@ -35,6 +35,12 @@ public class Score extends Auditable {
 
     private Double assignmentScore;
 
+    private Double total;
+
+    private String grade;
+
+    private Double gpa;
+
     @ManyToOne
     @JoinColumn(name="student_id")
     private Student student;

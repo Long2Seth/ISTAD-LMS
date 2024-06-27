@@ -63,6 +63,6 @@ public class Course extends Auditable {
     private YearOfStudy yearOfStudy;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Score> scores;
+    private Set<Score> scores;
 
 }

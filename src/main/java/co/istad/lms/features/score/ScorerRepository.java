@@ -9,10 +9,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import javax.crypto.spec.OAEPParameterSpec;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ScorerRepository extends JpaRepository<Score,Long>, JpaSpecificationExecutor<Score> {
 
     Optional<Score> findByUuid(String uuid);
+
+//    Set<Score> findAllByStudentUuidAndCourse_CourseYearOfStudy_Semester();
 
     boolean existsByStudentAndCourse(Student student, Course course);
 }

@@ -33,11 +33,11 @@ public interface AdmissionService {
     AdmissionDetailResponse getAdmissionByUuid(String uuid);
 
     /**
-     * Retrieves a paginated list of all student admissions.
+     * Retrieves a paginated list of all admissions.
      *
      * @param pageNumber is the pageNumber number to retrieve
      * @param pageSize is the pageSize of the pageNumber to retrieve
-     * @return * @return {@link Page<AdmissionResponse>}
+     * @return * @return {@link Page<AdmissionDetailResponse>}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
