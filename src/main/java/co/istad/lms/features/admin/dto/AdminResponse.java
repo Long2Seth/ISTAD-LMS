@@ -6,24 +6,78 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public record AdminResponse(
-        String uuid,
-
         String nameEn,
+
 
         String nameKh,
 
-        String username,
+
 
         String gender,
 
-        LocalDate dob,
+
 
         String email,
 
-        String profileImage,
 
-        String phoneNumber
+
+        String phoneNumber,
+
+
+
+        Set< String> educations,
+
+
+
+
+        Set<String> skills,
+
+
+
+
+        String birthPlace,
+
+
+
+
+        String currentAddress,
+
+
+
+
+        String bio,
+
+
+
+        String dob,
+
+
+
+
+        String linkGit,
+
+
+
+
+        String linkLinkedin,
+
+
+
+
+        String linkTelegram,
+
+
+
+
+
+        String uploadCv,
+
+
+
+
+        String identityCard
 ) {
 }

@@ -17,54 +17,76 @@ import java.util.Set;
 @Builder
 public record InstructorResponse(
 
-        String uuid,
-
-
         String nameEn,
 
 
         String nameKh,
 
-        String username,
 
 
         String gender,
 
 
-        String position,
-
-
-        String dob,
-
 
         String email,
 
-
-        String profileImage,
 
 
         String phoneNumber,
 
 
+
+        Set< String> educations,
+
+
+
+
+        Set<String> skills,
+
+
+
+
+        String birthPlace,
+
+
+
+
+        String currentAddress,
+
+
+
+
         String bio,
+
+
+
+        String dob,
+
+
+
 
         String linkGit,
 
+
+
+
         String linkLinkedin,
+
+
+
 
         String linkTelegram,
 
+
+
+
+
         String uploadCv,
 
-        String identityCard,
 
 
-        Set<@NotBlank(message = "Degree is required") String> degree,
 
-
-        Set<@NotBlank(message = "Major is required") String> major,
-
-        String birthPlace
+        String identityCard
 
 ) {
 
