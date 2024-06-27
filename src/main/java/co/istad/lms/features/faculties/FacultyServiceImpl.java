@@ -137,7 +137,7 @@ public class FacultyServiceImpl implements FacultyService {
         }
         //set logo to faculty
         if (facultyUpdateRequest.logo() != null && !facultyUpdateRequest.logo().trim().isEmpty()) {
-            faculty.setLogo(mediaService.getUrl(faculty.getLogo()));lo
+            faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
         }
 
         //save to database
