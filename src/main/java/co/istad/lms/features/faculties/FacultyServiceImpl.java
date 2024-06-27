@@ -136,6 +136,8 @@ public class FacultyServiceImpl implements FacultyService {
             }
         }
 
+        faculty.setLogo(facultyUpdateRequest.logo());
+
 
         //save to database
         facultyRepository.save(faculty);
