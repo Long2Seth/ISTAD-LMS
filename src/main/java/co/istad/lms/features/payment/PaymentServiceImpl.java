@@ -11,6 +11,7 @@ import co.istad.lms.features.payment.dto.PaymentResponse;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.mapper.PaymentMapper;
+import co.istad.lms.util.DateTimeUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,66 +36,35 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final BaseSpecification<Payment> baseSpecification;
-    private final StudentRepository studentRepository;
     private final UserRepository userRepository;
 
     @Override
     public void createPayment(@Valid PaymentRequest paymentRequest) {
 
-        User user = userRepository.findByUsername(paymentRequest.studentName())
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                String.format("User with username = %s have been not found", paymentRequest.studentName())
-                        )
-                );
+
+        
+
 
         // Create a new payment
-        Payment payment = new Payment();
+        Payment payment = paymentMapper.toPaymentRequest(paymentRequest);
+        // Convert paidDate from string to LocalDate
+        LocalDate paidDate = DateTimeUtil.stringToLocalDate(paymentRequest.paidDate(),"paidDate");
 
         payment.setUuid(UUID.randomUUID().toString());
-        payment.setStudentName(paymentRequest.studentName());
-        payment.setStudentProfile(user.getProfileImage());
-        payment.setGender(user.getGender());
-        payment.setOriginalPayment(paymentRequest.originalPayment());
-        payment.setDiscount(paymentRequest.discount());
-        payment.setPaidAmount(paymentRequest.paidAmount());
-        payment.setPaidDate(paymentRequest.paidDate());
-        payment.setPaymentMethod(paymentRequest.paymentMethod());
-        payment.setRemark(paymentRequest.remarks());
+        payment.setPaidDate(paidDate);
 
-        // Retrieve existing payments for the student
-        List<Payment> existingPayments = paymentRepository.findByStudentName(paymentRequest.studentName());
+        // Do logic discount
+        Double paidDiscount = payment.getAcademicFee() * payment.getDiscount() / 100;
 
-        // Sum the paidAmount of existing payments
-        double totalPaidAmount = existingPayments.stream()
-                .mapToDouble(Payment::getPaidAmount)
-                .sum();
+        // Set academic fee after discount
+        payment.setAcademicFee(payment.getAcademicFee() - paidDiscount);
 
-        // Add the current payment's paidAmount to the total
-        totalPaidAmount += paymentRequest.paidAmount();
-
-        // Set the totalPayment
-        payment.setTotalPayment(totalPaidAmount);
-
-        // Calculate the courseFee
-        double courseFee = paymentRequest.originalPayment() -
-                (paymentRequest.originalPayment() * (paymentRequest.discount() / 100.0));
-        payment.setCourseFee(courseFee);
-
-        // Calculate the balance due
-        double balanceDue = courseFee - totalPaidAmount;
-        payment.setBalanceDue(balanceDue);
-
-        // Set the status based on the balance due
-        payment.setStatus(Boolean.valueOf(balanceDue == 0 ? "Paid" : "Unpaid"));
-
-        if (paymentRequest.paidAmount() > payment.getCourseFee()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Paid amount must be less than course fee");
-        }
-
+        // Set total payment
+        payment.setTotalPayment(paymentRequest.paidAmount());
 
         // Save the payment to the repository
         paymentRepository.save(payment);
+
 
     }
 

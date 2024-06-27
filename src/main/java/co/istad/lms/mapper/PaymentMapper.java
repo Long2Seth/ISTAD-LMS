@@ -16,6 +16,7 @@ public interface PaymentMapper {
 
     HistoryPaymentResponse toHistoryPaymentResponse(Payment payment);
 
+    @Mapping(target = "payment.paidDate" , ignore = true)
     Payment toPaymentRequest(PaymentRequest paymentRequest);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

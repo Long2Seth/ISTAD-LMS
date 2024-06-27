@@ -37,7 +37,7 @@ public class Student {
 
 
     @Column(length = 50)
-    private Integer familyPhoneNumber;
+    private String familyPhoneNumber;
 
 
 

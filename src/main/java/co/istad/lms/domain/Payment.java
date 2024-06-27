@@ -18,67 +18,81 @@ import java.util.List;
 @Table(name = "payments")
 public class Payment extends Auditable {
 
+
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
 
     @Column(nullable = false, unique = true)
     private String uuid;
 
 
-    @Column(nullable = false)
+    @Column(length = 50 , nullable = false)
     private String studentName;
 
-
-    private String studentProfile;
-
-
-    @Column(nullable = false)
-    private String gender;
 
 
     @Column(nullable = false)
     private Double balanceDue;
 
 
+
     @Column(nullable = false)
     private Double paidAmount;
+
 
 
     @Column(nullable = false)
     private LocalDate paidDate;
 
 
+
     @Column(nullable = false)
     private Double discount;
 
-
-    @Column(nullable = false)
-    private Double originalPayment;
 
 
     @Column(nullable = false)
     private Double totalPayment;
 
 
-    private Double courseFee;
+
+    private Double academicFee;
+
 
 
     private String paymentMethod;
+
 
 
     @Column(columnDefinition = "TEXT")
     private String remark;
 
 
+
     @Column(nullable = false)
     private Boolean status;
+
+
+
+    @Column(nullable = false)
+    private Boolean paidComplete;
+
 
 
     @ManyToOne
     private Student student;
 
 
+
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
     private List<Receipt> receipt;
+
+
+
+
 }
