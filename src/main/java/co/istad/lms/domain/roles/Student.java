@@ -88,12 +88,6 @@ public class Student {
 
 
 
-    private Boolean active;
-    private Boolean hiatus;
-    private Boolean drop;
-    private Boolean disable; // delete source of student
-
-
 
     @OneToOne
     @JoinColumn(name = "user_id")
