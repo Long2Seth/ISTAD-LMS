@@ -36,6 +36,10 @@ public record StudentRequest(
         @NotBlank(message = "High school is required")
         String highSchool
 
-        // Add other necessary fields here with appropriate validation
+//
+//        @NotBlank(message = "status is required")
+//
+//        Integer status
+
 ) {
 }
