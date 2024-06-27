@@ -10,7 +10,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface FacultyMapper {
 
-    @Mapping(target = "logo",ignore = true)
+
     Faculty fromFacultyRequest(FacultyRequest facultyRequest);
 
     FacultyDetailResponse toFacultyDetailResponse(Faculty faculty);
