@@ -40,6 +40,10 @@ public class User extends Auditable {
     @Column(nullable = false, length = 10)
     private String gender;
 
+    @Column( length = 50)
+    private String position;
+
+
     @Column(nullable = false, length = 100)
     private String email;
 
@@ -53,10 +57,6 @@ public class User extends Auditable {
 
     @Column(columnDefinition = "TEXT")
     private String currentAddress;
-
-
-
-
 
 
     @Column(name = "birth_of_date")
