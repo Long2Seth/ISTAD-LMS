@@ -1,11 +1,18 @@
 package co.istad.lms.features.classes;
 
 import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Course;
+import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.classes.dto.*;
+import co.istad.lms.features.course.dto.CourseDetailResponse;
+import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
+import co.istad.lms.features.student.dto.StudentResponse;
 import org.springframework.data.domain.Page;
+
+import java.util.Set;
 
 /**
  * Business logic interface which contains to manage Classes
@@ -129,5 +136,9 @@ public interface ClassService {
      * @since 1.0 (2024)
      */
     void draftClassByUuid(String uuid);
+
+    Page<StudentResponse> getAllStudentInClass(String classUuid,int pageNumber, int pageSize);
+
+    Page<CourseDetailResponse> getAllCourseInClass(String classUuid, int pageNumber, int pageSize);
 
 }

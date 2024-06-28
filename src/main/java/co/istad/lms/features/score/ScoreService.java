@@ -4,6 +4,7 @@ package co.istad.lms.features.score;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.score.dto.*;
+import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
 import org.springframework.data.domain.Page;
 
 /**
@@ -87,6 +88,6 @@ public interface ScoreService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ScoreSemesterResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber, int pageSize);
+    Page<StudentSemesterScoreResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber, int pageSize);
 
 }

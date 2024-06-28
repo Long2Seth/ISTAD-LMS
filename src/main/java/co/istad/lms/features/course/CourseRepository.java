@@ -3,6 +3,7 @@ package co.istad.lms.features.course;
 import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Generation;
 import co.istad.lms.domain.YearOfStudy;
+import co.istad.lms.domain.roles.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,8 +25,11 @@ public interface CourseRepository extends JpaRepository<Course,Long>, JpaSpecifi
 
     Page<Course> findByOneClassGenerationAndYearOfStudy(Generation generation, YearOfStudy yearOfStudy, Pageable pageable);
 
+    Page<Course> findByOneClassUuid(String uuid,Pageable pageable);
 
-//    Optional<Course> finByOneClass(String oneClass);
+    Set<Course> findAllByOneClassGenerationAndStudentsAndYearOfStudy(Generation generation,
+                                                                                              Student student,
+                                                                                                     YearOfStudy yearOfStudy);
  }
 
 

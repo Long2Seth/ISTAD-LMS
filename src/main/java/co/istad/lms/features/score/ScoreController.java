@@ -2,6 +2,7 @@ package co.istad.lms.features.score;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.score.dto.*;
+import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -74,7 +75,7 @@ public class ScoreController {
 
     @PostMapping("/semester")
     @PreAuthorize("hasAnyAuthority('assessment:read')")
-    public Page<ScoreSemesterResponse> getAllScoresBySemester(
+    public Page<StudentSemesterScoreResponse> getAllScoresBySemester(
 
             @Valid @RequestBody ScoreSemesterRequest scoreSemesterRequest,
             @RequestParam(defaultValue = "0") int pageNumber,

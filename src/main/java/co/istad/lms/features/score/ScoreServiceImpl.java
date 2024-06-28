@@ -8,6 +8,7 @@ import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
 import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.score.dto.*;
 import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
@@ -192,7 +193,8 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Page<ScoreSemesterResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber, int pageSize) {
+    public Page<StudentSemesterScoreResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber,
+                                                                     int pageSize) {
 
         StudyProgram studyProgram =
                 studyProgramRepository.findByAlias(scoreSemesterRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
@@ -204,31 +206,26 @@ public class ScoreServiceImpl implements ScoreService {
         Generation generation=
                 generationRepository.findByAlias(scoreSemesterRequest.generationAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("generation = %s has not been found",scoreSemesterRequest.generationAlias())));
 
-        Set<Student> students=studentRepository.findAllByCoursesYearOfStudy(yearOfStudy);
-
 
         //create sort order
-        Sort sortById = Sort.by(Sort.Direction.ASC, "lectureDate");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
-        //find all lecture in database
-        Page<Course> courses = courseRepository.findByOneClassGenerationAndYearOfStudy(generation,yearOfStudy,pageRequest);
+        Page<Student> students=studentRepository.findAllByCoursesYearOfStudy(yearOfStudy,pageRequest);
 
-        return courses.map(course->{
-
-            Set<Score> scores=course.getScores();
-
-            Double total =course.getScores().stream()
-                    .mapToDouble(score -> score.getTotal())
-                    .sum();
-
-            scores.stream().map(score -> {
-                return scoreMapper.toScoreSemesterResponse(score);
-            });
-            return null;
-
+        students.map(student -> {
+                Set<Course> courses=courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,student,
+                        yearOfStudy);
+                return null;
         });
+
+
+//        //find all lecture in database
+//        Page<Course> courses = courseRepository.findByOneClassGenerationAndYearOfStudy(generation,yearOfStudy,pageRequest);
+
+        return null;
+
     }
 }
