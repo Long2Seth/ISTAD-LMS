@@ -17,7 +17,6 @@ public record CourseDetailResponse(
         SubjectResponse subject,
         InstructorResponse instructor,
         ClassResponse oneClass,
-        Set<StudentResponse> students,
 
         YearOfStudyResponse yearOfStudy
 ) {

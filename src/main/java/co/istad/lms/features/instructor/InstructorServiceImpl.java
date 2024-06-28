@@ -2,6 +2,7 @@ package co.istad.lms.features.instructor;
 
 
 import co.istad.lms.domain.Authority;
+import co.istad.lms.domain.Lecture;
 import co.istad.lms.domain.User;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
@@ -9,10 +10,14 @@ import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.instructor.dto.*;
+import co.istad.lms.features.lecture.LectureRepository;
+import co.istad.lms.features.lecture.dto.LectureDetailResponse;
+import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.mapper.InstructorMapper;
+import co.istad.lms.mapper.LectureMapper;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
 import co.istad.lms.util.OtpUtil;
@@ -42,6 +47,10 @@ public class InstructorServiceImpl implements InstructorService {
     private final UserMapper userMapper;
     private final UserService userService;
     private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final LectureRepository lectureRepository;
+
+    private final LectureMapper lectureMapper;
 
 
     public Set<Authority> getDefaultAuthorities() {
@@ -74,7 +83,6 @@ public class InstructorServiceImpl implements InstructorService {
         }
 
 
-
         // Create new user for the instructor
         User user = userMapper.fromInstructorRequest(instructorRequest);
 
@@ -100,7 +108,7 @@ public class InstructorServiceImpl implements InstructorService {
         }
 
         // Set dob from string to LocalDate that comes from the request validation
-        LocalDate dob = DateTimeUtil.stringToLocalDate(instructorRequest.dob(),"dob");
+        LocalDate dob = DateTimeUtil.stringToLocalDate(instructorRequest.dob(), "dob");
         user.setDob(dob);
 
         user.setIsDeleted(false);
@@ -233,20 +241,20 @@ public class InstructorServiceImpl implements InstructorService {
 
 
         User user = userRepository.findByUuid(uuid)
-                        .orElseThrow(
-                                () -> new ResponseStatusException(
-                                        HttpStatus.NOT_FOUND,
-                                        String.format("User with uuid = %s not found", uuid)
-                                )
-                        );
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
 
         Instructor instructor = instructorRepository.findByUser(user)
-                        .orElseThrow(
-                                () -> new ResponseStatusException(
-                                        HttpStatus.NOT_FOUND,
-                                        String.format("Instructor with uuid = %s not found", uuid)
-                                )
-                        );
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Instructor with uuid = %s not found", uuid)
+                        )
+                );
 
         instructorRepository.delete(instructor);
 
@@ -353,6 +361,31 @@ public class InstructorServiceImpl implements InstructorService {
         Page<Instructor> filteredInstructors = new PageImpl<>(instructors, pageRequest, instructors.size());
 
         return filteredInstructors.map(instructorMapper::toResponse);
+    }
+
+    @Override
+    public Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "lectureDate");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all lecture in database
+        Page<Lecture> lectures = lectureRepository.findAllByCourseInstructorUserUuid(userUuid,pageRequest);
+
+        // map to DTO and return
+        return lectures.map(lecture -> {
+
+            String classCode = lecture.getCourse().getOneClass().getClassCode();
+
+            String startTime=DateTimeUtil.localTimeToString(lecture.getStartTime());
+
+            String endTime=DateTimeUtil.localTimeToString(lecture.getEndTime());
+
+            return lectureMapper.toLectureInstructorScheduleResponse(lecture, classCode,startTime,endTime);
+        });
     }
 
 

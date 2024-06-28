@@ -22,6 +22,9 @@ public interface StudentMapper {
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
     StudentResponse toResponse(Student student);
 
+    @Mapping(source = "user.uuid", target = "uuid")
+    StudentSemesterScoreResponse toStudentSemesterScoreResponse(Student student);
+
     StudentCourseResponse toResponseCourse(Student student);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")

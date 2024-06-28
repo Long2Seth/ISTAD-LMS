@@ -6,14 +6,8 @@ import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
-import co.istad.lms.features.score.dto.ScoreDetailResponse;
-import co.istad.lms.features.score.dto.ScoreRequest;
-import co.istad.lms.features.score.dto.ScoreResponse;
-import co.istad.lms.features.score.dto.ScoreUpdateRequest;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import co.istad.lms.features.score.dto.*;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",uses = {StudentMapper.class, })
 public interface ScoreMapper {
@@ -28,4 +22,6 @@ public interface ScoreMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateScoreFromRequest(@MappingTarget Score score, ScoreUpdateRequest scoreUpdateRequest);
 
+    @Mapping(source = "course",target = "courses",ignore = true)
+    ScoreSemesterResponse toScoreSemesterResponse(Score score);
 }

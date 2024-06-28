@@ -1,6 +1,8 @@
 package co.istad.lms.features.instructor;
 
 import co.istad.lms.features.instructor.dto.*;
+import co.istad.lms.features.lecture.dto.LectureDetailResponse;
+import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
 import org.springframework.data.domain.Page;
 
 /**
@@ -124,6 +126,9 @@ public interface InstructorService {
      * @since 1.0 (2024)
      */
     Page<InstructorResponse> getAllInstructor(int page, int limit);
+
+
+    Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
 
 
 }

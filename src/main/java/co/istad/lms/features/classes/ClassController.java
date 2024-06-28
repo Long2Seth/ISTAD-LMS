@@ -3,6 +3,9 @@ package co.istad.lms.features.classes;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.classes.dto.*;
+import co.istad.lms.features.course.dto.CourseDetailResponse;
+import co.istad.lms.features.course.dto.CourseResponse;
+import co.istad.lms.features.student.dto.StudentResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -120,5 +123,26 @@ public class ClassController {
 
         classService.draftClassByUuid(uuid);
     }
+
+    @GetMapping("/{uuid}/students")
+    @PreAuthorize("hasAnyAuthority('academic:read')")
+    public Page<StudentResponse> getStudentInClass(
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ){
+        return classService.getAllStudentInClass(uuid,pageNumber,pageSize);
+    }
+
+    @GetMapping("/{uuid}/courses")
+    @PreAuthorize("hasAnyAuthority('academic:read')")
+    public Page<CourseDetailResponse> getCourseInClass(
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ){
+        return classService.getAllCourseInClass(uuid,pageNumber,pageSize);
+    }
+
 
 }

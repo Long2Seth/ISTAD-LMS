@@ -1,18 +1,21 @@
 package co.istad.lms.features.score;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Course;
-import co.istad.lms.domain.Score;
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.course.CourseRepository;
-import co.istad.lms.features.score.dto.ScoreDetailResponse;
-import co.istad.lms.features.score.dto.ScoreRequest;
-import co.istad.lms.features.score.dto.ScoreUpdateRequest;
+import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
+import co.istad.lms.features.generation.GenerationRepository;
+import co.istad.lms.features.score.dto.*;
 import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
+import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ScoreMapper;
 import co.istad.lms.util.AssesmentsUtil;
 import lombok.RequiredArgsConstructor;
+import org.quartz.SimpleTrigger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -36,6 +41,12 @@ public class ScoreServiceImpl implements ScoreService {
     private final CourseRepository courseRepository;
 
     private final BaseSpecification<Score> baseSpecification;
+
+    private final YearOfStudyRepository yearOfStudyRepository;
+
+    private final StudyProgramRepository studyProgramRepository;
+
+    private final GenerationRepository generationRepository;
 
     @Override
     public void createScore(ScoreRequest scoreRequest) {
@@ -57,13 +68,13 @@ public class ScoreServiceImpl implements ScoreService {
 
         //get total score
         Double total =
-                (score.getActivityScore()*0.1)+(score.getAttendanceScore()*0.1)+(score.getMidtermExamScore()*0.2)+(score.getFinalExamScore()*0.35)+(score.getMiniProjectScore()*0.15)+(score.getAssignmentScore()*0.10);
+                (score.getActivityScore() * 0.1) + (score.getAttendanceScore() * 0.1) + (score.getMidtermExamScore() * 0.2) + (score.getFinalExamScore() * 0.35) + (score.getMiniProjectScore() * 0.15) + (score.getAssignmentScore() * 0.10);
 
         //get gpa
         Double gpa = AssesmentsUtil.getGpa(total);
 
         //get grade base on average
-        String grade= AssesmentsUtil.getGrade(total);
+        String grade = AssesmentsUtil.getGrade(total);
 
         //set total to score
         score.setTotal(total);
@@ -139,10 +150,10 @@ public class ScoreServiceImpl implements ScoreService {
         scorerRepository.save(score);
 
         //get class Code
-        String classCode= score.getCourse().getOneClass().getClassCode();
+        String classCode = score.getCourse().getOneClass().getClassCode();
 
         //map and return to DTO
-        return scoreMapper.toScoreDetailResponse(score,classCode);
+        return scoreMapper.toScoreDetailResponse(score, classCode);
     }
 
     @Override
@@ -178,6 +189,43 @@ public class ScoreServiceImpl implements ScoreService {
             //map and return to DTO
             return scoreMapper.toScoreDetailResponse(score, classCode);
         });
+
+    }
+
+    @Override
+    public Page<StudentSemesterScoreResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber,
+                                                                     int pageSize) {
+
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAlias(scoreSemesterRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                        "studyProgram = %s has not been found", scoreSemesterRequest.studyProgramAlias())));
+
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(scoreSemesterRequest.year(),
+                scoreSemesterRequest.semester(), studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study with year = %d, semester = %d , studyProgram = %s has not been found", scoreSemesterRequest.year(), scoreSemesterRequest.semester(), studyProgram.getAlias())));
+
+        Generation generation=
+                generationRepository.findByAlias(scoreSemesterRequest.generationAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("generation = %s has not been found",scoreSemesterRequest.generationAlias())));
+
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        Page<Student> students=studentRepository.findAllByCoursesYearOfStudy(yearOfStudy,pageRequest);
+
+        students.map(student -> {
+                Set<Course> courses=courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,student,
+                        yearOfStudy);
+                return null;
+        });
+
+
+//        //find all lecture in database
+//        Page<Course> courses = courseRepository.findByOneClassGenerationAndYearOfStudy(generation,yearOfStudy,pageRequest);
+
+        return null;
 
     }
 }

@@ -8,11 +8,10 @@ import java.util.Set;
 
 public record ScoreSemesterResponse(
 
-        String uuid,
         String classCode,
         Double total,
         Double gpa,
         StudentTranscriptResponse student,
-        Set<CourseSemesterScoreResponse> course
+        Set<CourseSemesterScoreResponse> courses
 ) {
 }

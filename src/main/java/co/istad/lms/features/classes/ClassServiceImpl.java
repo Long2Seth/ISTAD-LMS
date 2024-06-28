@@ -10,18 +10,22 @@ import co.istad.lms.features.classes.dto.ClassDetailResponse;
 import co.istad.lms.features.classes.dto.ClassRequest;
 import co.istad.lms.features.classes.dto.ClassUpdateRequest;
 import co.istad.lms.features.course.CourseRepository;
+import co.istad.lms.features.course.dto.CourseDetailResponse;
 import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.instructor.InstructorRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.student.StudentService;
+import co.istad.lms.features.student.dto.StudentResponse;
 import co.istad.lms.features.studentadmisson.StudentAdmissionRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.ClassMapper;
+import co.istad.lms.mapper.CourseMapper;
 import co.istad.lms.mapper.StudentAdmissionMapper;
+import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import org.passay.CharacterRule;
@@ -38,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
+import java.lang.module.ResolutionException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -80,6 +85,10 @@ public class ClassServiceImpl implements ClassService {
     private final UserService userService;
 
     private final CourseRepository courseRepository;
+
+    private final StudentMapper studentMapper;
+
+    private final CourseMapper courseMapper;
 
     @Override
     @Transactional
@@ -620,20 +629,38 @@ public class ClassServiceImpl implements ClassService {
         classRepository.save(aClass);
     }
 
-    private static String generateStrongPassword() {
-        CharacterRule lowercaseRule = new CharacterRule(EnglishCharacterData.LowerCase, 1);
-        CharacterRule uppercaseRule = new CharacterRule(EnglishCharacterData.UpperCase, 1);
-        CharacterRule digitRule = new CharacterRule(EnglishCharacterData.Digit, 1);
-        CharacterRule specialCharRule = new CharacterRule(EnglishCharacterData.Special, 1);
+    @Override
+    public Page<StudentResponse> getAllStudentInClass(String classUuid, int pageNumber, int pageSize) {
 
-        PasswordGenerator generator = new PasswordGenerator();
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
 
-        return generator.generatePassword(10, Arrays.asList(
-                lowercaseRule,
-                uppercaseRule,
-                digitRule,
-                specialCharRule
-        ));
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+
+        //find all student in class
+        Page<Student> students = studentRepository.findStudentByClassesUuid(classUuid,pageRequest);
+
+        //map entity to DTO and return
+        return students.map(studentMapper::toResponse);
+    }
+
+    @Override
+    public Page<CourseDetailResponse> getAllCourseInClass(String classUuid, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+
+        //find all student in class
+        Page<Course> students = courseRepository.findByOneClassUuid(classUuid,pageRequest);
+
+        //map entity to DTO and return
+        return students.map(courseMapper::toCourseDetailResponse);
     }
 
 }
