@@ -17,6 +17,13 @@ import java.util.Set;
 @Builder
 public record InstructorResponse(
 
+        String uuid,
+
+
+        String username,
+
+
+
         String nameEn,
 
 

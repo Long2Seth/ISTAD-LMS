@@ -31,4 +31,16 @@ public interface CourseMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCourseFromRequest(@MappingTarget Course course, CourseUpdateRequest courseUpdateRequest);
 
+
+    @Named("toCourseStudentResponse")
+    @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage")
+    @Mapping(source = "instructor.user.nameEn", target = "instructorName")
+    @Mapping(source = "yearOfStudy.year", target = "year")
+    @Mapping(source = "yearOfStudy.semester", target = "semester")
+    @Mapping(source = "subject.credit", target = "credit")
+    @Mapping(source = "subject.logo", target = "logo")
+    @Mapping(source = "subject.description", target = "description")
+    CourseStudentResponse toCourseStudentResponse(Course course);
+
+
 }

@@ -1,5 +1,6 @@
 package co.istad.lms.domain.roles;
 
+import co.istad.lms.domain.Course;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -133,6 +134,10 @@ public class Instructor {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    @OneToMany(mappedBy = "instructor")
+    private Set<Course> courses;
 
 
 

@@ -8,7 +8,7 @@ public record CourseStudentResponse(
         String description,
 
         // Instructor information for this course
-        String instructorAvatar,
+        String instructorProfileImage,
         String instructorName,
 
         // YearOfStudy

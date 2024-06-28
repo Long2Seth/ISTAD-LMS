@@ -15,6 +15,7 @@ import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyStudentAchievementResponse;
+import co.istad.lms.mapper.CourseMapper;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
@@ -45,6 +46,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final CourseMapper courseMapper;
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
     private final UserService userService;
@@ -346,11 +348,6 @@ public class StudentServiceImpl implements StudentService {
             scores.addAll(c.getScores());
         }
 
-        double totalScore = scores.stream()
-                .mapToDouble(score -> score.getFinalExamScore() + score.getMidtermExamScore() + score.getAssignmentScore() +
-                        score.getMiniProjectScore() + score.getAttendanceScore() + score.getActivityScore())
-                .sum();
-
         StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -421,49 +418,13 @@ public class StudentServiceImpl implements StudentService {
                         String.format("User with username %s not found", email)
                 ));
 
-        System.out.println("User: " + user);
-
         Student student = studentRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Student with username %s not found", email)
                 ));
 
-
-        Set<Course> course = student.getCourses();
-
-        Set<YearOfStudy> yearOfStudies = new HashSet<>();
-        for (Course c : course) {
-            yearOfStudies.addAll(yearOfStudyRepository.findByCourses(c));
-        }
-        if (yearOfStudies.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Year of study not found");
-        }
-
-
-        Set<CourseStudentResponse> courseStudentResponses = course.stream()
-                .map(courses -> {
-                    Instructor instructor = courses.getInstructor();
-                    String instructorProfileImage = null;
-                    String instructorName = null;
-                    if (instructor != null && instructor.getUser() != null) {
-                        instructorProfileImage = instructor.getUser().getProfileImage();
-                        instructorName = instructor.getUser().getNameEn();
-                    }
-                    return new CourseStudentResponse(
-                            courses.getUuid(),
-                            courses.getTitle(),
-                            courses.getSubject().getCredit(),
-                            courses.getSubject().getLogo(),
-                            courses.getSubject().getDescription(),
-                            instructorProfileImage,
-                            instructorName,
-                            courses.getYearOfStudy().getYear(),
-                            courses.getYearOfStudy().getSemester()
-                    );
-                })
-                .collect(Collectors.toSet());
-
+        Set<CourseStudentResponse> courseStudentResponses = studentMapper.toCourseStudentResponses(student.getCourses(), courseMapper);
 
         return new StudentCourseResponse(
                 user.getUuid(),

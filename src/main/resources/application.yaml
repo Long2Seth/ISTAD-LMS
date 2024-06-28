@@ -41,6 +41,10 @@ telegram:
     id: ${TELEGRAM_ID}
 
 spring:
+
+  main:
+    allow-circular-references: true
+
   application:
     name: "ISTAD-LMS"
   servlet: # this is for file upload
@@ -76,4 +80,4 @@ spring:
         starttls:
           enable: true
   profiles:
-    active: prod
+    active: dev
