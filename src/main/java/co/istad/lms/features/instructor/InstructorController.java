@@ -2,11 +2,15 @@ package co.istad.lms.features.instructor;
 
 
 import co.istad.lms.features.instructor.dto.*;
+import co.istad.lms.features.lecture.dto.LectureDetailResponse;
+import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
+import co.istad.lms.security.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -113,9 +117,16 @@ public class InstructorController {
          instructorService.blockInstructorByUuid(uuid);
     }
 
+    @GetMapping("/schedule")
+    @PreAuthorize("hasAnyAuthority('session:read')")
+    public Page<LectureInstructorScheduleResponse> getSchedule(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
 
-
-
+        return instructorService.getAllSchedule(userDetails.getUserUuid(),pageNumber,pageSize);
+    }
 
 
 

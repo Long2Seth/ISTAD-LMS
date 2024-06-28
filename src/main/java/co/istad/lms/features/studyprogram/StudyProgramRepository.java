@@ -17,6 +17,9 @@ public interface StudyProgramRepository extends JpaRepository<StudyProgram,Long>
 
     Optional<StudyProgram> findAllByAlias(String alias);
 
+    Optional<StudyProgram> findAllByClassesUuid(String uuid);
+
+
     Optional<StudyProgram> findByClassesIn(Set<Class> classes);
 
 }

@@ -3,9 +3,7 @@ package co.istad.lms.features.score;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.degree.dto.DegreeDetailResponse;
-import co.istad.lms.features.score.dto.ScoreDetailResponse;
-import co.istad.lms.features.score.dto.ScoreRequest;
-import co.istad.lms.features.score.dto.ScoreUpdateRequest;
+import co.istad.lms.features.score.dto.*;
 import org.springframework.data.domain.Page;
 
 /**
@@ -78,5 +76,17 @@ public interface ScoreService {
      * @since 1.0 (2024)
      */
     Page<ScoreDetailResponse> filterScores(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+
+
+    /**
+     * Retrieves a paginated list of all scores
+     *
+     * @param pageNumber is the current pageNumber number to retrieve
+     * @param pageSize is the pageSize of record per pageNumber to retrieve
+     * @return {@link Page<ScoreDetailResponse>}
+     * @author Pov Soknem
+     * @since 1.0 (2024)
+     */
+    Page<ScoreSemesterResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber, int pageSize);
 
 }

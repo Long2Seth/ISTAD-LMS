@@ -1,9 +1,7 @@
 package co.istad.lms.features.score;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.features.score.dto.ScoreDetailResponse;
-import co.istad.lms.features.score.dto.ScoreRequest;
-import co.istad.lms.features.score.dto.ScoreUpdateRequest;
+import co.istad.lms.features.score.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -74,14 +72,15 @@ public class ScoreController {
         return scoreService.filterScores(filterDto, pageNumber, pageSize);
     }
 
-    @GetMapping("/semester/")
+    @PostMapping("/semester")
     @PreAuthorize("hasAnyAuthority('assessment:read')")
-    public Page<ScoreDetailResponse> getAllScoresBySemester(
+    public Page<ScoreSemesterResponse> getAllScoresBySemester(
 
+            @Valid @RequestBody ScoreSemesterRequest scoreSemesterRequest,
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return scoreService.getAllScores(pageNumber, pageSize);
+        return scoreService.getAllScoresBySemester(scoreSemesterRequest,pageNumber, pageSize);
     }
 }

@@ -1,6 +1,7 @@
 package co.istad.lms.features.student;
 
 import co.istad.lms.domain.User;
+import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.domain.roles.Student;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
 
 
 @Repository
@@ -22,6 +24,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> , JpaSpe
     Optional<Student> findByUuid(String uuid);
 
     Optional<Student> findStudentByUserUuid(String userUuid);
+
+    Set<Student> findAllByCoursesYearOfStudy(YearOfStudy yearOfStudy);
 
     Optional<Student> findByUserUsername(String username);
 

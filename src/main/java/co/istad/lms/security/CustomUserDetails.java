@@ -45,6 +45,10 @@ public class CustomUserDetails implements UserDetails {
         return roles;
     }
 
+    public String getUserUuid(){
+        return user.getUuid();
+    }
+
 
 
     // make the proper format for the authorities
