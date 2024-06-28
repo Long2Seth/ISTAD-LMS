@@ -21,6 +21,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> , JpaSpe
 
     Optional<Student> findByUuid(String uuid);
 
+    Optional<Student> findByUserAndUuid(User user, String uuid);
+
     Optional<Student> findStudentByUserUuid(String userUuid);
 
     Optional<Student> findByUserUsername(String username);

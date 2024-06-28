@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StudentServiceImpl implements StudentService {
 
+
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final CourseMapper courseMapper;
@@ -55,7 +56,6 @@ public class StudentServiceImpl implements StudentService {
     private final BaseSpecification<Student> baseSpecification;
     private final YearOfStudyRepository yearOfStudyRepository;
     private final StudyProgramRepository studyProgramRepository;
-
 
 
     public String calculateGrade(double score) {
@@ -71,8 +71,6 @@ public class StudentServiceImpl implements StudentService {
             return "F";
         }
     }
-
-
 
 
     @Override
@@ -126,7 +124,6 @@ public class StudentServiceImpl implements StudentService {
                 .map(studentMapper::toResponseDetail);
 
     }
-
 
 
     @Override
@@ -375,7 +372,7 @@ public class StudentServiceImpl implements StudentService {
                                             .sum();
                                     double averageScore = courseScore / course.getScores().size();
                                     String studentGrade = calculateGrade(courseScore);
-                                    return new CourseResponse(course.getTitle(), averageScore,course.getSubject().getCredit() , studentGrade );
+                                    return new CourseResponse(course.getTitle(), averageScore, course.getSubject().getCredit(), studentGrade);
                                 })
                                 .collect(Collectors.toSet())
                 ))
@@ -398,32 +395,39 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentCourseResponse studentCourse() {
 
+        // Get authentication from security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // Check if authentication is null or not authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
         }
 
+        // Get principal from authentication
         Object principal = authentication.getPrincipal();
         if (!(principal instanceof UserDetails)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
         }
 
+        // Get email from UserDetails
         UserDetails userDetails = (UserDetails) principal;
         String email = userDetails.getUsername();
 
+        // Find user by email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("User with username %s not found", email)
                 ));
 
+        // Find student by user
         Student student = studentRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Student with username %s not found", email)
                 ));
 
+        // Map course student responses from student courses
         Set<CourseStudentResponse> courseStudentResponses = studentMapper.toCourseStudentResponses(student.getCourses(), courseMapper);
 
         return new StudentCourseResponse(
@@ -436,6 +440,68 @@ public class StudentServiceImpl implements StudentService {
         );
 
     }
+
+
+
+    public StudentCourseDetailResponse studentCourseDetail(String uuid) {
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email %s not found", email)
+                ));
+
+
+        // Find student by user
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Student not found"
+                ));
+
+
+        // Get the first course for simplicity, adjust as necessary
+        Course course = student.getCourses()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No course found for the student"
+                ));
+
+
+        // Find the corresponding year of study for the course
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByCourses(course)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Year of study not found for the course"
+                ));
+
+        return studentMapper.toStudentCourseDetailResponse(course, yearOfStudy);
+    }
+
 
     @Override
     public void deleteStudentByUuid(String uuid) {

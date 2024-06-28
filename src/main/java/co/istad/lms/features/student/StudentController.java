@@ -73,6 +73,11 @@ public class StudentController {
     }
 
 
+    @GetMapping("/course/{uuid}")
+    public StudentCourseDetailResponse getStudentCourseDetail(@PathVariable String uuid) {
+        return studentService.studentCourseDetail(uuid);
+    }
+
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}")
     public StudentResponseDetail updateStudent(@PathVariable String uuid, @RequestBody StudentRequestUpdate studentRequest) {

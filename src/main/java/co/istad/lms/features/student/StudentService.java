@@ -147,6 +147,20 @@ public interface StudentService {
 
 
     /**
+     *Retrieves the details of a student
+     *
+     * @return {@link StudentCourseDetailResponse} the response object containing the student
+     * @since 1.0 (2024)
+     */
+    StudentCourseDetailResponse studentCourseDetail(String uuid);
+
+
+
+
+
+
+
+    /**
      * Deletes an existing student.
      *
      * @param uuid    is the unique identifier of student
