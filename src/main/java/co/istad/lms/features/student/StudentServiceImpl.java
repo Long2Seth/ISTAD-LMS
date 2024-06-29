@@ -58,6 +58,22 @@ public class StudentServiceImpl implements StudentService {
     private final StudyProgramRepository studyProgramRepository;
 
 
+
+
+    private String generateNextCardId() {
+        Optional<Student> optionalStudent = studentRepository.findStudentWithMaxCardId();
+        if (optionalStudent.isPresent()) {
+            String maxCardId = optionalStudent.get().getCardId();
+            int nextId = Integer.parseInt(maxCardId.substring(2)) + 1;
+            return String.format("G-%04d", nextId);
+        } else {
+            return "G-0001";
+        }
+    }
+
+
+
+
     public String calculateGrade(double score) {
         if (score >= 90) {
             return "A";
@@ -158,6 +174,14 @@ public class StudentServiceImpl implements StudentService {
                     String.format("File with name = %s not found!", studentRequest.profileImage()));
         }
 
+        String username = studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob();
+        if (userRepository.existsByUsername(username)){
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with username = %s already exists", username)
+            );
+        }
+
 
         // Map user request to user
         User user = userMapper.fromStudentRequest(studentRequest);
@@ -188,7 +212,7 @@ public class StudentServiceImpl implements StudentService {
 
         user.setIsDeleted(false);
         user.setStatus(false);
-        user.setUsername(studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob());
+        user.setUsername(username);
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
@@ -201,12 +225,9 @@ public class StudentServiceImpl implements StudentService {
         // Map student request to student
         Student student = studentMapper.toRequest(studentRequest);
         student.setUuid(UUID.randomUUID().toString());
-        // Generate the next cardId
-        Integer maxCardId = studentRepository.findMaxCardId();
-        int nextCardIdNumber = (maxCardId != null) ? maxCardId + 1 : 1;
-        String nextCardId = String.format("g-%04d", nextCardIdNumber);
-        student.setCardId(nextCardId);
-        student.setStatus(1);
+
+        student.setCardId(generateNextCardId());
+        student.setStudentStatus(1); // 1 : Active , 2 : Drop , 3 : Hiatus , 4 : Stop learning
 
         // Save user in student
         student.setUser(user);
@@ -249,6 +270,15 @@ public class StudentServiceImpl implements StudentService {
 
         // Update student from student request
         student.setUser(user);
+
+        // validate student status can input only 1-4
+        if (studentRequest.studentStatus() < 1 || studentRequest.studentStatus() > 4) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Student status must be 1, 2, 3 or 4"
+            );
+        }
+        student.setStudentStatus(studentRequest.studentStatus());
 
         // Save student
         Student savedStudent = studentRepository.save(student);
@@ -552,7 +582,7 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public StudentResponse getStudentByUuid(String uuid) {
+    public StudentResponseDetail getStudentByUuid(String uuid) {
 
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -570,7 +600,7 @@ public class StudentServiceImpl implements StudentService {
                         )
                 );
 
-        return studentMapper.toResponse(student);
+        return studentMapper.toResponseDetail(student);
 
 
     }

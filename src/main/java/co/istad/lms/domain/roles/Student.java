@@ -86,11 +86,16 @@ public class Student {
     @Column(columnDefinition = "TEXT")
     private String biography;
 
+
+
+
     @Column(nullable = false)
     String cardId;
 
+
+
     @Column(nullable = false)
-    Integer status;
+    Integer studentStatus;
 
 
 

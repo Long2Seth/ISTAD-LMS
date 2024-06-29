@@ -141,6 +141,8 @@ public class AcademicServiceImpl implements AcademicService {
                     String.format("User with email = %s or username = %s already exists", academicRequestDetail.email(), user.getUsername()));
         }
 
+        userService.updateUserAuthorities(user, academicRequestDetail.authorityNames());
+
         // Update the user fields from the academic request
         userMapper.updateUserFromAcademicRequest(user, academicRequestDetail);
 

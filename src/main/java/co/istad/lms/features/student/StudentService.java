@@ -3,6 +3,7 @@ package co.istad.lms.features.student;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Authority;
 import co.istad.lms.features.student.dto.*;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 
 import java.util.Set;
@@ -93,7 +94,7 @@ public interface StudentService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    StudentResponseDetail updateStudentByUuid (String uuid , StudentRequestUpdate studentRequest);
+    StudentResponseDetail updateStudentByUuid (String uuid ,@Valid StudentRequestUpdate studentRequest);
 
 
 
@@ -150,6 +151,8 @@ public interface StudentService {
      *Retrieves the details of a student
      *
      * @return {@link StudentCourseDetailResponse} the response object containing the student
+     * @param uuid is the unique identifier of student
+     * @author Long Piseth
      * @since 1.0 (2024)
      */
     StudentCourseDetailResponse studentCourseDetail(String uuid);
@@ -199,7 +202,7 @@ public interface StudentService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    StudentResponse getStudentByUuid(String uuid);
+    StudentResponseDetail getStudentByUuid(String uuid);
 
 
 

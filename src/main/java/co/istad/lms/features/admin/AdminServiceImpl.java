@@ -148,6 +148,9 @@ public class AdminServiceImpl implements AdminService {
                     String.format("User with email = %s or username = %s already exists", adminRequestDetail.email(), user.getUsername()));
         }
 
+
+        userService.updateUserAuthorities(user, adminRequestDetail.authorityNames());
+
         // Update the user fields from the admin request
         userMapper.updateUserFromAdminRequest(user, adminRequestDetail);
 

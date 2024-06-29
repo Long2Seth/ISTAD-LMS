@@ -18,6 +18,6 @@ public record StaffRequestDetail(
         String profileImage,
         String phoneNumber,
         String currentAddress,
-        JsonBirthPlace birthPlace
+        String birthPlace
 ) {
 }

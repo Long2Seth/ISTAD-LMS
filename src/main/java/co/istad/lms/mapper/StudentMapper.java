@@ -31,6 +31,7 @@ public interface StudentMapper {
     StudentResponseDetail toResponseDetail(Student student);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+//    @Mapping(target = "status", source = "status", qualifiedByName = "mapStatus")
     void updateStudentFromRequest(@MappingTarget Student student, StudentRequestUpdate studentRequestUpdate);
 
 

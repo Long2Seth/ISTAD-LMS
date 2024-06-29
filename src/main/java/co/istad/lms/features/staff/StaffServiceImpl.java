@@ -79,7 +79,7 @@ public class StaffServiceImpl implements StaffService {
         }
 
         // Set dob from string to LocalDate that comes from the request validation
-        LocalDate dob = DateTimeUtil.stringToLocalDate(staffRequest.dob(),"dob");
+        LocalDate dob = DateTimeUtil.stringToLocalDate(staffRequest.dob(), "dob");
         user.setDob(dob);
         user.setUsername(staffRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + staffRequest.dob());
         user.setUuid(UUID.randomUUID().toString());
@@ -116,6 +116,8 @@ public class StaffServiceImpl implements StaffService {
 
     }
 
+
+
     @Override
     public StaffResponseDetail updateStaffByUuid(String uuid, StaffRequestUpdate staffRequestUpdate) {
 
@@ -127,27 +129,30 @@ public class StaffServiceImpl implements StaffService {
                         )
                 );
 
-
         if (staffRequestUpdate.profileImage() != null && !staffRequestUpdate.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(staffRequestUpdate.profileImage())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     String.format("File with name = %s not found!", staffRequestUpdate.profileImage()));
         }
 
-
-
         // Check if the user exists
-        if (userRepository.existsByEmailOrUsernameAndUuidNot(staffRequestUpdate.email(), user.getUsername() ,uuid)) {
+        if (userRepository.existsByEmailOrUsernameAndUuidNot(staffRequestUpdate.email(), user.getUsername(), uuid)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format("User with email = %s or username = %s already exists", staffRequestUpdate.email(), user.getUsername())
             );
         }
 
+
+       userService.updateUserAuthorities(user, staffRequestUpdate.authorityNames());
+
+
         // Update the user
-        userMapper.updateUserFromStaffRequest( user , staffRequestUpdate);
+        userMapper.updateUserFromStaffRequest(user, staffRequestUpdate);
 
         // Save the user
         userRepository.save(user);
+
+        // Check if the staff exists
         Staff staff = staffRepository.findByUser(user)
                 .orElseThrow(
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -158,17 +163,14 @@ public class StaffServiceImpl implements StaffService {
         // Update the staff
         staff.setUser(user);
 
-        // Save the staff
-        Staff saveStaff = staffRepository.save(staff);
+        // Update the staff from the request
+        staffMapper.updateStaffFromRequest(staff, staffRequestUpdate);
 
-        staffMapper.updateStaffFromRequest(saveStaff, staffRequestUpdate);
+        // Save the updated staff
+        staffRepository.save(staff);
 
         return staffMapper.toResponseDetail(staff);
-
     }
-
-
-
 
 
     @Override
@@ -187,8 +189,6 @@ public class StaffServiceImpl implements StaffService {
     }
 
 
-
-
     @Override
     public Page<StaffResponse> getStaff(int page, int limit) {
 
@@ -202,8 +202,6 @@ public class StaffServiceImpl implements StaffService {
         return new PageImpl<>(staffs, pageRequest, staffs.size()).map(staffMapper::toResponse);
 
     }
-
-
 
 
     @Override
@@ -222,12 +220,10 @@ public class StaffServiceImpl implements StaffService {
                                 String.format("Staff with user = %s was not found.", user)
                         )
                 );
-        
+
         return staffMapper.toResponseDetail(staff);
 
     }
-
-
 
 
     @Override
@@ -252,9 +248,6 @@ public class StaffServiceImpl implements StaffService {
     }
 
 
-
-
-
     @Override
     public void deleteStaffByUuid(String uuid) {
 
@@ -276,10 +269,6 @@ public class StaffServiceImpl implements StaffService {
         staffRepository.delete(staff);
 
     }
-
-
-
-
 
 
     @Override
@@ -306,9 +295,6 @@ public class StaffServiceImpl implements StaffService {
         staffRepository.save(staff);
 
     }
-
-
-
 
 
     @Override
@@ -338,8 +324,6 @@ public class StaffServiceImpl implements StaffService {
     }
 
 
-
-
     @Override
     public void updateDeletedStatus(String uuid) {
 
@@ -364,8 +348,6 @@ public class StaffServiceImpl implements StaffService {
         staffRepository.save(staff);
 
     }
-
-
 
 
 }

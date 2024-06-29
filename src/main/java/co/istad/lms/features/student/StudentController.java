@@ -48,7 +48,7 @@ public class StudentController {
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read','user:read')")
     @GetMapping("/{uuid}")
-    public StudentResponse getStudentByUuid(@PathVariable String uuid) {
+    public StudentResponseDetail getStudentByUuid(@PathVariable String uuid) {
         return studentService.getStudentByUuid(uuid);
     }
 

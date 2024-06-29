@@ -10,6 +10,12 @@ import java.util.Set;
 @Builder
 public record StaffResponse(
 
+        String uuid,
+
+
+        String position,
+
+
         String nameEn,
 
 

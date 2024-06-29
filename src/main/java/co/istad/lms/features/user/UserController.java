@@ -1,16 +1,14 @@
 package co.istad.lms.features.user;
 
-import co.istad.lms.features.user.dto.UserProfile;
-import co.istad.lms.features.user.dto.UserRequest;
-import co.istad.lms.features.user.dto.UserResponse;
-import co.istad.lms.features.user.dto.UserResponseDetail;
-import co.istad.lms.features.user.dto.UserUpdateRequest;
+import co.istad.lms.features.user.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -51,6 +49,14 @@ public class UserController {
             @RequestParam(defaultValue = "25") int pageSize
     ){
         return userService.getAllUsersExceptStudents(pageNumber, pageSize);
+    }
+
+
+
+
+    @GetMapping("/authority/{uuid}")
+    public AuthorityResponse getAllAuthorities(@PathVariable String uuid){
+        return userService.viewsAuthorityAllUser(uuid);
     }
 
 

@@ -20,12 +20,10 @@ import java.util.Set;
 public interface StudentRepository extends JpaRepository<Student, Long> , JpaSpecificationExecutor<Student> {
 
 
-    @Query("SELECT MAX(CAST(SUBSTRING(s.cardId, 3) AS int)) FROM Student s")
-    Integer findMaxCardId();
+    @Query("SELECT s FROM Student s WHERE s.cardId = (SELECT MAX(s2.cardId) FROM Student s2 WHERE s2.cardId LIKE 'G-%')")
+    Optional<Student> findStudentWithMaxCardId();
 
     Optional<Student> findByUuid(String uuid);
-
-    Optional<Student> findByUserAndUuid(User user, String uuid);
 
     Optional<Student> findStudentByUserUuid(String userUuid);
 

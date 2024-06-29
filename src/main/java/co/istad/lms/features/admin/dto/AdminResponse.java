@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.Set;
 
 public record AdminResponse(
+
+        String uuid,
+
+
+        String position,
+
+
         String nameEn,
 
 

@@ -3,6 +3,7 @@ package co.istad.lms.features.user;
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.authority.dto.AuthorityResponseToUser;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.media.MediaService;
 import co.istad.lms.features.user.dto.UserProfile;
@@ -35,17 +36,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
 
-
-
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
     private final MediaService mediaService;
     private final FileMetaDataRepository fileMetaDataRepository;
-
-
-
-
 
 
     @Override
@@ -77,10 +72,6 @@ public class UserServiceImpl implements UserService {
                 user.getNameEn()
         );
     }
-
-
-
-
 
 
     @Override
@@ -116,9 +107,24 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.joining());
     }
 
-
-
-
+    @Override
+    public void updateUserAuthorities(User user, Set<String> authorityNames) {
+        Set<Authority> allAuthorities = new HashSet<>();
+        if (authorityNames == null) {
+            allAuthorities.addAll(user.getAuthorities());
+        } else {
+            log.info(" authorityNames = {}", authorityNames);
+            for (String authorityName : authorityNames) {
+                Set<Authority> foundAuthorities = authorityRepository.findAllByAuthorityName(authorityName);
+                if (foundAuthorities.isEmpty()) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            String.format("Authority with name = %s not found!", authorityName));
+                }
+                allAuthorities.addAll(foundAuthorities);
+            }
+        }
+        user.setAuthorities(allAuthorities);
+    }
 
 
     @Override
@@ -128,7 +134,7 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(pageRequest);
 
         users.forEach(user -> {
-            if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+            if (user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
                 user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
             }
         });
@@ -140,11 +146,6 @@ public class UserServiceImpl implements UserService {
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponse);
     }
-
-
-
-
-
 
 
     @Override
@@ -163,22 +164,11 @@ public class UserServiceImpl implements UserService {
         List<User> filteredUsers = users.stream()
                 .filter(user -> !user.getIsDeleted())
                 .filter(user -> !user.getStatus())
-                .filter(user -> user.getStudent()==null)
+                .filter(user -> user.getStudent() == null)
                 .toList();
 
         return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponseDetail);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -188,7 +178,7 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(pageRequest);
 
         users.forEach(user -> {
-            if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+            if (user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
                 user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
             }
         });
@@ -202,12 +192,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-
-
-
     @Override
     public Page<UserResponse> getAllUsersWithAdminRole(int page, int limit) {
 
@@ -216,7 +200,7 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAllUsersWithAdminRole(pageRequest);
 
         users.forEach(user -> {
-            if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+            if (user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
                 user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
             }
         });
@@ -224,9 +208,25 @@ public class UserServiceImpl implements UserService {
         return users.map(userMapper::toUserResponse);
     }
 
+    @Override
+    public AuthorityResponse viewsAuthorityAllUser(String uuid) {
+
+        // Get all user
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("User with alias = %s was not found.", uuid)));
 
 
+        Set<AuthorityResponseToUser> authorities = user.getAuthorities().stream()
+                .map(authority -> new AuthorityResponseToUser(
+                        authority.getAuthorityName()
+                ))
+                .collect(Collectors.toSet());
 
+        return userMapper.toAuthorityResponseFromUser(user);
+
+
+    }
 
 
     @Override
@@ -237,16 +237,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with alias = %s was not found.", uuid)));
 
-        if(user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
+        if (user.getProfileImage() != null && !user.getProfileImage().trim().isEmpty()) {
             user.setProfileImage(mediaService.getUrl(user.getProfileImage()));
         }
 
         return userMapper.toUserResponse(user);
 
     }
-
-
-
 
 
     @Override
@@ -262,8 +259,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponseDetail(user);
 
     }
-
-
 
 
     @Override
@@ -308,7 +303,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Set dob from string to LocalDate that comes from the request validation
-        LocalDate dob = DateTimeUtil.stringToLocalDate(userRequest.dob(),"dob");
+        LocalDate dob = DateTimeUtil.stringToLocalDate(userRequest.dob(), "dob");
         user.setDob(dob);
 
         user.setUsername(userRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + userRequest.dob());
@@ -339,10 +334,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-
     @Override
     public UserResponse updateUser(String uuid, UserUpdateRequest userRequest) {
 
@@ -365,10 +356,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-
     @Override
     public void deleteUser(String uuid) {
 
@@ -383,9 +370,6 @@ public class UserServiceImpl implements UserService {
         userMapper.toUserResponse(user);
 
     }
-
-
-
 
 
     @Override
@@ -404,10 +388,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-
     @Override
     public void enableUser(String alias) {
 
@@ -424,8 +404,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
     @Override
     public void isDeleted(String uuid) {
 
@@ -440,8 +418,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
     }
-
-
 
 
 }
