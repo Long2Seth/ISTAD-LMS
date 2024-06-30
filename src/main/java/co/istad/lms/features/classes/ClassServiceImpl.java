@@ -136,7 +136,7 @@ public class ClassServiceImpl implements ClassService {
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
-                    course.setIsStarted(false);
+                    course.setStatus(1);
                     return course;
                 })
                 .collect(Collectors.toSet());
@@ -151,7 +151,7 @@ public class ClassServiceImpl implements ClassService {
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
-                    course.setIsStarted(false);
+                    course.setStatus(1);
                     return course;
                 })
                 .collect(Collectors.toSet());
@@ -650,7 +650,7 @@ public class ClassServiceImpl implements ClassService {
     public Page<CourseDetailResponse> getAllCourseInClass(String classUuid, int pageNumber, int pageSize) {
 
         //create sort order
-        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "courseStart");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);

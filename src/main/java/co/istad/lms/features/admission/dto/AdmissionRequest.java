@@ -16,6 +16,8 @@ public record AdmissionRequest(
         String openDate,
         String endDate,
 
+        String academicYearAlias,
+
 
         @Size(max = 100,message = "telegramLink cannot be longer than 100 characters")
         String telegramLink

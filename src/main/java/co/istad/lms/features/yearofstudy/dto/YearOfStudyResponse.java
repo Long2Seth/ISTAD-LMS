@@ -9,9 +9,7 @@ public record YearOfStudyResponse(
 
         String uuid,
         Integer year,
-        Integer semester,
-
-        Set<SubjectResponse> subjects
+        Integer semester
 
 ) {
 }

@@ -27,7 +27,6 @@ public class Admission extends Auditable {
     @Column(nullable = false)
     private Integer status;
 
-    private String academicYear;
 
     @Column(columnDefinition = "TEXT")
     private String remark;
@@ -41,5 +40,8 @@ public class Admission extends Auditable {
 
     @Column(nullable = false)
     private Boolean isDeleted;
+
+    @OneToOne
+    private AcademicYear academicYear;
 
 }

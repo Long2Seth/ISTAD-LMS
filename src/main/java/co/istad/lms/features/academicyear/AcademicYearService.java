@@ -25,14 +25,14 @@ public interface AcademicYearService {
     void createAcademicYear(AcademicYearRequest academicYearRequest);
 
     /**
-     * Retrieves the details of an academic by its UUID.
+     * Retrieves the details of an academic by its alias.
      *
-     * @param uuid is the unique identifier of academic
+     * @param alias is the unique identifier of academic
      * @return {@link AcademicYearDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    AcademicYearDetailResponse getAcademicYearByUuid(String uuid);
+    AcademicYearDetailResponse getAcademicYearByAlias(String alias);
 
     /**
      * Retrieves a paginated list of all academicYear.
@@ -48,40 +48,40 @@ public interface AcademicYearService {
     /**
      * Updates an existing academicYear
      *
-     * @param uuid    is the unique identifier of academicYear
+     * @param alias    is the unique identifier of academicYear
      * @param academicYearUpdateRequest the request object containing the updated academicYear details
      * @return {@link AcademicYearDetailResponse}
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    AcademicYearDetailResponse updateAcademicYear(String uuid, AcademicYearUpdateRequest academicYearUpdateRequest);
+    AcademicYearDetailResponse updateAcademicYear(String alias, AcademicYearUpdateRequest academicYearUpdateRequest);
 
     /**
-     * Delete academicYear by  UUID.
+     * Delete academicYear by  alias.
      *
-     * @param academicYearUuid the unique identifier of academicYear
+     * @param alias the unique identifier of academicYear
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void deleteAcademicYear(String academicYearUuid);
+    void deleteAcademicYear(String alias);
 
     /**
-     * Disables  academicYear by  UUID.
+     * Disables  academicYear by  alias.
      *
-     * @param uuid is the unique identifier of academicYear
+     * @param alias is the unique identifier of academicYear
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void disableAcademicYearByUuid(String uuid);
+    void disableAcademicYearByAlias(String alias);
 
     /**
-     * Enables an academicYear by its UUID.
+     * Enables an academicYear by its alias.
      *
-     * @param uuid is the unique identifier of academicYear
+     * @param alias is the unique identifier of academicYear
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    void enableAcademicYearByUuid(String uuid);
+    void enableAcademicYearByAlias(String alias);
 
 
     /**
