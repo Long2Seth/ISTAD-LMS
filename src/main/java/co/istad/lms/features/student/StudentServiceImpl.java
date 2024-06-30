@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StudentServiceImpl implements StudentService {
 
+
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final CourseMapper courseMapper;
@@ -55,6 +56,21 @@ public class StudentServiceImpl implements StudentService {
     private final BaseSpecification<Student> baseSpecification;
     private final YearOfStudyRepository yearOfStudyRepository;
     private final StudyProgramRepository studyProgramRepository;
+
+
+
+
+    private String generateNextCardId() {
+        Optional<Student> optionalStudent = studentRepository.findStudentWithMaxCardId();
+        if (optionalStudent.isPresent()) {
+            String maxCardId = optionalStudent.get().getCardId();
+            int nextId = Integer.parseInt(maxCardId.substring(2)) + 1;
+            return String.format("G-%04d", nextId);
+        } else {
+            return "G-0001";
+        }
+    }
+
 
 
 
@@ -71,8 +87,6 @@ public class StudentServiceImpl implements StudentService {
             return "F";
         }
     }
-
-
 
 
     @Override
@@ -128,7 +142,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-
     @Override
     public Page<StudentCourseResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
 
@@ -161,6 +174,14 @@ public class StudentServiceImpl implements StudentService {
                     String.format("File with name = %s not found!", studentRequest.profileImage()));
         }
 
+        String username = studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob();
+        if (userRepository.existsByUsername(username)){
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with username = %s already exists", username)
+            );
+        }
+
 
         // Map user request to user
         User user = userMapper.fromStudentRequest(studentRequest);
@@ -191,7 +212,7 @@ public class StudentServiceImpl implements StudentService {
 
         user.setIsDeleted(false);
         user.setStatus(false);
-        user.setUsername(studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob());
+        user.setUsername(username);
         user.setIsChangePassword(false);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
@@ -204,12 +225,9 @@ public class StudentServiceImpl implements StudentService {
         // Map student request to student
         Student student = studentMapper.toRequest(studentRequest);
         student.setUuid(UUID.randomUUID().toString());
-        // Generate the next cardId
-        Integer maxCardId = studentRepository.findMaxCardId();
-        int nextCardIdNumber = (maxCardId != null) ? maxCardId + 1 : 1;
-        String nextCardId = String.format("g-%04d", nextCardIdNumber);
-        student.setCardId(nextCardId);
-        student.setStatus(1);
+
+        student.setCardId(generateNextCardId());
+        student.setStudentStatus(1); // 1 : Active , 2 : Drop , 3 : Hiatus , 4 : Stop learning
 
         // Save user in student
         student.setUser(user);
@@ -252,6 +270,15 @@ public class StudentServiceImpl implements StudentService {
 
         // Update student from student request
         student.setUser(user);
+
+        // validate student status can input only 1-4
+        if (studentRequest.studentStatus() < 1 || studentRequest.studentStatus() > 4) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Student status must be 1, 2, 3 or 4"
+            );
+        }
+        student.setStudentStatus(studentRequest.studentStatus());
 
         // Save student
         Student savedStudent = studentRepository.save(student);
@@ -375,7 +402,7 @@ public class StudentServiceImpl implements StudentService {
                                             .sum();
                                     double averageScore = courseScore / course.getScores().size();
                                     String studentGrade = calculateGrade(courseScore);
-                                    return new CourseResponse(course.getTitle(), averageScore,course.getSubject().getCredit() , studentGrade );
+                                    return new CourseResponse(course.getTitle(), averageScore, course.getSubject().getCredit(), studentGrade);
                                 })
                                 .collect(Collectors.toSet())
                 ))
@@ -398,32 +425,39 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentCourseResponse studentCourse() {
 
+        // Get authentication from security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // Check if authentication is null or not authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
         }
 
+        // Get principal from authentication
         Object principal = authentication.getPrincipal();
         if (!(principal instanceof UserDetails)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
         }
 
+        // Get email from UserDetails
         UserDetails userDetails = (UserDetails) principal;
         String email = userDetails.getUsername();
 
+        // Find user by email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("User with username %s not found", email)
                 ));
 
+        // Find student by user
         Student student = studentRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         String.format("Student with username %s not found", email)
                 ));
 
+        // Map course student responses from student courses
         Set<CourseStudentResponse> courseStudentResponses = studentMapper.toCourseStudentResponses(student.getCourses(), courseMapper);
 
         return new StudentCourseResponse(
@@ -436,6 +470,68 @@ public class StudentServiceImpl implements StudentService {
         );
 
     }
+
+
+
+    public StudentCourseDetailResponse studentCourseDetail(String uuid) {
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email %s not found", email)
+                ));
+
+
+        // Find student by user
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Student not found"
+                ));
+
+
+        // Get the first course for simplicity, adjust as necessary
+        Course course = student.getCourses()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "No course found for the student"
+                ));
+
+
+        // Find the corresponding year of study for the course
+        YearOfStudy yearOfStudy = yearOfStudyRepository.findByCourses(course)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Year of study not found for the course"
+                ));
+
+        return studentMapper.toStudentCourseDetailResponse(course, yearOfStudy);
+    }
+
 
     @Override
     public void deleteStudentByUuid(String uuid) {
@@ -486,7 +582,7 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public StudentResponse getStudentByUuid(String uuid) {
+    public StudentResponseDetail getStudentByUuid(String uuid) {
 
         User user = userRepository.findByUuid(uuid)
                 .orElseThrow(
@@ -504,7 +600,7 @@ public class StudentServiceImpl implements StudentService {
                         )
                 );
 
-        return studentMapper.toResponse(student);
+        return studentMapper.toResponseDetail(student);
 
 
     }

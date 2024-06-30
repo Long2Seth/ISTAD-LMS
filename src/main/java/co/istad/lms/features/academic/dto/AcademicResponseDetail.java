@@ -5,20 +5,34 @@ import co.istad.lms.features.user.dto.UserResponse;
 import co.istad.lms.features.user.dto.UserResponseDetail;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public record AcademicResponseDetail(
 
         String uuid,
 
+
+        String position,
+
+
+
         String highSchool,
 
         LocalDate highSchoolGraduationDate,
 
-        String degree,
+
 
         LocalDate degreeGraduationDate,
 
-        String major,
+
+        Set< String> educations,
+
+
+
+
+        Set<String> skills,
+
+
 
         String studyAtUniversityOrInstitution,
 

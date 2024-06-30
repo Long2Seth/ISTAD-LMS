@@ -1,5 +1,6 @@
 package co.istad.lms.mapper;
 
+import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestUpdate;
@@ -16,73 +17,52 @@ import co.istad.lms.features.student.dto.StudentSettingRequest;
 import co.istad.lms.features.user.dto.*;
 import org.mapstruct.*;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-
-    @Mapping(target = "dob" , ignore = true)
+    @Mapping(target = "dob", ignore = true)
     User fromUserRequest(UserRequest userRequest);
+
+
+    AuthorityResponse toAuthorityResponseFromUser(User user);
 
 
     ResponsePassword toResponsePassword(User user);
 
-
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromRequest(@MappingTarget User user, UserUpdateRequest userRequest);
 
-
-
     User fromAdminRequest(AdminRequest adminRequest);
-
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromAdminRequest(@MappingTarget User user, AdminRequestUpdate adminRequestUpdate);
 
-
-
     User fromAcademicRequest(AcademicRequest academicRequest);
-
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromAcademicRequest(@MappingTarget User user, AcademicRequestUpdate academicRequestUpdate);
 
-
-
     User fromInstructorRequest(InstructorRequest instructorRequest);
-
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromInstructorRequest(@MappingTarget User user, InstructorRequestUpdate instructorRequestUpdate);
 
-
-
     User fromStaffRequest(StaffRequest staffRequest);
-
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStaffRequest(@MappingTarget User user, StaffRequestUpdate staffRequestUpdate);
 
-
-
     User fromStudentRequest(StudentRequest studentRequest);
-
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStudentRequest(@MappingTarget User user, StudentRequestUpdate studentRequestUpdate);
 
-
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStudentSettingRequest(@MappingTarget User user, StudentSettingRequest studentSettingRequest);
-
-
-
 
     @Named("toUserResponse")
     @Mappings({

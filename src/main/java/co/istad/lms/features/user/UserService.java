@@ -3,12 +3,12 @@ package co.istad.lms.features.user;
 
 
 
-import co.istad.lms.features.user.dto.UserProfile;
-import co.istad.lms.features.user.dto.UserRequest;
-import co.istad.lms.features.user.dto.UserResponse;
-import co.istad.lms.features.user.dto.UserResponseDetail;
-import co.istad.lms.features.user.dto.UserUpdateRequest;
+import co.istad.lms.domain.User;
+import co.istad.lms.features.user.dto.*;
 import org.springframework.data.domain.Page;
+
+
+import java.util.Set;
 
 /**
  * Business logic interface which contains to manage users
@@ -26,6 +26,11 @@ public interface UserService {
      * @since 1.0 (2024)
      */
     String generateStrongPassword(int length);
+
+
+
+    // Method update authority
+    void updateUserAuthorities(User user, Set<String> authorityNames);
 
 
 
@@ -94,6 +99,18 @@ public interface UserService {
      * @since 1.0 (2024)
      */
     Page<UserResponse> getAllUsersWithAdminRole(int page, int limit);
+
+
+
+    /**
+     * Retrieves a paginated list of all users with academic role.
+     *
+     * @param uuid is the unique identifier of user
+     * @return {@link Page<UserResponse>} the list of users
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    AuthorityResponse viewsAuthorityAllUser( String uuid);
 
 
 

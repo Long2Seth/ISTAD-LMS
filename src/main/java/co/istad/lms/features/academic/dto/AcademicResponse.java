@@ -6,6 +6,15 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public record AcademicResponse(
+
+        String uuid,
+
+
+
+        String position,
+        
+
+
         String nameEn,
 
 

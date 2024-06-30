@@ -24,21 +24,31 @@ public class User extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(unique = true, nullable = false)
     private String uuid;
+
 
 
     @Column(nullable = false, length = 50)
     private String nameEn;
 
+
+
     @Column(nullable = false, length = 50)
     private String nameKh;
+
+
 
     @Column(nullable = false, length = 50, unique = true)
     private String username;
 
+
+
     @Column(nullable = false, length = 10)
     private String gender;
+
+
 
     @Column( length = 50)
     private String position;
@@ -46,6 +56,8 @@ public class User extends Auditable {
 
     @Column(nullable = false, length = 100)
     private String email;
+
+
 
     @Column(length = 20)
     private String phoneNumber;
@@ -55,12 +67,15 @@ public class User extends Auditable {
     private String birthPlace;
 
 
+
     @Column(columnDefinition = "TEXT")
     private String currentAddress;
 
 
+
     @Column(name = "birth_of_date")
     private LocalDate dob;
+
 
 
     private String password;

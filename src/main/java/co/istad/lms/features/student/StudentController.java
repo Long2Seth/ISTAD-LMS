@@ -48,7 +48,7 @@ public class StudentController {
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:read','user:read')")
     @GetMapping("/{uuid}")
-    public StudentResponse getStudentByUuid(@PathVariable String uuid) {
+    public StudentResponseDetail getStudentByUuid(@PathVariable String uuid) {
         return studentService.getStudentByUuid(uuid);
     }
 
@@ -72,6 +72,11 @@ public class StudentController {
         return studentService.studentCourse();
     }
 
+
+    @GetMapping("/course/{uuid}")
+    public StudentCourseDetailResponse getStudentCourseDetail(@PathVariable String uuid) {
+        return studentService.studentCourseDetail(uuid);
+    }
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
     @PatchMapping("/{uuid}")

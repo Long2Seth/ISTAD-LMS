@@ -6,8 +6,6 @@ import lombok.Builder;
 @Builder
 public record AuthorityResponse(
 
-        String uuid,
-        String authorityName,
-        String description
+        String authorityName
 ) {
 }

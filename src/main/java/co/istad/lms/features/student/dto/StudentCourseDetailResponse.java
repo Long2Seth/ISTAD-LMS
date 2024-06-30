@@ -5,11 +5,16 @@ import java.util.Set;
 
 public record StudentCourseDetailResponse(
 
+        // YearOfStudy information
         Integer year,
         Integer semester,
+
+        // Subject information
         String courseTitle,
         String courseDescription,
         String courseLogo,
+
+        // Subject information
         Integer credit,
         Integer theory,
         Integer practice,
@@ -17,15 +22,14 @@ public record StudentCourseDetailResponse(
 
         // Instructor information
         String instructorName,
-        String position,
+        String position
 
         //Student profile
-        Set<String> studentProfile,
+//        Set<String> studentProfileImage,
 
         // Classes start
-        LocalDate classesStart
+//        LocalDate classesStart
 
 
-
-        ) {
+) {
 }

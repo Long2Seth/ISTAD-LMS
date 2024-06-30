@@ -470,7 +470,7 @@ public class ClassServiceImpl implements ClassService {
                         //set classes to student
                         student.setCardId(aClass.getGeneration().getAlias()+"-"+numberOfStudent);
 
-                        student.setStatus(1);
+                        student.setStudentStatus(1);
 
                         // Map user request to user
                         User user = student.getUser();

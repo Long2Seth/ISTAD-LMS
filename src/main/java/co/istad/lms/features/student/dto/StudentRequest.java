@@ -36,10 +36,6 @@ public record StudentRequest(
         @NotBlank(message = "High school is required")
         String highSchool
 
-//
-//        @NotBlank(message = "status is required")
-//
-//        Integer status
 
 ) {
 }
