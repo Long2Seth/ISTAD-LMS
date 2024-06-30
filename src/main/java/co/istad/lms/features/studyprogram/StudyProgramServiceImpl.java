@@ -4,6 +4,7 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.Degree;
 import co.istad.lms.domain.Faculty;
 import co.istad.lms.domain.StudyProgram;
+import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.faculties.FacultyRepository;
 import co.istad.lms.features.file.FileMetaDataRepository;
@@ -13,7 +14,9 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
 import co.istad.lms.mapper.StudyProgramMapper;
+import co.istad.lms.mapper.YearOfStudyMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +25,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 
 @Service
@@ -43,6 +50,10 @@ public class StudyProgramServiceImpl implements StudyProgramService {
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final MediaService mediaService;
+
+    private final YearOfStudyRepository yearOfStudyRepository;
+
+    private final YearOfStudyMapper yearOfStudyMapper;
 
 
     @Override
@@ -85,6 +96,31 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         //save to database
         studyProgramRepository.save(studyProgram);
+
+        Set<YearOfStudy> yearOfStudies =new HashSet<>();
+
+        if(degree.getNumberOfYear()!=null&&degree.getNumberOfYear()>0){
+            for(int i=1;i<=degree.getNumberOfYear();i++){
+
+                for(int j=1;j<=2;j++){
+
+                    YearOfStudy yearOfStudy=new YearOfStudy();
+
+                    yearOfStudy.setStudyProgram(studyProgram);
+                    yearOfStudy.setUuid(UUID.randomUUID().toString());
+                    yearOfStudy.setIsDeleted(false);
+                    yearOfStudy.setIsDraft(false);
+                    yearOfStudy.setYear(i);
+                    yearOfStudy.setSemester(j);
+
+                    yearOfStudies.add(yearOfStudy);
+
+                }
+            }
+        }
+
+        //save year of study to database
+        yearOfStudyRepository.saveAll(yearOfStudies);
 
     }
 
@@ -264,5 +300,24 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);
     }
 
+    @Override
+    public Page<YearOfStudyDetailResponse> getAllYearOfStudy(String alias, int pageNumber, int pageSize) {
+
+        //crate sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "year","semester");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAlias(alias).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStudy = %s has not been found",alias)));
+
+
+        //find all studyProgram in database
+        Page<YearOfStudy> yearOfStudies = yearOfStudyRepository.findYearOfStudiesByStudyProgram(studyProgram,pageRequest);
+
+        //map entity to DTO and return
+        return yearOfStudies.map(yearOfStudyMapper::toYearOfStudyDetailResponse);
+    }
 
 }

@@ -32,7 +32,8 @@ public class AcademicYearServiceImpl implements AcademicYearService{
     public void createAcademicYear(AcademicYearRequest academicYearRequest) {
 
         if(academicYearRepository.existsByAlias(academicYearRequest.alias())){
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("academicYear with alias = %s has " +
+            throw  new ResponseStatusException(HttpStatus.CONFLICT
+                    ,String.format("academicYear with alias = %s has " +
                     "already existed",academicYearRequest.alias()));
         }
 

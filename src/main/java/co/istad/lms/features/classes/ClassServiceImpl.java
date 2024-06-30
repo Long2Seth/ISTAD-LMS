@@ -5,6 +5,8 @@ import co.istad.lms.domain.Class;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.academicyear.AcademicYearRepository;
+import co.istad.lms.features.academicyear.dto.AcademicYearResponse;
 import co.istad.lms.features.classes.dto.ClassAddStudentRequest;
 import co.istad.lms.features.classes.dto.ClassDetailResponse;
 import co.istad.lms.features.classes.dto.ClassRequest;
@@ -90,6 +92,8 @@ public class ClassServiceImpl implements ClassService {
 
     private final CourseMapper courseMapper;
 
+    private final AcademicYearRepository academicYearRepository;
+
     @Override
     @Transactional
     public void createClass(ClassRequest classRequest) {
@@ -102,6 +106,9 @@ public class ClassServiceImpl implements ClassService {
 
         //map from DTO to entity
         Class aClass = classMapper.fromClassRequest(classRequest);
+
+        AcademicYear academicYear=
+                academicYearRepository.findByAlias(classRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("academicYear =%s has not been found",classRequest.academicYearAlias())));
 
         //find studyProgram by studyPramAlias in classRequest
         StudyProgram studyProgram =
@@ -197,8 +204,12 @@ public class ClassServiceImpl implements ClassService {
 
         }
 
+
         //set shift to entity
         aClass.setShift(shift);
+
+        //setAcademicYear to class
+        aClass.setAcademicYear(academicYear);
 
         //set all course to cass
         aClass.setCourses(allCourse);

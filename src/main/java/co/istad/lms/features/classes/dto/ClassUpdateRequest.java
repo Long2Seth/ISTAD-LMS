@@ -26,6 +26,9 @@ public record ClassUpdateRequest(
         @Size(max = 100, message = "generationAlias cannot be longer than 100 characters")
         String generationAlias,
 
+        @Size(max = 100, message = "academicYearAlias cannot be longer than 100 characters")
+        String academicYearAlias,
+
         Boolean isDraft,
         @Positive
         Integer status

@@ -79,8 +79,10 @@ public class AdmissionServiceImpl implements AdmissionService {
         //set uuid to admission
         admission.setUuid(UUID.randomUUID().toString());
 
+        //set isDeleted to false(enable)
         admission.setIsDeleted(false);
 
+        //set academicYear
         admission.setAcademicYear(academicYear);
 
         //save to database

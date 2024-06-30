@@ -84,5 +84,8 @@ public class  Class extends Auditable {
     @OneToMany(mappedBy = "oneClass", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     Set<Course> courses;
 
+    @ManyToOne
+    AcademicYear academicYear;
+
 
 }

@@ -17,6 +17,10 @@ public record ClassRequest(
 
         String description,
 
+        @Size(max = 100, message = "academicYearAlias cannot be longer than 100 characters")
+        @NotBlank(message = "academicYearAlias is require")
+        String academicYearAlias,
+
         @Size(max = 100, message = "instructorUuid cannot be longer than 100 characters")
         String instructorUuid,
 
