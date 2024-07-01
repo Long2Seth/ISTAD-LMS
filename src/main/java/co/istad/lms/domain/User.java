@@ -99,6 +99,7 @@ public class User extends Auditable {
     private Boolean status;
     private Boolean isChangePassword;
 
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_authorities",
@@ -107,17 +108,22 @@ public class User extends Auditable {
     )
     private Set<Authority> authorities;
 
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Admin admin;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Student student;
 
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Instructor instructor;
 
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Academic academic;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Staff staff;

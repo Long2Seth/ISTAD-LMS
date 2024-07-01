@@ -2,6 +2,7 @@ package co.istad.lms.domain.roles;
 
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.Course;
+import co.istad.lms.domain.Payment;
 import co.istad.lms.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -117,6 +118,11 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private Set<Course> courses;
+
+
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Set<Payment> payments;
 
 
 

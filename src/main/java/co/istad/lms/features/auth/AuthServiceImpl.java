@@ -34,24 +34,23 @@ import javax.crypto.SecretKey;
 public class AuthServiceImpl implements AuthService {
 
 
-
-
     private final DaoAuthenticationProvider daoAuthenticationProvider;
+
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+
     private final UserService userService;
+
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final TokenGenerator tokenGenerator;
-    private final UserDetailsService userDetailsService;
+
     private final UserMapper userMapper;
-
-
-
 
 
     @Override
     public AuthResponse login(AuthRequest request) {
-
 
 
         try {
@@ -107,9 +106,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
-
-
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         Authentication authentication = jwtAuthenticationProvider.authenticate(
@@ -117,9 +113,6 @@ public class AuthServiceImpl implements AuthService {
         );
         return tokenGenerator.generateTokens(authentication);
     }
-
-
-
 
 
     @Override
@@ -180,15 +173,11 @@ public class AuthServiceImpl implements AuthService {
         user.setIsChangePassword(true);
 
 
-
-
         // Save the updated user
         userRepository.save(user);
 
 
     }
-
-
 
 
     @Override
@@ -223,8 +212,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
-
     @Override
     public ResponsePassword viewPasswordByUsernameOrEmail(RequestPasswordByUsernameOrEmail request) {
 
@@ -233,16 +220,16 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with email or username %s not found", request.usernameOrEmail())));
 
-//        user.setPassword(Decoder(user.getPassword());
+        //        user.setPassword(Decoder(user.getPassword());
 
         return userMapper.toResponsePassword(user);
     }
-
-
 
 
     @Override
     public void logout(String token) {
         // TODO: Implement logout logic
     }
+
+
 }
