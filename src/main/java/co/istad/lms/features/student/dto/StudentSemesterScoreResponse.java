@@ -1,10 +1,12 @@
 package co.istad.lms.features.student.dto;
 
 import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.Set;
 
+@Builder
 public record StudentSemesterScoreResponse(
         String uuid,
         String cardId,

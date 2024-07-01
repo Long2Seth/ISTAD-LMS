@@ -34,6 +34,10 @@ public class  Class extends Auditable {
     @Column(nullable = false)
     Integer year;
 
+    LocalDate classStart;
+
+    LocalDate classEnd;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -83,6 +87,9 @@ public class  Class extends Auditable {
 
     @OneToMany(mappedBy = "oneClass", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     Set<Course> courses;
+
+    @ManyToOne
+    AcademicYear academicYear;
 
 
 }

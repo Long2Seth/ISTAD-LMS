@@ -5,12 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 public record ClassUpdateRequest(
 
         @Size(max = 100, message = "classCode cannot be longer than 100 characters")
         String classCode,
+        LocalDate classStart,
+
+        LocalDate classEnd,
 
         String description,
 
@@ -25,6 +29,9 @@ public record ClassUpdateRequest(
 
         @Size(max = 100, message = "generationAlias cannot be longer than 100 characters")
         String generationAlias,
+
+        @Size(max = 100, message = "academicYearAlias cannot be longer than 100 characters")
+        String academicYearAlias,
 
         Boolean isDraft,
         @Positive

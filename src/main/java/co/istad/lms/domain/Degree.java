@@ -22,6 +22,8 @@ public class Degree extends Auditable {
     @Column(nullable = false, unique = true,length = 100)
     private String alias;
 
+    private Integer numberOfYear;
+
     @Column(nullable = false, length = 100)
     private String level;
 

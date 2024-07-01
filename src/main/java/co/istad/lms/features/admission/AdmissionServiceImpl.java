@@ -4,6 +4,7 @@ package co.istad.lms.features.admission;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
+import co.istad.lms.features.academicyear.AcademicYearRepository;
 import co.istad.lms.features.admission.dto.*;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.shift.ShiftRepository;
@@ -34,6 +35,8 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final AdmissionMapper admissionMapper;
 
     private final BaseSpecification<Admission> baseSpecification;
+
+    private final AcademicYearRepository academicYearRepository;
 
     @Override
     public void createAdmission(AdmissionRequest admissionRequest) {
@@ -70,10 +73,17 @@ public class AdmissionServiceImpl implements AdmissionService {
             admissionRepository.saveAll(admissions);
         }
 
+        AcademicYear academicYear=
+                academicYearRepository.findByAlias(admissionRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("AcademicYear = %s has not been found",admissionRequest.academicYearAlias())));
+
         //set uuid to admission
         admission.setUuid(UUID.randomUUID().toString());
 
+        //set isDeleted to false(enable)
         admission.setIsDeleted(false);
+
+        //set academicYear
+        admission.setAcademicYear(academicYear);
 
         //save to database
         admissionRepository.save(admission);
@@ -135,9 +145,15 @@ public class AdmissionServiceImpl implements AdmissionService {
             }
         }
 
-
         //map data from DTO to entity
         admissionMapper.updateAdmissionFromRequest(admission, admissionUpdateRequest);
+
+
+        if(admissionUpdateRequest.academicYearAlias()!=null&&!admissionUpdateRequest.academicYearAlias().trim().isEmpty()){
+            AcademicYear academicYear=
+                    academicYearRepository.findByAlias(admissionUpdateRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("AcademicYear = %s has not been found",admissionUpdateRequest.academicYearAlias())));
+            admission.setAcademicYear(academicYear);
+        }
 
         //save to database
         admissionRepository.save(admission);

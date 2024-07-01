@@ -20,11 +20,14 @@ public class AcademicYear extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
-    @Column(nullable = false,length = 100)
-    private String uuid;
+    @Column(nullable = false,length = 100,unique = true)
+    private String alias;
 
     @Column(nullable = false , length = 50)
     private String academicYear;
+
+    @Column(nullable = false)
+    Integer status;
 
     @Column(nullable = false)
     Boolean isDraft;

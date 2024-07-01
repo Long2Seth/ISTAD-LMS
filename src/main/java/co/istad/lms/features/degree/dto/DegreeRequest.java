@@ -1,8 +1,6 @@
 package co.istad.lms.features.degree.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record DegreeRequest(
         @NotBlank(message = "Alias is required")
@@ -12,6 +10,10 @@ public record DegreeRequest(
         @NotBlank(message = "Level is required")
         @Size(max = 100, message = "Level can not be longer than 100 characters")
         String level,
+
+        @NotBlank(message = "numberOfYear is require")
+        @Positive(message = "number is year is positive ")
+        Integer numberOfYear,
 
         String description,
 

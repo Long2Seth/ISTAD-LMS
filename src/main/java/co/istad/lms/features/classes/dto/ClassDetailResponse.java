@@ -1,6 +1,8 @@
 package co.istad.lms.features.classes.dto;
 
+import co.istad.lms.domain.AcademicYear;
 import co.istad.lms.domain.Course;
+import co.istad.lms.features.academicyear.dto.AcademicYearResponse;
 import co.istad.lms.features.course.dto.CourseClassResponse;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.generation.dto.GenerationResponse;
@@ -16,6 +18,9 @@ public record ClassDetailResponse(
 
         String uuid,
         String classCode,
+        LocalDate classStart,
+
+        LocalDate classEnd,
         String description,
         Boolean isDeleted,
         Boolean isDraft,
@@ -27,6 +32,8 @@ public record ClassDetailResponse(
 
         Set<StudentResponse> students,
 
-        Set<CourseClassResponse> courses
+        Set<CourseClassResponse> courses,
+
+        AcademicYearResponse academicYear
 ) {
 }

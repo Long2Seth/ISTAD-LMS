@@ -15,6 +15,8 @@ public interface ScorerRepository extends JpaRepository<Score,Long>, JpaSpecific
 
     Optional<Score> findByUuid(String uuid);
 
+    Optional<Score> findByCourseAndStudent(Course course,Student student);
+
 //    Set<Score> findAllByStudentUuidAndCourse_CourseYearOfStudy_Semester();
 
     boolean existsByStudentAndCourse(Student student, Course course);

@@ -5,6 +5,8 @@ import co.istad.lms.domain.Class;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.academicyear.AcademicYearRepository;
+import co.istad.lms.features.academicyear.dto.AcademicYearResponse;
 import co.istad.lms.features.classes.dto.ClassAddStudentRequest;
 import co.istad.lms.features.classes.dto.ClassDetailResponse;
 import co.istad.lms.features.classes.dto.ClassRequest;
@@ -90,6 +92,8 @@ public class ClassServiceImpl implements ClassService {
 
     private final CourseMapper courseMapper;
 
+    private final AcademicYearRepository academicYearRepository;
+
     @Override
     @Transactional
     public void createClass(ClassRequest classRequest) {
@@ -102,6 +106,9 @@ public class ClassServiceImpl implements ClassService {
 
         //map from DTO to entity
         Class aClass = classMapper.fromClassRequest(classRequest);
+
+        AcademicYear academicYear=
+                academicYearRepository.findByAlias(classRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("academicYear =%s has not been found",classRequest.academicYearAlias())));
 
         //find studyProgram by studyPramAlias in classRequest
         StudyProgram studyProgram =
@@ -136,7 +143,7 @@ public class ClassServiceImpl implements ClassService {
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
-                    course.setIsStarted(false);
+                    course.setStatus(1);
                     return course;
                 })
                 .collect(Collectors.toSet());
@@ -151,7 +158,7 @@ public class ClassServiceImpl implements ClassService {
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
-                    course.setIsStarted(false);
+                    course.setStatus(1);
                     return course;
                 })
                 .collect(Collectors.toSet());
@@ -197,8 +204,12 @@ public class ClassServiceImpl implements ClassService {
 
         }
 
+
         //set shift to entity
         aClass.setShift(shift);
+
+        //setAcademicYear to class
+        aClass.setAcademicYear(academicYear);
 
         //set all course to cass
         aClass.setCourses(allCourse);
@@ -650,7 +661,7 @@ public class ClassServiceImpl implements ClassService {
     public Page<CourseDetailResponse> getAllCourseInClass(String classUuid, int pageNumber, int pageSize) {
 
         //create sort order
-        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
+        Sort sortById = Sort.by(Sort.Direction.ASC, "courseStart");
 
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);

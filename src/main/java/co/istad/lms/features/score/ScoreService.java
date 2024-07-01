@@ -90,4 +90,6 @@ public interface ScoreService {
      */
     Page<StudentSemesterScoreResponse> getAllScoresBySemester(ScoreSemesterRequest scoreSemesterRequest, int pageNumber, int pageSize);
 
+    public Page<StudentSemesterScoreResponse> getAllTranscript(ScoreSemesterRequest scoreSemesterRequest,
+                                                               int pageNumber,int pageSize);
 }

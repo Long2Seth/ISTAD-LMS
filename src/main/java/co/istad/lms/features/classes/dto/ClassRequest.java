@@ -3,6 +3,7 @@ package co.istad.lms.features.classes.dto;
 import jakarta.validation.constraints.*;
 
 import javax.swing.text.StyledEditorKit;
+import java.time.LocalDate;
 import java.util.Set;
 
 public record ClassRequest(
@@ -14,8 +15,15 @@ public record ClassRequest(
         @NotNull(message = "Year is require")
         @Positive(message = "year must be positive")
         Integer year,
+        LocalDate classStart,
+
+        LocalDate classEnd,
 
         String description,
+
+        @Size(max = 100, message = "academicYearAlias cannot be longer than 100 characters")
+        @NotBlank(message = "academicYearAlias is require")
+        String academicYearAlias,
 
         @Size(max = 100, message = "instructorUuid cannot be longer than 100 characters")
         String instructorUuid,

@@ -36,12 +36,13 @@ public class Course extends Auditable {
     @Column(nullable = false)
     private Boolean isDeleted;
 
-    @Column(nullable = false)
-    private Boolean isStarted;
+    private Integer status;
 
     Integer credit;
 
     private LocalDate courseStart;
+
+    private LocalDate courseEnd;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
