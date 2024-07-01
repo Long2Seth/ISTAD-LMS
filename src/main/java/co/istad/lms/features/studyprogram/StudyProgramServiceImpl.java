@@ -1,10 +1,7 @@
 package co.istad.lms.features.studyprogram;
 
 import co.istad.lms.base.BaseSpecification;
-import co.istad.lms.domain.Degree;
-import co.istad.lms.domain.Faculty;
-import co.istad.lms.domain.StudyProgram;
-import co.istad.lms.domain.YearOfStudy;
+import co.istad.lms.domain.*;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.faculties.FacultyRepository;
 import co.istad.lms.features.file.FileMetaDataRepository;
@@ -13,22 +10,26 @@ import co.istad.lms.features.minio.MinioStorageService;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
+import co.istad.lms.features.subject.SubjectRepository;
+import co.istad.lms.features.subject.dto.SubjectYearOfStudyDetailResponse;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudySubjectResponse;
 import co.istad.lms.mapper.StudyProgramMapper;
+import co.istad.lms.mapper.SubjectMapper;
 import co.istad.lms.mapper.YearOfStudyMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -54,6 +55,10 @@ public class StudyProgramServiceImpl implements StudyProgramService {
     private final YearOfStudyRepository yearOfStudyRepository;
 
     private final YearOfStudyMapper yearOfStudyMapper;
+
+    private  final SubjectMapper subjectMapper;
+
+    private final SubjectRepository subjectRepository;
 
 
     @Override
@@ -301,23 +306,32 @@ public class StudyProgramServiceImpl implements StudyProgramService {
     }
 
     @Override
-    public Page<YearOfStudyDetailResponse> getAllYearOfStudy(String alias, int pageNumber, int pageSize) {
+    public Page<SubjectYearOfStudyDetailResponse> getAllYearOfStudySubject(String alias, int pageNumber, int pageSize) {
+        // Create sort order
+        Sort sortByAlias = Sort.by(Sort.Direction.ASC, "alias");
 
-        //crate sort order
-        Sort sortById = Sort.by(Sort.Direction.ASC, "year","semester");
+        // Create pagination with current pageNumber and pageSize
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortByAlias);
 
-        //create pagination with current pageNumber and pageSize of pageNumber
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+        // Find study program by alias
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram with alias = %s has not been found", alias)));
 
-        StudyProgram studyProgram =
-                studyProgramRepository.findByAlias(alias).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("YearOfStudy = %s has not been found",alias)));
+        // Find all yearOfStudies by study program
+        Set<YearOfStudy> yearOfStudies = yearOfStudyRepository.findYearOfStudiesByStudyProgram(studyProgram);
 
+        // Collect all subjects and map to DTO
+        List<SubjectYearOfStudyDetailResponse> subjectDtos = yearOfStudies.stream()
+                .flatMap(yearOfStudy -> yearOfStudy.getSubjects().stream()
+                        .map(subject -> subjectMapper.toSubjectYearOfStudyDetailResponse(subject,yearOfStudyMapper.toYearOfStudySubjectResponse(yearOfStudy))))
+                .collect(Collectors.toList());
 
-        //find all studyProgram in database
-        Page<YearOfStudy> yearOfStudies = yearOfStudyRepository.findYearOfStudiesByStudyProgram(studyProgram,pageRequest);
+        // Create a sublist for pagination
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), subjectDtos.size());
+        List<SubjectYearOfStudyDetailResponse> pageContent = subjectDtos.subList(start, end);
 
-        //map entity to DTO and return
-        return yearOfStudies.map(yearOfStudyMapper::toYearOfStudyDetailResponse);
+        return new PageImpl<>(pageContent, pageable, subjectDtos.size());
     }
 
 }

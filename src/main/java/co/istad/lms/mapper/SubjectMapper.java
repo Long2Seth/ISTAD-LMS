@@ -1,12 +1,14 @@
 package co.istad.lms.mapper;
 
+import co.istad.lms.domain.YearOfStudy;
+import co.istad.lms.features.media.MediaService;
+import co.istad.lms.features.subject.dto.*;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudySubjectResponse;
+import co.istad.lms.util.MediaUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import co.istad.lms.domain.Subject;
-import co.istad.lms.features.subject.dto.SubjectDetailResponse;
-import co.istad.lms.features.subject.dto.SubjectRequest;
-import co.istad.lms.features.subject.dto.SubjectResponse;
-import co.istad.lms.features.subject.dto.SubjectUpdateRequest;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
@@ -14,12 +16,33 @@ public interface SubjectMapper {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @Mapping(target = "curriculum", source = "curriculum",qualifiedByName = "jsonNodeToString")
+    @Mapping(target = "curriculum", source = "curriculum", qualifiedByName = "jsonNodeToString")
     Subject fromDegreeRequest(SubjectRequest degreeCreateRequest);
 
-    @Mapping(target = "curriculum", source = "curriculum",qualifiedByName = "stringToJsonNode")
+    @Mapping(target = "curriculum", source = "curriculum", qualifiedByName = "stringToJsonNode")
     SubjectDetailResponse toSubjectDetailResponse(Subject subject);
 
+//    @Mapping(target = "curriculum", source = "subject.curriculum", qualifiedByName = "stringToJsonNode")
+    @Mapping(target = "yearOfStudy", qualifiedByName = "toYearOfStudy")
+    @Mapping(source = "subject.isDeleted", target = "isDeleted")
+    @Mapping(source = "subject.isDraft", target = "isDraft")
+    @Mapping(source = "subject.logo", target = "logo", qualifiedByName = "getLogoUrl")
+    SubjectYearOfStudyDetailResponse toSubjectYearOfStudyDetailResponse(Subject subject, YearOfStudySubjectResponse yearOfStudy);
+
+    @Named("toYearOfStudy")
+    default YearOfStudySubjectResponse toYearOfStudy(YearOfStudySubjectResponse yearOfStudy) {
+        return yearOfStudy;
+    }
+
+    @Named("getLogoUrl")
+    default String getLogoUrl(String logo) {
+
+        if (logo != null && !logo.trim().isEmpty()) {
+            return MediaUtil.getUrl(logo);
+        } else {
+            return null;
+        }
+    }
 
     SubjectResponse toSubjectResponse(Subject subject);
 

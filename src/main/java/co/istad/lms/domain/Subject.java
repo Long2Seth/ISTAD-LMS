@@ -62,4 +62,8 @@ public class Subject extends Auditable {
     private Boolean isDraft;
 
 
+    @ManyToMany(mappedBy = "subjects")
+    private Set<YearOfStudy> yearOfStudies;
+
+
 }
