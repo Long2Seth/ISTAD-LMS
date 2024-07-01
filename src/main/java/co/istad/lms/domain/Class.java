@@ -34,6 +34,10 @@ public class  Class extends Auditable {
     @Column(nullable = false)
     Integer year;
 
+    LocalDate classStart;
+
+    LocalDate classEnd;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 

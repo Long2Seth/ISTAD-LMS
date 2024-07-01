@@ -18,6 +18,9 @@ public record ClassDetailResponse(
 
         String uuid,
         String classCode,
+        LocalDate classStart,
+
+        LocalDate classEnd,
         String description,
         Boolean isDeleted,
         Boolean isDraft,

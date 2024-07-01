@@ -9,13 +9,14 @@ import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.score.dto.*;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
-import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.mapper.CourseMapper;
 import co.istad.lms.mapper.ScoreMapper;
+import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.util.AssesmentsUtil;
 import lombok.RequiredArgsConstructor;
-import org.quartz.SimpleTrigger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,15 +25,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ScoreServiceImpl implements ScoreService {
 
-    private final ScorerRepository scorerRepository;
+    private final ScorerRepository scoreRepository;
 
     private final ScoreMapper scoreMapper;
 
@@ -48,6 +50,25 @@ public class ScoreServiceImpl implements ScoreService {
 
     private final GenerationRepository generationRepository;
 
+    private final CourseMapper courseMapper;
+
+    private final StudentMapper studentMapper;
+
+    @Value("${assessment-percentage.activity-score}")
+    private Double activityScorePercentage;
+
+    @Value("${assessment-percentage.attendance-score}")
+    private Double attendanceScorePercentage;
+
+    @Value("${assessment-percentage.final-score}")
+    private Double finalScorePercentage;
+
+    @Value("${assessment-percentage.mini-project-midterm-score}")
+    private Double miniProjectScorePercentage;
+
+    @Value("${assessment-percentage.assignment-score}")
+    private Double assignmentScorePercentage;
+
     @Override
     public void createScore(ScoreRequest scoreRequest) {
 
@@ -60,7 +81,7 @@ public class ScoreServiceImpl implements ScoreService {
         Score score = scoreMapper.fromScoreRequest(scoreRequest);
 
         //validate duplicate score for a student by course
-        if (scorerRepository.existsByStudentAndCourse(student, course)) {
+        if (scoreRepository.existsByStudentAndCourse(student, course)) {
 
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("score with student = %s and course  " +
                     "= %s has already existed", student.getUser().getUuid(), course.getUuid()));
@@ -68,7 +89,11 @@ public class ScoreServiceImpl implements ScoreService {
 
         //get total score
         Double total =
-                (score.getActivityScore() * 0.1) + (score.getAttendanceScore() * 0.1) + (score.getMidtermExamScore() * 0.2) + (score.getFinalExamScore() * 0.35) + (score.getMiniProjectScore() * 0.15) + (score.getAssignmentScore() * 0.10);
+                (score.getActivityScore() * activityScorePercentage) +
+                        (score.getAttendanceScore() * attendanceScorePercentage) +
+                        (score.getFinalExamScore() * finalScorePercentage) +
+                        ((score.getMiniProjectScore() + score.getMidtermExamScore()) * miniProjectScorePercentage) +
+                        (score.getAssignmentScore() * assignmentScorePercentage);
 
         //get gpa
         Double gpa = AssesmentsUtil.getGpa(total);
@@ -98,7 +123,7 @@ public class ScoreServiceImpl implements ScoreService {
         score.setUuid(UUID.randomUUID().toString());
 
         //save to database
-        scorerRepository.save(score);
+        scoreRepository.save(score);
 
     }
 
@@ -107,7 +132,7 @@ public class ScoreServiceImpl implements ScoreService {
 
         //find score by uuid
         Score score =
-                scorerRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
+                scoreRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
 
         //get class code
         String classCode = score.getCourse().getOneClass().getClassCode();
@@ -126,7 +151,7 @@ public class ScoreServiceImpl implements ScoreService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all score in database
-        Page<Score> scores = scorerRepository.findAll(pageRequest);
+        Page<Score> scores = scoreRepository.findAll(pageRequest);
 
         //map entity to DTO and return
         return scores.map(score -> {
@@ -142,12 +167,12 @@ public class ScoreServiceImpl implements ScoreService {
     public ScoreDetailResponse updateScoreByUuid(String uuid, ScoreUpdateRequest scoreUpdateRequest) {
 
         //map from DTO to entity
-        Score score = scorerRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
+        Score score = scoreRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
         //map from DTO to entity
         scoreMapper.updateScoreFromRequest(score, scoreUpdateRequest);
 
         //save to database
-        scorerRepository.save(score);
+        scoreRepository.save(score);
 
         //get class Code
         String classCode = score.getCourse().getOneClass().getClassCode();
@@ -160,10 +185,10 @@ public class ScoreServiceImpl implements ScoreService {
     public void deleteScoreByUuid(String uuid) {
 
         //find score in database by uuid
-        Score score = scorerRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
+        Score score = scoreRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
 
         //delete from database
-        scorerRepository.delete(score);
+        scoreRepository.delete(score);
     }
 
     @Override
@@ -179,7 +204,7 @@ public class ScoreServiceImpl implements ScoreService {
         Specification<Score> specification = baseSpecification.filter(filterDto);
 
         //get all entity that match with filter condition
-        Page<Score> scores = scorerRepository.findAll(specification, pageRequest);
+        Page<Score> scores = scoreRepository.findAll(specification, pageRequest);
 
         //map entity to DTO and return
         return scores.map(score -> {
@@ -203,8 +228,8 @@ public class ScoreServiceImpl implements ScoreService {
         YearOfStudy yearOfStudy = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(scoreSemesterRequest.year(),
                 scoreSemesterRequest.semester(), studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study with year = %d, semester = %d , studyProgram = %s has not been found", scoreSemesterRequest.year(), scoreSemesterRequest.semester(), studyProgram.getAlias())));
 
-        Generation generation=
-                generationRepository.findByAlias(scoreSemesterRequest.generationAlias()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("generation = %s has not been found",scoreSemesterRequest.generationAlias())));
+        Generation generation =
+                generationRepository.findByAlias(scoreSemesterRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("generation = %s has not been found", scoreSemesterRequest.generationAlias())));
 
 
         //create sort order
@@ -213,19 +238,99 @@ public class ScoreServiceImpl implements ScoreService {
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
-        Page<Student> students=studentRepository.findAllByCoursesYearOfStudy(yearOfStudy,pageRequest);
+        Page<Student> students = studentRepository.findAllByCoursesYearOfStudy(yearOfStudy, pageRequest);
 
-        students.map(student -> {
-                Set<Course> courses=courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,student,
-                        yearOfStudy);
-                return null;
+        // Map students to StudentSemesterScoreResponse and calculate sum of totals
+        return students.map(student -> {
+            Set<Course> coursesSet = courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,
+                    student, yearOfStudy);
+
+            //total score per semester
+            AtomicReference<Double> total = new AtomicReference<>(0.0);
+            AtomicReference<Integer> numberOfCourse = new AtomicReference<>(0);
+
+            // Map courses to CourseResponse and set score from Score entity
+            Set<CourseSemesterScoreResponse> courses = coursesSet.stream().map(course -> {
+                Score scoreObject = scoreRepository.findByCourseAndStudent(course, student).orElse(null);
+
+                Double score;
+                if (scoreObject != null) {
+                    score = scoreObject.getTotal();
+                } else {
+                    score = 0.0;
+                }
+                total.updateAndGet(v -> v + score);
+                numberOfCourse.updateAndGet(n -> n + 1);
+
+                return new CourseSemesterScoreResponse(course.getTitle(), score);
+
+            }).collect(Collectors.toSet());
+
+            Double average = total.get() / numberOfCourse.get();
+
+            String grade = AssesmentsUtil.getGrade(average);
+
+            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get());
         });
 
+    }
 
-//        //find all lecture in database
-//        Page<Course> courses = courseRepository.findByOneClassGenerationAndYearOfStudy(generation,yearOfStudy,pageRequest);
+    @Override
+    public Page<StudentSemesterScoreResponse> getAllTranscript(ScoreSemesterRequest scoreSemesterRequest, int pageNumber,
+                                                               int pageSize) {
 
-        return null;
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAlias(scoreSemesterRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                        "studyProgram = %s has not been found", scoreSemesterRequest.studyProgramAlias())));
+
+        YearOfStudy yearOfStudy =
+                yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(scoreSemesterRequest.year(),
+                scoreSemesterRequest.semester(), studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study with year = %d, semester = %d , studyProgram = %s has not been found", scoreSemesterRequest.year(), scoreSemesterRequest.semester(), studyProgram.getAlias())));
+
+        Generation generation =
+                generationRepository.findByAlias(scoreSemesterRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("generation = %s has not been found", scoreSemesterRequest.generationAlias())));
+
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        Page<Student> students = studentRepository.findAllByCoursesYearOfStudy(yearOfStudy, pageRequest);
+
+        // Map students to StudentSemesterScoreResponse and calculate sum of totals
+        return students.map(student -> {
+            Set<Course> coursesSet = courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,
+                    student, yearOfStudy);
+
+            //total score per semester
+            AtomicReference<Double> total = new AtomicReference<>(0.0);
+            AtomicReference<Integer> numberOfCourse = new AtomicReference<>(0);
+
+            // Map courses to CourseResponse and set score from Score entity
+            Set<CourseSemesterScoreResponse> courses = coursesSet.stream().map(course -> {
+                Score scoreObject = scoreRepository.findByCourseAndStudent(course, student).orElse(null);
+
+                Double score;
+                if (scoreObject != null) {
+                    score = scoreObject.getTotal();
+                } else {
+                    score = 0.0;
+                }
+                total.updateAndGet(v -> v + score);
+                numberOfCourse.updateAndGet(n -> n + 1);
+
+                return new CourseSemesterScoreResponse(course.getTitle(), score);
+
+            }).collect(Collectors.toSet());
+
+            Double average = total.get() / numberOfCourse.get();
+
+            String grade = AssesmentsUtil.getGrade(average);
+
+            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get());
+        });
 
     }
 }

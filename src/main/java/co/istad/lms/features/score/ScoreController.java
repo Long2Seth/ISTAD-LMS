@@ -73,7 +73,7 @@ public class ScoreController {
         return scoreService.filterScores(filterDto, pageNumber, pageSize);
     }
 
-    @PostMapping("/semester")
+    @PostMapping("/semesters")
     @PreAuthorize("hasAnyAuthority('assessment:read')")
     public Page<StudentSemesterScoreResponse> getAllScoresBySemester(
 
