@@ -50,6 +50,17 @@ public interface StudentMapper {
     @Mapping(source = "student.user.gender",target = "gender")
     StudentScoreResponse toStudentScoreResponse(Student student);
 
+    @Mapping(source = "student.user.nameEn",target = "nameEn")
+    @Mapping(source = "student.user.uuid",target = "uuid")
+    @Mapping(source = "student.user.gender",target = "gender")
+    @Mapping(source = "student.studentStatus",target = "status")
+    @Mapping(source = "student.user.dob",target = "dob")
+    StudentTranscriptResponse toStudentTranscriptResponse(Student student,Integer year,Double semester1Score,
+                                                          Double semester2Score,String grade,Double gpa,Double total);
+
+//    (student,scoreTranscriptRequest.year(), averageSemester1,
+//    averageSemester2,grade,gpa,average);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 //    @Mapping(target = "status", source = "status", qualifiedByName = "mapStatus")
     void updateStudentFromRequest(@MappingTarget Student student, StudentRequestUpdate studentRequestUpdate);

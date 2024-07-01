@@ -9,6 +9,7 @@ import co.istad.lms.features.generation.GenerationRepository;
 import co.istad.lms.features.score.dto.*;
 import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
+import co.istad.lms.features.student.dto.StudentTranscriptResponse;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.CourseMapper;
@@ -276,19 +277,27 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Page<StudentSemesterScoreResponse> getAllTranscript(ScoreSemesterRequest scoreSemesterRequest, int pageNumber,
-                                                               int pageSize) {
+    public Page<StudentTranscriptResponse> getAllTranscript(ScoreTranscriptRequest scoreTranscriptRequest, int pageNumber,
+                                                            int pageSize) {
 
         StudyProgram studyProgram =
-                studyProgramRepository.findByAlias(scoreSemesterRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
-                        "studyProgram = %s has not been found", scoreSemesterRequest.studyProgramAlias())));
+                studyProgramRepository.findByAlias(scoreTranscriptRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                        "studyProgram = %s has not been found", scoreTranscriptRequest.studyProgramAlias())));
 
-        YearOfStudy yearOfStudy =
-                yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(scoreSemesterRequest.year(),
-                scoreSemesterRequest.semester(), studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("year of study with year = %d, semester = %d , studyProgram = %s has not been found", scoreSemesterRequest.year(), scoreSemesterRequest.semester(), studyProgram.getAlias())));
+        YearOfStudy yearOfStudy1 =
+                yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(scoreTranscriptRequest.year(),
+                        1, studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                        "year of study with year = %d, semester = %d , studyProgram = %s has not been found",
+                        scoreTranscriptRequest.year(), 1, studyProgram.getAlias())));
+        YearOfStudy yearOfStudy2 =
+                yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(scoreTranscriptRequest.year(),
+                        2, studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format(
+                                "year of study with year = %d, semester = %d , studyProgram = %s has not been found",
+                                scoreTranscriptRequest.year(), 2, studyProgram.getAlias())));
 
         Generation generation =
-                generationRepository.findByAlias(scoreSemesterRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("generation = %s has not been found", scoreSemesterRequest.generationAlias())));
+                generationRepository.findByAlias(scoreTranscriptRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("generation = %s has not been found", scoreTranscriptRequest.generationAlias())));
 
 
         //create sort order
@@ -297,19 +306,25 @@ public class ScoreServiceImpl implements ScoreService {
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
-        Page<Student> students = studentRepository.findAllByCoursesYearOfStudy(yearOfStudy, pageRequest);
+        Page<Student> students = studentRepository.findAllByCoursesYearOfStudy(yearOfStudy1, pageRequest);
 
         // Map students to StudentSemesterScoreResponse and calculate sum of totals
         return students.map(student -> {
-            Set<Course> coursesSet = courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,
-                    student, yearOfStudy);
+            Set<Course> coursesSet1 = courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,
+                    student, yearOfStudy1);
+            Set<Course> coursesSet2 = courseRepository.findAllByOneClassGenerationAndStudentsAndYearOfStudy(generation,
+                    student, yearOfStudy2);
 
-            //total score per semester
-            AtomicReference<Double> total = new AtomicReference<>(0.0);
-            AtomicReference<Integer> numberOfCourse = new AtomicReference<>(0);
+            //total score and number of score in semester 1
+            AtomicReference<Double> totalSemester1 = new AtomicReference<>(0.0);
+            AtomicReference<Integer> numberOfCourseSemester1 = new AtomicReference<>(0);
+
+            //total score and number of score in semester 2
+            AtomicReference<Double> totalSemester2 = new AtomicReference<>(0.0);
+            AtomicReference<Integer> numberOfCourseSemester2 = new AtomicReference<>(0);
 
             // Map courses to CourseResponse and set score from Score entity
-            Set<CourseSemesterScoreResponse> courses = coursesSet.stream().map(course -> {
+            Set<CourseSemesterScoreResponse> courses1 = coursesSet1.stream().map(course -> {
                 Score scoreObject = scoreRepository.findByCourseAndStudent(course, student).orElse(null);
 
                 Double score;
@@ -318,18 +333,50 @@ public class ScoreServiceImpl implements ScoreService {
                 } else {
                     score = 0.0;
                 }
-                total.updateAndGet(v -> v + score);
-                numberOfCourse.updateAndGet(n -> n + 1);
+                totalSemester1.updateAndGet(v -> v + score);
+                numberOfCourseSemester1.updateAndGet(n -> n + 1);
 
                 return new CourseSemesterScoreResponse(course.getTitle(), score);
 
             }).collect(Collectors.toSet());
 
-            Double average = total.get() / numberOfCourse.get();
+            // Map courses to CourseResponse and set score from Score entity
+            Set<CourseSemesterScoreResponse> courses2 = coursesSet2.stream().map(course -> {
+                Score scoreObject = scoreRepository.findByCourseAndStudent(course, student).orElse(null);
 
-            String grade = AssesmentsUtil.getGrade(average);
+                Double score;
+                if (scoreObject != null) {
+                    score = scoreObject.getTotal();
+                } else {
+                    score = 0.0;
+                }
+//                System.out.println("semester 2 = " + score);
+                totalSemester2.updateAndGet(v -> v + score);
+                numberOfCourseSemester2.updateAndGet(n -> n + 1);
 
-            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get());
+                return new CourseSemesterScoreResponse(course.getTitle(), score);
+
+            }).collect(Collectors.toSet());
+
+            Double averageSemester1 = totalSemester1.get() / ((numberOfCourseSemester1.get())>0.0?
+                    numberOfCourseSemester1.get():1);
+
+
+            Double averageSemester2 = totalSemester2.get() /((numberOfCourseSemester2.get())>0.0?
+                    numberOfCourseSemester2.get():1);
+            Double total = averageSemester1 + averageSemester2;
+
+
+            Integer numberOfCourse =(numberOfCourseSemester1.get()+numberOfCourseSemester2.get())>0.0?
+                    (numberOfCourseSemester1.get()+numberOfCourseSemester2.get()):1;
+
+            Double average = total / numberOfCourse;
+
+            String grade = AssesmentsUtil.getGrade((average));
+
+            Double gpa = AssesmentsUtil.getGpa(average);
+
+            return studentMapper.toStudentTranscriptResponse(student, scoreTranscriptRequest.year(), averageSemester1, averageSemester2, grade, gpa, average);
         });
 
     }
