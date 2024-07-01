@@ -41,7 +41,7 @@ public record ClassRequest(
         String generationAlias,
 
         @Size(max = 100, message = "studentUuid cannot be longer than 100 characters")
-        Set<String> studentUuid,
+        Set<String> studentAdmissionUuid,
 
         @NotNull(message = "isDraft is require")
         Boolean isDraft,

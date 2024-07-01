@@ -23,6 +23,7 @@ public class AcademicYear extends Auditable {
     @Column(nullable = false,length = 100,unique = true)
     private String alias;
 
+
     @Column(nullable = false , length = 50)
     private String academicYear;
 

@@ -184,26 +184,6 @@ public class ClassServiceImpl implements ClassService {
         //find generation by generationAlias in classRequest
         Generation generation = generationRepository.findByAlias(classRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found", classRequest.generationAlias())));
 
-        //check all student alias from DTO null or not
-        if (classRequest.studentUuid() != null) {
-
-            //find student by studentUuid from dto
-            Set<Student> students =
-                    classRequest.studentUuid().stream().map(studentUui ->
-                            studentRepository.findByUuid(studentUui).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with uuid = %s has not been found.", studentUui)))
-
-                    ).collect(Collectors.toSet());
-
-            aClass.setStudents(students);
-
-            //set student to course in semester1
-            coursesSemester1.forEach(course -> course.setStudents(students));
-
-            //set student to course in semester2
-            coursesSemester2.forEach(course -> course.setStudents(students));
-
-        }
-
 
         //set shift to entity
         aClass.setShift(shift);
@@ -225,6 +205,174 @@ public class ClassServiceImpl implements ClassService {
 
         //set isDeleted to false(enable)
         aClass.setIsDeleted(false);
+
+        //check all student alias from DTO null or not
+        if (classRequest.studentAdmissionUuid() != null&& !classRequest.studentAdmissionUuid().isEmpty()) {
+
+            Set<User> users=new HashSet<>();
+
+            //find all studentAdmission from DTO in database to add by student uuid
+            Set<StudentAdmission> studentAdmissions =
+                    classRequest.studentAdmissionUuid().stream().peek(studentAdmissionUuid -> {
+                        if (studentAdmissionUuid.length() > 100) {
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("StudentAdmission UUID = %s exceeds the maximum length of 100 characters", studentAdmissionUuid));
+                        }
+                    }).map(studentAdmissionUuid ->
+                            studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
+
+            //add all studentAdmission to student
+            Set<Student> students = studentAdmissions.stream()
+                    .map(studentAdmission -> {
+
+                        //if studentAdmission already add to class(also has in student and user table)
+                        if (studentAdmission.isStudent()) {
+
+                            //get student from student table
+                            Student student =
+                                    studentRepository.findByUuid(studentAdmission.getStudentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studentAdmission.getStudentUuid())));
+
+
+                            //get all class that student study
+                            Set<Class> classes = student.getClasses();
+
+                            //add new class to set of class of student
+                            classes.add(aClass);
+
+                            //set classes to student
+                            student.setClasses(classes);
+
+
+                            Set<Course> studentCourses=new HashSet<>();
+                            if(student.getCourses()!=null){
+
+                                //get all course that student enrolled
+                                studentCourses=student.getCourses();
+                            }
+
+                            //add all course in class to student course(appen on old course that student enrolled)
+                            studentCourses.addAll(allCourse);
+
+                            //set all course(include course that student enrolled before and new course from class)
+                            student.setCourses(studentCourses);
+
+                            return student;
+                        }
+                        //admission that doesn't add to class yet(not student)
+                        else {
+
+                            //map from student admission
+                            Student student = studentAdmissionMapper.toStudent(studentAdmission);
+
+                            if (userRepository.existsByEmailOrUsername(student.getUser().getEmail(), student.getUser().getUsername())) {
+                                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("UserName = %s or %s has " +
+                                        "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
+                            }
+
+                            //set uuid to student
+                            student.setUuid(UUID.randomUUID().toString());
+
+                            long numberOfStudent = studentRepository.count();
+
+                            //set classes to student
+                            student.setCardId(aClass.getGeneration().getAlias()+"-"+numberOfStudent);
+
+                            student.setStudentStatus(1);
+
+
+
+                            // Map user request to user
+                            User user = student.getUser();
+
+
+                            //set uuid to user
+                            user.setUuid(UUID.randomUUID().toString());
+
+                            String rawPassword = userService.generateStrongPassword(10);
+                            try {
+                                //generate key for encrypt
+                                SecretKey key = OtpUtil.generateKey();
+
+                                //encrypt password
+                                String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+                                //set raw password with encrypt password
+                                user.setRawPassword(encryptedPassword);
+
+                                //set password to null
+                                user.setPassword(null);
+
+                            } catch (Exception e) {
+                                throw new RuntimeException("Error generating or encrypting password", e);
+                            }
+
+                            user.setIsDeleted(false);
+                            user.setStatus(false);
+
+                            //set userName to user
+                            user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s+", "-") + "-" + studentAdmission.getDob());
+
+                            //set user information
+                            user.setIsChangePassword(false);
+                            user.setAccountNonExpired(true);
+                            user.setAccountNonLocked(true);
+                            user.setCredentialsNonExpired(true);
+
+                            //set default authorities to user
+                            user.setAuthorities(studentService.getDefaultAuthoritiesStudent());
+
+                            // set user to student
+                            student.setUser(user);
+
+                            //add user to user Set
+                            users.add(user);
+
+                            //set student uuid to admission
+                            studentAdmission.setStudentUuid(student.getUuid());
+
+                            //set isStudent true(mark for admission that already add to student)
+                            studentAdmission.setStudent(true);
+
+
+                            Set<Course> studentCourses=new HashSet<>();
+                            if(student.getCourses()!=null){
+
+                                //get all course that student enrolled
+                                studentCourses=student.getCourses();
+                            }
+
+                            //add all course in class to student course(appen on old course that student enrolled)
+                            studentCourses.addAll(allCourse);
+
+                            //set all course(include course that student enrolled before and new course from class)
+                            student.setCourses(studentCourses);
+
+                            return student;
+                        }
+
+                    })
+                    .collect(Collectors.toSet());
+
+
+            //save user to database
+            userRepository.saveAll(users);
+
+            //save student to database
+            studentRepository.saveAll(students);
+
+            //save all studentAdmission to database
+            studentAdmissionRepository.saveAll(studentAdmissions);
+
+            //get all student in class
+            Set<Student> allStudents = aClass.getStudents();
+
+            //add new student from request
+            allStudents.addAll(students);
+
+            //set student to class(include old and new student)
+            aClass.setStudents(students);
+
+        }
+
 
         //save to database
         classRepository.save(aClass);

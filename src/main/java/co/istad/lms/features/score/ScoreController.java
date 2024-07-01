@@ -3,6 +3,7 @@ package co.istad.lms.features.score;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.score.dto.*;
 import co.istad.lms.features.student.dto.StudentSemesterScoreResponse;
+import co.istad.lms.features.student.dto.StudentTranscriptResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -83,5 +84,17 @@ public class ScoreController {
     ) {
 
         return scoreService.getAllScoresBySemester(scoreSemesterRequest,pageNumber, pageSize);
+    }
+
+    @PostMapping("/transcripts")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
+    public Page<StudentTranscriptResponse> getAllTranscript(
+
+            @Valid @RequestBody ScoreTranscriptRequest scoreTranscriptRequest,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return scoreService.getAllTranscript(scoreTranscriptRequest,pageNumber, pageSize);
     }
 }

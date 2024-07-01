@@ -92,12 +92,12 @@ public class FacultyServiceImpl implements FacultyService {
         //get all faculty from database
         Page<Faculty> faculties = facultyRepository.findAll(pageRequest);
 
-        // update the logo URL for each faculty
-        faculties.forEach(faculty -> {
-            if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-                faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
-            }
-        });
+//        // update the logo URL for each faculty
+//        faculties.forEach(faculty -> {
+//            if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
+//                faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
+//            }
+//        });
 
         //map entity to DTO and return
         return faculties.map(facultyMapper::toFacultyDetailResponse);

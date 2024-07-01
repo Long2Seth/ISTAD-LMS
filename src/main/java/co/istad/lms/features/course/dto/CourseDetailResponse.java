@@ -8,6 +8,7 @@ import co.istad.lms.features.student.dto.StudentResponse;
 import co.istad.lms.features.subject.dto.SubjectResponse;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 public record CourseDetailResponse(
@@ -17,6 +18,9 @@ public record CourseDetailResponse(
         SubjectResponse subject,
         InstructorResponse instructor,
         ClassResponse oneClass,
+        LocalDate courseStart,
+
+        LocalDate courseEnd,
 
         YearOfStudyResponse yearOfStudy
 ) {

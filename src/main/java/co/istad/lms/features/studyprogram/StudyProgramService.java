@@ -6,6 +6,7 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
+import co.istad.lms.features.subject.dto.SubjectYearOfStudyDetailResponse;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -119,5 +120,5 @@ public interface StudyProgramService {
      */
     Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
 
-    Page<YearOfStudyDetailResponse> getAllYearOfStudy(String alias, int pageNumber, int pageSize);
+    Page<SubjectYearOfStudyDetailResponse> getAllYearOfStudySubject(String alias, int pageNumber, int pageSize);
 }

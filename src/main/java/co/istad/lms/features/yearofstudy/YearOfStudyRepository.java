@@ -1,9 +1,7 @@
 package co.istad.lms.features.yearofstudy;
 
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
-import co.istad.lms.domain.Course;
-import co.istad.lms.domain.StudyProgram;
-import co.istad.lms.domain.YearOfStudy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +22,7 @@ public interface YearOfStudyRepository extends JpaRepository<YearOfStudy,Long>, 
     Set<YearOfStudy> findByCourses(Course course);
 
 
-    Page<YearOfStudy> findYearOfStudiesByStudyProgram(StudyProgram studyProgram, Pageable pageable);
+    Set<YearOfStudy> findYearOfStudiesByStudyProgram(StudyProgram studyProgram);
+
+    Optional<YearOfStudy> findBySubjectsAndStudyProgram(Subject subject,StudyProgram studyProgram);
 }

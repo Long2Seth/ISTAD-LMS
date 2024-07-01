@@ -6,10 +6,7 @@ import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.*;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
@@ -21,6 +18,8 @@ public interface YearOfStudyMapper {
     YearOfStudyDetailResponse toYearOfStudyDetailResponse(YearOfStudy yearOfStudy);
 
     YearOfStudyResponse toYearOfStudyResponse(YearOfStudy yearOfStudy);
+
+    YearOfStudySubjectResponse toYearOfStudySubjectResponse(YearOfStudy yearOfStudy);
 
     @Mapping(target = "subjects",ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

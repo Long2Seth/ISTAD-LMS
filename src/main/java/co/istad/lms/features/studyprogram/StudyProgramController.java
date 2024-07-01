@@ -10,6 +10,7 @@ import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
 import co.istad.lms.features.studyprogram.dto.StudyProgramResponse;
 import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
+import co.istad.lms.features.subject.dto.SubjectYearOfStudyDetailResponse;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
 import jakarta.validation.Valid;
@@ -122,14 +123,14 @@ public class StudyProgramController {
 
     @PreAuthorize("hasAnyAuthority('admin:control')")
     @GetMapping("/{alias}/year-of-studies")
-    public Page<YearOfStudyDetailResponse> getAllYearOfStudies(
+    public Page<SubjectYearOfStudyDetailResponse> getAllYearOfStudies(
 
             @PathVariable String alias,
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return studyProgramService.getAllYearOfStudy(alias,pageNumber, pageSize);
+        return studyProgramService.getAllYearOfStudySubject(alias,pageNumber, pageSize);
 
     }
 
