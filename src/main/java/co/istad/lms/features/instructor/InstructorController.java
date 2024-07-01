@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/instructors")
-@PreAuthorize("hasAnyAuthority('admin:control')")
 public class InstructorController {
 
 
@@ -33,6 +32,12 @@ public class InstructorController {
             @RequestParam(defaultValue = "25") int pageSize
     ){
         return instructorService.getAllInstructorDetail(pageNumber, pageSize);
+    }
+
+
+    @GetMapping("/courses")
+    public InstructorCoursesResponse getInstructorCourses(){
+        return instructorService.getInstructorCourses();
     }
 
 

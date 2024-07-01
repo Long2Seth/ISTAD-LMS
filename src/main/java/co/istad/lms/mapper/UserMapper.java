@@ -1,11 +1,13 @@
 package co.istad.lms.mapper;
 
 import co.istad.lms.domain.Authority;
+import co.istad.lms.domain.Course;
 import co.istad.lms.domain.User;
 import co.istad.lms.features.academic.dto.AcademicRequest;
 import co.istad.lms.features.academic.dto.AcademicRequestUpdate;
 import co.istad.lms.features.admin.dto.AdminRequest;
 import co.istad.lms.features.admin.dto.AdminRequestUpdate;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorRequestUpdate;
 import co.istad.lms.features.password.dto.ResponsePassword;
@@ -94,4 +96,20 @@ public interface UserMapper {
             @Mapping(source = "position", target = "position")
     })
     UserResponseDetail toUserResponseDetail(User user);
+
+
+    @Named("toCourseWithUsersResponseSet")
+    @Mappings({
+            @Mapping(source = "subject.credit", target = "credit"),
+            @Mapping(source = "subject.logo", target = "logo"),
+            @Mapping(source = "subject.description", target = "description"),
+            @Mapping(source = "instructor.user.nameEn", target = "instructorName"),
+            @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage"),
+            @Mapping(source = "yearOfStudy.year", target = "year"),
+            @Mapping(source = "yearOfStudy.semester", target = "semester")
+    })
+    CourseWithUsersResponse toCourseWithUsersResponse(Course course);
+
+
+
 }

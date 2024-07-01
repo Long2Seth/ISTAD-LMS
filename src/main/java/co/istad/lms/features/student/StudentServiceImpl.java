@@ -3,11 +3,10 @@ package co.istad.lms.features.student;
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
-import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.course.dto.CourseResponse;
-import co.istad.lms.features.course.dto.CourseStudentResponse;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
@@ -46,15 +45,25 @@ public class StudentServiceImpl implements StudentService {
 
 
     private final StudentRepository studentRepository;
+
     private final StudentMapper studentMapper;
+
     private final CourseMapper courseMapper;
+
     private final UserRepository userRepository;
+
     private final AuthorityRepository authorityRepository;
+
     private final UserService userService;
+
     private final UserMapper userMapper;
+
     private final FileMetaDataRepository fileMetaDataRepository;
+
     private final BaseSpecification<Student> baseSpecification;
+
     private final YearOfStudyRepository yearOfStudyRepository;
+
     private final StudyProgramRepository studyProgramRepository;
 
 
@@ -458,7 +467,7 @@ public class StudentServiceImpl implements StudentService {
                 ));
 
         // Map course student responses from student courses
-        Set<CourseStudentResponse> courseStudentResponses = studentMapper.toCourseStudentResponses(student.getCourses(), courseMapper);
+        Set<CourseWithUsersResponse> courseStudentResponses = studentMapper.toCourseStudentResponses(student.getCourses(), courseMapper);
 
         return new StudentCourseResponse(
                 user.getUuid(),

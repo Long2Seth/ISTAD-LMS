@@ -1,9 +1,7 @@
 package co.istad.lms.features.instructor;
 
 
-import co.istad.lms.domain.Authority;
-import co.istad.lms.domain.Lecture;
-import co.istad.lms.domain.User;
+import co.istad.lms.domain.*;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.authority.AuthorityRepository;
@@ -16,6 +14,7 @@ import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.InstructorMapper;
 import co.istad.lms.mapper.LectureMapper;
 import co.istad.lms.mapper.UserMapper;
@@ -27,6 +26,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,11 +43,19 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     private final InstructorRepository instructorRepository;
+
     private final InstructorMapper instructorMapper;
+
     private final AuthorityRepository authorityRepository;
+
+    private final YearOfStudyRepository yearOfStudyRepository;
+
     private final UserRepository userRepository;
+
     private final UserMapper userMapper;
+
     private final UserService userService;
+
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final LectureRepository lectureRepository;
@@ -332,6 +342,42 @@ public class InstructorServiceImpl implements InstructorService {
         instructorRepository.save(instructor);
 
     }
+
+    @Override
+    public InstructorCoursesResponse getInstructorCourses() {
+
+        // Get the current authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email %s not found", email)
+                ));
+
+        Instructor instructor = instructorRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with email %s not found", email)
+                ));
+
+
+        return instructorMapper.toInstructorCoursesResponse(instructor);
+    }
+
+
 
     @Override
     public Page<InstructorResponseDetail> getAllInstructorDetail(int page, int limit) {

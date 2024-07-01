@@ -22,13 +22,14 @@ public record StudentCourseDetailResponse(
 
         // Instructor information
         String instructorName,
-        String position
+        String userProfileImage,
+        String position,
 
         //Student profile
 //        Set<String> studentProfileImage,
 
         // Classes start
-//        LocalDate classesStart
+        LocalDate classesStart
 
 
 ) {
