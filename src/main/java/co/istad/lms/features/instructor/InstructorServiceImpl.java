@@ -11,13 +11,20 @@ import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.LectureRepository;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
+import co.istad.lms.features.material.MaterialRepository;
+import co.istad.lms.features.material.MaterialService;
+import co.istad.lms.features.material.dto.MaterialDetailResponse;
+import co.istad.lms.features.media.MediaService;
+import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
 import co.istad.lms.mapper.InstructorMapper;
 import co.istad.lms.mapper.LectureMapper;
+import co.istad.lms.mapper.MaterialMapper;
 import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.security.CustomUserDetails;
 import co.istad.lms.util.DateTimeUtil;
 import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +41,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
+import javax.print.attribute.standard.Media;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +70,14 @@ public class InstructorServiceImpl implements InstructorService {
     private final LectureRepository lectureRepository;
 
     private final LectureMapper lectureMapper;
+
+    private final MaterialRepository materialRepository;
+
+    private final MediaService mediaService;
+
+    private final MaterialMapper materialMapper;
+
+    private final SubjectRepository subjectRepository;
 
 
     public Set<Authority> getDefaultAuthorities() {
@@ -434,5 +451,47 @@ public class InstructorServiceImpl implements InstructorService {
         });
     }
 
+    @Override
+    public Page<MaterialDetailResponse> getAllMaterials(CustomUserDetails userDetails, int pageNumber, int pageSize) {
 
+        String userUuid = userDetails.getUserUuid();
+        String username = userDetails.getUsername();
+
+        // Get instructor by user uuid
+        Instructor instructor =
+                instructorRepository.findInstructorByUserUuid(userUuid).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor with user uuid = %s has not been found", username)));
+
+        Set<Course> courses = instructor.getCourses();
+
+        Set<Subject> subjects = courses.stream()
+                .map(Course::getSubject)
+                .collect(Collectors.toSet());
+
+        Set<Material> materials = subjects.stream()
+                .flatMap(subject -> materialRepository.findAllBySubject(subject).stream())
+                .collect(Collectors.toSet());
+
+        // Convert the Set<Material> to a List<Material>
+        List<Material> materialList = materials.stream()
+                .sorted((m1, m2) -> m2.getCreatedAt().compareTo(m1.getCreatedAt())) // Sort by createdAt DESC
+                .collect(Collectors.toList());
+
+        // Calculate start and end indices for the sublist
+        int start = pageNumber * pageSize;
+        int end = Math.min(start + pageSize, materialList.size());
+
+        // Create a sublist for the current page
+        List<Material> subList = materialList.subList(start, end);
+
+        // Wrap the sublist in a PageImpl object
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Material> materialsPage = new PageImpl<>(subList, pageRequest, materialList.size());
+
+        // Map entity to DTO and return
+        return materialsPage.map(material -> {
+            String url = mediaService.getDownloadUrl(material.getFileName());
+            return materialMapper.toMaterialDetailResponse(material, url);
+        });
+    }
 }

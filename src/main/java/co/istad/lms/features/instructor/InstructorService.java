@@ -3,6 +3,8 @@ package co.istad.lms.features.instructor;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
+import co.istad.lms.features.material.dto.MaterialDetailResponse;
+import co.istad.lms.security.CustomUserDetails;
 import org.springframework.data.domain.Page;
 
 /**
@@ -144,8 +146,7 @@ public interface InstructorService {
 
     Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
 
-//    Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
-
+    Page<MaterialDetailResponse> getAllMaterials(CustomUserDetails userDetails, int pageNumber, int pageSize);
 
 
 }

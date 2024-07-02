@@ -1,6 +1,7 @@
 package co.istad.lms.features.material.dto;
 
 
+import co.istad.lms.features.subject.dto.SubjectResponse;
 import jakarta.persistence.Column;
 
 public record MaterialDetailResponse(
@@ -13,7 +14,7 @@ public record MaterialDetailResponse(
         String fileName,
         String fileUrl,
         String description,
-        String subjectAlias,
+        SubjectResponse subject,
 
         Boolean isDeleted,
         Boolean isDraft
