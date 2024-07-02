@@ -144,5 +144,8 @@ public interface InstructorService {
 
     Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
 
+//    Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
+
+
 
 }

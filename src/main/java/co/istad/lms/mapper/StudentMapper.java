@@ -94,4 +94,5 @@ public interface StudentMapper {
     StudentCourseDetailResponse toStudentCourseDetailResponse(Course course, YearOfStudy yearOfStudy);
 
 
+
 }
