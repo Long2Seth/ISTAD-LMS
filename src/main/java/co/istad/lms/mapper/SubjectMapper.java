@@ -20,6 +20,7 @@ public interface SubjectMapper {
     Subject fromDegreeRequest(SubjectRequest degreeCreateRequest);
 
     @Mapping(target = "curriculum", source = "curriculum", qualifiedByName = "stringToJsonNode")
+    @Mapping(source = "subject.logo", target = "logo", qualifiedByName = "getLogoUrl")
     SubjectDetailResponse toSubjectDetailResponse(Subject subject);
 
 //    @Mapping(target = "curriculum", source = "subject.curriculum", qualifiedByName = "stringToJsonNode")

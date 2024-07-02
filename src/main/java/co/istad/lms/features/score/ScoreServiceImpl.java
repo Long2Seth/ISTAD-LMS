@@ -249,9 +249,13 @@ public class ScoreServiceImpl implements ScoreService {
             //total score per semester
             AtomicReference<Double> total = new AtomicReference<>(0.0);
             AtomicReference<Integer> numberOfCourse = new AtomicReference<>(0);
+            AtomicReference<String> classCode= new AtomicReference<>("N/A");
 
             // Map courses to CourseResponse and set score from Score entity
             Set<CourseSemesterScoreResponse> courses = coursesSet.stream().map(course -> {
+
+                classCode.set(course.getOneClass().getClassCode());
+
                 Score scoreObject = scoreRepository.findByCourseAndStudent(course, student).orElse(null);
 
                 Double score;
@@ -271,7 +275,7 @@ public class ScoreServiceImpl implements ScoreService {
 
             String grade = AssesmentsUtil.getGrade(average);
 
-            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get());
+            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get(),classCode.get());
         });
 
     }
