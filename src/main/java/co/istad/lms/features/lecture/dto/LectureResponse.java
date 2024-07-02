@@ -16,7 +16,7 @@ public record LectureResponse(
         Boolean isDraft,
         Integer status,
         String teachingType,
-        g
+
 
         String classCode
 ) {
