@@ -4,7 +4,7 @@ import co.istad.lms.domain.Course;
 import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
-import co.istad.lms.features.course.dto.CourseStudentResponse;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.user.dto.UserProfile;
 import org.mapstruct.*;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, CourseMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, CourseMapper.class, ClassMapper.class})
 public interface StudentMapper {
 
     @Mapping(target = "user.dob", ignore = true)
@@ -43,11 +43,12 @@ public interface StudentMapper {
     StudentCourseResponse toResponseCourse(Student student);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
+    @Mapping(source = "courses" , target = "courses", qualifiedByName = "toUseCourseResponse")
     StudentResponseDetail toResponseDetail(Student student);
 
-    @Mapping(source = "student.user.nameEn",target = "nameEn")
-    @Mapping(source = "student.user.uuid",target = "uuid")
-    @Mapping(source = "student.user.gender",target = "gender")
+    @Mapping(source = "student.user.nameEn", target = "nameEn")
+    @Mapping(source = "student.user.uuid", target = "uuid")
+    @Mapping(source = "student.user.gender", target = "gender")
     StudentScoreResponse toStudentScoreResponse(Student student);
 
     @Mapping(source = "student.user.nameEn",target = "nameEn")
@@ -70,8 +71,7 @@ public interface StudentMapper {
     void updateStudentSettingRequest(@MappingTarget Student student, StudentSettingRequest studentSettingRequest);
 
 
-
-    default Set<CourseStudentResponse> toCourseStudentResponses(Set<Course> courses, @Context CourseMapper courseMapper) {
+    default Set<CourseWithUsersResponse> toCourseStudentResponses(Set<Course> courses, @Context CourseMapper courseMapper) {
         return courses.stream()
                 .map(courseMapper::toCourseStudentResponse)
                 .collect(Collectors.toSet());
@@ -88,9 +88,10 @@ public interface StudentMapper {
     @Mapping(target = "practice", source = "course.subject.practice")
     @Mapping(target = "internship", source = "course.subject.internship")
     @Mapping(target = "instructorName", source = "course.instructor.user.nameEn")
+    @Mapping(target = "userProfileImage", source = "course.instructor.user.profileImage")
     @Mapping(target = "position", source = "course.instructor.user.position")
+    @Mapping(target = "classesStart", source = "course.oneClass.classStart")
     StudentCourseDetailResponse toStudentCourseDetailResponse(Course course, YearOfStudy yearOfStudy);
-
 
 
 }

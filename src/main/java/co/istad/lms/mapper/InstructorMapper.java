@@ -1,13 +1,20 @@
 package co.istad.lms.mapper;
 
+import co.istad.lms.domain.Course;
+import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
 import org.mapstruct.*;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring",uses = {UserMapper.class, CourseMapper.class})
+@Mapper(componentModel = "spring",uses = {UserMapper.class, CourseMapper.class , ClassMapper.class})
 public interface InstructorMapper {
+
+
+
+
 
     @Mapping(target = "user.dob" , ignore = true)
     Instructor toRequest(InstructorRequest request);
@@ -19,7 +26,7 @@ public interface InstructorMapper {
 
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponse")
-    InstructorCourseResponse toCourseResponse(Instructor instructor);
+    InstructorInfoResponse toCourseResponse(Instructor instructor);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     @Mapping(source = "courses", target = "courses" , qualifiedByName = "toCourseStudentResponse")
@@ -29,6 +36,22 @@ public interface InstructorMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateInstructorFromRequest(@MappingTarget Instructor instructor, InstructorRequestUpdate instructorRequestUpdate);
+
+
+
+    @Mapping(source = "user.uuid", target = "uuid")
+    @Mapping(source = "user.nameEn", target = "nameEn")
+    @Mapping(source = "user.nameKh", target = "nameKh")
+    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.gender", target = "gender")
+    @Mapping(source = "user.dob", target = "dob")
+    @Mapping(source = "user.email", target = "email")
+    @Mapping(source = "user.profileImage", target = "profileImage")
+    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
+    @Mapping(source = "user.currentAddress", target = "currentAddress")
+    @Mapping(source = "user.birthPlace", target = "birthPlace")
+    @Mapping(source = "courses", target = "courses", qualifiedByName = "toCourseWithUsersResponseSet")
+    InstructorCoursesResponse toInstructorCoursesResponse(Instructor instructor);
 
 
 }

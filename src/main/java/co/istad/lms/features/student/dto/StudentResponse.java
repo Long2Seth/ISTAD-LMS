@@ -10,6 +10,8 @@ import java.util.Set;
 
 public record StudentResponse(
 
+
+
         String uuid,
 
 
@@ -20,6 +22,9 @@ public record StudentResponse(
         Integer studentStatus,
 
 
+
+
+        String profileImage,
 
 
 
@@ -38,7 +43,20 @@ public record StudentResponse(
 
 
 
+        String username,
+
+
+
         String phoneNumber,
+
+
+
+        String guardianRelationShip,
+
+
+
+
+        String familyPhoneNumber,
 
 
 
@@ -53,10 +71,26 @@ public record StudentResponse(
 
 
 
-        String bio,
+        String biography,
 
 
 
-        String dob
+        String dob,
+
+
+
+        String bacIiGrade,
+
+
+
+        String highSchoolCertificate,
+
+
+        String vocationTrainingCertificate,
+
+
+        String anyValuableCertificate
+
+
 ) {
 }

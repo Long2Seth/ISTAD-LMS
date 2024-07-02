@@ -104,6 +104,20 @@ public interface InstructorService {
     void blockInstructorByUuid( String uuid);
 
 
+
+
+    /**
+     * Retrieves a paginated list of all courses of an instructor.
+     *
+     * @return {@link InstructorCoursesResponse}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorCoursesResponse getInstructorCourses();
+
+
+
+
     /**
      * Retrieves a paginated list details of all instructors.
      * @param page is the pageNumber number to retrieve

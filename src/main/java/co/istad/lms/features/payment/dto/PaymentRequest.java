@@ -24,6 +24,11 @@ public record PaymentRequest(
         double academicFee,
 
 
+        @NotNull(message = "Year be required")
+        @Positive(message = "Year must be positive")
+        Integer year,
+
+
 
         @NotNull(message = "Discount  be required")
         @Positive(message = "Discount must be positive")
@@ -46,6 +51,6 @@ public record PaymentRequest(
 
 
         @Size(max = 255 , message = "Remarks must be less than 255 characters")
-        String remarks
+        String remark
 ) {
 }

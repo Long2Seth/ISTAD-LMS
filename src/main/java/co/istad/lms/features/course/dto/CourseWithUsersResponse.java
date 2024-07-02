@@ -1,6 +1,6 @@
 package co.istad.lms.features.course.dto;
 
-public record CourseStudentResponse(
+public record CourseWithUsersResponse(
         String uuid,
         String title,
         Integer credit,

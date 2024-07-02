@@ -2,8 +2,10 @@ package co.istad.lms.features.payment;
 
 
 import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Course;
 import co.istad.lms.domain.Payment;
 import co.istad.lms.domain.User;
+import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.payment.dto.HistoryPaymentResponse;
 import co.istad.lms.features.payment.dto.PaymentRequest;
@@ -25,7 +27,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,26 +39,74 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     private final PaymentRepository paymentRepository;
+
+    private final StudentRepository studentRepository;
+
     private final PaymentMapper paymentMapper;
+
     private final BaseSpecification<Payment> baseSpecification;
+
     private final UserRepository userRepository;
+
 
     @Override
     public void createPayment(@Valid PaymentRequest paymentRequest) {
 
+        // Find student by username
+        User user = userRepository.findByUsername(paymentRequest.userName())
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                String.format("Student with username = %s have been not found", paymentRequest.userName()))
+                );
 
-        
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with username = %s have been not found", paymentRequest.userName()
+                                )
+                        )
+                );
+
+        // Get the courses of the student
+        Set<Course> courses = student.getCourses();
+
+        // Check if there are any courses
+        if (courses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("Student with username = %s is not enrolled in any courses", paymentRequest.userName()));
+        }
+
+        int paymentYear = paymentRequest.year();
+        boolean yearMatch = false;
+        // Check year with student's year of study
+        for (Course course : courses) {
+            YearOfStudy yearOfStudy = course.getYearOfStudy();
+            if (yearOfStudy.getYear() == paymentYear) {
+                yearMatch = true;
+                break;
+            }
+        }
+
+        if (!yearMatch) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The year of payment must match the student's current year of study");
+        }
 
 
         // Create a new payment
         Payment payment = paymentMapper.toPaymentRequest(paymentRequest);
+
+        payment.setStudentName(student.getUser().getNameEn());
+        payment.setStudent(student); // Set the student to the payment
+
         // Convert paidDate from string to LocalDate
-        LocalDate paidDate = DateTimeUtil.stringToLocalDate(paymentRequest.paidDate(),"paidDate");
+        LocalDate paidDate = DateTimeUtil.stringToLocalDate(paymentRequest.paidDate(), "paidDate");
 
         payment.setUuid(UUID.randomUUID().toString());
         payment.setPaidDate(paidDate);
 
-        // Do logic discount
+        // Calculate the discount
         Double paidDiscount = payment.getAcademicFee() * payment.getDiscount() / 100;
 
         // Set academic fee after discount
@@ -62,10 +115,19 @@ public class PaymentServiceImpl implements PaymentService {
         // Set total payment
         payment.setTotalPayment(paymentRequest.paidAmount());
 
+        // Set balance due
+        payment.setBalanceDue(payment.getAcademicFee() - payment.getTotalPayment());
+
+        // Set paid complete status
+        if (Objects.equals(payment.getTotalPayment(), payment.getAcademicFee())) {
+            payment.setPaidComplete(true);
+        } else {
+            payment.setPaidComplete(false);
+        }
+        payment.setStatus(false);
+
         // Save the payment to the repository
         paymentRepository.save(payment);
-
-
     }
 
 
@@ -78,7 +140,6 @@ public class PaymentServiceImpl implements PaymentService {
         return payments.map(paymentMapper::toPaymentResponse);
 
     }
-
 
 
     @Override

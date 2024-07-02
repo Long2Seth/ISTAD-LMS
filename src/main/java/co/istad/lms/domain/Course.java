@@ -38,7 +38,6 @@ public class Course extends Auditable {
 
     private Integer status;
 
-    Integer credit;
 
     private LocalDate courseStart;
 

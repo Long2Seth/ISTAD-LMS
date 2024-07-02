@@ -36,6 +36,11 @@ public class Payment extends Auditable {
 
 
 
+    @Column( nullable = false)
+    private Integer year;
+
+
+
     @Column(nullable = false)
     private Double balanceDue;
 
@@ -84,8 +89,10 @@ public class Payment extends Auditable {
 
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
+
 
 
 
