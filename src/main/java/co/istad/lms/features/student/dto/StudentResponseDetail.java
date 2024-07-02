@@ -40,6 +40,11 @@ public record StudentResponseDetail(
 
 
 
+
+        String username,
+
+
+
         String phoneNumber,
 
 
