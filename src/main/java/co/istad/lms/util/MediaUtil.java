@@ -4,16 +4,21 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class MediaUtil {
 
-    //endpoint that handle manage medias
-    @Value("${media.end-point}")
     private static String mediaEndpoint;
-
-    //base uri for media
-    @Value("${media.base-uri}")
     private static String baseUri;
 
-    public static String getUrl(String fileName){
+    @Value("${media.end-point}")
+    public void setMediaEndpoint(String mediaEndpoint) {
+        MediaUtil.mediaEndpoint = mediaEndpoint;
+    }
 
+    @Value("${media.base-uri}")
+    public void setBaseUri(String baseUri) {
+        MediaUtil.baseUri = baseUri;
+    }
+
+    public static String getUrl(String fileName) {
+        System.out.println("base url = " + baseUri);
         return baseUri + mediaEndpoint + "/view/" + fileName;
     }
 }
