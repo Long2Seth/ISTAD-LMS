@@ -16,7 +16,7 @@ public record ScoreDetailResponse(
         String grade,
         Double total,
         CourseResponse course,
-        Student student,
+        StudentResponse student,
         Boolean isDeleted
 ) {
 }
