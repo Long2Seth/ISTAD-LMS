@@ -61,4 +61,6 @@ public interface MediaService {
             ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, io.minio.errors.ServerException;
 
     String getUrl(String fileName);
+
+    String getDownloadUrl(String fileName);
 }

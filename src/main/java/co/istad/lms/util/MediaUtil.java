@@ -23,4 +23,9 @@ public class MediaUtil {
 
         return baseUri + mediaEndpoint + "/view/" + fileName;
     }
+
+    public static String getDownloadUrl(String fileName) {
+
+        return baseUri + mediaEndpoint + "/download/" + fileName;
+    }
 }
