@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Page<UserResponseDetail> getAllUsersExceptStudents(int page, int limit) {
+    public Page<UserResponse> getAllUsersExceptStudents(int page, int limit) {
 
         PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> user.getStudent() == null)
                 .toList();
 
-        return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponseDetail);
+        return new PageImpl<>(filteredUsers, pageRequest, filteredUsers.size()).map(userMapper::toUserResponse);
     }
 
 

@@ -84,11 +84,7 @@ public record InstructorResponseDetail(
 
 
 
-        Set<String> skills ,
-
-
-
-        Set<CourseWithUsersResponse> courses
+        Set<String> skills
 
 
 ) {

@@ -1,5 +1,6 @@
 package co.istad.lms.features.instructor;
 
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
@@ -48,6 +49,10 @@ public interface InstructorService {
      * @since 1.0 (2024)
      */
     InstructorResponseDetail getInstructorDetailByUuid(String uuid);
+    
+
+
+    Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(String uuid, int pageNumber, int pageSize);
 
 
 

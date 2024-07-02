@@ -29,7 +29,6 @@ public interface InstructorMapper {
     InstructorInfoResponse toCourseResponse(Instructor instructor);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
-    @Mapping(source = "courses", target = "courses" , qualifiedByName = "toCourseStudentResponse")
     InstructorResponseDetail toResponseDetail(Instructor instructor);
 
 

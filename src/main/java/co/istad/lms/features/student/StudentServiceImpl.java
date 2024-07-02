@@ -377,17 +377,28 @@ public class StudentServiceImpl implements StudentService {
                 ));
 
         Set<Class> studentClasses = student.getClasses();
+        if (studentClasses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have class ", student.getUser().getNameEn()));
+        }
+
+        // Get all courses from student
         Set<Course> courses = student.getCourses();
+        if (courses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have course ", student.getUser().getNameEn()));
+        }
 
         List<Score> scores = new ArrayList<>();
         for (Course c : courses) {
             scores.addAll(c.getScores());
         }
+        if (scores.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have score ", student.getUser().getNameEn()));
+        }
 
         StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Study program not found"
+                        String.format("Study program = %s not found" , studentClasses)
                 ));
 
         Set<YearOfStudy> yearOfStudies = new HashSet<>();
@@ -405,13 +416,13 @@ public class StudentServiceImpl implements StudentService {
                         yearOfStudy.getCourses().stream()
                                 .map(course -> {
                                     double courseScore = course.getScores().stream()
-                                            .filter(score -> score.getStudent().equals(student))
-                                            .mapToDouble(score -> score.getFinalExamScore() + score.getMidtermExamScore() + score.getAssignmentScore() +
-                                                    score.getMiniProjectScore() + score.getAttendanceScore() + score.getActivityScore())
+                                            .mapToDouble(Score::getTotal)
                                             .sum();
-                                    double averageScore = courseScore / course.getScores().size();
-                                    String studentGrade = calculateGrade(courseScore);
-                                    return new CourseResponse(course.getTitle(), averageScore, course.getSubject().getCredit(), studentGrade);
+                                    String studentGrade = course.getScores().stream()
+                                            .map(Score::getGrade)
+                                            .findFirst()
+                                            .orElse(null);
+                                    return new CourseResponse(course.getTitle(), courseScore, course.getSubject().getCredit(), studentGrade);
                                 })
                                 .collect(Collectors.toSet())
                 ))

@@ -74,7 +74,7 @@ public interface UserService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    Page<UserResponseDetail> getAllUsersExceptStudents(int page , int limit);
+    Page<UserResponse> getAllUsersExceptStudents(int page , int limit);
 
 
     /**

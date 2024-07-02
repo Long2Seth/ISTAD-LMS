@@ -1,6 +1,7 @@
 package co.istad.lms.features.instructor;
 
 
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
@@ -63,6 +64,16 @@ public class InstructorController {
     @GetMapping("/detail/{uuid}")
     public InstructorResponseDetail getInstructorDetailByUuid(@PathVariable String uuid){
         return instructorService.getInstructorDetailByUuid(uuid);
+    }
+
+    @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read','instructor:read')")
+    @GetMapping("/detail/{uuid}/courses")
+    public Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(
+            @PathVariable String uuid ,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ){
+        return instructorService.getInstructorDetailByUuidCourse(uuid,pageNumber,pageSize);
     }
 
 
