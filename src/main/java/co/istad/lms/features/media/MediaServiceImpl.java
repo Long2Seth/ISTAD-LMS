@@ -251,7 +251,9 @@ public class MediaServiceImpl implements MediaService {
                 contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation") ||
                 contentType.equals("application/msword") ||
                 contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
-                contentType.equals("text/plain"))) {
+                contentType.equals("text/plain") ||
+                contentType.equals("application/vnd.ms-excel") ||
+                contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported file type.");
         }
 
@@ -263,6 +265,13 @@ public class MediaServiceImpl implements MediaService {
 
         return baseUri + mediaEndpoint + "/view/" + fileName;
     }
+
+    @Override
+    public String getDownloadUrl(String fileName){
+
+        return baseUri + mediaEndpoint + "/download/" + fileName;
+    }
+
 
 
 }

@@ -3,12 +3,15 @@ package co.istad.lms.features.user;
 
 import co.istad.lms.domain.Authority;
 import co.istad.lms.domain.User;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
@@ -54,6 +57,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT CASE WHEN COUNT(ad) > 0 THEN TRUE ELSE FALSE END FROM Admin ad WHERE ad.user.id = :userId")
     boolean existsByUserIdAndAdmin(Long userId);
+
+    Long countAllByCreatedAtIsAfter(Timestamp createdAt);
 
 
 }

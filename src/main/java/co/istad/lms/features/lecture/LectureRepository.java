@@ -18,5 +18,7 @@ public interface LectureRepository extends JpaRepository<Lecture, Long>, JpaSpec
 
     Page<Lecture> findAllByCourseInstructorUserUuid(String uuid, Pageable pageable);
 
+    Set<Lecture> findAllByStatus(Integer status);
+
 
 }

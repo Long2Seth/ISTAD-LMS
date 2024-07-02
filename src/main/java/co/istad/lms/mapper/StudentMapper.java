@@ -30,7 +30,9 @@ public interface StudentMapper {
     @Mapping(source = "student.user.dob", target = "dob")
     @Mapping(source = "student.user.gender", target = "gender")
     @Mapping(source = "courses", target = "courses", qualifiedByName = "mapCourses")
-    StudentSemesterScoreResponse toStudentSemesterScoreResponse(Student student, Set<CourseSemesterScoreResponse> courses, String grade, Double total);
+    StudentSemesterScoreResponse toStudentSemesterScoreResponse(Student student,
+                                                                Set<CourseSemesterScoreResponse> courses,String grade
+            , Double total,String classCode);
 
     @Named("mapCourses")
     static Set<CourseSemesterScoreResponse> mapCourses(Set<CourseSemesterScoreResponse> courses) {
@@ -90,6 +92,7 @@ public interface StudentMapper {
     @Mapping(target = "position", source = "course.instructor.user.position")
     @Mapping(target = "classesStart", source = "course.oneClass.classStart")
     StudentCourseDetailResponse toStudentCourseDetailResponse(Course course, YearOfStudy yearOfStudy);
+
 
 
 }

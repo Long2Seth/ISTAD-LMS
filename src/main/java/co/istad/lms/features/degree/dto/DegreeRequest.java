@@ -11,7 +11,7 @@ public record DegreeRequest(
         @Size(max = 100, message = "Level can not be longer than 100 characters")
         String level,
 
-        @NotBlank(message = "numberOfYear is require")
+        @NotNull(message = "numberOfYear is require")
         @Positive(message = "number is year is positive ")
         Integer numberOfYear,
 

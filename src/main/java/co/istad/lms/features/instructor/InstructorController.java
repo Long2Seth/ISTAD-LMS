@@ -5,6 +5,7 @@ import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
+import co.istad.lms.features.material.dto.MaterialDetailResponse;
 import co.istad.lms.security.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -144,7 +145,15 @@ public class InstructorController {
         return instructorService.getAllSchedule(userDetails.getUserUuid(),pageNumber,pageSize);
     }
 
+    @GetMapping("/material")
+    @PreAuthorize("hasAnyAuthority('session:read')")
+    public Page<MaterialDetailResponse> getMaterial(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
 
-
+        return instructorService.getAllMaterials(userDetails,pageNumber,pageSize);
+    }
 
 }

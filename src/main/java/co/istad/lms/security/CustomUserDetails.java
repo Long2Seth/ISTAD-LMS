@@ -49,6 +49,10 @@ public class CustomUserDetails implements UserDetails {
         return user.getUuid();
     }
 
+    public String getUserUsername(){
+        return user.getUsername();
+    }
+
 
 
     // make the proper format for the authorities

@@ -1,7 +1,9 @@
 package co.istad.lms.util;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MediaUtil {
 
     private static String mediaEndpoint;
@@ -18,7 +20,12 @@ public class MediaUtil {
     }
 
     public static String getUrl(String fileName) {
-        System.out.println("base url = " + baseUri);
+
         return baseUri + mediaEndpoint + "/view/" + fileName;
+    }
+
+    public static String getDownloadUrl(String fileName) {
+
+        return baseUri + mediaEndpoint + "/download/" + fileName;
     }
 }

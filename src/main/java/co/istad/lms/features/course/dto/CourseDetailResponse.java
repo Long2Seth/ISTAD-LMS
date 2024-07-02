@@ -20,6 +20,8 @@ public record CourseDetailResponse(
         ClassResponse oneClass,
         LocalDate courseStart,
 
+        Integer status,
+
         LocalDate courseEnd,
 
         YearOfStudyResponse yearOfStudy

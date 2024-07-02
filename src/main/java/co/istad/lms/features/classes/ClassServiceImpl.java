@@ -207,7 +207,7 @@ public class ClassServiceImpl implements ClassService {
         aClass.setIsDeleted(false);
 
         //check all student alias from DTO null or not
-        if (classRequest.studentAdmissionUuid() != null&& !classRequest.studentAdmissionUuid().isEmpty()) {
+        if (false||classRequest.studentAdmissionUuid() != null&& !classRequest.studentAdmissionUuid().isEmpty()) {
 
             Set<User> users=new HashSet<>();
 

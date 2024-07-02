@@ -27,6 +27,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>, JpaSpec
 
     Optional<Subject> findByAliasAndIsDeletedFalse(String alias);
 
+
     @Query("SELECT s FROM Subject s JOIN s.yearOfStudies y WHERE y.uuid IN :yearOfStudyUuids")
     Page<Subject> findByYearOfStudyUuids(@Param("yearOfStudyUuids") Set<String> yearOfStudyUuids, Pageable pageable);
 }

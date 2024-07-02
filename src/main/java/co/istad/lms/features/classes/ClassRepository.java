@@ -26,4 +26,6 @@ public interface ClassRepository extends JpaRepository<Class,Long>, JpaSpecifica
     Boolean existsByUuid(String uuid);
 
     Set<Class> findByStudents(Student student);
+
+    Long countAllByStatus(Integer status);
 }

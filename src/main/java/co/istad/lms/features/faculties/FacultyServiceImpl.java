@@ -70,11 +70,6 @@ public class FacultyServiceImpl implements FacultyService {
         Faculty faculty =
                 facultyRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found1.", alias)));
 
-        //set logo url to faculty
-        if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-            faculty.setLogo(mediaService.getUrl((faculty.getLogo())));
-        }
-
         //return Faculty detail
         return facultyMapper.toFacultyDetailResponse(faculty);
     }
@@ -91,13 +86,6 @@ public class FacultyServiceImpl implements FacultyService {
 
         //get all faculty from database
         Page<Faculty> faculties = facultyRepository.findAll(pageRequest);
-
-//        // update the logo URL for each faculty
-//        faculties.forEach(faculty -> {
-//            if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-//                faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
-//            }
-//        });
 
         //map entity to DTO and return
         return faculties.map(facultyMapper::toFacultyDetailResponse);
@@ -147,13 +135,6 @@ public class FacultyServiceImpl implements FacultyService {
 
         //save to database
         facultyRepository.save(faculty);
-
-        //set logo to faculty
-        if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-            faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
-        }
-
-
 
         //return faculty detail
         return facultyMapper.toFacultyDetailResponse(faculty);
@@ -241,13 +222,6 @@ public class FacultyServiceImpl implements FacultyService {
 
         //get all entity that match with filter condition
         Page<Faculty> faculties = facultyRepository.findAll(specification, pageRequest);
-
-        //set logo url to faculty
-        faculties.forEach(faculty -> {
-            if (faculty.getLogo() != null && !faculty.getLogo().trim().isEmpty()) {
-                faculty.setLogo(mediaService.getUrl(faculty.getLogo()));
-            }
-        });
 
         //map to DTO and return
         return faculties.map(facultyMapper::toFacultyDetailResponse);

@@ -35,6 +35,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> , JpaSpe
 
     Page<Student> findStudentByClassesUuid(String uuid, Pageable pageable);
 
+    Long countAllByStudentStatus(Integer status);
+
 
 
 }

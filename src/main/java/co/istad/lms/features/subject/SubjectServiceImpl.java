@@ -69,11 +69,6 @@ public class SubjectServiceImpl implements SubjectService {
         //find subject by alias
         Subject subject = subjectRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found.", alias)));
 
-        //set logo url to faculty
-        if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
-            subject.setLogo(mediaService.getUrl(subject.getLogo()));
-        }
-
         //return subject detail
         return subjectMapper.toSubjectDetailResponse(subject);
 
@@ -90,13 +85,6 @@ public class SubjectServiceImpl implements SubjectService {
 
         //find all subject in database
         Page<Subject> subjects = subjectRepository.findAll(pageRequest);
-
-        //set logo url to faculty
-        subjects.forEach(subject -> {
-            if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
-                subject.setLogo(mediaService.getUrl(subject.getLogo()));
-            }
-        });
 
         //map entity to DTO and return
         return subjects.map(subjectMapper::toSubjectDetailResponse);
@@ -143,11 +131,6 @@ public class SubjectServiceImpl implements SubjectService {
 
         //save to database
         subjectRepository.save(subject);
-
-        //set logo url to faculty
-        if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
-            subject.setLogo(mediaService.getUrl((subject.getLogo())));
-        }
 
         //return Subject response
         return subjectMapper.toSubjectDetailResponse(subject);
@@ -237,12 +220,6 @@ public class SubjectServiceImpl implements SubjectService {
         //get all entity that match with filter condition
         Page<Subject> subjects = subjectRepository.findAll(specification, pageRequest);
 
-        //set logo url to faculty
-        subjects.forEach(subject -> {
-            if (subject.getLogo() != null && !subject.getLogo().trim().isEmpty()) {
-                subject.setLogo(mediaService.getUrl(subject.getLogo()));
-            }
-        });
         //map to DTO and return
         return subjects.map(subjectMapper::toSubjectDetailResponse);
 

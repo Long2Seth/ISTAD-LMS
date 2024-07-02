@@ -1,5 +1,6 @@
 package co.istad.lms.features.student.dto;
 
+import co.istad.lms.features.academicyear.dto.AcademicYearResponse;
 import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
 import lombok.Builder;
 
@@ -14,6 +15,10 @@ public record StudentSemesterScoreResponse(
         String gender,
         LocalDate dob,
         Integer status,
+
+        String classCode,
+
+        AcademicYearResponse academicYear,
 
         Set<CourseSemesterScoreResponse> courses,
 

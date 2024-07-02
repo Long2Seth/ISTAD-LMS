@@ -67,7 +67,7 @@ public class MaterialServiceImpl implements MaterialService {
         // Find material by alias
         Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
 
-        String url = mediaService.getUrl(material.getFileName());
+        String url = mediaService.getDownloadUrl(material.getFileName());
 
         // Return material detail
         return materialMapper.toMaterialDetailResponse(material, url);
@@ -89,7 +89,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map entity to DTO and return
         return materials.map(material -> {
-            String url = mediaService.getUrl(material.getFileName());
+            String url = mediaService.getDownloadUrl(material.getFileName());
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
@@ -122,7 +122,7 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        String url = mediaService.getUrl(material.getFileName());
+        String url = mediaService.getDownloadUrl(material.getFileName());
         return materialMapper.toMaterialDetailResponse(material, url);
     }
 
@@ -175,7 +175,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map to DTO and return
         return materials.map(material -> {
-            String url = mediaService.getUrl(material.getFileName());
+            String url = mediaService.getDownloadUrl(material.getFileName());
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
