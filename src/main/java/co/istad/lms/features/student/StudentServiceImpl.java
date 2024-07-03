@@ -106,6 +106,9 @@ public class StudentServiceImpl implements StudentService {
         // Set default authorities
         Set<Authority> authorities = new HashSet<>();
         authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("material:write"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("material:update"));
+//        authorities.addAll(authorityRepository.findAllByAuthorityName(""));
         authorities.addAll(authorityRepository.findAllByAuthorityName("user:read"));
 
         return authorities;
