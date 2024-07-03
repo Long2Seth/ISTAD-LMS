@@ -73,6 +73,10 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
                     studentAdmissionRequest.identity()));
         }
 
+        if(studentAdmissionRequest.anyValuableCertificate()==null&&studentAdmissionRequest.highSchoolCertificate()==null&&studentAdmissionRequest.vocationTrainingIiiCertificate()==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"certificate must be have at least 1");
+        }
+
         //find admission that open
         Admission admission = admissionRepository.findByStatus(1).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
 

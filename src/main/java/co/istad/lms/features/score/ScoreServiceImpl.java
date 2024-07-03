@@ -275,7 +275,10 @@ public class ScoreServiceImpl implements ScoreService {
 
             String grade = AssesmentsUtil.getGrade(average);
 
-            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get(),classCode.get());
+            Double gpa =AssesmentsUtil.getGpa(average);
+
+            return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get(),gpa,
+                    classCode.get());
         });
 
     }
@@ -326,6 +329,8 @@ public class ScoreServiceImpl implements ScoreService {
             //total score and number of score in semester 2
             AtomicReference<Double> totalSemester2 = new AtomicReference<>(0.0);
             AtomicReference<Integer> numberOfCourseSemester2 = new AtomicReference<>(0);
+            AtomicReference<Integer> sumCredit= new AtomicReference<>(0);
+            AtomicReference<Double> sumGpa= new AtomicReference<>(0.0);
 
             // Map courses to CourseResponse and set score from Score entity
             Set<CourseSemesterScoreResponse> courses1 = coursesSet1.stream().map(course -> {
@@ -337,8 +342,14 @@ public class ScoreServiceImpl implements ScoreService {
                 } else {
                     score = 0.0;
                 }
+
+                Integer credit=course.getSubject().getCredit();
+                Double gpa=AssesmentsUtil.getGpa(score);
+
                 totalSemester1.updateAndGet(v -> v + score);
                 numberOfCourseSemester1.updateAndGet(n -> n + 1);
+                sumGpa.updateAndGet(g->g+gpa);
+                sumCredit.updateAndGet(c->c+credit);
 
                 return new CourseSemesterScoreResponse(course.getTitle(), score);
 
@@ -354,9 +365,14 @@ public class ScoreServiceImpl implements ScoreService {
                 } else {
                     score = 0.0;
                 }
-//                System.out.println("semester 2 = " + score);
+
+                Integer credit=course.getSubject().getCredit();
+                Double gpa=AssesmentsUtil.getGpa(score);
+
                 totalSemester2.updateAndGet(v -> v + score);
                 numberOfCourseSemester2.updateAndGet(n -> n + 1);
+                sumGpa.updateAndGet(g->g+gpa);
+                sumCredit.updateAndGet(c->c+credit);
 
                 return new CourseSemesterScoreResponse(course.getTitle(), score);
 
@@ -378,9 +394,12 @@ public class ScoreServiceImpl implements ScoreService {
 
             String grade = AssesmentsUtil.getGrade((average));
 
-            Double gpa = AssesmentsUtil.getGpa(average);
 
-            return studentMapper.toStudentTranscriptResponse(student, scoreTranscriptRequest.year(), averageSemester1, averageSemester2, grade, gpa, average);
+            Double averageGpa = sumCredit.get()>0?(sumGpa.get()/sumCredit.get()):0.0;
+
+
+            return studentMapper.toStudentTranscriptResponse(student, scoreTranscriptRequest.year(), averageSemester1
+                    , averageSemester2, grade, averageGpa, average);
         });
 
     }

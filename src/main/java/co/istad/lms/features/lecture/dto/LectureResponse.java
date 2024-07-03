@@ -17,7 +17,6 @@ public record LectureResponse(
         Integer status,
         String teachingType,
 
-
         String classCode
 ) {
 }

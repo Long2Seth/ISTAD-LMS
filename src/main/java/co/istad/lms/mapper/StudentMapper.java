@@ -32,7 +32,7 @@ public interface StudentMapper {
     @Mapping(source = "courses", target = "courses", qualifiedByName = "mapCourses")
     StudentSemesterScoreResponse toStudentSemesterScoreResponse(Student student,
                                                                 Set<CourseSemesterScoreResponse> courses,String grade
-            , Double total,String classCode);
+            , Double total,Double gpa,String classCode);
 
     @Named("mapCourses")
     static Set<CourseSemesterScoreResponse> mapCourses(Set<CourseSemesterScoreResponse> courses) {

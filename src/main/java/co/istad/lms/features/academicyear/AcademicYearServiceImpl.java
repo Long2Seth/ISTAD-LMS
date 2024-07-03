@@ -82,8 +82,24 @@ public class AcademicYearServiceImpl implements AcademicYearService{
         AcademicYear academicYear=
                 academicYearRepository.findByAlias(alias).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("AcademicYear  = %s has not been found",alias)));
 
-//        if()
-        return null;
+        //check null alias from DTO
+        if (academicYearUpdateRequest.alias() != null) {
+
+            //validate alias from dto with original alias
+            if (!alias.equalsIgnoreCase(academicYearUpdateRequest.alias())) {
+
+                //validate new alias is conflict with other alias or not
+                if (academicYearRepository.existsByAlias(academicYearUpdateRequest.alias())) {
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Faculty = %s already exist" +
+                            ".", academicYearUpdateRequest.alias()));
+                }
+            }
+        }
+
+        academicYearRepository.save(academicYear);
+
+        return academicYearMapper.toAcademicYearDetailResponse(academicYear);
 
 
     }
