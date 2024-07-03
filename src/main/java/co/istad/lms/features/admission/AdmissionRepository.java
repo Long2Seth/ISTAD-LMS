@@ -1,5 +1,6 @@
 package co.istad.lms.features.admission;
 
+import co.istad.lms.domain.AcademicYear;
 import co.istad.lms.domain.Admission;
 import co.istad.lms.domain.StudentAdmission;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface AdmissionRepository extends JpaRepository<Admission, Long>,JpaS
     Optional<Admission> findByStatus(Integer status);
 
     Set<Admission> findAllByStatus(Integer status);
+
+    boolean existsByAcademicYear(AcademicYear academicYear);
 }

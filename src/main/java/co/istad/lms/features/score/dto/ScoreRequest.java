@@ -4,22 +4,28 @@ import jakarta.validation.constraints.*;
 
 public record ScoreRequest(
 
-        @Min(value = 0,message = "activityScore is 0 or greater")
+        @Min(value = 0, message = "activityScore must be between 0 and 100")
+        @Max(value = 100, message = "activityScore must be between 0 and 100")
         Double activityScore,
 
-        @Min(value = 0,message = "attendanceScore  is 0 or greater")
+        @Min(value = 0, message = "attendanceScore must be between 0 and 100")
+        @Max(value = 100, message = "attendanceScore must be between 0 and 100")
         Double attendanceScore,
 
-        @Min(value = 0,message = "midtermExamScore  is 0 or greater")
+        @Min(value = 0, message = "midtermExamScore must be between 0 and 100")
+        @Max(value = 100, message = "midtermExamScore must be between 0 and 100")
         Double midtermExamScore,
 
-        @Min(value = 0,message = "activityScore  is 0 or greater")
+        @Min(value = 0, message = "finalExamScore must be between 0 and 100")
+        @Max(value = 100, message = "finalExamScore must be between 0 and 100")
         Double finalExamScore,
 
-        @Min(value = 0,message = "finalExamScore  is 0 or greater")
+        @Min(value = 0, message = "miniProjectScore must be between 0 and 100")
+        @Max(value = 100, message = "miniProjectScore must be between 0 and 100")
         Double miniProjectScore,
 
-        @Min(value = 0,message = "assignmentScore  is 0 or greater")
+        @Min(value = 0, message = "assignmentScore must be between 0 and 100")
+        @Max(value = 100, message = "assignmentScore must be between 0 and 100")
         Double assignmentScore,
 
         @NotBlank(message = "Student uuid is required")

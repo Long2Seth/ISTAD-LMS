@@ -76,6 +76,12 @@ public class AdmissionServiceImpl implements AdmissionService {
         AcademicYear academicYear=
                 academicYearRepository.findByAlias(admissionRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("AcademicYear = %s has not been found",admissionRequest.academicYearAlias())));
 
+        if(admissionRepository.existsByAcademicYear(academicYear)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("admission with academicYear = %s " +
+                    "has already existed",academicYear.getAlias()));
+        }
+
+
         //set uuid to admission
         admission.setUuid(UUID.randomUUID().toString());
 

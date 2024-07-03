@@ -73,9 +73,67 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
                     studentAdmissionRequest.identity()));
         }
 
-        if(studentAdmissionRequest.anyValuableCertificate()==null&&studentAdmissionRequest.highSchoolCertificate()==null&&studentAdmissionRequest.vocationTrainingIiiCertificate()==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"certificate must be have at least 1");
+        // Validate certificates (at least one certificate must be provided)
+        if ((studentAdmissionRequest.anyValuableCertificate() == null || studentAdmissionRequest.anyValuableCertificate().trim().isEmpty())
+                && (studentAdmissionRequest.highSchoolCertificate() == null || studentAdmissionRequest.highSchoolCertificate().trim().isEmpty())
+                && (studentAdmissionRequest.vocationTrainingIiiCertificate() == null || studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "At least one certificate must be provided.");
+        } else if (studentAdmissionRequest.anyValuableCertificate() != null
+                && !studentAdmissionRequest.anyValuableCertificate().trim().isEmpty()
+                && (studentAdmissionRequest.highSchoolCertificate() == null || studentAdmissionRequest.highSchoolCertificate().trim().isEmpty())
+                && (studentAdmissionRequest.vocationTrainingIiiCertificate() == null || studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty())) {
+
+            // Only anyValuableCertificate
+            System.out.println("Any Valuable Certificate: " + studentAdmissionRequest.anyValuableCertificate());
+        } else if ((studentAdmissionRequest.anyValuableCertificate() == null || studentAdmissionRequest.anyValuableCertificate().trim().isEmpty())
+                && studentAdmissionRequest.highSchoolCertificate() != null
+                && !studentAdmissionRequest.highSchoolCertificate().trim().isEmpty()
+                && (studentAdmissionRequest.vocationTrainingIiiCertificate() == null || studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty())) {
+
+            // Only highSchoolCertificate
+            System.out.println("High School Certificate: " + studentAdmissionRequest.highSchoolCertificate());
+        } else if ((studentAdmissionRequest.anyValuableCertificate() == null || studentAdmissionRequest.anyValuableCertificate().trim().isEmpty())
+                && (studentAdmissionRequest.highSchoolCertificate() == null || studentAdmissionRequest.highSchoolCertificate().trim().isEmpty())
+                && studentAdmissionRequest.vocationTrainingIiiCertificate() != null
+                && !studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty()) {
+
+            // Only vocationTrainingIiiCertificate
+            System.out.println("Vocational Training III Certificate: " + studentAdmissionRequest.vocationTrainingIiiCertificate());
+        } else if (studentAdmissionRequest.anyValuableCertificate() != null
+                && !studentAdmissionRequest.anyValuableCertificate().trim().isEmpty()
+                && studentAdmissionRequest.highSchoolCertificate() != null
+                && !studentAdmissionRequest.highSchoolCertificate().trim().isEmpty()
+                && (studentAdmissionRequest.vocationTrainingIiiCertificate() == null || studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty())) {
+
+            // anyValuableCertificate and highSchoolCertificate
+            System.out.println("Any Valuable Certificate: " + studentAdmissionRequest.anyValuableCertificate());
+            System.out.println("High School Certificate: " + studentAdmissionRequest.highSchoolCertificate());
+        } else if (studentAdmissionRequest.anyValuableCertificate() != null
+                && !studentAdmissionRequest.anyValuableCertificate().trim().isEmpty()
+                && (studentAdmissionRequest.highSchoolCertificate() == null || studentAdmissionRequest.highSchoolCertificate().trim().isEmpty())
+                && studentAdmissionRequest.vocationTrainingIiiCertificate() != null
+                && !studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty()) {
+
+            // anyValuableCertificate and vocationTrainingIiiCertificate
+            System.out.println("Any Valuable Certificate: " + studentAdmissionRequest.anyValuableCertificate());
+            System.out.println("Vocational Training III Certificate: " + studentAdmissionRequest.vocationTrainingIiiCertificate());
+        } else if ((studentAdmissionRequest.anyValuableCertificate() == null || studentAdmissionRequest.anyValuableCertificate().trim().isEmpty())
+                && studentAdmissionRequest.highSchoolCertificate() != null
+                && !studentAdmissionRequest.highSchoolCertificate().trim().isEmpty()
+                && studentAdmissionRequest.vocationTrainingIiiCertificate() != null
+                && !studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty()) {
+
+            // highSchoolCertificate and vocationTrainingIiiCertificate
+            System.out.println("High School Certificate: " + studentAdmissionRequest.highSchoolCertificate());
+            System.out.println("Vocational Training III Certificate: " + studentAdmissionRequest.vocationTrainingIiiCertificate());
+        } else {
+            // All three certificates
+            System.out.println("Any Valuable Certificate: " + studentAdmissionRequest.anyValuableCertificate());
+            System.out.println("High School Certificate: " + studentAdmissionRequest.highSchoolCertificate());
+            System.out.println("Vocational Training III Certificate: " + studentAdmissionRequest.vocationTrainingIiiCertificate());
         }
+
 
         //find admission that open
         Admission admission = admissionRepository.findByStatus(1).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "admission has been closed"));
