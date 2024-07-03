@@ -280,7 +280,6 @@ public class ScoreServiceImpl implements ScoreService {
             return studentMapper.toStudentSemesterScoreResponse(student, courses, grade, total.get(),gpa,
                     classCode.get());
         });
-
     }
 
     @Override
