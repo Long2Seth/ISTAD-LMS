@@ -6,9 +6,10 @@ import jakarta.persistence.Column;
 
 public record MaterialDetailResponse(
 
-        String alias,
+        String uuid,
         String title,
         String contentType,
+        String fileType,
         String extension,
         Long size,
         String fileName,

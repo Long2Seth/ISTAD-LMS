@@ -20,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,9 @@ public class MaterialServiceImpl implements MaterialService {
         //set isDelete to false
         material.setIsDeleted(false);
 
+        //set uuid
+        material.setUuid(UUID.randomUUID().toString());
+
         //set subject to material
         material.setSubject(subject);
         // Save to database
@@ -64,7 +69,7 @@ public class MaterialServiceImpl implements MaterialService {
                         , String.format("Material = %s has not been found.", uuid)));
 
         String url = null;
-        if (material.getContentType().trim().equalsIgnoreCase("video")) {
+        if (material.getContentType().trim().equalsIgnoreCase("youtubeVideo")) {
             url = material.getFileName();
         } else {
             url = mediaService.getDownloadUrl(material.getFileName());
@@ -91,7 +96,7 @@ public class MaterialServiceImpl implements MaterialService {
         // Map entity to DTO and return
         return materials.map(material -> {
             String url = null;
-            if (material.getContentType().trim().equalsIgnoreCase("video")) {
+            if (material.getContentType().trim().equalsIgnoreCase("youtubeVideo")) {
                 url = material.getFileName();
             } else {
                 url = mediaService.getDownloadUrl(material.getFileName());
@@ -117,7 +122,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Return Material response
         String url = null;
-        if (material.getContentType().trim().equalsIgnoreCase("video")) {
+        if (material.getContentType().trim().equalsIgnoreCase("youtubeVideo")) {
             url = material.getFileName();
         } else {
             url = mediaService.getDownloadUrl(material.getFileName());
@@ -182,7 +187,33 @@ public class MaterialServiceImpl implements MaterialService {
         // Map to DTO and return
         return materials.map(material -> {
             String url = null;
-            if (material.getContentType().trim().equalsIgnoreCase("video")) {
+            if (material.getContentType().trim().equalsIgnoreCase("youtubeVideo")) {
+                url = material.getFileName();
+            } else {
+                url = mediaService.getDownloadUrl(material.getFileName());
+            }
+            return materialMapper.toMaterialDetailResponse(material, url);
+        });
+    }
+
+    @Override
+    public Page<MaterialDetailResponse> getAllMaterialsByFileType(String fileType, int pageNumber, int pageSize) {
+        
+
+        // Create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "title");
+
+        // Create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        // Find all materials in database
+        Page<Material> materials = materialRepository.findAllByFileType(fileType,pageRequest);
+
+
+        // Map entity to DTO and return
+        return materials.map(material -> {
+            String url = null;
+            if (material.getContentType().trim().equalsIgnoreCase("youtubeVideo")) {
                 url = material.getFileName();
             } else {
                 url = mediaService.getDownloadUrl(material.getFileName());

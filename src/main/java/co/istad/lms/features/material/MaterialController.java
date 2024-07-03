@@ -93,5 +93,17 @@ public class MaterialController {
         return materialService.filterMaterials(filterDto, pageNumber, pageSize);
     }
 
+    @GetMapping("/types/{type}")
+    @PreAuthorize("hasAnyAuthority('material:read')")
+    public Page<MaterialDetailResponse> getAllMaterialByFileType(
+
+            @PathVariable String type,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return materialService.getAllMaterialsByFileType(type,pageNumber, pageSize);
+    }
+
 
 }

@@ -33,6 +33,8 @@ public class Material extends Auditable {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String fileName;
 
+    private String fileType;
+
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
 

@@ -172,7 +172,8 @@ public interface InstructorService {
 
     Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
 
-    Page<MaterialDetailResponse> getAllMaterials(CustomUserDetails userDetails, int pageNumber, int pageSize);
+    Page<MaterialDetailResponse> getAllMaterialsByFileType(CustomUserDetails userDetails,String fileType,
+                                                           int pageNumber, int pageSize);
 
 
 }

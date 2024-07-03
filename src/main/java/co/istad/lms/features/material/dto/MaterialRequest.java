@@ -11,6 +11,8 @@ public record MaterialRequest(
         String fileName,
         @Size(max = 100, message = "contentType cannot be longer than 100 characters")
         String contentType,
+        @Size(max = 100, message = "fileType cannot be longer than 100 characters")
+        String fileType,
         @Size(max = 20, message = "extension cannot be longer than 20 characters")
         String extension,
         @Min(value = 0,message = "size is 0 or positive")
