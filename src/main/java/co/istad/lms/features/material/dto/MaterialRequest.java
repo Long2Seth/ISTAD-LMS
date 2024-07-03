@@ -5,12 +5,9 @@ import jakarta.validation.constraints.*;
 
 public record MaterialRequest(
 
-        @NotBlank(message = "alias is required")
-        @Size(max = 100, message = "alias cannot be longer than 100 characters")
-        String alias,
         @NotBlank(message = "Title is required")
         String title,
-        @NotBlank(message = "fileName URL is required")
+        @NotBlank(message = "fileName is required")
         String fileName,
         @Size(max = 100, message = "contentType cannot be longer than 100 characters")
         String contentType,
@@ -18,6 +15,7 @@ public record MaterialRequest(
         String extension,
         @Min(value = 0,message = "size is 0 or positive")
         Long size,
+        String youtubeLink,
         String description,
         @NotBlank(message = "Subject alias is required")
         @Size(max = 100, message = "subjectAlias cannot be longer than 100 characters")

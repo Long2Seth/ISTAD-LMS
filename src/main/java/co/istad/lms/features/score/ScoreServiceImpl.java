@@ -367,7 +367,7 @@ public class ScoreServiceImpl implements ScoreService {
                 }
 
                 Integer credit=course.getSubject().getCredit();
-                Double gpa=AssesmentsUtil.getGpa(score);
+                Double gpa=AssesmentsUtil.getGpa(score)*credit;
 
                 totalSemester2.updateAndGet(v -> v + score);
                 numberOfCourseSemester2.updateAndGet(n -> n + 1);

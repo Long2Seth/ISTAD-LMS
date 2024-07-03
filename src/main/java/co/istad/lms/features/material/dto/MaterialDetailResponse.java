@@ -13,6 +13,7 @@ public record MaterialDetailResponse(
         Long size,
         String fileName,
         String fileUrl,
+        String youtubeLink,
         String description,
         SubjectResponse subject,
 
