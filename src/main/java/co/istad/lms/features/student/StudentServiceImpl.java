@@ -5,6 +5,7 @@ import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.course.CourseRepository;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
@@ -47,6 +48,8 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     private final StudentMapper studentMapper;
+
+    private final CourseRepository courseRepository;
 
     private final CourseMapper courseMapper;
 
@@ -391,9 +394,7 @@ public class StudentServiceImpl implements StudentService {
         for (Course c : courses) {
             scores.addAll(c.getScores());
         }
-        if (scores.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have score ", student.getUser().getNameEn()));
-        }
+
 
         StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -493,7 +494,7 @@ public class StudentServiceImpl implements StudentService {
 
 
 
-    public StudentCourseDetailResponse studentCourseDetail(String uuid) {
+    public StudentCourseDetailResponse studentCourseDetail(String courseUuid) {
 
         // Get authentication from security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -526,30 +527,19 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Student not found"
+                        String.format("Student with email %s not found", email)
                 ));
 
 
         // Get the first course for simplicity, adjust as necessary
-        Course course = student.getCourses()
-                .stream()
-                .findFirst()
+        Course course = courseRepository.findByUuid(courseUuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "No course found for the student"
+                        String.format("Course with uuid = %s not found", courseUuid)
                 ));
 
 
-        // Find the corresponding year of study for the course
-        YearOfStudy yearOfStudy = yearOfStudyRepository.findByCourses(course)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Year of study not found for the course"
-                ));
-
-        return studentMapper.toStudentCourseDetailResponse(course, yearOfStudy);
+        return studentMapper.toStudentCourseDetailResponse(student, course);
     }
 
 

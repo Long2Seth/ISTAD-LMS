@@ -1,6 +1,9 @@
 package co.istad.lms.features.instructor.dto;
 
+import jakarta.persistence.Column;
+
 import java.time.LocalDate;
+import java.util.Set;
 
 public record InstructorCourseDetailResponse(
 
@@ -9,7 +12,25 @@ public record InstructorCourseDetailResponse(
         Integer year,
         Integer semester,
 
-        // Subject information
+        //Instruction information
+
+
+        String linkGit,
+
+
+        String linkLinkedin,
+
+
+        String linkTelegram,
+
+
+        String uploadCv,
+
+
+        String identityCard,
+
+
+// Subject information
         String courseTitle,
         String courseDescription,
         String courseLogo,
@@ -26,7 +47,7 @@ public record InstructorCourseDetailResponse(
         String position,
 
         //Student profile
-//        Set<String> studentProfileImage,
+        Set<String> studentProfileImage,
 
         // Classes start
         LocalDate classesStart

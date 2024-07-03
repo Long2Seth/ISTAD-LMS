@@ -78,6 +78,13 @@ public class InstructorController {
     }
 
 
+    @GetMapping("/course/{uuid}")
+    public InstructorCourseDetailResponse getInstructorCourseDetailByUuid(@PathVariable String uuid){
+        System.out.println("uuid = " + uuid);
+        return instructorService.getInstructorCourseDetailByUuid(uuid);
+    }
+
+
 
     @PreAuthorize("hasAnyAuthority('admin:control' , 'academic:read','instructor:read')")
     @GetMapping("/{uuid}")

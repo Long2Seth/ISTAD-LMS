@@ -51,9 +51,30 @@ public interface InstructorService {
      * @since 1.0 (2024)
      */
     InstructorResponseDetail getInstructorDetailByUuid(String uuid);
+
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param courseUuid is the unique identifier of course
+     * @return {@link InstructorCourseDetailResponse}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorCourseDetailResponse getInstructorCourseDetailByUuid(String courseUuid);
     
 
 
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @param pageNumber is the pageNumber number to retrieve
+     * @param pageSize is the pageSize of the pageNumber to retrieve
+     * @return {@link Page<CourseWithUsersResponse>} is the page of course with users response
+     * @since 1.0 (2024)
+     */
     Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(String uuid, int pageNumber, int pageSize);
 
 

@@ -7,6 +7,8 @@ public record StudentSettingRequest(
         String gender,
         String profileImage,
         String phoneNumber,
+        String familyPhoneNumber,
+        String guardianRelationShip,
         String bio,
         String currentAddress,
         String birthPlace

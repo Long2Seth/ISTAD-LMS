@@ -78,9 +78,9 @@ public interface StudentMapper {
     }
 
 
-    @Mapping(target = "year", source = "yearOfStudy.year")
-    @Mapping(target = "semester", source = "yearOfStudy.semester")
-    @Mapping(target = "courseTitle", source = "course.title")
+    @Mapping(target = "year", source = "course.yearOfStudy.year")
+    @Mapping(target = "semester", source = "course.yearOfStudy.semester")
+    @Mapping(target = "courseTitle", source = "course.subject.title")
     @Mapping(target = "courseDescription", source = "course.subject.description")
     @Mapping(target = "courseLogo", source = "course.subject.logo")
     @Mapping(target = "credit", source = "course.subject.credit")
@@ -91,7 +91,14 @@ public interface StudentMapper {
     @Mapping(target = "userProfileImage", source = "course.instructor.user.profileImage")
     @Mapping(target = "position", source = "course.instructor.user.position")
     @Mapping(target = "classesStart", source = "course.oneClass.classStart")
-    StudentCourseDetailResponse toStudentCourseDetailResponse(Course course, YearOfStudy yearOfStudy);
+    @Mapping( source = "course.students" , target = "studentProfileImage" , qualifiedByName = "getProfileImage")
+    StudentCourseDetailResponse toStudentCourseDetailResponse(Student student, Course course);
+
+    @Named("getProfileImage")
+    default String getProfileImage(Student student) {
+        return student.getUser().getProfileImage();
+    }
+
 
 
 

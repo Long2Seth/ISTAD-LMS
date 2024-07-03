@@ -26,7 +26,7 @@ public record StudentCourseDetailResponse(
         String position,
 
         //Student profile
-//        Set<String> studentProfileImage,
+        Set<String> studentProfileImage,
 
         // Classes start
         LocalDate classesStart

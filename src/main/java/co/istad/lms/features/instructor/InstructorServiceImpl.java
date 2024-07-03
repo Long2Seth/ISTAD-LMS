@@ -6,6 +6,7 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.course.CourseRepository;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.instructor.dto.*;
@@ -54,6 +55,8 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     private final InstructorRepository instructorRepository;
+
+    private final CourseRepository courseRepository;
 
     private final CourseMapper courseMapper;
 
@@ -236,6 +239,57 @@ public class InstructorServiceImpl implements InstructorService {
         return instructorMapper.toResponseDetail(instructor);
 
     }
+
+
+
+    @Override
+    public InstructorCourseDetailResponse getInstructorCourseDetailByUuid(String courseUuid) {
+
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email %s not found", email)
+                ));
+
+
+        Instructor instructor = instructorRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with email %s not found", email)
+                ));
+
+        Course course = courseRepository.findByUuid(courseUuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Course with uuid %s not found", courseUuid)
+                ));
+
+        return instructorMapper.toInstructorCourseDetailResponse(instructor, course);
+
+    }
+
+
 
     @Override
     public Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(String uuid, int pageNumber, int pageSize) {
