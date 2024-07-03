@@ -19,6 +19,7 @@ import co.istad.lms.mapper.CourseMapper;
 import co.istad.lms.mapper.StudentMapper;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.MediaUtil;
 import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -433,12 +434,13 @@ public class StudentServiceImpl implements StudentService {
                 .collect(Collectors.toSet());
 
         return new StudentAchievementResponse(
+                MediaUtil.getUrl(user.getProfileImage()),
                 user.getNameEn(),
                 user.getNameKh(),
                 user.getDob(),
                 studyProgram.getDegree().getLevel(),
                 studyProgram.getStudyProgramName(),
-                user.getAvatar(),
+                MediaUtil.getUrl( user.getAvatar()),
                 yearOfStudyResponses
         );
     }
@@ -490,6 +492,7 @@ public class StudentServiceImpl implements StudentService {
                 user.getNameKh(),
                 user.getUsername(),
                 user.getGender(),
+                MediaUtil.getUrl( user.getAvatar()),
                 courseStudentResponses
         );
 

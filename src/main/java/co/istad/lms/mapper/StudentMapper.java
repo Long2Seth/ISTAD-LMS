@@ -7,6 +7,7 @@ import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.student.dto.*;
 import co.istad.lms.features.user.dto.UserProfile;
+import co.istad.lms.util.MediaUtil;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,6 +45,7 @@ public interface StudentMapper {
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
     @Mapping(source = "courses" , target = "courses", qualifiedByName = "toUseCourseResponse")
+    @Mapping(target = "profileImage" , source = "user.profileImage" , qualifiedByName = "getLogoUrl")
     StudentResponseDetail toResponseDetail(Student student);
 
     @Mapping(source = "student.user.nameEn", target = "nameEn")
@@ -71,6 +73,7 @@ public interface StudentMapper {
     void updateStudentSettingRequest(@MappingTarget Student student, StudentSettingRequest studentSettingRequest);
 
 
+
     default Set<CourseWithUsersResponse> toCourseStudentResponses(Set<Course> courses, @Context CourseMapper courseMapper) {
         return courses.stream()
                 .map(courseMapper::toCourseStudentResponse)
@@ -93,6 +96,18 @@ public interface StudentMapper {
     @Mapping(target = "classesStart", source = "course.oneClass.classStart")
     @Mapping( source = "course.students" , target = "studentProfileImage" , qualifiedByName = "getProfileImage")
     StudentCourseDetailResponse toStudentCourseDetailResponse(Student student, Course course);
+
+
+    @Named("getLogoUrl")
+    default String getLogoUrl(String logo) {
+
+        if (logo != null && !logo.trim().isEmpty()) {
+            return MediaUtil.getUrl(logo);
+        } else {
+            return null;
+        }
+    }
+
 
     @Named("getProfileImage")
     default String getProfileImage(Student student) {
