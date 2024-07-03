@@ -23,6 +23,7 @@ public record StudentSemesterScoreResponse(
         Set<CourseSemesterScoreResponse> courses,
 
         String grade,
+        Double gpa,
         Double total
 
 ) {

@@ -10,10 +10,11 @@ import java.util.Set;
 
 public interface MaterialRepository extends JpaRepository<Material, Long>, JpaSpecificationExecutor<Material>{
 
-    Optional<Material> findByAlias(String alias);
-
-    Boolean existsByAlias(String alias);
 
     Set<Material> findAllBySubject(Subject subject);
+
+    boolean existsByUuid(String uuid);
+
+    Optional<Material> findByUuid(String uuid);
 
 }

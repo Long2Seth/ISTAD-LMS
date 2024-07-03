@@ -1,5 +1,7 @@
 package co.istad.lms.util;
 
+import co.istad.lms.domain.Course;
+
 public class AssesmentsUtil {
 
     public static String getGrade(Double score){
@@ -38,4 +40,19 @@ public class AssesmentsUtil {
             return 0.0;
         }
     }
+
+//    public static Double getAverageGpa(Set<Course>){
+//
+//        double totalGpa = 0.0;
+//        int totalCredits = 0;
+//
+//        for (Course course : courses) {
+//            totalGpa += course.getGpa() * course.getCredit();
+//            totalCredits += course.getCredit();
+//        }
+//
+//        return totalCredits == 0 ? 0 : totalGpa / totalCredits;
+//    }
+//
+//    }
 }

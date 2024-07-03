@@ -21,7 +21,7 @@ public record StudentTranscriptResponse(
         String grade,
 
         Double gpa,
-        Double total
+        Double average
 
 
 ) {

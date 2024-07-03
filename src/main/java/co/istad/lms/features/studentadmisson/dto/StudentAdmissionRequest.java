@@ -52,17 +52,23 @@ public record StudentAdmissionRequest(
         String avatar,
 
         String biography,
+        String classStudent,
+
+        String diplomaSession,
+        String anyValuableCertificate,
+        String vocationTrainingIiiCertificate,
+        String highSchoolCertificate,
 
         @NotBlank(message = "Shift alias is required")
-        @Size(max = 100,message = "shiftAlias can not be longer than 100 characters")
+        @Size(max = 100, message = "shiftAlias can not be longer than 100 characters")
         String shiftAlias,
 
         @NotBlank(message = "Study Program alias is required")
-        @Size(max = 100,message = "studyProgramAlias can not be longer than 100 characters")
+        @Size(max = 100, message = "studyProgramAlias can not be longer than 100 characters")
         String studyProgramAlias,
 
         @NotBlank(message = "Degree alias is required")
-        @Size(max = 100,message = "degreeAlias can not be longer than 100 characters")
+        @Size(max = 100, message = "degreeAlias can not be longer than 100 characters")
         String degreeAlias
 ) {
 }

@@ -28,11 +28,11 @@ public class MaterialController {
 
     }
 
-    @GetMapping("/{alias}")
+    @GetMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('material:read')")
-    MaterialDetailResponse getMaterialByAlias(@PathVariable String alias) {
+    MaterialDetailResponse getMaterialByUuid(@PathVariable String uuid) {
 
-        return materialService.getMaterialByAlias(alias);
+        return materialService.getMaterialByUuid(uuid);
 
     }
 
@@ -48,37 +48,37 @@ public class MaterialController {
     }
 
 
-    @PatchMapping("/{alias}")
+    @PatchMapping("/{uuid}")
     @PreAuthorize("hasAnyAuthority('material:update')")
-    public MaterialDetailResponse updateMaterial(@PathVariable String alias,
+    public MaterialDetailResponse updateMaterial(@PathVariable String uuid,
                                                  @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {
 
-        return materialService.updateMaterialByAlias(alias, materialUpdateRequest);
+        return materialService.updateMaterialByUuid(uuid, materialUpdateRequest);
     }
 
 
-    @DeleteMapping("/{alias}")
+    @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('material:delete')")
-    public void deleteMaterial(@PathVariable String alias) {
+    public void deleteMaterial(@PathVariable String uuid) {
 
-        materialService.deleteMaterialByAlias(alias);
+        materialService.deleteMaterialByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/enable")
+    @PutMapping("/{uuid}/enable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('material:update')")
-    void enableMaterial(@PathVariable String alias) {
+    void enableMaterial(@PathVariable String uuid) {
 
-        materialService.enableMaterialByAlias(alias);
+        materialService.enableMaterialByUuid(uuid);
     }
 
-    @PutMapping("/{alias}/disable")
+    @PutMapping("/{uuid}/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('material:update')")
-    void disableMaterial(@PathVariable String alias) {
+    void disableMaterial(@PathVariable String uuid) {
 
-        materialService.disableMaterialByAlias(alias);
+        materialService.disableMaterialByUuid(uuid);
     }
 
     @PostMapping("/filter")

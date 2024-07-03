@@ -75,6 +75,16 @@ public class StudentAdmission extends Auditable {
     @Column(length = 100)
     private String studentUuid;
 
+    private String classStudent;
+
+    private String diplomaSession;
+
+    private String highSchoolCertificate;
+
+    private String vocationTrainingIiiCertificate;
+
+    private String anyValuableCertificate;
+
 
     @ManyToOne
     @JoinColumn(name = "shift_id",nullable = false)

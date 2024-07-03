@@ -40,12 +40,6 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public void createMaterial(MaterialRequest materialRequest) {
 
-        // Validate material by alias
-        if (materialRepository.existsByAlias(materialRequest.alias())) {
-
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Material = %s already exists.", materialRequest.alias()));
-        }
-
         //validate subject by alias
         Subject subject = subjectRepository.findByAlias(materialRequest.subjectAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Subject = %s has not been found", materialRequest.subjectAlias())));
 
@@ -62,12 +56,19 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public MaterialDetailResponse getMaterialByAlias(String alias) {
+    public MaterialDetailResponse getMaterialByUuid(String uuid) {
 
-        // Find material by alias
-        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
+        // Find material by uuid
+        Material material =
+                materialRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                        , String.format("Material = %s has not been found.", uuid)));
 
-        String url = mediaService.getDownloadUrl(material.getFileName());
+        String url = null;
+        if (material.getContentType().trim().equalsIgnoreCase("video")) {
+            url = material.getFileName();
+        } else {
+            url = mediaService.getDownloadUrl(material.getFileName());
+        }
 
         // Return material detail
         return materialMapper.toMaterialDetailResponse(material, url);
@@ -89,31 +90,24 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map entity to DTO and return
         return materials.map(material -> {
-            String url = mediaService.getDownloadUrl(material.getFileName());
+            String url = null;
+            if (material.getContentType().trim().equalsIgnoreCase("video")) {
+                url = material.getFileName();
+            } else {
+                url = mediaService.getDownloadUrl(material.getFileName());
+            }
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
 
     @Override
-    public MaterialDetailResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest) {
+    public MaterialDetailResponse updateMaterialByUuid(String uuid, MaterialUpdateRequest materialUpdateRequest) {
 
-        // Find material by alias
-        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
+        // Find material by uuid
+        Material material =
+                materialRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Material = %s has not been found.", uuid)));
 
-        // Check null alias from DTO
-        if (materialUpdateRequest.alias() != null) {
-
-            // Validate alias from dto with original alias
-            if (!alias.equalsIgnoreCase(materialUpdateRequest.alias())) {
-
-                // Validate new alias is conflict with other alias or not
-                if (materialRepository.existsByAlias(materialUpdateRequest.alias())) {
-
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,
-                            String.format("Material = %s already exist.", materialUpdateRequest.alias()));
-                }
-            }
-        }
 
         // Map DTO to entity
         materialMapper.updateMaterialFromRequest(material, materialUpdateRequest);
@@ -122,25 +116,35 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.save(material);
 
         // Return Material response
-        String url = mediaService.getDownloadUrl(material.getFileName());
+        String url = null;
+        if (material.getContentType().trim().equalsIgnoreCase("video")) {
+            url = material.getFileName();
+        } else {
+            url = mediaService.getDownloadUrl(material.getFileName());
+        }
+
         return materialMapper.toMaterialDetailResponse(material, url);
     }
 
     @Override
-    public void deleteMaterialByAlias(String alias) {
+    public void deleteMaterialByUuid(String uuid) {
 
-        // Find material in database by alias
-        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found.", alias)));
+        // Find material in database by uuid
+        Material material =
+                materialRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                        , String.format("Material = %s has not been found.", uuid)));
 
         // Delete material in database
         materialRepository.delete(material);
     }
 
     @Override
-    public void enableMaterialByAlias(String alias) {
+    public void enableMaterialByUuid(String uuid) {
 
-        // Validate material from dto by alias
-        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found ! ", alias)));
+        // Validate material from dto by uuid
+        Material material =
+                materialRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                        , String.format("Material = %s has not been found ! ", uuid)));
 
         // Enable material (assuming there's a field to handle enable/disable status)
 
@@ -148,10 +152,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public void disableMaterialByAlias(String alias) {
+    public void disableMaterialByUuid(String uuid) {
 
-        // Validate material from dto by alias
-        Material material = materialRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Material = %s has not been found ! ", alias)));
+        // Validate material from dto by uuid
+        Material material =
+                materialRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+                        , String.format("Material = %s has not been found ! ", uuid)));
 
         // Disable material (assuming there's a field to handle enable/disable status)
 
@@ -175,7 +181,12 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Map to DTO and return
         return materials.map(material -> {
-            String url = mediaService.getDownloadUrl(material.getFileName());
+            String url = null;
+            if (material.getContentType().trim().equalsIgnoreCase("video")) {
+                url = material.getFileName();
+            } else {
+                url = mediaService.getDownloadUrl(material.getFileName());
+            }
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }

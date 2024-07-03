@@ -26,57 +26,57 @@ public interface MaterialService {
     void createMaterial(MaterialRequest materialRequest);
 
     /**
-     * Retrieves the details of a material by its alias.
+     * Retrieves the details of a material by its uuid.
      *
-     * @param alias is the unique name of material
+     * @param uuid is the unique name of material
      * @return {@link MaterialDetailResponse}
      * @author Nouth Chanraeksa
      * @since 1.0 (2024)
      */
-    MaterialDetailResponse getMaterialByAlias(String alias);
+    MaterialDetailResponse getMaterialByUuid(String uuid);
 
 
     /**
-     * Updates an existing material by its alias.
+     * Updates an existing material by its uuid.
      *
-     * @param alias                 is the unique name of material
+     * @param uuid                 is the unique name of material
      * @param materialUpdateRequest is the request object containing the updated subject details
      * @return {@link MaterialDetailResponse}
      * @author Nouth Chanreaksa
      * @since 1.0 (2024)
      */
-    MaterialDetailResponse updateMaterialByAlias(String alias, MaterialUpdateRequest materialUpdateRequest);
+    MaterialDetailResponse updateMaterialByUuid(String uuid, MaterialUpdateRequest materialUpdateRequest);
 
     Page<MaterialDetailResponse> getAllMaterials(int pageNumber, int pageSize);
 
 
     /**
-     * Deletes a material by its alias.
+     * Deletes a material by its uuid.
      *
-     * @param alias is the unique name of subject
+     * @param uuid is the unique name of subject
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    void deleteMaterialByAlias(String alias);
+    void deleteMaterialByUuid(String uuid);
 
 
     /**
-     * Enable material by alias
+     * Enable material by uuid
      *
-     * @param alias is the unique name of material
+     * @param uuid is the unique name of material
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    void enableMaterialByAlias(String alias);
+    void enableMaterialByUuid(String uuid);
 
     /**
-     * Disable material by alias
+     * Disable material by uuid
      *
-     * @param alias is the unique name of material
+     * @param uuid is the unique name of material
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    void disableMaterialByAlias(String alias);
+    void disableMaterialByUuid(String uuid);
 
     /**
      * Filters material based on the specified criteria and retrieves a paginated list of results.

@@ -10,24 +10,33 @@ import co.istad.lms.features.studentadmisson.dto.StudentAdmissionDetailResponse;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionRequest;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionResponse;
 import co.istad.lms.features.studentadmisson.dto.StudentAdmissionUpdateRequest;
+import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.MediaUtil;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface StudentAdmissionMapper {
 
-   @Mapping(target = "admission",ignore = true)
-   @Mapping(target = "shift", ignore = true)
-   @Mapping(target = "studyProgram", ignore = true)
-   @Mapping(target = "degree", ignore = true)
+
+
+    @Mapping(target = "admission", ignore = true)
+    @Mapping(target = "shift", ignore = true)
+    @Mapping(target = "studyProgram", ignore = true)
+    @Mapping(target = "degree", ignore = true)
+    @Mapping(source = "diplomaSession", target = "diplomaSession", qualifiedByName = "validateDiplomaSession")
+
     StudentAdmission fromStudentAdmissionRequest(StudentAdmissionRequest studentAdmissionRequest);
 
     StudentAdmissionResponse toStudentAdmissionResponse(StudentAdmission studentAdmission);
 
 
+    @Mapping(source = "highSchoolCertificate", target = "highSchoolCertificate", qualifiedByName = "getDownloadUrl")
+    @Mapping(source = "vocationTrainingIiiCertificate", target = "vocationTrainingIiiCertificate", qualifiedByName = "getDownloadUrl")
+    @Mapping(source = "anyValuableCertificate", target = "anyValuableCertificate", qualifiedByName = "getDownloadUrl")
     StudentAdmissionDetailResponse toStudentAdmissionDetailResponse(StudentAdmission studentAdmission);
 
 
-    @Mapping(target = "admission",ignore = true)
+    @Mapping(target = "admission", ignore = true)
     @Mapping(target = "shift", ignore = true)
     @Mapping(target = "studyProgram", ignore = true)
     @Mapping(target = "degree", ignore = true)
@@ -51,4 +60,16 @@ public interface StudentAdmissionMapper {
 //    @Mapping(source = "identity", target = "user.identity")
 //    @Mapping(source = "biography", target = "user.biography")
     Student toStudent(StudentAdmission studentAdmission);
+
+    @Named("validateDiplomaSession")
+    default String validateDiplomaSession(String diplomaSession) {
+        DateTimeUtil.validateDiplomaSession(diplomaSession);
+        return diplomaSession;
+    }
+
+    @Named("getDownloadUrl")
+    default String getDownloadUrl(String file) {
+
+        return MediaUtil.getDownloadUrl(file);
+    }
 }

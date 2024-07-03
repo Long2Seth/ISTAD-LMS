@@ -48,8 +48,15 @@ public record StudentAdmissionUpdateRequest(
         String identity,
 
         String biography,
+        String anyValuableCertificate,
+        String vocationTrainingIiiCertificate,
+        String highSchoolCertificate,
 
-        @Size(max = 100,message = "shifAlias can not be longer than 100 characters")
+        String classStudent,
+
+        String diplomaSession,
+
+        @Size(max = 100,message = "shiftAlias can not be longer than 100 characters")
         String shiftAlias,
 
         @Size(max = 100,message = "studyProgramAlias can not be longer than 100 characters")

@@ -32,7 +32,7 @@ public interface StudentMapper {
     @Mapping(source = "courses", target = "courses", qualifiedByName = "mapCourses")
     StudentSemesterScoreResponse toStudentSemesterScoreResponse(Student student,
                                                                 Set<CourseSemesterScoreResponse> courses,String grade
-            , Double total,String classCode);
+            , Double total,Double gpa,String classCode);
 
     @Named("mapCourses")
     static Set<CourseSemesterScoreResponse> mapCourses(Set<CourseSemesterScoreResponse> courses) {
@@ -57,7 +57,7 @@ public interface StudentMapper {
     @Mapping(source = "student.studentStatus",target = "status")
     @Mapping(source = "student.user.dob",target = "dob")
     StudentTranscriptResponse toStudentTranscriptResponse(Student student,Integer year,Double semester1Score,
-                                                          Double semester2Score,String grade,Double gpa,Double total);
+                                                          Double semester2Score,String grade,Double gpa,Double average);
 
 //    (student,scoreTranscriptRequest.year(), averageSemester1,
 //    averageSemester2,grade,gpa,average);

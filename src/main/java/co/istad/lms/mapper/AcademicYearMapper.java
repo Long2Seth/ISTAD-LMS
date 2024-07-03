@@ -17,6 +17,7 @@ import org.mapstruct.*;
 public interface AcademicYearMapper {
 
     @Mapping(target = "academicYear", source = "academicYear", qualifiedByName = "validateAcademicYear")
+    @Mapping(target = "alias", source = "alias", qualifiedByName = "validateAcademicYearAlias")
     AcademicYear fromAcademicYearRequest(AcademicYearRequest academicYearRequest);
 
     AcademicYearResponse toAcademicYearResponse(AcademicYear academicYear);
@@ -31,5 +32,11 @@ public interface AcademicYearMapper {
     default String validateAcademicYear(String academicYear) {
         DateTimeUtil.validateAcademicYear(academicYear);
         return academicYear;
+    }
+
+    @Named("validateAcademicYearAlias")
+    default String validateAcademicYearAlias(String academicYearAlias) {
+        DateTimeUtil.validateAcademicYearAlias(academicYearAlias);
+        return academicYearAlias;
     }
 }
