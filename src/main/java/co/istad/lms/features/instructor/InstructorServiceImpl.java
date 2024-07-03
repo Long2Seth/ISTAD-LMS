@@ -241,7 +241,6 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
 
-
     @Override
     public InstructorCourseDetailResponse getInstructorCourseDetailByUuid(String courseUuid) {
 
@@ -288,7 +287,6 @@ public class InstructorServiceImpl implements InstructorService {
         return instructorMapper.toInstructorCourseDetailResponse(instructor, course);
 
     }
-
 
 
     @Override
@@ -486,7 +484,6 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
 
-
     @Override
     public Page<InstructorResponseDetail> getAllInstructorDetail(int page, int limit) {
 
@@ -527,26 +524,27 @@ public class InstructorServiceImpl implements InstructorService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all lecture in database
-        Page<Lecture> lectures = lectureRepository.findAllByCourseInstructorUserUuid(userUuid,pageRequest);
+        Page<Lecture> lectures = lectureRepository.findAllByCourseInstructorUserUuid(userUuid, pageRequest);
 
         // map to DTO and return
         return lectures.map(lecture -> {
 
             String classCode = lecture.getCourse().getOneClass().getClassCode();
 
-            String startTime=DateTimeUtil.localTimeToString(lecture.getStartTime());
+            String startTime = DateTimeUtil.localTimeToString(lecture.getStartTime());
 
-            String endTime=DateTimeUtil.localTimeToString(lecture.getEndTime());
+            String endTime = DateTimeUtil.localTimeToString(lecture.getEndTime());
 
-            return lectureMapper.toLectureInstructorScheduleResponse(lecture, classCode,startTime,endTime);
+            return lectureMapper.toLectureInstructorScheduleResponse(lecture, classCode, startTime, endTime);
         });
     }
 
     @Override
-    public Page<MaterialDetailResponse> getAllMaterials(CustomUserDetails userDetails, int pageNumber, int pageSize) {
+    public Page<MaterialDetailResponse> getAllMaterialsByFileType(CustomUserDetails userDetails, String fileType, int pageNumber, int pageSize) {
 
         String userUuid = userDetails.getUserUuid();
         String username = userDetails.getUsername();
+
 
         // Get instructor by user uuid
         Instructor instructor =
@@ -559,8 +557,9 @@ public class InstructorServiceImpl implements InstructorService {
                 .map(Course::getSubject)
                 .collect(Collectors.toSet());
 
+
         Set<Material> materials = subjects.stream()
-                .flatMap(subject -> materialRepository.findAllBySubject(subject).stream())
+                .flatMap(subject -> materialRepository.findAllBySubjectAndFileType(subject,fileType).stream())
                 .collect(Collectors.toSet());
 
         // Convert the Set<Material> to a List<Material>

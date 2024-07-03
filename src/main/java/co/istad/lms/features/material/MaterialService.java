@@ -89,5 +89,7 @@ public interface MaterialService {
      * @since 1.0 (2024)
      */
     Page<MaterialDetailResponse> filterMaterials(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize);
+
+    Page<MaterialDetailResponse> getAllMaterialsByFileType(String fileType,int pageNumber, int pageSize);
 }
 

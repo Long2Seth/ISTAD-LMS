@@ -152,15 +152,16 @@ public class InstructorController {
         return instructorService.getAllSchedule(userDetails.getUserUuid(),pageNumber,pageSize);
     }
 
-    @GetMapping("/material")
+    @GetMapping("/materials/{type}")
     @PreAuthorize("hasAnyAuthority('session:read')")
     public Page<MaterialDetailResponse> getMaterial(
+            @PathVariable String type,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize
     ) {
 
-        return instructorService.getAllMaterials(userDetails,pageNumber,pageSize);
+        return instructorService.getAllMaterialsByFileType(userDetails,type,pageNumber,pageSize);
     }
 
 }
