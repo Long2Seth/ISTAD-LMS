@@ -10,6 +10,7 @@ public record StudentCourseResponse(
         String nameKh,
         String username,
         String gender,
+        String avatar,
         Set<CourseWithUsersResponse> courses
 ) {
 }

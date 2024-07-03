@@ -9,7 +9,7 @@ public record StudentSettingRequest(
         String phoneNumber,
         String familyPhoneNumber,
         String guardianRelationShip,
-        String bio,
+        String biography,
         String currentAddress,
         String birthPlace
 ) {
