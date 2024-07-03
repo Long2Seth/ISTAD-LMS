@@ -6,6 +6,8 @@ import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
+import co.istad.lms.features.course.CourseRepository;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.LectureRepository;
@@ -20,6 +22,7 @@ import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.mapper.CourseMapper;
 import co.istad.lms.mapper.InstructorMapper;
 import co.istad.lms.mapper.LectureMapper;
 import co.istad.lms.mapper.MaterialMapper;
@@ -52,6 +55,10 @@ public class InstructorServiceImpl implements InstructorService {
 
 
     private final InstructorRepository instructorRepository;
+
+    private final CourseRepository courseRepository;
+
+    private final CourseMapper courseMapper;
 
     private final InstructorMapper instructorMapper;
 
@@ -230,6 +237,90 @@ public class InstructorServiceImpl implements InstructorService {
 
         // Return the instructor response detail
         return instructorMapper.toResponseDetail(instructor);
+
+    }
+
+
+
+    @Override
+    public InstructorCourseDetailResponse getInstructorCourseDetailByUuid(String courseUuid) {
+
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email %s not found", email)
+                ));
+
+
+        Instructor instructor = instructorRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with email %s not found", email)
+                ));
+
+        Course course = courseRepository.findByUuid(courseUuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Course with uuid %s not found", courseUuid)
+                ));
+
+        return instructorMapper.toInstructorCourseDetailResponse(instructor, course);
+
+    }
+
+
+
+    @Override
+    public Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(String uuid, int pageNumber, int pageSize) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+
+
+        Instructor instructor = instructorRepository.findInstructorByUserUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with uuid = %s not found", uuid)
+                ));
+
+        Set<Course> courses = instructor.getCourses();
+        if (courses.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    String.format("Instructor with uuid = %s has no courses", uuid)
+            );
+        }
+
+        List<CourseWithUsersResponse> courseList = courses.stream()
+                .map(courseMapper::toCourseWithUsersResponse)
+                .collect(Collectors.toList());
+
+        // Create a sublist for pagination
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), courseList.size());
+        List<CourseWithUsersResponse> pageContent = courseList.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageRequest, courseList.size());
 
     }
 

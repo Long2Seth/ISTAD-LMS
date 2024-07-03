@@ -5,6 +5,7 @@ import co.istad.lms.domain.*;
 import co.istad.lms.domain.Class;
 import co.istad.lms.domain.roles.Student;
 import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.course.CourseRepository;
 import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
@@ -47,6 +48,8 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     private final StudentMapper studentMapper;
+
+    private final CourseRepository courseRepository;
 
     private final CourseMapper courseMapper;
 
@@ -377,17 +380,26 @@ public class StudentServiceImpl implements StudentService {
                 ));
 
         Set<Class> studentClasses = student.getClasses();
+        if (studentClasses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have class ", student.getUser().getNameEn()));
+        }
+
+        // Get all courses from student
         Set<Course> courses = student.getCourses();
+        if (courses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have course ", student.getUser().getNameEn()));
+        }
 
         List<Score> scores = new ArrayList<>();
         for (Course c : courses) {
             scores.addAll(c.getScores());
         }
 
+
         StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Study program not found"
+                        String.format("Study program = %s not found" , studentClasses)
                 ));
 
         Set<YearOfStudy> yearOfStudies = new HashSet<>();
@@ -405,13 +417,13 @@ public class StudentServiceImpl implements StudentService {
                         yearOfStudy.getCourses().stream()
                                 .map(course -> {
                                     double courseScore = course.getScores().stream()
-                                            .filter(score -> score.getStudent().equals(student))
-                                            .mapToDouble(score -> score.getFinalExamScore() + score.getMidtermExamScore() + score.getAssignmentScore() +
-                                                    score.getMiniProjectScore() + score.getAttendanceScore() + score.getActivityScore())
+                                            .mapToDouble(Score::getTotal)
                                             .sum();
-                                    double averageScore = courseScore / course.getScores().size();
-                                    String studentGrade = calculateGrade(courseScore);
-                                    return new CourseResponse(course.getTitle(), averageScore, course.getSubject().getCredit(), studentGrade);
+                                    String studentGrade = course.getScores().stream()
+                                            .map(Score::getGrade)
+                                            .findFirst()
+                                            .orElse(null);
+                                    return new CourseResponse(course.getTitle(), courseScore, course.getSubject().getCredit(), studentGrade);
                                 })
                                 .collect(Collectors.toSet())
                 ))
@@ -482,7 +494,7 @@ public class StudentServiceImpl implements StudentService {
 
 
 
-    public StudentCourseDetailResponse studentCourseDetail(String uuid) {
+    public StudentCourseDetailResponse studentCourseDetail(String courseUuid) {
 
         // Get authentication from security
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -515,30 +527,19 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findByUser(user)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Student not found"
+                        String.format("Student with email %s not found", email)
                 ));
 
 
         // Get the first course for simplicity, adjust as necessary
-        Course course = student.getCourses()
-                .stream()
-                .findFirst()
+        Course course = courseRepository.findByUuid(courseUuid)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "No course found for the student"
+                        String.format("Course with uuid = %s not found", courseUuid)
                 ));
 
 
-        // Find the corresponding year of study for the course
-        YearOfStudy yearOfStudy = yearOfStudyRepository.findByCourses(course)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Year of study not found for the course"
-                ));
-
-        return studentMapper.toStudentCourseDetailResponse(course, yearOfStudy);
+        return studentMapper.toStudentCourseDetailResponse(student, course);
     }
 
 

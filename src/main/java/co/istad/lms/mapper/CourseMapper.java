@@ -49,6 +49,23 @@ public interface CourseMapper {
     CourseWithUsersResponse toCourseStudentResponse(Course course);
 
 
+
+    @Named("toCourseWithUsersResponseSet")
+    @Mappings({
+            @Mapping(target = "status" , source = "status"),
+            @Mapping(source = "subject.credit", target = "credit"),
+            @Mapping(source = "subject.logo", target = "logo"),
+            @Mapping(source = "subject.description", target = "description"),
+            @Mapping(source = "instructor.user.nameEn", target = "instructorName"),
+            @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage"),
+            @Mapping(source = "yearOfStudy.year", target = "year"),
+            @Mapping(source = "yearOfStudy.semester", target = "semester")
+    })
+    CourseWithUsersResponse toCourseWithUsersResponse(Course course);
+
+
+
+
     @Named("toUseCourseResponse")
     @Mapping(source = "subject.title", target = "title")
     @Mapping(source = "subject.credit", target = "credit")

@@ -44,7 +44,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('admin:control')")
     @GetMapping("not-students")
-    public Page<UserResponseDetail> getAllUsersExceptStudents(
+    public Page<UserResponse> getAllUsersExceptStudents(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize
     ){
