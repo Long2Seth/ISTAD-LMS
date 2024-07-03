@@ -19,6 +19,8 @@ public interface YearOfStudyMapper {
 
     YearOfStudyResponse toYearOfStudyResponse(YearOfStudy yearOfStudy);
 
+    YearOfStudyYearResponse toYearOfStudyYearResponse(YearOfStudy yearOfStudy);
+
     YearOfStudySubjectResponse toYearOfStudySubjectResponse(YearOfStudy yearOfStudy);
 
     @Mapping(target = "subjects",ignore = true)

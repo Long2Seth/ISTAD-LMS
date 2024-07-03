@@ -25,4 +25,6 @@ public interface YearOfStudyRepository extends JpaRepository<YearOfStudy,Long>, 
     Set<YearOfStudy> findYearOfStudiesByStudyProgram(StudyProgram studyProgram);
 
     Optional<YearOfStudy> findBySubjectsAndStudyProgram(Subject subject,StudyProgram studyProgram);
+
+    Set<YearOfStudy> findAllByYearAndStudyProgramAlias(Integer year,String studyProgramAlias);
 }
