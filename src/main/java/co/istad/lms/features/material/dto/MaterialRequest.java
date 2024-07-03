@@ -15,7 +15,7 @@ public record MaterialRequest(
         String extension,
         @Min(value = 0,message = "size is 0 or positive")
         Long size,
-        String youtubeLink,
+
         String description,
         @NotBlank(message = "Subject alias is required")
         @Size(max = 100, message = "subjectAlias cannot be longer than 100 characters")
