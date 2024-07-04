@@ -16,7 +16,8 @@ public interface LectureRepository extends JpaRepository<Lecture, Long>, JpaSpec
 
     Boolean existsByUuid(String alias);
 
-    Page<Lecture> findAllByCourseInstructorUserUuid(String uuid, Pageable pageable);
+    Page<Lecture> findAllByCourseInstructorUserUuidAndStatusAndIsDraftAndIsDeleted(String uuid,Integer status
+            ,boolean isDraft,boolean isDeleted, Pageable pageable);
 
     Set<Lecture> findAllByStatus(Integer status);
 
