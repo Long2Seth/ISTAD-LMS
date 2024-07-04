@@ -624,4 +624,9 @@ public class InstructorServiceImpl implements InstructorService {
             return materialMapper.toMaterialDetailResponse(material, url);
         });
     }
+
+    @Override
+    public Page<MaterialDetailResponse> getAssessment(CustomUserDetails userDetails, String fileType, int pageNumber, int pageSize) {
+        return null;
+    }
 }

@@ -186,4 +186,7 @@ public interface InstructorService {
                                                            int pageNumber, int pageSize);
 
 
+    Page<MaterialDetailResponse> getAssessment(CustomUserDetails userDetails,String fileType,
+                                                           int pageNumber, int pageSize);
+
 }

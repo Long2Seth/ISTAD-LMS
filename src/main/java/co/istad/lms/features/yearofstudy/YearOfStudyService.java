@@ -4,6 +4,8 @@ import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.features.yearofstudy.dto.*;
 import org.springframework.data.domain.Page;
 
+import java.util.Set;
+
 /**
  * Service interface for managing YearOfStudy.
  *
@@ -131,4 +133,6 @@ public interface YearOfStudyService {
      * @since 1.0 (2024)
      */
     void draftYearOfStudyByUuid(String uuid);
+
+    Set<YearOfStudyYearResponse> getYearOfStudyInYear(YearOfStudyYearRequest yearOfStudyYearRequest);
 }

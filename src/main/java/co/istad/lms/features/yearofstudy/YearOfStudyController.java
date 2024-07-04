@@ -133,4 +133,12 @@ public class YearOfStudyController {
         yearOfStudyService.draftYearOfStudyByUuid(uuid);
 
     }
+    @PostMapping("/study-programs/years")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('faculty:update')")
+    public void getYearOfStudyInYear(@RequestBody YearOfStudyYearRequest yearOfStudyYearRequest){
+
+        yearOfStudyService.getYearOfStudyInYear(yearOfStudyYearRequest);
+
+    }
 }

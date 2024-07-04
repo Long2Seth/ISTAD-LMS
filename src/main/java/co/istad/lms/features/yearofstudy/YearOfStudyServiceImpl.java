@@ -6,10 +6,7 @@ import co.istad.lms.domain.Subject;
 import co.istad.lms.domain.YearOfStudy;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
 import co.istad.lms.features.subject.SubjectRepository;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudySubjectRequest;
-import co.istad.lms.features.yearofstudy.dto.YearOfStudyUpdateRequest;
+import co.istad.lms.features.yearofstudy.dto.*;
 import co.istad.lms.mapper.YearOfStudyMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -252,5 +249,27 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
 
         //save to database
         yearOfStudyRepository.save(yearOfStudy);
+    }
+
+    @Override
+    public Set<YearOfStudyYearResponse> getYearOfStudyInYear(YearOfStudyYearRequest yearOfStudyYearRequest) {
+
+        Integer year=null;
+        try {
+            year = Integer.parseInt(yearOfStudyYearRequest.year());
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,String.format("Year = %s is invalid format",
+                    yearOfStudyYearRequest.year()));
+        }
+
+        Set<YearOfStudy> yearOfStudies = yearOfStudyRepository.findAllByYearAndStudyProgramAlias(year,
+                yearOfStudyYearRequest.studyProgramAlias());
+
+        System.out.println("year ="+yearOfStudies.size());
+
+        return yearOfStudies.stream()
+                .map(yearOfStudy -> yearOfStudyMapper.toYearOfStudyYearResponse(yearOfStudy))
+                .collect(Collectors.toSet());
+
     }
 }
