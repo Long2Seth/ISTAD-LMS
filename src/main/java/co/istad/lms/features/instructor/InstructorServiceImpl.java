@@ -573,7 +573,8 @@ public class InstructorServiceImpl implements InstructorService {
 
         //find all lecture in database
         Page<Lecture> lectures =
-                lectureRepository.findAllByCourseInstructorUserUuidAndStatusAndIsDraftAndIsDeleted(userUuid,1,false,false, pageRequest);
+                lectureRepository.findAllByCourseInstructorUserUuidAndStatusInAndIsDraftAndIsDeleted(userUuid,Arrays.asList(1, 2),false,
+                        false, pageRequest);
 
         // map to DTO and return
         return lectures.map(lecture -> {
