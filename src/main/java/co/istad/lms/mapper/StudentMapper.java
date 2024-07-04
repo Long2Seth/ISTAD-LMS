@@ -32,8 +32,8 @@ public interface StudentMapper {
     @Mapping(source = "student.user.gender", target = "gender")
     @Mapping(source = "courses", target = "courses", qualifiedByName = "mapCourses")
     StudentSemesterScoreResponse toStudentSemesterScoreResponse(Student student,
-                                                                Set<CourseSemesterScoreResponse> courses,String grade
-            , Double total,Double gpa,String classCode);
+                                                                Set<CourseSemesterScoreResponse> courses, String grade
+            , Double total, Double gpa, String classCode);
 
     @Named("mapCourses")
     static Set<CourseSemesterScoreResponse> mapCourses(Set<CourseSemesterScoreResponse> courses) {
@@ -44,8 +44,8 @@ public interface StudentMapper {
     StudentCourseResponse toResponseCourse(Student student);
 
     @Mapping(source = "user", target = ".", qualifiedByName = "toUserResponseDetail")
-    @Mapping(source = "courses" , target = "courses", qualifiedByName = "toUseCourseResponse")
-    @Mapping(target = "profileImage" , source = "user.profileImage" , qualifiedByName = "getLogoUrl")
+    @Mapping(source = "courses", target = "courses", qualifiedByName = "toUseCourseResponse")
+    @Mapping(target = "profileImage", source = "user.profileImage")
     StudentResponseDetail toResponseDetail(Student student);
 
     @Mapping(source = "student.user.nameEn", target = "nameEn")
@@ -53,13 +53,13 @@ public interface StudentMapper {
     @Mapping(source = "student.user.gender", target = "gender")
     StudentScoreResponse toStudentScoreResponse(Student student);
 
-    @Mapping(source = "student.user.nameEn",target = "nameEn")
-    @Mapping(source = "student.user.uuid",target = "uuid")
-    @Mapping(source = "student.user.gender",target = "gender")
-    @Mapping(source = "student.studentStatus",target = "status")
-    @Mapping(source = "student.user.dob",target = "dob")
-    StudentTranscriptResponse toStudentTranscriptResponse(Student student,Integer year,Double semester1Score,
-                                                          Double semester2Score,String grade,Double gpa,Double average);
+    @Mapping(source = "student.user.nameEn", target = "nameEn")
+    @Mapping(source = "student.user.uuid", target = "uuid")
+    @Mapping(source = "student.user.gender", target = "gender")
+    @Mapping(source = "student.studentStatus", target = "status")
+    @Mapping(source = "student.user.dob", target = "dob")
+    StudentTranscriptResponse toStudentTranscriptResponse(Student student, Integer year, Double semester1Score,
+                                                          Double semester2Score, String grade, Double gpa, Double average);
 
 //    (student,scoreTranscriptRequest.year(), averageSemester1,
 //    averageSemester2,grade,gpa,average);
@@ -73,7 +73,6 @@ public interface StudentMapper {
     void updateStudentSettingRequest(@MappingTarget Student student, StudentSettingRequest studentSettingRequest);
 
 
-
     default Set<CourseWithUsersResponse> toCourseStudentResponses(Set<Course> courses, @Context CourseMapper courseMapper) {
         return courses.stream()
                 .map(courseMapper::toCourseStudentResponse)
@@ -85,20 +84,20 @@ public interface StudentMapper {
     @Mapping(target = "semester", source = "course.yearOfStudy.semester")
     @Mapping(target = "courseTitle", source = "course.subject.title")
     @Mapping(target = "courseDescription", source = "course.subject.description")
-    @Mapping(target = "courseLogo", source = "course.subject.logo")
+    @Mapping(target = "courseLogo", source = "course.subject.logo" , qualifiedByName = "getUrl")
     @Mapping(target = "credit", source = "course.subject.credit")
     @Mapping(target = "theory", source = "course.subject.theory")
     @Mapping(target = "practice", source = "course.subject.practice")
     @Mapping(target = "internship", source = "course.subject.internship")
     @Mapping(target = "instructorName", source = "course.instructor.user.nameEn")
-    @Mapping(target = "userProfileImage", source = "course.instructor.user.profileImage")
+    @Mapping(target = "userProfileImage", source = "course.instructor.user.profileImage" , qualifiedByName = "getUrl")
     @Mapping(target = "position", source = "course.instructor.user.position")
     @Mapping(target = "classesStart", source = "course.oneClass.classStart")
-    @Mapping( source = "course.students" , target = "studentProfileImage" , qualifiedByName = "getProfileImage")
+    @Mapping(source = "course.students", target = "studentProfileImage", qualifiedByName = "getProfileImage")
     StudentCourseDetailResponse toStudentCourseDetailResponse(Student student, Course course);
 
 
-    @Named("getLogoUrl")
+    @Named("getUrl")
     default String getLogoUrl(String logo) {
 
         if (logo != null && !logo.trim().isEmpty()) {
@@ -111,10 +110,9 @@ public interface StudentMapper {
 
     @Named("getProfileImage")
     default String getProfileImage(Student student) {
-        return student.getUser().getProfileImage();
+        return (student.getUser().getProfileImage() != null && !student.getUser().getProfileImage().trim().isEmpty()) ?
+                MediaUtil.getUrl(student.getUser().getProfileImage()) : null;
     }
-
-
 
 
 }
