@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,7 +17,8 @@ public interface LectureRepository extends JpaRepository<Lecture, Long>, JpaSpec
 
     Boolean existsByUuid(String alias);
 
-    Page<Lecture> findAllByCourseInstructorUserUuid(String uuid, Pageable pageable);
+    Page<Lecture> findAllByCourseInstructorUserUuidAndStatusInAndIsDraftAndIsDeleted(String uuid, List<Integer> status
+            , boolean isDraft, boolean isDeleted, Pageable pageable);
 
     Set<Lecture> findAllByStatus(Integer status);
 

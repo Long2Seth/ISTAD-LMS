@@ -265,7 +265,6 @@ public class YearOfStudyServiceImpl implements YearOfStudyService {
         Set<YearOfStudy> yearOfStudies = yearOfStudyRepository.findAllByYearAndStudyProgramAlias(year,
                 yearOfStudyYearRequest.studyProgramAlias());
 
-        System.out.println("year ="+yearOfStudies.size());
 
         return yearOfStudies.stream()
                 .map(yearOfStudy -> yearOfStudyMapper.toYearOfStudyYearResponse(yearOfStudy))

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/year-of-studies")
@@ -136,9 +138,9 @@ public class YearOfStudyController {
     @PostMapping("/study-programs/years")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('faculty:update')")
-    public void getYearOfStudyInYear(@RequestBody YearOfStudyYearRequest yearOfStudyYearRequest){
+    public Set<YearOfStudyYearResponse> getYearOfStudyInYear(@RequestBody YearOfStudyYearRequest yearOfStudyYearRequest){
 
-        yearOfStudyService.getYearOfStudyInYear(yearOfStudyYearRequest);
+        return yearOfStudyService.getYearOfStudyInYear(yearOfStudyYearRequest);
 
     }
 }
