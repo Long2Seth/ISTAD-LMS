@@ -17,16 +17,16 @@ import co.istad.lms.features.material.MaterialRepository;
 import co.istad.lms.features.material.MaterialService;
 import co.istad.lms.features.material.dto.MaterialDetailResponse;
 import co.istad.lms.features.media.MediaService;
+import co.istad.lms.features.score.ScorerRepository;
+import co.istad.lms.features.score.dto.ScoreDetailResponse;
+import co.istad.lms.features.score.dto.ScoreEachSemesterResponse;
+import co.istad.lms.features.score.dto.ScoreResponse;
 import co.istad.lms.features.subject.SubjectRepository;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.features.user.UserService;
 import co.istad.lms.features.user.dto.JsonBirthPlace;
 import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
-import co.istad.lms.mapper.CourseMapper;
-import co.istad.lms.mapper.InstructorMapper;
-import co.istad.lms.mapper.LectureMapper;
-import co.istad.lms.mapper.MaterialMapper;
-import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.mapper.*;
 import co.istad.lms.security.CustomUserDetails;
 import co.istad.lms.util.DateTimeUtil;
 import co.istad.lms.util.OtpUtil;
@@ -86,6 +86,10 @@ public class InstructorServiceImpl implements InstructorService {
 
     private final SubjectRepository subjectRepository;
 
+    private final ScorerRepository scoreRepository;
+
+    private final ScoreMapper scoreMapper;
+
 
     public Set<Authority> getDefaultAuthorities() {
         // Set default authorities
@@ -99,6 +103,10 @@ public class InstructorServiceImpl implements InstructorService {
         authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
         authorities.addAll(authorityRepository.findAllByAuthorityName("course:write"));
         authorities.addAll(authorityRepository.findAllByAuthorityName("payment:read"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("assessment:write"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("assessment:update"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("assessment:delete"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("assessment:read"));
 
         return authorities;
 
@@ -586,7 +594,26 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public Page<MaterialDetailResponse> getAssessment(CustomUserDetails userDetails, String fileType, int pageNumber, int pageSize) {
-        return null;
+    public Page<ScoreEachSemesterResponse> getAssessment(CustomUserDetails userDetails, int pageNumber, int pageSize) {
+
+        String userUuid = userDetails.getUserUuid();
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all score in database
+        Page<Score> scores = scoreRepository.findAllByCourseInstructorUserUuid(userUuid,pageRequest);
+
+        //map entity to DTO and return
+        return scores.map(score -> {
+            //get class code
+            String classCode = score.getCourse().getOneClass().getClassCode();
+
+            //map and return to DTO
+            return scoreMapper.toScoreEachSemesterResponse(score, classCode);
+        });
     }
 }

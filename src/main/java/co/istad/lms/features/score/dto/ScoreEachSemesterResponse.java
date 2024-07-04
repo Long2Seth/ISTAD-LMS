@@ -1,11 +1,10 @@
 package co.istad.lms.features.score.dto;
 
-import co.istad.lms.domain.roles.Student;
-import co.istad.lms.features.course.dto.CourseResponse;
 import co.istad.lms.features.course.dto.CourseScoreResponse;
+import co.istad.lms.features.student.dto.StudentAssessmentResponse;
 import co.istad.lms.features.student.dto.StudentResponse;
 
-public record ScoreDetailResponse(
+public record ScoreEachSemesterResponse(
         String uuid,
         Double activityScore,
         Double attendanceScore,
@@ -17,7 +16,7 @@ public record ScoreDetailResponse(
         String grade,
         Double total,
         CourseScoreResponse course,
-        StudentResponse student,
+        StudentAssessmentResponse student,
         Boolean isDeleted
 ) {
 }

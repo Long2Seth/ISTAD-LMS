@@ -28,4 +28,7 @@ public interface ClassRepository extends JpaRepository<Class,Long>, JpaSpecifica
     Set<Class> findByStudents(Student student);
 
     Long countAllByStatus(Integer status);
+
+    Optional<Class> findAllByUuidAndStudyProgramAliasAndGenerationAlias(String uuid,String studyProgramAlias,
+                                                                        String generationAlias);
 }
