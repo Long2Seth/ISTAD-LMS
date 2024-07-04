@@ -296,6 +296,46 @@ public class InstructorServiceImpl implements InstructorService {
 
     }
 
+    @Override
+    public void instructorSetting(InstructorSettingRequest instructorSettingRequest) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+        Instructor instructor = instructorRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Instructor with username %s not found", email)
+                ));
+
+        userMapper.updateUserFromInstructorSettingRequest(user, instructorSettingRequest);
+
+        // Save the updated user to the database
+        userRepository.save(user);
+
+        instructorMapper.updateInstructorFromSettingRequest(instructor, instructorSettingRequest);
+
+        // Save the updated instructor to the database
+        instructorRepository.save(instructor);
+
+    }
+
 
     @Override
     public Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(String uuid, int pageNumber, int pageSize) {

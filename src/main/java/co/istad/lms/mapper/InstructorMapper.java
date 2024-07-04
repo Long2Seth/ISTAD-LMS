@@ -38,6 +38,10 @@ public interface InstructorMapper {
     void updateInstructorFromRequest(@MappingTarget Instructor instructor, InstructorRequestUpdate instructorRequestUpdate);
 
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+void updateInstructorFromSettingRequest(@MappingTarget Instructor instructor, InstructorSettingRequest instructorSettingRequest);
+
+
     @Mapping( source = "instructor.user.position" , target = "position")
     @Mapping( source = "instructor.user.profileImage" , target = "userProfileImage")
     @Mapping( source = "instructor.user.nameEn" , target = "instructorName")
