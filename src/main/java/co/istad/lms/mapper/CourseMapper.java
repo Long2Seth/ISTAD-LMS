@@ -8,6 +8,7 @@ import co.istad.lms.features.degree.dto.DegreeDetailResponse;
 import co.istad.lms.features.degree.dto.DegreeRequest;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.degree.dto.DegreeUpdateRequest;
+import co.istad.lms.util.MediaUtil;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -39,12 +40,12 @@ public interface CourseMapper {
 
 
     @Named("toCourseStudentResponse")
-    @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage")
+    @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage", qualifiedByName = "getLogoUrlCourse")
     @Mapping(source = "instructor.user.nameEn", target = "instructorName")
     @Mapping(source = "yearOfStudy.year", target = "year")
     @Mapping(source = "yearOfStudy.semester", target = "semester")
     @Mapping(source = "subject.credit", target = "credit")
-    @Mapping(source = "subject.logo", target = "logo")
+    @Mapping(source = "subject.logo", target = "logo" , qualifiedByName = "getLogoUrlCourse")
     @Mapping(source = "subject.description", target = "description")
     CourseWithUsersResponse toCourseStudentResponse(Course course);
 
@@ -54,10 +55,10 @@ public interface CourseMapper {
     @Mappings({
             @Mapping(target = "status" , source = "status"),
             @Mapping(source = "subject.credit", target = "credit"),
-            @Mapping(source = "subject.logo", target = "logo"),
+            @Mapping(source = "subject.logo", target = "logo" , qualifiedByName = "getLogoUrlCourse"),
             @Mapping(source = "subject.description", target = "description"),
             @Mapping(source = "instructor.user.nameEn", target = "instructorName"),
-            @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage"),
+            @Mapping(source = "instructor.user.profileImage", target = "instructorProfileImage" , qualifiedByName = "getLogoUrlCourse"),
             @Mapping(source = "yearOfStudy.year", target = "year"),
             @Mapping(source = "yearOfStudy.semester", target = "semester")
     })
@@ -86,6 +87,18 @@ public interface CourseMapper {
                 .map(Score::getGrade)
                 .collect(Collectors.joining(", "));
     }
+
+
+    @Named("getLogoUrlCourse")
+    default String getLogoUrlCourse(String logo) {
+
+        if (logo != null && !logo.trim().isEmpty()) {
+            return MediaUtil.getUrl(logo);
+        } else {
+            return null;
+        }
+    }
+
 
 
 }
