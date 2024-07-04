@@ -337,6 +337,14 @@ public class StudentServiceImpl implements StudentService {
                         String.format("User with username %s not found", email)
                 ));
 
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+
+
         userMapper.updateUserFromStudentSettingRequest(user, studentSettingRequest);
 
 
@@ -345,7 +353,7 @@ public class StudentServiceImpl implements StudentService {
 
 
         // Update user from student request
-        studentMapper.updateStudentSettingRequest(user.getStudent(), studentSettingRequest);
+        studentMapper.updateStudentSettingRequest(student, studentSettingRequest);
 
         // Save student
         studentRepository.save(user.getStudent());

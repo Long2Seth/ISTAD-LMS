@@ -63,7 +63,17 @@ public interface InstructorService {
      * @since 1.0 (2024)
      */
     InstructorCourseDetailResponse getInstructorCourseDetailByUuid(String courseUuid);
-    
+
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param instructorSettingRequest is the unique identifier of course
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void instructorSetting(InstructorSettingRequest instructorSettingRequest);
 
 
     /**

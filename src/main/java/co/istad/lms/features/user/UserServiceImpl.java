@@ -10,6 +10,7 @@ import co.istad.lms.features.user.dto.UserProfile;
 import co.istad.lms.features.user.dto.*;
 import co.istad.lms.mapper.UserMapper;
 import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.MediaUtil;
 import co.istad.lms.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
                 ));
 
         return new UserProfile(
-                user.getProfileImage(),
+                MediaUtil.getUrl(user.getProfileImage()),
                 user.getNameEn()
         );
     }

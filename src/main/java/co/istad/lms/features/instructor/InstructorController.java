@@ -78,6 +78,12 @@ public class InstructorController {
     }
 
 
+    @PatchMapping("/setting")
+    public void updateInstructorSetting(@RequestBody InstructorSettingRequest instructorSettingRequest){
+        instructorService.instructorSetting(instructorSettingRequest);
+    }
+
+
     @GetMapping("/course/{uuid}")
     public InstructorCourseDetailResponse getInstructorCourseDetailByUuid(@PathVariable String uuid){
         System.out.println("uuid = " + uuid);

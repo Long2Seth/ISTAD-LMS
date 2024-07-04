@@ -10,6 +10,7 @@ import co.istad.lms.features.admin.dto.AdminRequestUpdate;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.InstructorRequest;
 import co.istad.lms.features.instructor.dto.InstructorRequestUpdate;
+import co.istad.lms.features.instructor.dto.InstructorSettingRequest;
 import co.istad.lms.features.password.dto.ResponsePassword;
 import co.istad.lms.features.staff.dto.StaffRequest;
 import co.istad.lms.features.staff.dto.StaffRequestUpdate;
@@ -65,6 +66,10 @@ public interface UserMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromStudentSettingRequest(@MappingTarget User user, StudentSettingRequest studentSettingRequest);
+
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateUserFromInstructorSettingRequest(@MappingTarget User user, InstructorSettingRequest instructorSettingRequest);
 
     @Named("toUserResponse")
     @Mapping(source = "uuid", target = "uuid")
