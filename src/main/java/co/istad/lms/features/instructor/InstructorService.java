@@ -1,10 +1,13 @@
 package co.istad.lms.features.instructor;
 
+import co.istad.lms.features.course.dto.CourseDetailResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
 import co.istad.lms.features.material.dto.MaterialDetailResponse;
+import co.istad.lms.features.score.dto.ScoreDetailResponse;
+import co.istad.lms.features.score.dto.ScoreEachSemesterResponse;
 import co.istad.lms.security.CustomUserDetails;
 import org.springframework.data.domain.Page;
 
@@ -186,7 +189,5 @@ public interface InstructorService {
                                                            int pageNumber, int pageSize);
 
 
-    Page<MaterialDetailResponse> getAssessment(CustomUserDetails userDetails,String fileType,
-                                                           int pageNumber, int pageSize);
-
+    Page<ScoreEachSemesterResponse> getAssessment(CustomUserDetails userDetails, int pageNumber, int pageSize);
 }

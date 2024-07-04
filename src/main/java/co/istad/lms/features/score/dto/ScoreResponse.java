@@ -9,7 +9,6 @@ public record ScoreResponse(
         Double miniProjectScore,
         Double assignmentScore,
         String studentAlias,
-        String courseAlias,
         Boolean isDeleted
 ) {
 }

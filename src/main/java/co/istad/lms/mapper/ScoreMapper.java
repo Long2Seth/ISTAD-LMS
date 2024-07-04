@@ -16,6 +16,11 @@ public interface ScoreMapper {
 
     ScoreDetailResponse toScoreDetailResponse(Score score,String classCode);
 
+    @Mapping(source = "score.student.user.dob",target = "student.dob")
+    @Mapping(source = "score.student.user.gender",target = "student.gender")
+    @Mapping(source = "score.student.user.nameEn",target = "student.nameEn")
+    ScoreEachSemesterResponse toScoreEachSemesterResponse(Score score,String classCode);
+
 
     ScoreResponse toScoreResponse(Score score);
 

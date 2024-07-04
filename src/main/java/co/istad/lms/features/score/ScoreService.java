@@ -93,4 +93,6 @@ public interface ScoreService {
 
     public Page<StudentTranscriptResponse> getAllTranscript(ScoreTranscriptRequest scoreTranscriptRequest,
                                                             int pageNumber, int pageSize);
+
+    public Page<ScoreDetailResponse> getAllScoreEachCourse(String uuid,int pageNumber, int pageSize);
 }

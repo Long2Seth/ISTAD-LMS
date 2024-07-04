@@ -1,11 +1,14 @@
 package co.istad.lms.features.instructor;
 
 
+import co.istad.lms.features.course.dto.CourseDetailResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
 import co.istad.lms.features.lecture.dto.LectureDetailResponse;
 import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
 import co.istad.lms.features.material.dto.MaterialDetailResponse;
+import co.istad.lms.features.score.dto.ScoreDetailResponse;
+import co.istad.lms.features.score.dto.ScoreEachSemesterResponse;
 import co.istad.lms.security.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -168,6 +171,18 @@ public class InstructorController {
     ) {
 
         return instructorService.getAllMaterialsByFileType(userDetails,type,pageNumber,pageSize);
+    }
+
+    @GetMapping("/assessments")
+    @PreAuthorize("hasAnyAuthority('session:read')")
+    public Page<ScoreEachSemesterResponse> getAssessment(
+
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return instructorService.getAssessment(userDetails,pageNumber,pageSize);
     }
 
 }

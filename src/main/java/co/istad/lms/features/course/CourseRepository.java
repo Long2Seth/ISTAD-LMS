@@ -30,6 +30,8 @@ public interface CourseRepository extends JpaRepository<Course,Long>, JpaSpecifi
     Set<Course> findAllByOneClassGenerationAndStudentsAndYearOfStudy(Generation generation, Student student, YearOfStudy yearOfStudy);
 
     Long countAllByStatus(Integer status);
+
+    Page<Course> findAllByInstructorUserUuid(String uuid,Pageable pageable);
  }
 
 

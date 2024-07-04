@@ -2,7 +2,9 @@ package co.istad.lms.features.score;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
+import co.istad.lms.domain.Class;
 import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.classes.ClassRepository;
 import co.istad.lms.features.course.CourseRepository;
 import co.istad.lms.features.course.dto.CourseSemesterScoreResponse;
 import co.istad.lms.features.generation.GenerationRepository;
@@ -55,6 +57,8 @@ public class ScoreServiceImpl implements ScoreService {
 
     private final StudentMapper studentMapper;
 
+    private final ClassRepository classRepository;
+
     @Value("${assessment-percentage.activity-score}")
     private Double activityScorePercentage;
 
@@ -93,7 +97,7 @@ public class ScoreServiceImpl implements ScoreService {
                 (score.getActivityScore() * activityScorePercentage) +
                         (score.getAttendanceScore() * attendanceScorePercentage) +
                         (score.getFinalExamScore() * finalScorePercentage) +
-                        ((score.getMiniProjectScore() + score.getMidtermExamScore()) * miniProjectScorePercentage) +
+                        (((score.getMiniProjectScore() + score.getMidtermExamScore())/2) * miniProjectScorePercentage) +
                         (score.getAssignmentScore() * assignmentScorePercentage);
 
         //get gpa
@@ -171,6 +175,29 @@ public class ScoreServiceImpl implements ScoreService {
         Score score = scoreRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Score = %s has not been found", uuid)));
         //map from DTO to entity
         scoreMapper.updateScoreFromRequest(score, scoreUpdateRequest);
+
+        //get total score
+        Double total =
+                (score.getActivityScore() * activityScorePercentage) +
+                        (score.getAttendanceScore() * attendanceScorePercentage) +
+                        (score.getFinalExamScore() * finalScorePercentage) +
+                        (((score.getMiniProjectScore() + score.getMidtermExamScore())/2) * miniProjectScorePercentage) +
+                        (score.getAssignmentScore() * assignmentScorePercentage);
+
+        //get gpa
+        Double gpa = AssesmentsUtil.getGpa(total);
+
+        //get grade base on average
+        String grade = AssesmentsUtil.getGrade(total);
+
+        //set total to score
+        score.setTotal(total);
+
+        //set grade to score
+        score.setGrade(grade);
+
+        //set gpa to score
+        score.setGpa(gpa);
 
         //save to database
         scoreRepository.save(score);
@@ -401,5 +428,27 @@ public class ScoreServiceImpl implements ScoreService {
                     , averageSemester2, grade, averageGpa, average);
         });
 
+    }
+
+    @Override
+    public Page<ScoreDetailResponse> getAllScoreEachCourse(String uuid,int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all score in database
+        Page<Score> scores = scoreRepository.findAllByCourseUuid(uuid,pageRequest);
+
+        //map entity to DTO and return
+        return scores.map(score -> {
+
+            String classCode =score.getCourse().getOneClass().getClassCode();
+
+            //map and return to DTO
+            return scoreMapper.toScoreDetailResponse(score, classCode);
+        });
     }
 }

@@ -97,4 +97,16 @@ public class ScoreController {
 
         return scoreService.getAllTranscript(scoreTranscriptRequest,pageNumber, pageSize);
     }
+
+    @GetMapping("/each-course/{uuid}")
+    @PreAuthorize("hasAnyAuthority('assessment:read')")
+    public Page<ScoreDetailResponse> getScoreEachCourse(
+
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return scoreService.getAllScoreEachCourse(uuid,pageNumber, pageSize);
+    }
 }
