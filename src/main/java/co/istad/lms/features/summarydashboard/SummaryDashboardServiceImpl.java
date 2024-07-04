@@ -8,8 +8,6 @@ import co.istad.lms.features.student.StudentRepository;
 import co.istad.lms.features.summarydashboard.dto.SummaryDashboardDetailResponse;
 import co.istad.lms.features.user.UserRepository;
 import co.istad.lms.mapper.LectureMapper;
-import co.istad.lms.mapper.LectureMapperImpl;
-import co.istad.lms.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

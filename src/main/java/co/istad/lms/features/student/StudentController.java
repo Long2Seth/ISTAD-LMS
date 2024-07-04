@@ -87,9 +87,18 @@ public class StudentController {
 
 
     @PatchMapping("/setting")
-    public void updateStudentSetting(@RequestBody StudentSettingRequest studentSettingRequest) {
+    public void updateStudentSetting(@RequestBody StudentSetting studentSettingRequest) {
         studentService.updateSettingStudent(studentSettingRequest);
     }
+
+
+
+    @GetMapping("/setting")
+    public StudentSetting getStudentSetting() {
+        return studentService.getStudentSetting();
+    }
+
+
 
 
     @PreAuthorize("hasAnyAuthority('admin:control','academic:update')")
