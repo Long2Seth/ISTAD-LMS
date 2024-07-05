@@ -1,5 +1,8 @@
 package co.istad.lms.features.portal;
 
+import co.istad.lms.features.portal.dto.PortalDegreeResponse;
+import co.istad.lms.features.portal.dto.PortalShiftResponse;
+import co.istad.lms.features.portal.dto.PortalStudyProgramResponse;
 import co.istad.lms.features.studyprogram.StudyProgramService;
 import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,20 +13,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/portals")
 public class PortalController{
 
-    private final StudyProgramService studyProgramService;
+    private final PortalService portalService;
     @GetMapping("/study-programs")
-    public Page<StudyProgramDetailResponse> getAllStudyPrograms(
+    public Set<PortalStudyProgramResponse> getAllStudyPrograms() {
 
-            @RequestParam(defaultValue = "0") int pageNumber,
-            @RequestParam(defaultValue = "25") int pageSize
-    ) {
+        return portalService.getAllStudyPrograms();
 
-        return studyProgramService.getAllStudyPrograms(pageNumber, pageSize);
+    }
+
+    @GetMapping("/degrees")
+    public Set<PortalDegreeResponse> getAllDegrees() {
+
+        return portalService.getAllDegrees();
+
+    }
+
+    @GetMapping("/shifts")
+    public Set<PortalShiftResponse> getAllShifts() {
+
+        return portalService.getAllShifts();
 
     }
 }

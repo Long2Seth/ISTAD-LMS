@@ -22,4 +22,6 @@ public interface StudyProgramRepository extends JpaRepository<StudyProgram,Long>
 
     Optional<StudyProgram> findByClassesIn(Set<Class> classes);
 
+    Set<StudyProgram> findAllByIsDeletedFalseAndIsDraftFalse();
+
 }

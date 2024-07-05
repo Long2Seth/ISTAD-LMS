@@ -1,6 +1,7 @@
 package co.istad.lms.features.instructor;
 
 
+import co.istad.lms.features.attendance.dto.AttendanceInstructorReportResponse;
 import co.istad.lms.features.course.dto.CourseDetailResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
@@ -183,6 +184,18 @@ public class InstructorController {
     ) {
 
         return instructorService.getAssessment(userDetails,pageNumber,pageSize);
+    }
+
+    @GetMapping("/reports/attendances")
+    @PreAuthorize("hasAnyAuthority('session:read')")
+    public Page<AttendanceInstructorReportResponse> getInstructorReportAttendance(
+
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return null;
     }
 
 }

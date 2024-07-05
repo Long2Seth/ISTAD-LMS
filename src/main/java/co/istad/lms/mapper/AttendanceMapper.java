@@ -2,10 +2,7 @@ package co.istad.lms.mapper;
 
 
 import co.istad.lms.domain.Attendance;
-import co.istad.lms.features.attendance.dto.AttendanceDetailResponse;
-import co.istad.lms.features.attendance.dto.AttendanceRequest;
-import co.istad.lms.features.attendance.dto.AttendanceResponse;
-import co.istad.lms.features.attendance.dto.AttendanceUpdateRequest;
+import co.istad.lms.features.attendance.dto.*;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -19,6 +16,8 @@ public interface AttendanceMapper {
     AttendanceDetailResponse toAttendanceDetailResponse(Attendance attendance);
 
     AttendanceResponse toAttendanceResponse(Attendance attendance);
+
+    AttendanceInstructorReportResponse toAttendanceInstructorReportResponse(Attendance attendance);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateAttendanceFromRequest(@MappingTarget Attendance attendance, AttendanceUpdateRequest attendanceUpdateRequest);

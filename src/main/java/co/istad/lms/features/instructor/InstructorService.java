@@ -1,5 +1,6 @@
 package co.istad.lms.features.instructor;
 
+import co.istad.lms.features.attendance.dto.AttendanceInstructorReportResponse;
 import co.istad.lms.features.course.dto.CourseDetailResponse;
 import co.istad.lms.features.course.dto.CourseWithUsersResponse;
 import co.istad.lms.features.instructor.dto.*;
@@ -190,4 +191,8 @@ public interface InstructorService {
 
 
     Page<ScoreEachSemesterResponse> getAssessment(CustomUserDetails userDetails, int pageNumber, int pageSize);
+
+    Page<AttendanceInstructorReportResponse> getInstructorReportAttendance(CustomUserDetails userDetails, int pageNumber, int pageSize);
+
+
 }

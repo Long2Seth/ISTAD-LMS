@@ -297,6 +297,7 @@ public class ClassServiceImpl implements ClassService {
 
                                 //set raw password with encrypt password
                                 user.setRawPassword(encryptedPassword);
+                                user.setRawPassword(encryptedPassword);
 
                                 //set password to null
                                 user.setPassword(null);
@@ -553,6 +554,10 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public ClassDetailResponse addStudent(String uuid, ClassAddStudentRequest classAddStudentRequest) {
+
+        if(classAddStudentRequest.studentAdmissionUuid()==null||classAddStudentRequest.studentAdmissionUuid().isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"studentAdmissionUuid is null or empty");
+        }
 
         //validate class from DTO by uuid
         Class aClass =

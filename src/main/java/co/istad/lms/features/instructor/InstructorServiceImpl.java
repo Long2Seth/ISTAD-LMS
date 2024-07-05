@@ -4,6 +4,8 @@ package co.istad.lms.features.instructor;
 import co.istad.lms.domain.*;
 import co.istad.lms.domain.json.BirthPlace;
 import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.features.attendance.AttendanceRepository;
+import co.istad.lms.features.attendance.dto.AttendanceInstructorReportResponse;
 import co.istad.lms.features.authority.AuthorityRepository;
 import co.istad.lms.features.authority.dto.AuthorityRequestToUser;
 import co.istad.lms.features.course.CourseRepository;
@@ -89,6 +91,8 @@ public class InstructorServiceImpl implements InstructorService {
     private final ScorerRepository scoreRepository;
 
     private final ScoreMapper scoreMapper;
+
+    private final AttendanceRepository attendanceRepository;
 
 
     public Set<Authority> getDefaultAuthorities() {
@@ -657,5 +661,33 @@ public class InstructorServiceImpl implements InstructorService {
             //map and return to DTO
             return scoreMapper.toScoreEachSemesterResponse(score, classCode);
         });
+    }
+
+    @Override
+    public Page<AttendanceInstructorReportResponse> getInstructorReportAttendance(CustomUserDetails userDetails, int pageNumber, int pageSize) {
+
+        String userUuid = userDetails.getUserUuid();
+        String username = userDetails.getUsername();
+
+
+        // Get instructor by user uuid
+        Instructor instructor =
+                instructorRepository.findInstructorByUserUuid(userUuid).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor with user uuid = %s has not been found", username)));
+
+        Set<Course> courses = instructor.getCourses();
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current page and size of page
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all attendance in database
+//        Page<Attendance> attendance = attendanceRepository.findAllByLectureUuid(lectureUuid,pageRequest);
+//
+//        //map entity to DTO and return
+//        return attendance.map(attendanceMapper::toAttendanceDetailResponse);
+        return null;
     }
 }

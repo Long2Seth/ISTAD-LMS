@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface DegreeRepository extends JpaRepository<Degree, Long>, JpaSpecificationExecutor<Degree> {
 
@@ -24,6 +25,8 @@ public interface DegreeRepository extends JpaRepository<Degree, Long>, JpaSpecif
     Optional<Degree> findByAliasAndIsDeletedFalseAndIsDraftFalse(String alias);
 
     Optional<Degree> findByAliasAndIsDeletedFalse(String alias);
+
+    Set<Degree> findAllByIsDeletedFalseAndIsDraftFalse();
 
 
 }
