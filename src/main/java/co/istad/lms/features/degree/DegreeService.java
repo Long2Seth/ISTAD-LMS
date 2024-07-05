@@ -43,7 +43,7 @@ public interface DegreeService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<DegreeDetailResponse> getAllDegrees(int pageNumber, int pageSize);
+    Page<DegreeDetailResponse> getAllDegrees(int pageNumber, int pageSize,String disable);
 
     /**
      * Update an existing degree by its alias.

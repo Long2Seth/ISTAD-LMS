@@ -28,5 +28,7 @@ public interface DegreeRepository extends JpaRepository<Degree, Long>, JpaSpecif
 
     Set<Degree> findAllByIsDeletedFalseAndIsDraftFalse();
 
+    Page<Degree> findAllByIsDeleted(Boolean isDeleted,Pageable pageable);
+
 
 }

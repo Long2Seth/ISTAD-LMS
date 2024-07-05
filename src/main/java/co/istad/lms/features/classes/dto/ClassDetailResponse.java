@@ -20,6 +20,8 @@ public record ClassDetailResponse(
         String classCode,
         LocalDate classStart,
 
+        Integer year,
+
         LocalDate classEnd,
         String description,
         Boolean isDeleted,

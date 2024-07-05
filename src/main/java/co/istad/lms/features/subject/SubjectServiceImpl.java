@@ -75,7 +75,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Page<SubjectDetailResponse> getAllSubject(int pageNumber, int pageSize) {
+    public Page<SubjectDetailResponse> getAllSubject(int pageNumber, int pageSize,String disable) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -84,7 +84,15 @@ public class SubjectServiceImpl implements SubjectService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all subject in database
-        Page<Subject> subjects = subjectRepository.findAll(pageRequest);
+        Page<Subject> subjects;
+
+        if (disable.trim().equalsIgnoreCase("false") ||disable.trim().equalsIgnoreCase("true")){
+
+            subjects = subjectRepository.findAllByIsDeleted(Boolean.parseBoolean(disable),pageRequest);
+
+        }else{
+            subjects = subjectRepository.findAll(pageRequest);
+        }
 
         //map entity to DTO and return
         return subjects.map(subjectMapper::toSubjectDetailResponse);

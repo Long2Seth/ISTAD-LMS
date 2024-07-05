@@ -48,10 +48,10 @@ public class FacultyController {
 
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "25") int pageSize,
-            @RequestParam(required = false,defaultValue = "null") String enable
+            @RequestParam(required = false,defaultValue = "null") String disable
     ) {
 
-        return facultyService.getAllFaculties(pageNumber, pageSize,enable);
+        return facultyService.getAllFaculties(pageNumber, pageSize,disable);
 
     }
 

@@ -75,7 +75,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize, String enable) {
+    public Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize, String disable) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -85,13 +85,13 @@ public class FacultyServiceImpl implements FacultyService {
 
         Page<Faculty> faculties;
 
-        //get all faculty from database
-        if (!enable.trim().equalsIgnoreCase("false") && !enable.trim().equalsIgnoreCase("true")){
-            faculties = facultyRepository.findAll(pageRequest);
-            System.out.println("enable=" + enable);
+        if (disable.trim().equalsIgnoreCase("false") ||disable.trim().equalsIgnoreCase("true")){
+
+            System.out.println("disable = "+disable);
+            faculties = facultyRepository.findAllByIsDeleted(Boolean.parseBoolean(disable),pageRequest);
+
         }else{
-            Boolean isDeleted = Boolean.parseBoolean(enable);
-            faculties = facultyRepository.findAllByIsDeleted(isDeleted, pageRequest);
+            faculties = facultyRepository.findAll(pageRequest);
         }
 
         //map entity to DTO and return

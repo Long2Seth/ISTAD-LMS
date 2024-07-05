@@ -41,10 +41,11 @@ public class SubjectController {
     public Page<SubjectDetailResponse> getAllSubjects(
 
             @RequestParam(defaultValue = "0") int pageNumber,
-            @RequestParam(defaultValue = "25") int pageSize
+            @RequestParam(defaultValue = "25") int pageSize,
+            @RequestParam(required = false,defaultValue = "null") String disable
     ) {
 
-        return subjectService.getAllSubject(pageNumber, pageSize);
+        return subjectService.getAllSubject(pageNumber, pageSize,disable);
     }
 
     @PatchMapping("/{alias}")

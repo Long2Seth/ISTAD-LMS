@@ -47,7 +47,7 @@ public interface FacultyService {
      * @since 1.0 (2024)
      */
 
-    Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize,String enable);
+    Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize,String disable);
 
     /**
      * Update faculty by alias

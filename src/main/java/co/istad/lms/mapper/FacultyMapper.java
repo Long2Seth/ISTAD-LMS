@@ -14,9 +14,9 @@ public interface FacultyMapper {
 
     Faculty fromFacultyRequest(FacultyRequest facultyRequest);
 
-    @Mapping(source = "logo",target = "logo",qualifiedByName = "getLogoUrl")
+    @Mapping(source = "logo",target = "logo",qualifiedByName = "getFacultyLogoUrl")
     FacultyDetailResponse toFacultyDetailResponse(Faculty faculty);
-    @Named("getLogoUrl")
+    @Named("getFacultyLogoUrl")
     default String getLogoUrl(String logo) {
 
         if (logo != null && !logo.trim().isEmpty()) {

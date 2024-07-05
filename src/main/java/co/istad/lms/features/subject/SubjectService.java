@@ -43,7 +43,7 @@ public interface SubjectService {
      * @author Nouth Chanraksa
      * @since 1.0 (2024)
      */
-    Page<SubjectDetailResponse> getAllSubject(int pageNumber, int pageSize);
+    Page<SubjectDetailResponse> getAllSubject(int pageNumber, int pageSize,String disable);
 
     /**
      * Updates an existing subject by its alias.

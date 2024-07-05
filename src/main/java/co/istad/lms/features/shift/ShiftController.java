@@ -43,10 +43,11 @@ public class ShiftController {
     public Page<ShiftDetailResponse> getAllShifts(
 
             @RequestParam(defaultValue = "0") int pageNumber,
-            @RequestParam(defaultValue = "25") int pageSize
+            @RequestParam(defaultValue = "25") int pageSize,
+            @RequestParam(defaultValue = "null") String disable
     ) {
 
-        return shiftService.getAllShifts(pageNumber, pageSize);
+        return shiftService.getAllShifts(pageNumber, pageSize,disable);
 
     }
 

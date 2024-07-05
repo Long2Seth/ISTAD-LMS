@@ -112,7 +112,14 @@ public class StudyProgramServiceImpl implements StudyProgramService {
                     YearOfStudy yearOfStudy=new YearOfStudy();
 
                     yearOfStudy.setStudyProgram(studyProgram);
-                    yearOfStudy.setUuid(UUID.randomUUID().toString());
+
+                    String uuid;
+                    do {
+                        uuid = UUID.randomUUID().toString();
+                    } while (yearOfStudyRepository.existsByUuid(uuid));
+
+                    yearOfStudy.setUuid(uuid);
+
                     yearOfStudy.setIsDeleted(false);
                     yearOfStudy.setIsDraft(false);
                     yearOfStudy.setYear(i);
@@ -135,10 +142,6 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         //validate studyProgram from DTO by alias
         StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found.", alias)));
 
-        //update logo url for studyProgram
-        if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
-            studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
-        }
 
         //map to DTO and return
         return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
@@ -156,12 +159,6 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         //find all studyProgram in database
         Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(pageRequest);
 
-        // update the logo URL for each studyProgram
-        studyPrograms.forEach(studyProgram -> {
-            if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
-                studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
-            }
-        });
         //map entity to DTO and return
         return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);
     }
@@ -200,9 +197,6 @@ public class StudyProgramServiceImpl implements StudyProgramService {
 
         //save to database
         studyProgramRepository.save(studyProgram);
-
-        //set url to logo
-        studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
 
         //map entity to DTO and return
         return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
@@ -294,12 +288,6 @@ public class StudyProgramServiceImpl implements StudyProgramService {
         //get all entity that match with filter condition
         Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(specification, pageRequest);
 
-        // update the logo URL for each studyProgram
-        studyPrograms.forEach(studyProgram -> {
-            if (studyProgram.getLogo() != null && !studyProgram.getLogo().trim().isEmpty()) {
-                studyProgram.setLogo(mediaService.getUrl(studyProgram.getLogo()));
-            }
-        });
 
         //map to DTO and return
         return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);

@@ -72,7 +72,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
     @Override
-    public Page<ShiftDetailResponse> getAllShifts(int pageNumber, int pageSize) {
+    public Page<ShiftDetailResponse> getAllShifts(int pageNumber, int pageSize,String disable) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -81,10 +81,18 @@ public class ShiftServiceImpl implements ShiftService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
         //find all shift in database
-        Page<Shift> shift = shiftRepository.findAll(pageRequest);
+        Page<Shift> shifts;
+
+        if (disable.trim().equalsIgnoreCase("false") ||disable.trim().equalsIgnoreCase("true")){
+
+            shifts = shiftRepository.findAllByIsDeleted(Boolean.parseBoolean(disable),pageRequest);
+
+        }else{
+            shifts = shiftRepository.findAll(pageRequest);
+        }
 
         //map entity to DTO and return
-        return shift.map(shiftMapper::toShiftDetailResponse);
+        return shifts.map(shiftMapper::toShiftDetailResponse);
     }
 
     @Override

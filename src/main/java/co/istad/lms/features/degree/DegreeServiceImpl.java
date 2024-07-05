@@ -57,7 +57,7 @@ public class DegreeServiceImpl implements DegreeService {
 
 
     @Override
-    public Page<DegreeDetailResponse> getAllDegrees(int pageNumber, int pageSize) {
+    public Page<DegreeDetailResponse> getAllDegrees(int pageNumber, int pageSize,String disable) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -65,8 +65,15 @@ public class DegreeServiceImpl implements DegreeService {
         //create pagination with current pageNumber and pageSize of pageNumber
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
-        //find all degrees in database
-        Page<Degree> degrees = degreeRepository.findAll(pageRequest);
+        Page<Degree> degrees;
+
+        if (disable.trim().equalsIgnoreCase("false") ||disable.trim().equalsIgnoreCase("true")){
+
+            degrees = degreeRepository.findAllByIsDeleted(Boolean.parseBoolean(disable),pageRequest);
+
+        }else{
+            degrees = degreeRepository.findAll(pageRequest);
+        }
 
         //map entity to DTO and return
         return degrees.map(degreeMapper::toDegreeDetailResponse);

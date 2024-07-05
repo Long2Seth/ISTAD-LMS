@@ -43,10 +43,11 @@ public class DegreeController {
     public Page<DegreeDetailResponse> getAllDegrees(
 
             @RequestParam(defaultValue = "0") int pageNumber,
-            @RequestParam(defaultValue = "25") int pageSize
+            @RequestParam(defaultValue = "25") int pageSize,
+            @RequestParam(required = false,defaultValue = "null") String disable
     ) {
 
-        return degreeService.getAllDegrees(pageNumber, pageSize);
+        return degreeService.getAllDegrees(pageNumber, pageSize,disable);
     }
 
 

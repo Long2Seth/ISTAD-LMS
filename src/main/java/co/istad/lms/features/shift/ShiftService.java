@@ -38,7 +38,7 @@ public interface ShiftService {
      * @author Pov Soknem
      * @since 1.0 (2024)
      */
-    Page<ShiftDetailResponse> getAllShifts(int pageNumber, int pageSize);
+    Page<ShiftDetailResponse> getAllShifts(int pageNumber, int pageSize,String disable);
 
     /**
      * Updates a shift identified by its alias.
