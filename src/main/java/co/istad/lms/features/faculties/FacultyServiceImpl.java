@@ -75,17 +75,24 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize) {
+    public Page<FacultyDetailResponse> getAllFaculties(int pageNumber, int pageSize, String enable) {
 
         //create sort order
         Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
 
         //create pagination
-
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
 
+        Page<Faculty> faculties;
+
         //get all faculty from database
-        Page<Faculty> faculties = facultyRepository.findAll(pageRequest);
+        if (!enable.trim().equalsIgnoreCase("false") && !enable.trim().equalsIgnoreCase("true")){
+            faculties = facultyRepository.findAll(pageRequest);
+            System.out.println("enable=" + enable);
+        }else{
+            Boolean isDeleted = Boolean.parseBoolean(enable);
+            faculties = facultyRepository.findAllByIsDeleted(isDeleted, pageRequest);
+        }
 
         //map entity to DTO and return
         return faculties.map(facultyMapper::toFacultyDetailResponse);
@@ -128,7 +135,7 @@ public class FacultyServiceImpl implements FacultyService {
         //set logo to faculty
         if (facultyUpdateRequest.logo() != null && !facultyUpdateRequest.logo().trim().isEmpty()) {
 
-            if(!Objects.equals(faculty.getLogo(), facultyUpdateRequest.logo())){
+            if (!Objects.equals(faculty.getLogo(), facultyUpdateRequest.logo())) {
                 faculty.setLogo(facultyUpdateRequest.logo());
             }
         }
