@@ -69,8 +69,16 @@ public interface StudentMapper {
     void updateStudentFromRequest(@MappingTarget Student student, StudentRequestUpdate studentRequestUpdate);
 
 
+    @Mapping(target = "gender", source="user.gender")
+    @Mapping(target = "profileImage", source="user.profileImage" , qualifiedByName = "getUrl")
+    @Mapping(target = "phoneNumber", source="user.phoneNumber")
+    @Mapping(target = "currentAddress", source="user.currentAddress")
+    @Mapping(target = "birthPlace" , source = "user.birthPlace" )
+    StudentSetting toStudentSettingResponse(Student student);
+
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateStudentSettingRequest(@MappingTarget Student student, StudentSettingRequest studentSettingRequest);
+    void updateStudentSettingRequest(@MappingTarget Student student, StudentSetting studentSettingRequest);
 
 
     default Set<CourseWithUsersResponse> toCourseStudentResponses(Set<Course> courses, @Context CourseMapper courseMapper) {
@@ -98,7 +106,7 @@ public interface StudentMapper {
 
 
     @Named("getUrl")
-    default String getLogoUrl(String logo) {
+    default String getUrl(String logo) {
 
         if (logo != null && !logo.trim().isEmpty()) {
             return MediaUtil.getUrl(logo);

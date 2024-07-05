@@ -16,7 +16,7 @@ import co.istad.lms.features.staff.dto.StaffRequest;
 import co.istad.lms.features.staff.dto.StaffRequestUpdate;
 import co.istad.lms.features.student.dto.StudentRequest;
 import co.istad.lms.features.student.dto.StudentRequestUpdate;
-import co.istad.lms.features.student.dto.StudentSettingRequest;
+import co.istad.lms.features.student.dto.StudentSetting;
 import co.istad.lms.features.user.dto.*;
 import org.mapstruct.*;
 
@@ -65,7 +65,7 @@ public interface UserMapper {
     void updateUserFromStudentRequest(@MappingTarget User user, StudentRequestUpdate studentRequestUpdate);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUserFromStudentSettingRequest(@MappingTarget User user, StudentSettingRequest studentSettingRequest);
+    void updateUserFromStudentSettingRequest(@MappingTarget User user, StudentSetting studentSettingRequest);
 
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

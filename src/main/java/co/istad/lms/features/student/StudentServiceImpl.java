@@ -309,7 +309,7 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public void updateSettingStudent(StudentSettingRequest studentSettingRequest) {
+    public void updateSettingStudent(StudentSetting studentSettingRequest) {
 
 
         // Get authentication from security
@@ -358,6 +358,43 @@ public class StudentServiceImpl implements StudentService {
         // Save student
         studentRepository.save(user.getStudent());
 
+
+    }
+
+    @Override
+    public StudentSetting getStudentSetting() {
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+        return studentMapper.toStudentSettingResponse(student);
 
     }
 

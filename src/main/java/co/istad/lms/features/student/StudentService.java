@@ -108,7 +108,16 @@ public interface StudentService {
      * @author Long Piseth
      * @since 1.0 (2024)
      */
-    void updateSettingStudent(StudentSettingRequest studentSettingRequest);
+    void updateSettingStudent(StudentSetting studentSettingRequest);
+
+
+    /**
+     * Retrieves the details of a student
+     * @return {@link StudentSetting} the response object containing the student details
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    StudentSetting getStudentSetting();
 
 
 
