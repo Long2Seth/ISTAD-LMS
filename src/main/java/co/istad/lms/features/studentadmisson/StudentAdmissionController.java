@@ -72,4 +72,16 @@ public class StudentAdmissionController {
 
         return studentAdmissionService.filterStudentAdmissions(filterDto, pageNumber, pageSize);
     }
+
+    @GetMapping("/classes/{uuid}")
+    @PreAuthorize("hasAnyAuthority('admission:read')")
+    public Page<StudentAdmissionDetailResponse> getStudentAllAdmissionsByClassInfo(
+
+            @PathVariable String uuid,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return studentAdmissionService.getAllStudentAdmissionsByClassInfo(uuid,pageNumber, pageSize);
+    }
 }

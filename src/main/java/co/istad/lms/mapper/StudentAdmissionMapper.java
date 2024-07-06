@@ -33,6 +33,7 @@ public interface StudentAdmissionMapper {
     @Mapping(source = "highSchoolCertificate", target = "highSchoolCertificate", qualifiedByName = "getDownloadUrl")
     @Mapping(source = "vocationTrainingIiiCertificate", target = "vocationTrainingIiiCertificate", qualifiedByName = "getDownloadUrl")
     @Mapping(source = "anyValuableCertificate", target = "anyValuableCertificate", qualifiedByName = "getDownloadUrl")
+    @Mapping(source = "avatar", target = "avatar", qualifiedByName = "getViewUrl")
     StudentAdmissionDetailResponse toStudentAdmissionDetailResponse(StudentAdmission studentAdmission);
 
 
@@ -71,5 +72,11 @@ public interface StudentAdmissionMapper {
     default String getDownloadUrl(String file) {
 
         return MediaUtil.getDownloadUrl(file);
+    }
+
+    @Named("getViewUrl")
+    default String getViewUrl(String file) {
+
+        return MediaUtil.getUrl(file);
     }
 }

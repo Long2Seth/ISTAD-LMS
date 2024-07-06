@@ -57,8 +57,14 @@ public class AttendanceServiceImpl implements AttendanceService {
         // map DTO to entity
         Attendance attendance = attendanceMapper.fromAttendanceRequest(attendanceRequest);
 
+        String uuid;
+        do {
+            uuid = UUID.randomUUID().toString();
+        } while (attendanceRepository.existsByUuid(uuid));
+
+
         //random uuid to attendance
-        attendance.setUuid(UUID.randomUUID().toString());
+        attendance.setUuid(uuid);
 
         //set lecture to attendance
         attendance.setLecture(lecture);

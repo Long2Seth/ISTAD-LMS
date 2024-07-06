@@ -2,9 +2,11 @@ package co.istad.lms.features.studentadmisson;
 
 import co.istad.lms.base.BaseSpecification;
 import co.istad.lms.domain.*;
+import co.istad.lms.domain.Class;
 import co.istad.lms.features.admission.AdmissionRepository;
 import co.istad.lms.features.admission.AdmissionService;
 import co.istad.lms.features.admission.dto.AdmissionRequest;
+import co.istad.lms.features.classes.ClassRepository;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.degree.dto.DegreeResponse;
 import co.istad.lms.features.file.FileMetaDataRepository;
@@ -51,7 +53,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
     private final AdmissionRepository admissionRepository;
 
-    private final MediaService mediaService;
+    private final ClassRepository classRepository;
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
@@ -106,9 +108,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
                 && !studentAdmissionRequest.highSchoolCertificate().trim().isEmpty()
                 && (studentAdmissionRequest.vocationTrainingIiiCertificate() == null || studentAdmissionRequest.vocationTrainingIiiCertificate().trim().isEmpty())) {
 
-            // anyValuableCertificate and highSchoolCertificate
-            System.out.println("Any Valuable Certificate: " + studentAdmissionRequest.anyValuableCertificate());
-            System.out.println("High School Certificate: " + studentAdmissionRequest.highSchoolCertificate());
+
         } else if (studentAdmissionRequest.anyValuableCertificate() != null
                 && !studentAdmissionRequest.anyValuableCertificate().trim().isEmpty()
                 && (studentAdmissionRequest.highSchoolCertificate() == null || studentAdmissionRequest.highSchoolCertificate().trim().isEmpty())
@@ -150,8 +150,13 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //map from DTO to entity
         StudentAdmission studentAdmission = studentAdmissionMapper.fromStudentAdmissionRequest(studentAdmissionRequest);
 
-        //generate uuid for admission
-        studentAdmission.setUuid(UUID.randomUUID().toString());
+        String uuid;
+        do {
+            uuid = UUID.randomUUID().toString();
+        } while (studentAdmissionRepository.existsByUuid(uuid));
+
+        //set uuid for admission
+        studentAdmission.setUuid(uuid);
 
         //set isDeleted false(enable)
         studentAdmission.setIsDeleted(false);
@@ -167,6 +172,7 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
         //set admission to student admission
         studentAdmission.setAdmission(admission);
+
         //set admission to student admission
         studentAdmission.setStudent(false);
 
@@ -185,11 +191,6 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         StudentAdmission admission = studentAdmissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found ", uuid)));
 
 
-        //set avatar url to studentAdmission
-        if (admission.getAvatar() != null && !admission.getAvatar().trim().isEmpty()) {
-            admission.setAvatar(mediaService.getUrl((admission.getAvatar())));
-        }
-
         //return AdmissionDetail to DTO
         return studentAdmissionMapper.toStudentAdmissionDetailResponse(admission);
     }
@@ -206,13 +207,6 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //find all student admission in database
         Page<StudentAdmission> admissionsPage = studentAdmissionRepository.findAll(pageRequest);
 
-        admissionsPage.forEach(studentAdmission -> {
-
-            //set avatar url to studentAdmission
-            if (studentAdmission.getAvatar() != null && !studentAdmission.getAvatar().trim().isEmpty()) {
-                studentAdmission.setAvatar(mediaService.getUrl((studentAdmission.getAvatar())));
-            }
-        });
 
         //map entity to database and return student AdmissionDetail
         return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
@@ -275,10 +269,6 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
             studentAdmission.setStudyProgram(studyProgram);
         }
 
-        //set avatar url to studentAdmission
-        if (studentAdmission.getAvatar() != null && !studentAdmission.getAvatar().trim().isEmpty()) {
-            studentAdmission.setAvatar(mediaService.getUrl((studentAdmission.getAvatar())));
-        }
 
         //save to database
         studentAdmissionRepository.save(studentAdmission);
@@ -338,16 +328,38 @@ public class StudentAdmissionServiceImpl implements StudentAdmissionService {
         //get all entity that match with filter condition
         Page<StudentAdmission> admissionsPage = studentAdmissionRepository.findAll(specification, pageRequest);
 
-        admissionsPage.forEach(studentAdmission -> {
-
-            //set avatar url to studentAdmission
-            if (studentAdmission.getAvatar() != null && !studentAdmission.getAvatar().trim().isEmpty()) {
-                studentAdmission.setAvatar(mediaService.getUrl((studentAdmission.getAvatar())));
-            }
-        });
 
         //map to DTO and return
         return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
 
+    }
+
+    @Override
+    public Page<StudentAdmissionDetailResponse> getAllStudentAdmissionsByClassInfo(String uuid, int pageNumber, int pageSize) {
+
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class with uuid  =  %s has not been found",uuid)));
+
+        String degreeAlias=aClass.getStudyProgram().getDegree().getAlias();
+
+        String studyProgramAlias = aClass.getStudyProgram().getAlias();
+
+        String shiftAlias  = aClass.getShift().getAlias();
+
+        //create sort order
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+
+        //find all student admission in database
+        Page<StudentAdmission> admissionsPage =
+                studentAdmissionRepository.findAllByShiftAliasAndStudyProgramAliasAndDegreeAlias(shiftAlias,
+                        studyProgramAlias,degreeAlias, pageRequest);
+
+
+        //map entity to database and return student AdmissionDetail
+        return admissionsPage.map(studentAdmissionMapper::toStudentAdmissionDetailResponse);
     }
 }

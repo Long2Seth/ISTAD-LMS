@@ -18,4 +18,6 @@ public interface AdmissionRepository extends JpaRepository<Admission, Long>,JpaS
     Set<Admission> findAllByStatus(Integer status);
 
     boolean existsByAcademicYear(AcademicYear academicYear);
+
+    boolean existsByUuid(String uuid);
 }

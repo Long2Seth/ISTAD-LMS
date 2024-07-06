@@ -37,6 +37,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> , JpaSpe
 
     Long countAllByStudentStatus(Integer status);
 
-
+    boolean existsByUuid(String uuid);
 
 }

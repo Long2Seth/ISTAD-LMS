@@ -98,8 +98,8 @@ public class ClassServiceImpl implements ClassService {
     @Transactional
     public void createClass(ClassRequest classRequest) {
 
-        if(classRepository.existsByClassCode(classRequest.classCode())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("Class with classCode = %s has " +
+        if (classRepository.existsByClassCode(classRequest.classCode())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Class with classCode = %s has " +
                             "already existed",
                     classRequest.classCode()));
         }
@@ -107,30 +107,30 @@ public class ClassServiceImpl implements ClassService {
         //map from DTO to entity
         Class aClass = classMapper.fromClassRequest(classRequest);
 
-        AcademicYear academicYear=
-                academicYearRepository.findByAlias(classRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("academicYear =%s has not been found",classRequest.academicYearAlias())));
+        AcademicYear academicYear =
+                academicYearRepository.findByAlias(classRequest.academicYearAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("academicYear =%s has not been found", classRequest.academicYearAlias())));
 
         //find studyProgram by studyPramAlias in classRequest
         StudyProgram studyProgram =
                 studyProgramRepository.findByAliasAndIsDeletedFalse(classRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram = %s has not been found", classRequest.studyProgramAlias())));
 
         //find year of study by year and semester 1
-        YearOfStudy yearOfStudy1=yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(),1,
-                studyProgram).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(
-                        "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
-                classRequest.year(),1,studyProgram.getAlias())));
+        YearOfStudy yearOfStudy1 = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(), 1,
+                studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
+                classRequest.year(), 1, studyProgram.getAlias())));
 
         //find year of study by year and semester 2
-        YearOfStudy yearOfStudy2=yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(),2,
-                studyProgram).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(
+        YearOfStudy yearOfStudy2 = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(), 2,
+                studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
                 "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
-                classRequest.year(),2,studyProgram.getAlias())));
+                classRequest.year(), 2, studyProgram.getAlias())));
 
         //get all subject in semester 1
-        Set<Subject> subjects1=yearOfStudy1.getSubjects();
+        Set<Subject> subjects1 = yearOfStudy1.getSubjects();
 
         //get all subject in semester2
-        Set<Subject> subjects2=yearOfStudy2.getSubjects();
+        Set<Subject> subjects2 = yearOfStudy2.getSubjects();
 
 
         Set<Course> coursesSemester1 = subjects1.stream()
@@ -139,7 +139,14 @@ public class ClassServiceImpl implements ClassService {
                     course.setOneClass(aClass);
                     course.setSubject(subject);
                     course.setYearOfStudy(yearOfStudy1);
-                    course.setUuid(UUID.randomUUID().toString());
+
+                    String uuid;
+                    do {
+                        uuid = UUID.randomUUID().toString();
+                    } while (courseRepository.existsByUuid(uuid));
+
+                    course.setUuid(uuid);
+
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
@@ -154,7 +161,14 @@ public class ClassServiceImpl implements ClassService {
                     course.setOneClass(aClass);
                     course.setSubject(subject);
                     course.setYearOfStudy(yearOfStudy2);
-                    course.setUuid(UUID.randomUUID().toString());
+
+                    String uuid;
+                    do {
+                        uuid = UUID.randomUUID().toString();
+                    } while (courseRepository.existsByUuid(uuid));
+
+                    course.setUuid(uuid);
+
                     course.setTitle(subject.getTitle());
                     course.setIsDeleted(false);
                     course.setIsDraft(true);
@@ -164,12 +178,12 @@ public class ClassServiceImpl implements ClassService {
                 .collect(Collectors.toSet());
 
         //all course in class
-        Set<Course> allCourse=new HashSet<>();
+        Set<Course> allCourse = new HashSet<>();
         allCourse.addAll(coursesSemester1);
         allCourse.addAll(coursesSemester2);
 
 //        find instructor by instructorUuid in classRequest
-        if (classRequest.instructorUuid() != null) {
+        if (classRequest.instructorUuid() != null && !classRequest.instructorUuid().trim().isEmpty()) {
 
             Instructor instructor =
                     instructorRepository.findInstructorByUserUuid(classRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classRequest.instructorUuid())));
@@ -194,8 +208,13 @@ public class ClassServiceImpl implements ClassService {
         //set all course to cass
         aClass.setCourses(allCourse);
 
+        String uuid;
+        do {
+            uuid = UUID.randomUUID().toString();
+        } while (classRepository.existsByUuid(uuid));
+
         //set uuid of study to class
-        aClass.setUuid(UUID.randomUUID().toString());
+        aClass.setUuid(uuid);
 
         //set generation to entity
         aClass.setGeneration(generation);
@@ -207,9 +226,9 @@ public class ClassServiceImpl implements ClassService {
         aClass.setIsDeleted(false);
 
         //check all student alias from DTO null or not
-        if (false||classRequest.studentAdmissionUuid() != null&& !classRequest.studentAdmissionUuid().isEmpty()) {
+        if (false || classRequest.studentAdmissionUuid() != null && !classRequest.studentAdmissionUuid().isEmpty()) {
 
-            Set<User> users=new HashSet<>();
+            Set<User> users = new HashSet<>();
 
             //find all studentAdmission from DTO in database to add by student uuid
             Set<StudentAdmission> studentAdmissions =
@@ -242,11 +261,11 @@ public class ClassServiceImpl implements ClassService {
                             student.setClasses(classes);
 
 
-                            Set<Course> studentCourses=new HashSet<>();
-                            if(student.getCourses()!=null){
+                            Set<Course> studentCourses = new HashSet<>();
+                            if (student.getCourses() != null) {
 
                                 //get all course that student enrolled
-                                studentCourses=student.getCourses();
+                                studentCourses = student.getCourses();
                             }
 
                             //add all course in class to student course(appen on old course that student enrolled)
@@ -268,24 +287,32 @@ public class ClassServiceImpl implements ClassService {
                                         "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
                             }
 
+                            String StudentUuid;
+                            do {
+                                StudentUuid = UUID.randomUUID().toString();
+                            } while (studentRepository.existsByUuid(student.getUuid()));
+
                             //set uuid to student
-                            student.setUuid(UUID.randomUUID().toString());
+                            student.setUuid(StudentUuid);
 
                             long numberOfStudent = studentRepository.count();
 
                             //set classes to student
-                            student.setCardId(aClass.getGeneration().getAlias()+"-"+numberOfStudent);
+                            student.setCardId(aClass.getGeneration().getAlias() + "-" + numberOfStudent);
 
                             student.setStudentStatus(1);
-
 
 
                             // Map user request to user
                             User user = student.getUser();
 
+                            String userUuid;
+                            do {
+                                userUuid = UUID.randomUUID().toString();
+                            } while (userRepository.existsByUuid(userUuid));
 
                             //set uuid to user
-                            user.setUuid(UUID.randomUUID().toString());
+                            user.setUuid(userUuid);
 
                             String rawPassword = userService.generateStrongPassword(10);
                             try {
@@ -334,11 +361,11 @@ public class ClassServiceImpl implements ClassService {
                             studentAdmission.setStudent(true);
 
 
-                            Set<Course> studentCourses=new HashSet<>();
-                            if(student.getCourses()!=null){
+                            Set<Course> studentCourses = new HashSet<>();
+                            if (student.getCourses() != null) {
 
                                 //get all course that student enrolled
-                                studentCourses=student.getCourses();
+                                studentCourses = student.getCourses();
                             }
 
                             //add all course in class to student course(appen on old course that student enrolled)
@@ -417,7 +444,7 @@ public class ClassServiceImpl implements ClassService {
                         String.format("Class = %s has not been found", uuid)));
 
         //check null alias from DTO
-        if (classUpdateRequest.classCode()!=null) {
+        if (classUpdateRequest.classCode() != null) {
 
             //validate classCode from dto with original classCode
             if (!aClass.getClassCode().equalsIgnoreCase(classUpdateRequest.classCode())) {
@@ -555,8 +582,8 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public ClassDetailResponse addStudent(String uuid, ClassAddStudentRequest classAddStudentRequest) {
 
-        if(classAddStudentRequest.studentAdmissionUuid()==null||classAddStudentRequest.studentAdmissionUuid().isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"studentAdmissionUuid is null or empty");
+        if (classAddStudentRequest.studentAdmissionUuid() == null || classAddStudentRequest.studentAdmissionUuid().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "studentAdmissionUuid is null or empty");
         }
 
         //validate class from DTO by uuid
@@ -576,7 +603,7 @@ public class ClassServiceImpl implements ClassService {
                 }).map(studentAdmissionUuid ->
                         studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
 
-        Set<User> users=new HashSet<>();
+        Set<User> users = new HashSet<>();
 
         //add all studentAdmission to student
         Set<Student> students = studentAdmissions.stream()
@@ -600,11 +627,11 @@ public class ClassServiceImpl implements ClassService {
                         student.setClasses(classes);
 
 
-                        Set<Course> studentCourses=new HashSet<>();
-                        if(student.getCourses()!=null){
+                        Set<Course> studentCourses = new HashSet<>();
+                        if (student.getCourses() != null) {
 
                             //get all course that student enrolled
-                            studentCourses=student.getCourses();
+                            studentCourses = student.getCourses();
                         }
 
                         //add all course in class to student course(appen on old course that student enrolled)
@@ -626,21 +653,33 @@ public class ClassServiceImpl implements ClassService {
                                     "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
                         }
 
+                        String studentUuid;
+                        do {
+                            studentUuid = UUID.randomUUID().toString();
+                        } while (studentRepository.existsByUuid(studentUuid));
+
+
                         //set uuid to student
-                        student.setUuid(UUID.randomUUID().toString());
+                        student.setUuid(studentUuid);
 
                         long numberOfStudent = studentRepository.count();
 
                         //set classes to student
-                        student.setCardId(aClass.getGeneration().getAlias()+"-"+numberOfStudent);
+                        student.setCardId(aClass.getGeneration().getAlias() + "-" + numberOfStudent);
 
                         student.setStudentStatus(1);
 
                         // Map user request to user
                         User user = student.getUser();
 
+                        String userUuid;
+                        do {
+                            userUuid = UUID.randomUUID().toString();
+                        } while (userRepository.existsByUuid(userUuid));
+
+
                         //set uuid to user
-                        user.setUuid(UUID.randomUUID().toString());
+                        user.setUuid(userUuid);
 
                         String rawPassword = userService.generateStrongPassword(10);
                         try {
@@ -688,11 +727,11 @@ public class ClassServiceImpl implements ClassService {
                         studentAdmission.setStudent(true);
 
 
-                        Set<Course> studentCourses=new HashSet<>();
-                        if(student.getCourses()!=null){
+                        Set<Course> studentCourses = new HashSet<>();
+                        if (student.getCourses() != null) {
 
                             //get all course that student enrolled
-                            studentCourses=student.getCourses();
+                            studentCourses = student.getCourses();
                         }
 
                         //add all course in class to student course(appen on old course that student enrolled)
@@ -804,7 +843,7 @@ public class ClassServiceImpl implements ClassService {
 
 
         //find all student in class
-        Page<Student> students = studentRepository.findStudentByClassesUuid(classUuid,pageRequest);
+        Page<Student> students = studentRepository.findStudentByClassesUuid(classUuid, pageRequest);
 
         //map entity to DTO and return
         return students.map(studentMapper::toResponse);
@@ -821,7 +860,7 @@ public class ClassServiceImpl implements ClassService {
 
 
         //find all student in class
-        Page<Course> students = courseRepository.findByOneClassUuid(classUuid,pageRequest);
+        Page<Course> students = courseRepository.findByOneClassUuid(classUuid, pageRequest);
 
         //map entity to DTO and return
         return students.map(courseMapper::toCourseDetailResponse);

@@ -81,9 +81,13 @@ public class AdmissionServiceImpl implements AdmissionService {
                     "has already existed",academicYear.getAlias()));
         }
 
+        String uuid;
+        do {
+            uuid = UUID.randomUUID().toString();
+        } while (admissionRepository.existsByUuid(uuid));
 
         //set uuid to admission
-        admission.setUuid(UUID.randomUUID().toString());
+        admission.setUuid(uuid);
 
         //set isDeleted to false(enable)
         admission.setIsDeleted(false);

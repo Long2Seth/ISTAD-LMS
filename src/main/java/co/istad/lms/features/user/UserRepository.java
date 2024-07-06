@@ -60,5 +60,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Long countAllByCreatedAtIsAfter(Timestamp createdAt);
 
+    boolean existsByUuid(String uuid);
 
 }
