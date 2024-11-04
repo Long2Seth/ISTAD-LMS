@@ -1,62 +1,105 @@
 package co.istad.lms.domain;
 
-
+import co.istad.lms.config.jpa.Auditable;
+import co.istad.lms.domain.roles.Student;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "payments")
 @Entity
-public class Payment extends Auditable{
+@Table(name = "payments")
+public class Payment extends Auditable {
+
+
+
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "uuid" , nullable = false)
+
+
+    @Column(nullable = false, unique = true)
     private String uuid;
 
-    @Column ( name = "paid_amount" , nullable = false)
-    private Double paidAmount;
 
-    @Column ( name = "payment_date" , nullable = false)
-    private LocalDate paymentDate;
+    @Column(length = 50 , nullable = false)
+    private String studentName;
 
-    @Column( name = "discount" , nullable = false)
-    private Double discount;
 
-    @Column ( name = "due_amount" , nullable = false)
-    private Double dueAmount;
 
-    @Column ( name = "total_amount" , nullable = false)
-    private Double totalAmount;
-
-    @Column ( name = "year" , nullable = false)
+    @Column( nullable = false)
     private Integer year;
 
-    @Column ( name = "semester" , nullable = false)
-    private Integer semester;
 
-    @Column  ( name = "remark" , columnDefinition = "TEXT")
+
+    @Column(nullable = false)
+    private Double balanceDue;
+
+
+
+    @Column(nullable = false)
+    private Double paidAmount;
+
+
+
+    @Column(nullable = false)
+    private LocalDate paidDate;
+
+
+
+    @Column(nullable = false)
+    private Double discount;
+
+
+
+    @Column(nullable = false)
+    private Double totalPayment;
+
+
+
+    private Double academicFee;
+
+
+
+    private String paymentMethod;
+
+
+
+    @Column(columnDefinition = "TEXT")
     private String remark;
 
-    @Column ( name = "student_id" , nullable = false)
-    private Long studentId;
 
-    @Column( name = "status" , nullable = false)
+
+    @Column(nullable = false)
     private Boolean status;
 
-    @Column ( name = "is_deleted" , nullable = false)
-    private Boolean isDeleted;
+
+
+    @Column(nullable = false)
+    private Boolean paidComplete;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+
+
+
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
+    private List<Receipt> receipt;
 
 
 
 
 }
-

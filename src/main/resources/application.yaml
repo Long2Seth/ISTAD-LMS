@@ -1,6 +1,7 @@
 media:
-#  server-path: ${MEDIA_SERVER_PATH}
-  #  client-path: /media/**
+  #media endpoint
+  end-point: ${MEDIA_ENDPOINT}
+  #the host that handle show image
   base-uri: ${MEDIA_BASE_URI}
 server:
   port: ${SERVER_PORT}
@@ -10,6 +11,13 @@ ACCESS_TOKEN_PUBLIC_KEY_PATH: ${ACT_PUBLIC}
 # This is for the refresh token
 REFRESH_TOKEN_PRIVATE_KEY_PATH: ${RET_PRIVATE}
 REFRESH_TOKEN_PUBLIC_KEY_PATH: ${RET_PUBLIC}
+
+assessment-percentage:
+  activity-score: ${ACTIVITY-SCORE-PERCENTAGE}
+  attendance-score: ${ATTENDANCE-SCORE-PERCENTAGE}
+  final-score: ${FINAL-SCORE-PERCENTAGE}
+  mini-project-midterm-score: ${MINI-PROJECT-MIDTERM-SCORE-PERCENTAGE}
+  assignment-score: ${ASSIGMENT-SCORE-PERCENTAGE}
 
 springdoc:
   swagger-ui:
@@ -21,13 +29,29 @@ file:
   storage-dir: "filestorage/images/"
   client-dir: "/images/**"
 
+url:
+  expiry: ${URL-EXPIRY-TIME}
+
 minio:
   url: ${MINIO_URL}
   secret-key: ${MINIO_SECRETE_KEY}
   bucket-name: ${MINIO_BUCKET}
   access-key: ${MINIO_ACCESS_KEY}
 
+app:
+  domain: ${DOMAIN}
+
+telegram:
+  bot:
+    token: ${TELEGRAM_TOKEN}
+#    username: ${TELEGRAM_USERNAME}
+    id: ${TELEGRAM_ID}
+
 spring:
+
+  main:
+    allow-circular-references: true
+
   application:
     name: "ISTAD-LMS"
   servlet: # this is for file upload
@@ -42,8 +66,11 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update # or update
+      ddl-auto: update
     generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
   security:
     user:
       name: ${SECURITY_NAME}
@@ -60,4 +87,4 @@ spring:
         starttls:
           enable: true
   profiles:
-    active: dev
+    active: stage

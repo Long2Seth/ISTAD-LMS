@@ -1,0 +1,198 @@
+package co.istad.lms.features.instructor;
+
+import co.istad.lms.features.attendance.dto.AttendanceInstructorReportResponse;
+import co.istad.lms.features.course.dto.CourseDetailResponse;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
+import co.istad.lms.features.instructor.dto.*;
+import co.istad.lms.features.lecture.dto.LectureDetailResponse;
+import co.istad.lms.features.lecture.dto.LectureInstructorScheduleResponse;
+import co.istad.lms.features.material.dto.MaterialDetailResponse;
+import co.istad.lms.features.score.dto.ScoreDetailResponse;
+import co.istad.lms.features.score.dto.ScoreEachSemesterResponse;
+import co.istad.lms.security.CustomUserDetails;
+import org.springframework.data.domain.Page;
+
+/**
+ * Business logic interface which contains to manage instructors
+ * @since 1.0 (2024)
+ * @author Long Piseth
+ * @version 1.0
+
+ */
+public interface InstructorService {
+
+
+    /**
+     * Creates a new instructor.
+     *
+     * @param instructorRequest is the request object containing instructor details for create instructor
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void createInstructor(InstructorRequest instructorRequest);
+
+
+
+    /**
+     * Updates an existing instructor.
+     *
+     * @param uuid    is the unique identifier of instructor
+     * @param instructorRequestUpdate the request object containing the updated instructor details
+     * @return {@link InstructorResponseDetail}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorResponseDetail updateInstructorByUuid(String uuid, InstructorRequestUpdate instructorRequestUpdate);
+
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @return {@link InstructorResponseDetail}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorResponseDetail getInstructorDetailByUuid(String uuid);
+
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param courseUuid is the unique identifier of course
+     * @return {@link InstructorCourseDetailResponse}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorCourseDetailResponse getInstructorCourseDetailByUuid(String courseUuid);
+
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param instructorSettingRequest is the unique identifier of course
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void instructorSetting(InstructorSettingRequest instructorSettingRequest);
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @param pageNumber is the pageNumber number to retrieve
+     * @param pageSize is the pageSize of the pageNumber to retrieve
+     * @return {@link Page<CourseWithUsersResponse>} is the page of course with users response
+     * @since 1.0 (2024)
+     */
+    Page<CourseWithUsersResponse> getInstructorDetailByUuidCourse(String uuid, int pageNumber, int pageSize);
+
+
+
+    /**
+     * Retrieves the details of an instructor by its UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @return {@link InstructorResponse}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorResponse getInstructorByUuid(String uuid);
+
+
+    /**
+     * Delete instructor by  UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void deleteInstructorByUuid( String uuid);
+
+
+    /**
+     * Disables  instructor by  UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void disableInstructorByUuid( String uuid);
+
+
+
+    /**
+     * Enables an instructor by its UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void enableInstructorByUuid( String uuid);
+
+
+
+    /**
+     * Block an instructor by its UUID.
+     *
+     * @param uuid is the unique identifier of instructor
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    void blockInstructorByUuid( String uuid);
+
+
+
+
+    /**
+     * Retrieves a paginated list of all courses of an instructor.
+     *
+     * @return {@link InstructorCoursesResponse}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    InstructorCoursesResponse getInstructorCourses();
+
+
+
+
+    /**
+     * Retrieves a paginated list details of all instructors.
+     * @param page is the pageNumber number to retrieve
+     * @param limit is the pageSize of the pageNumber to retrieve
+     * @return {@link Page<InstructorResponse>}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    Page<InstructorResponseDetail> getAllInstructorDetail(int page, int limit);
+
+
+
+    /**
+     * Retrieves a paginated list of all instructors.
+     *
+     * @param page is the pageNumber number to retrieve
+     * @param limit is the pageSize of the pageNumber to retrieve
+     * @return {@link Page<InstructorResponse>}
+     * @author Long Piseth
+     * @since 1.0 (2024)
+     */
+    Page<InstructorResponse> getAllInstructor(int page, int limit);
+
+
+    Page<LectureInstructorScheduleResponse> getAllSchedule(String userUuid, int pageNumber, int pageSize);
+
+    Page<MaterialDetailResponse> getAllMaterialsByFileType(CustomUserDetails userDetails,String fileType,
+                                                           int pageNumber, int pageSize);
+
+
+    Page<ScoreEachSemesterResponse> getAssessment(CustomUserDetails userDetails, int pageNumber, int pageSize);
+
+    Page<AttendanceInstructorReportResponse> getInstructorReportAttendance(CustomUserDetails userDetails, int pageNumber, int pageSize);
+
+
+}

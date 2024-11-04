@@ -1,10 +1,11 @@
 package co.istad.lms.domain;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -15,12 +16,17 @@ public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    @Column(nullable = false , length = 50 , name = "authority_name")
+    @Column(unique = true, nullable = false)
+    private String uuid;
+
+    @Column(nullable = false, length = 50)
     private String authorityName;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-
+    @ManyToMany(mappedBy = "authorities")
+    private List<User> users;
 }

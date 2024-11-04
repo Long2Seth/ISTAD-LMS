@@ -1,19 +1,65 @@
 package co.istad.lms.features.user.dto;
 
-import co.istad.lms.domain.Role;
-import java.util.List;
 
+
+import lombok.Builder;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+
+@Builder
 public record UserResponse(
-        String name_en,
-        String name_kh,
+
+
+
+        String uuid,
+
+
+        String nameEn,
+
+
+        String nameKh,
+
+
+        String username,
+
+
+        String position,
+
+
         String email,
-        String userName,
-        String profileImage,
+
+
         String phoneNumber,
-        String cityOrProvince,
-        String khanOrDistrict,
-        String sangkatOrCommune,
-        String street,
-        List<Role> roles
+
+
+        LocalDate dob,
+
+
+        String gender,
+
+
+        String profileImage,
+
+
+
+        String linkGit,
+
+
+        String linkTelegram,
+
+
+        String linkLinkedIn,
+
+
+        Set< String> educations,
+
+
+
+
+        Set<String> skills
+
+
         ){
 }

@@ -1,26 +1,29 @@
 // AdmissionServiceImpl.java
+
 package co.istad.lms.features.admission;
 
-import co.istad.lms.domain.Admission;
-import co.istad.lms.domain.Degree;
-import co.istad.lms.domain.Shift;
-import co.istad.lms.domain.StudyProgram;
-import co.istad.lms.features.admission.dto.AdmissionCreateRequest;
-import co.istad.lms.features.admission.dto.AdmissionDetailResponse;
-import co.istad.lms.features.admission.dto.AdmissionResponse;
-import co.istad.lms.features.admission.dto.AdmissionUpdateRequest;
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.*;
+import co.istad.lms.features.academicyear.AcademicYearRepository;
+import co.istad.lms.features.admission.dto.*;
 import co.istad.lms.features.degree.DegreeRepository;
 import co.istad.lms.features.shift.ShiftRepository;
 import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.telegrambot.TelegramBotService;
 import co.istad.lms.mapper.AdmissionMapper;
+import co.istad.lms.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -28,101 +31,229 @@ import java.util.UUID;
 public class AdmissionServiceImpl implements AdmissionService {
 
     private final AdmissionRepository admissionRepository;
+
     private final AdmissionMapper admissionMapper;
-    private final DegreeRepository degreeRepository;
-    private final ShiftRepository shiftRepository;
-    private final StudyProgramRepository studyProgramRepository;
+
+    private final BaseSpecification<Admission> baseSpecification;
+
+    private final AcademicYearRepository academicYearRepository;
 
     @Override
-    public AdmissionResponse createAdmission(AdmissionCreateRequest admissionCreateRequest) {
-        Degree degree = degreeRepository.findByAlias(admissionCreateRequest.degreeAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "degree with Degree alias =" + admissionCreateRequest.degreeAlias() + "not found"));
-        Shift shift = shiftRepository.findByAlias(admissionCreateRequest.shiftAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "shift with shift alias =" + admissionCreateRequest.shiftAlias() + "not found"));
+    public void createAdmission(AdmissionRequest admissionRequest) {
 
-        StudyProgram studyProgram = studyProgramRepository.findByAlias(admissionCreateRequest.studyProgramAlias())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "study program with study program alias =" + admissionCreateRequest.studyProgramAlias() + "not found"));
+        //check format for openDate
+        LocalDate openDate = DateTimeUtil.stringToLocalDate(admissionRequest.openDate(), "openDate");
 
-        Admission admission = admissionMapper.fromAdmissionRequest(admissionCreateRequest);
-        admission.setUuid(UUID.randomUUID().toString()); // Generate UUID
-        admission.setShift(shift);
-        admission.setDegree(degree);
-        admission.setStudyProgram(studyProgram);
-        admission = admissionRepository.save(admission);
-        return admissionMapper.toAdmissionResponse(admission);
+        //check endDate value
+        LocalDate endDate = null;
+        if (admissionRequest.endDate() != null && !admissionRequest.endDate().trim().isEmpty()) {
+
+            //validate endDate format
+            endDate = DateTimeUtil.stringToLocalDate(admissionRequest.endDate(), "endDate");
+
+            //validate openDate must before endDate(if endDate contain value)
+            if (openDate.isAfter(endDate)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after openDate");
+            }
+        }
+
+        //map form DTO to entity
+        Admission admission = admissionMapper.fromAdmissionRequest(admissionRequest);
+
+        // Check if the status of admission is set to 1 (open)
+        if (admissionRequest.status() == 1) {
+
+            // Find all admissions that are open (status = 1)
+            Set<Admission> admissions = admissionRepository.findAllByStatus(1);
+
+            // Close all open admissions (set status to 2)
+            admissions.forEach(admissionMap -> admissionMap.setStatus(2));
+
+            // Batch save all updated admissions
+            admissionRepository.saveAll(admissions);
+        }
+
+        AcademicYear academicYear=
+                academicYearRepository.findByAlias(admissionRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("AcademicYear = %s has not been found",admissionRequest.academicYearAlias())));
+
+        if(admissionRepository.existsByAcademicYear(academicYear)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("admission with academicYear = %s " +
+                    "has already existed",academicYear.getAlias()));
+        }
+
+        String uuid;
+        do {
+            uuid = UUID.randomUUID().toString();
+        } while (admissionRepository.existsByUuid(uuid));
+
+        //set uuid to admission
+        admission.setUuid(uuid);
+
+        //set isDeleted to false(enable)
+        admission.setIsDeleted(false);
+
+        //set academicYear
+        admission.setAcademicYear(academicYear);
+
+        //save to database
+        admissionRepository.save(admission);
     }
 
     @Override
     public AdmissionDetailResponse getAdmissionByUuid(String uuid) {
-        Admission admission = admissionRepository.findByUuid(uuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Admission with uuid = " + uuid + " doesn't exist ! "));
+
+        //find admission in database by uuid
+        Admission admission = admissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ", uuid)));
+
+        //save to database and return AdmissionDetail
         return admissionMapper.toAdmissionDetailResponse(admission);
     }
 
     @Override
-    public List<AdmissionResponse> getAdmissionByNameEn(String nameEn) {
-        if (!admissionRepository.existsByNameEn(nameEn)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Admission with name = " + nameEn + " doesn't exist ! ");
+    public Page<AdmissionDetailResponse> getAllAdmissions(int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+
+        //find all admission in database
+        Page<Admission> admissionsPage = admissionRepository.findAll(pageRequest);
+
+        //map entity to database and return AdmissionDetail
+        return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
+    }
+
+    @Override
+    public AdmissionDetailResponse updateAdmission(String admissionUuid,
+                                                   AdmissionUpdateRequest admissionUpdateRequest) {
+
+        //find admission by uuid in database
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission  = %s has not been found ! ", admissionUuid)));
+
+        //get openDate from admission
+        LocalDate openDate = admission.getOpenDate();
+
+        //if user update openDate
+        if (admissionUpdateRequest.openDate() != null && !admissionUpdateRequest.openDate().trim().isEmpty()) {
+
+            //validate openDate from DTO
+            openDate = DateTimeUtil.stringToLocalDate(admissionUpdateRequest.openDate(), "openDate");
         }
-        List<Admission> admission = admissionRepository.findByNameEnIgnoreCase(nameEn);
-        return admission.stream().map(
-                admissionMapper::toAdmissionResponse).toList();
-    }
 
-    @Override
-    public List<AdmissionResponse> getAdmissionByNameKh(String nameKh) {
-        if (!admissionRepository.existsByNameKh(nameKh)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Admission with name = " + nameKh + " doesn't exist ! ");
+        //check endDate value
+        LocalDate endDate = admission.getEndDate();
+        if (admissionUpdateRequest.endDate() != null && !admissionUpdateRequest.endDate().trim().isEmpty()) {
+
+            //validate endDate format
+            endDate = DateTimeUtil.stringToLocalDate(admissionUpdateRequest.endDate(), "endDate");
+
+            //validate endDate must be after openDate
+            if (openDate.isAfter(endDate)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate must be after openDate");
+            }
         }
-        List<Admission> admission = admissionRepository.findByNameKhIgnoreCase(nameKh);
-        return admission.stream().map(
-                admissionMapper::toAdmissionResponse).toList();
-    }
 
-    @Override
-    public Page<AdmissionResponse> getAdmissionByNameEnContains(String nameEnContain, Pageable pageable) {
-        Page<Admission> admissionsPage = admissionRepository.findByNameEnContainingIgnoreCase(nameEnContain, pageable);
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
-    }
-
-    @Override
-    public Page<AdmissionResponse> getAdmissionByNameKhContains(String nameKhContain, Pageable pageable) {
-        Page<Admission> admissionsPage = admissionRepository.findByNameKhContainingIgnoreCase(nameKhContain, pageable);
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
-    }
+        //map data from DTO to entity
+        admissionMapper.updateAdmissionFromRequest(admission, admissionUpdateRequest);
 
 
-    @Override
-    public Page<AdmissionResponse> getAllAdmissions(Pageable pageable) {
-        Page<Admission> admissionsPage = admissionRepository.findAll(pageable);
-        return admissionsPage.map(admissionMapper::toAdmissionResponse);
-    }
+        if(admissionUpdateRequest.academicYearAlias()!=null&&!admissionUpdateRequest.academicYearAlias().trim().isEmpty()){
+            AcademicYear academicYear=
+                    academicYearRepository.findByAlias(admissionUpdateRequest.academicYearAlias()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("AcademicYear = %s has not been found",admissionUpdateRequest.academicYearAlias())));
+            admission.setAcademicYear(academicYear);
+        }
 
-    @Override
-    public AdmissionResponse updateAdmission(String admissionUuid, AdmissionUpdateRequest admissionRequest) {
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Account with id = " + admissionUuid + " doesn't exist ! "));
+        //save to database
+        admissionRepository.save(admission);
 
-        admissionMapper.updateAdmissionFromRequest(admission, admissionRequest);
-        admission = admissionRepository.save(admission);
-        return admissionMapper.toAdmissionResponse(admission);
+        //return admissionResponse to controller
+        return admissionMapper.toAdmissionDetailResponse(admission);
     }
 
     @Override
     public void deleteAdmission(String admissionUuid) {
-        Admission admission = admissionRepository.findByUuid(admissionUuid)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Account with id = " + admissionUuid + " doesn't exist ! "));
+
+        //validate admission by uuid
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
+
+        //delete from database
         admissionRepository.delete(admission);
     }
+
+    @Override
+    public void disableAdmissionByUuid(String admissionUuid) {
+
+        //validate from dto with uuid
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
+
+        //set isDelete to true (disable)
+        admission.setIsDeleted(true);
+
+        //save to database
+        admissionRepository.save(admission);
+    }
+
+    @Override
+    public void enableAdmissionByUuid(String admissionUuid) {
+
+        //validate from dto by uuid
+        Admission admission = admissionRepository.findByUuid(admissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found ! ", admissionUuid)));
+
+        //set isDeleted to false(enable)
+        admission.setIsDeleted(false);
+
+        //save to database
+        admissionRepository.save(admission);
+
+    }
+
+    @Override
+    public void updateAdmissionStatus(String uuid, AdmissionUpdateStatusRequest admissionUpdateStatusRequest) {
+
+        Admission admission = admissionRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Admission = %s has not been found", uuid)));
+
+        // Check if the status of the admission is set to 1 (open)
+        if (admissionUpdateStatusRequest.status() == 1) {
+
+            // Find all admissions that are open (status = 1)
+            Set<Admission> admissions = admissionRepository.findAllByStatus(1);
+
+            // Update status to 2 for all open admissions
+            admissions.forEach(admissionMap -> admissionMap.setStatus(2));
+
+            // Batch save all updated admissions
+            admissionRepository.saveAll(admissions);
+        }
+
+
+        //set new status
+        admission.setStatus(admissionUpdateStatusRequest.status());
+
+        //save to database
+        admissionRepository.save(admission);
+
+    }
+
+    @Override
+    public Page<AdmissionDetailResponse> filterAdmissions(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //create a dynamic query specification for filtering Admission entities based on the criteria provided
+        Specification<Admission> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<Admission> admissionsPage = admissionRepository.findAll(specification, pageRequest);
+
+        //map to DTO and return
+        return admissionsPage.map(admissionMapper::toAdmissionDetailResponse);
+
+    }
+
 }

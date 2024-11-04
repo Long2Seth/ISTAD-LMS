@@ -1,0 +1,869 @@
+package co.istad.lms.features.classes;
+
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.Class;
+import co.istad.lms.domain.*;
+import co.istad.lms.domain.roles.Instructor;
+import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.academicyear.AcademicYearRepository;
+import co.istad.lms.features.academicyear.dto.AcademicYearResponse;
+import co.istad.lms.features.classes.dto.ClassAddStudentRequest;
+import co.istad.lms.features.classes.dto.ClassDetailResponse;
+import co.istad.lms.features.classes.dto.ClassRequest;
+import co.istad.lms.features.classes.dto.ClassUpdateRequest;
+import co.istad.lms.features.course.CourseRepository;
+import co.istad.lms.features.course.dto.CourseDetailResponse;
+import co.istad.lms.features.generation.GenerationRepository;
+import co.istad.lms.features.instructor.InstructorRepository;
+import co.istad.lms.features.shift.ShiftRepository;
+import co.istad.lms.features.student.StudentRepository;
+import co.istad.lms.features.student.StudentService;
+import co.istad.lms.features.student.dto.StudentResponse;
+import co.istad.lms.features.studentadmisson.StudentAdmissionRepository;
+import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.mapper.ClassMapper;
+import co.istad.lms.mapper.CourseMapper;
+import co.istad.lms.mapper.StudentAdmissionMapper;
+import co.istad.lms.mapper.StudentMapper;
+import co.istad.lms.util.OtpUtil;
+import lombok.RequiredArgsConstructor;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.crypto.SecretKey;
+import java.lang.module.ResolutionException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+
+@Service
+@RequiredArgsConstructor
+public class ClassServiceImpl implements ClassService {
+
+    private final ClassRepository classRepository;
+
+    private final ClassMapper classMapper;
+
+    private final BaseSpecification<Class> baseSpecification;
+
+    private final StudyProgramRepository studyProgramRepository;
+
+    private final ShiftRepository shiftRepository;
+
+    private final GenerationRepository generationRepository;
+
+    private final InstructorRepository instructorRepository;
+
+    private final StudentRepository studentRepository;
+
+    private final StudentService studentService;
+
+    private final YearOfStudyRepository yearOfStudyRepository;
+
+    private final StudentAdmissionRepository studentAdmissionRepository;
+
+    private final StudentAdmissionMapper studentAdmissionMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
+    private final UserService userService;
+
+    private final CourseRepository courseRepository;
+
+    private final StudentMapper studentMapper;
+
+    private final CourseMapper courseMapper;
+
+    private final AcademicYearRepository academicYearRepository;
+
+    @Override
+    @Transactional
+    public void createClass(ClassRequest classRequest) {
+
+        if (classRepository.existsByClassCode(classRequest.classCode())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Class with classCode = %s has " +
+                            "already existed",
+                    classRequest.classCode()));
+        }
+
+        //map from DTO to entity
+        Class aClass = classMapper.fromClassRequest(classRequest);
+
+        AcademicYear academicYear =
+                academicYearRepository.findByAlias(classRequest.academicYearAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("academicYear =%s has not been found", classRequest.academicYearAlias())));
+
+        //find studyProgram by studyPramAlias in classRequest
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(classRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram = %s has not been found", classRequest.studyProgramAlias())));
+
+        //find year of study by year and semester 1
+        YearOfStudy yearOfStudy1 = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(), 1,
+                studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
+                classRequest.year(), 1, studyProgram.getAlias())));
+
+        //find year of study by year and semester 2
+        YearOfStudy yearOfStudy2 = yearOfStudyRepository.findByYearAndSemesterAndStudyProgram(classRequest.year(), 2,
+                studyProgram).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(
+                "yearOfStudy that year =%s, semester = %s ,studyProgram = %s has not been found",
+                classRequest.year(), 2, studyProgram.getAlias())));
+
+        //get all subject in semester 1
+        Set<Subject> subjects1 = yearOfStudy1.getSubjects();
+
+        //get all subject in semester2
+        Set<Subject> subjects2 = yearOfStudy2.getSubjects();
+
+
+        Set<Course> coursesSemester1 = subjects1.stream()
+                .map(subject -> {
+                    Course course = new Course();
+                    course.setOneClass(aClass);
+                    course.setSubject(subject);
+                    course.setYearOfStudy(yearOfStudy1);
+
+                    String uuid;
+                    do {
+                        uuid = UUID.randomUUID().toString();
+                    } while (courseRepository.existsByUuid(uuid));
+
+                    course.setUuid(uuid);
+
+                    course.setTitle(subject.getTitle());
+                    course.setIsDeleted(false);
+                    course.setIsDraft(true);
+                    course.setStatus(1);
+                    return course;
+                })
+                .collect(Collectors.toSet());
+
+        Set<Course> coursesSemester2 = subjects2.stream()
+                .map(subject -> {
+                    Course course = new Course();
+                    course.setOneClass(aClass);
+                    course.setSubject(subject);
+                    course.setYearOfStudy(yearOfStudy2);
+
+                    String uuid;
+                    do {
+                        uuid = UUID.randomUUID().toString();
+                    } while (courseRepository.existsByUuid(uuid));
+
+                    course.setUuid(uuid);
+
+                    course.setTitle(subject.getTitle());
+                    course.setIsDeleted(false);
+                    course.setIsDraft(true);
+                    course.setStatus(1);
+                    return course;
+                })
+                .collect(Collectors.toSet());
+
+        //all course in class
+        Set<Course> allCourse = new HashSet<>();
+        allCourse.addAll(coursesSemester1);
+        allCourse.addAll(coursesSemester2);
+
+//        find instructor by instructorUuid in classRequest
+        if (classRequest.instructorUuid() != null && !classRequest.instructorUuid().trim().isEmpty()) {
+
+            Instructor instructor =
+                    instructorRepository.findInstructorByUserUuid(classRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classRequest.instructorUuid())));
+
+            //set instructor to class
+            aClass.setInstructor(instructor);
+        }
+
+        //find shift by shiftAlias in classRequest
+        Shift shift = shiftRepository.findByAlias(classRequest.shiftAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found", classRequest.shiftAlias())));
+
+        //find generation by generationAlias in classRequest
+        Generation generation = generationRepository.findByAlias(classRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found", classRequest.generationAlias())));
+
+
+        //set shift to entity
+        aClass.setShift(shift);
+
+        //setAcademicYear to class
+        aClass.setAcademicYear(academicYear);
+
+        //set all course to cass
+        aClass.setCourses(allCourse);
+
+        String uuid;
+        do {
+            uuid = UUID.randomUUID().toString();
+        } while (classRepository.existsByUuid(uuid));
+
+        //set uuid of study to class
+        aClass.setUuid(uuid);
+
+        //set generation to entity
+        aClass.setGeneration(generation);
+
+        //set studyProgram to entity
+        aClass.setStudyProgram(studyProgram);
+
+        //set isDeleted to false(enable)
+        aClass.setIsDeleted(false);
+
+        //check all student alias from DTO null or not
+        if (false || classRequest.studentAdmissionUuid() != null && !classRequest.studentAdmissionUuid().isEmpty()) {
+
+            Set<User> users = new HashSet<>();
+
+            //find all studentAdmission from DTO in database to add by student uuid
+            Set<StudentAdmission> studentAdmissions =
+                    classRequest.studentAdmissionUuid().stream().peek(studentAdmissionUuid -> {
+                        if (studentAdmissionUuid.length() > 100) {
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("StudentAdmission UUID = %s exceeds the maximum length of 100 characters", studentAdmissionUuid));
+                        }
+                    }).map(studentAdmissionUuid ->
+                            studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
+
+            //add all studentAdmission to student
+            Set<Student> students = studentAdmissions.stream()
+                    .map(studentAdmission -> {
+
+                        //if studentAdmission already add to class(also has in student and user table)
+                        if (studentAdmission.isStudent()) {
+
+                            //get student from student table
+                            Student student =
+                                    studentRepository.findByUuid(studentAdmission.getStudentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studentAdmission.getStudentUuid())));
+
+
+                            //get all class that student study
+                            Set<Class> classes = student.getClasses();
+
+                            //add new class to set of class of student
+                            classes.add(aClass);
+
+                            //set classes to student
+                            student.setClasses(classes);
+
+
+                            Set<Course> studentCourses = new HashSet<>();
+                            if (student.getCourses() != null) {
+
+                                //get all course that student enrolled
+                                studentCourses = student.getCourses();
+                            }
+
+                            //add all course in class to student course(appen on old course that student enrolled)
+                            studentCourses.addAll(allCourse);
+
+                            //set all course(include course that student enrolled before and new course from class)
+                            student.setCourses(studentCourses);
+
+                            return student;
+                        }
+                        //admission that doesn't add to class yet(not student)
+                        else {
+
+                            //map from student admission
+                            Student student = studentAdmissionMapper.toStudent(studentAdmission);
+
+                            if (userRepository.existsByEmailOrUsername(student.getUser().getEmail(), student.getUser().getUsername())) {
+                                throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("UserName = %s or %s has " +
+                                        "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
+                            }
+
+                            String StudentUuid;
+                            do {
+                                StudentUuid = UUID.randomUUID().toString();
+                            } while (studentRepository.existsByUuid(student.getUuid()));
+
+                            //set uuid to student
+                            student.setUuid(StudentUuid);
+
+                            long numberOfStudent = studentRepository.count();
+
+                            //set classes to student
+                            student.setCardId(aClass.getGeneration().getAlias() + "-" + numberOfStudent);
+
+                            student.setStudentStatus(1);
+
+
+                            // Map user request to user
+                            User user = student.getUser();
+
+                            String userUuid;
+                            do {
+                                userUuid = UUID.randomUUID().toString();
+                            } while (userRepository.existsByUuid(userUuid));
+
+                            //set uuid to user
+                            user.setUuid(userUuid);
+
+                            String rawPassword = userService.generateStrongPassword(10);
+                            try {
+                                //generate key for encrypt
+                                SecretKey key = OtpUtil.generateKey();
+
+                                //encrypt password
+                                String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+                                //set raw password with encrypt password
+                                user.setRawPassword(encryptedPassword);
+                                user.setRawPassword(encryptedPassword);
+
+                                //set password to null
+                                user.setPassword(null);
+
+                            } catch (Exception e) {
+                                throw new RuntimeException("Error generating or encrypting password", e);
+                            }
+
+                            user.setIsDeleted(false);
+                            user.setStatus(false);
+
+                            //set userName to user
+                            user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s+", "-") + "-" + studentAdmission.getDob());
+
+                            //set user information
+                            user.setIsChangePassword(false);
+                            user.setAccountNonExpired(true);
+                            user.setAccountNonLocked(true);
+                            user.setCredentialsNonExpired(true);
+
+                            //set default authorities to user
+                            user.setAuthorities(studentService.getDefaultAuthoritiesStudent());
+
+                            // set user to student
+                            student.setUser(user);
+
+                            //add user to user Set
+                            users.add(user);
+
+                            //set student uuid to admission
+                            studentAdmission.setStudentUuid(student.getUuid());
+
+                            //set isStudent true(mark for admission that already add to student)
+                            studentAdmission.setStudent(true);
+
+
+                            Set<Course> studentCourses = new HashSet<>();
+                            if (student.getCourses() != null) {
+
+                                //get all course that student enrolled
+                                studentCourses = student.getCourses();
+                            }
+
+                            //add all course in class to student course(appen on old course that student enrolled)
+                            studentCourses.addAll(allCourse);
+
+                            //set all course(include course that student enrolled before and new course from class)
+                            student.setCourses(studentCourses);
+
+                            return student;
+                        }
+
+                    })
+                    .collect(Collectors.toSet());
+
+
+            //save user to database
+            userRepository.saveAll(users);
+
+            //save student to database
+            studentRepository.saveAll(students);
+
+            //save all studentAdmission to database
+            studentAdmissionRepository.saveAll(studentAdmissions);
+
+            //get all student in class
+            Set<Student> allStudents = aClass.getStudents();
+
+            //add new student from request
+            allStudents.addAll(students);
+
+            //set student to class(include old and new student)
+            aClass.setStudents(students);
+
+        }
+
+
+        //save to database
+        classRepository.save(aClass);
+
+    }
+
+    @Override
+    public ClassDetailResponse getClassByUuid(String alias) {
+
+        //find class by uuid
+        Class aClass =
+                classRepository.findByUuid(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found.", alias)));
+
+        //return degree detail
+        return classMapper.toClassDetailResponse(aClass);
+    }
+
+    @Override
+    public Page<ClassDetailResponse> getAllClasses(int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all classes in database
+        Page<Class> classes = classRepository.findAll(pageRequest);
+
+        //map entity to DTO and return
+        return classes.map(classMapper::toClassDetailResponse);
+    }
+
+    @Override
+    public ClassDetailResponse updateClassByUuid(String uuid, ClassUpdateRequest classUpdateRequest) {
+
+        //validate class from DTO
+        Class aClass =
+                classRepository.findByUuidAndIsDeletedFalse(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", uuid)));
+
+        //check null alias from DTO
+        if (classUpdateRequest.classCode() != null) {
+
+            //validate classCode from dto with original classCode
+            if (!aClass.getClassCode().equalsIgnoreCase(classUpdateRequest.classCode())) {
+
+                //validate new alias is conflict with other alias or not
+                if (classRepository.existsByClassCode(classUpdateRequest.classCode())) {
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Class with classCode = %s " +
+                            "already " +
+                            "exist.", classUpdateRequest.classCode()));
+                }
+            }
+        }
+
+        //check studyProgram from update DTO
+        if (classUpdateRequest.studyProgramAlias() != null) {
+
+            //find studyProgram by studyPramAlias in classRequest
+            StudyProgram studyProgram = studyProgramRepository.findByAlias(classUpdateRequest.studyProgramAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram = %s has not been found", classUpdateRequest.studyProgramAlias())));
+
+            //set studyProgram to entity
+            aClass.setStudyProgram(studyProgram);
+
+        }
+
+        //check instructor from update DTO
+        if (classUpdateRequest.instructorUuid() != null) {
+
+            //find instructor by instructorUuid in classRequest
+            Instructor instructor =
+                    instructorRepository.findInstructorByUserUuid(classUpdateRequest.instructorUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Instructor = %s has not been found", classUpdateRequest.instructorUuid())));
+
+//            set instructor to entity
+            aClass.setInstructor(instructor);
+        }
+
+
+        //check shift from update DTO
+        if (classUpdateRequest.shiftAlias() != null) {
+
+            //find shift by shiftAlias in classRequest
+            Shift shift = shiftRepository.findByAlias(classUpdateRequest.shiftAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Shift = %s has not been found", classUpdateRequest.shiftAlias())));
+
+            //set shift to entity
+            aClass.setShift(shift);
+        }
+
+        //check generation from update DTO
+        if (classUpdateRequest.generationAlias() != null) {
+
+            //find generation by generationAlias in classRequest
+            Generation generation = generationRepository.findByAlias(classUpdateRequest.generationAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Generation = %s has not been found", classUpdateRequest.generationAlias())));
+
+            //set generation to entity
+            aClass.setGeneration(generation);
+
+        }
+
+        //map from DTO to entity
+        classMapper.updateClassFromRequest(aClass, classUpdateRequest);
+
+        //save to entity
+        classRepository.save(aClass);
+
+        return classMapper.toClassDetailResponse(aClass);
+
+    }
+
+    @Override
+    public void deleteClassByUuid(String uuid) {
+
+        //find class in database by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found.", uuid)));
+
+        //delete class in database
+        classRepository.delete(aClass);
+    }
+
+    @Override
+    public void enableClassByUuid(String uuid) {
+
+        //validate class from dto by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
+
+        //set isDeleted to false(enable)
+        aClass.setIsDeleted(false);
+
+        //save to database
+        classRepository.save(aClass);
+    }
+
+    @Override
+    public void disableClassByUuid(String uuid) {
+
+        //validate class from dto by alias
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
+
+        //set isDeleted to true(disable)
+        aClass.setIsDeleted(true);
+
+        //set is draft to true
+        aClass.setIsDraft(true);
+
+        //save to database
+        classRepository.save(aClass);
+    }
+
+    @Override
+    public Page<ClassDetailResponse> filterClasses(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //create a dynamic query specification for filtering Class entities based on the criteria provided
+        Specification<Class> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<Class> classes = classRepository.findAll(specification, pageRequest);
+
+        //map to DTO and return
+        return classes.map(classMapper::toClassDetailResponse);
+
+    }
+
+    @Override
+    public ClassDetailResponse addStudent(String uuid, ClassAddStudentRequest classAddStudentRequest) {
+
+        if (classAddStudentRequest.studentAdmissionUuid() == null || classAddStudentRequest.studentAdmissionUuid().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "studentAdmissionUuid is null or empty");
+        }
+
+        //validate class from DTO by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", uuid)));
+
+        //get all course form class
+        Set<Course> courses = aClass.getCourses();
+
+        //find all studentAdmission from DTO in database to add by student uuid
+        Set<StudentAdmission> studentAdmissions =
+                classAddStudentRequest.studentAdmissionUuid().stream().peek(studentAdmissionUuid -> {
+                    if (studentAdmissionUuid.length() > 100) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("StudentAdmission UUID = %s exceeds the maximum length of 100 characters", studentAdmissionUuid));
+                    }
+                }).map(studentAdmissionUuid ->
+                        studentAdmissionRepository.findByUuid(studentAdmissionUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudentAdmission = %s has not been found", studentAdmissionUuid)))).collect(Collectors.toSet());
+
+        Set<User> users = new HashSet<>();
+
+        //add all studentAdmission to student
+        Set<Student> students = studentAdmissions.stream()
+                .map(studentAdmission -> {
+
+                    //if studentAdmission already add to class(also has in student and user table)
+                    if (studentAdmission.isStudent()) {
+
+                        //get student from student table
+                        Student student =
+                                studentRepository.findByUuid(studentAdmission.getStudentUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found", studentAdmission.getStudentUuid())));
+
+
+                        //get all class that student study
+                        Set<Class> classes = student.getClasses();
+
+                        //add new class to set of class of student
+                        classes.add(aClass);
+
+                        //set classes to student
+                        student.setClasses(classes);
+
+
+                        Set<Course> studentCourses = new HashSet<>();
+                        if (student.getCourses() != null) {
+
+                            //get all course that student enrolled
+                            studentCourses = student.getCourses();
+                        }
+
+                        //add all course in class to student course(appen on old course that student enrolled)
+                        studentCourses.addAll(courses);
+
+                        //set all course(include course that student enrolled before and new course from class)
+                        student.setCourses(studentCourses);
+
+                        return student;
+                    }
+                    //admission that doesn't add to class yet(not student)
+                    else {
+
+                        //map from student admission
+                        Student student = studentAdmissionMapper.toStudent(studentAdmission);
+
+                        if (userRepository.existsByEmailOrUsername(student.getUser().getEmail(), student.getUser().getUsername())) {
+                            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("UserName = %s or %s has " +
+                                    "already exist", student.getUser().getEmail(), student.getUser().getUsername()));
+                        }
+
+                        String studentUuid;
+                        do {
+                            studentUuid = UUID.randomUUID().toString();
+                        } while (studentRepository.existsByUuid(studentUuid));
+
+
+                        //set uuid to student
+                        student.setUuid(studentUuid);
+
+                        long numberOfStudent = studentRepository.count();
+
+                        //set classes to student
+                        student.setCardId(aClass.getGeneration().getAlias() + "-" + numberOfStudent);
+
+                        student.setStudentStatus(1);
+
+                        // Map user request to user
+                        User user = student.getUser();
+
+                        String userUuid;
+                        do {
+                            userUuid = UUID.randomUUID().toString();
+                        } while (userRepository.existsByUuid(userUuid));
+
+
+                        //set uuid to user
+                        user.setUuid(userUuid);
+
+                        String rawPassword = userService.generateStrongPassword(10);
+                        try {
+                            //generate key for encrypt
+                            SecretKey key = OtpUtil.generateKey();
+
+                            //encrypt password
+                            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+                            //set raw password with encrypt password
+                            user.setRawPassword(encryptedPassword);
+
+                            //set password to null
+                            user.setPassword(null);
+
+                        } catch (Exception e) {
+                            throw new RuntimeException("Error generating or encrypting password", e);
+                        }
+
+                        user.setIsDeleted(false);
+                        user.setStatus(false);
+
+                        //set userName to user
+                        user.setUsername(studentAdmission.getNameEn().trim().replaceAll("\\s+", "-") + "-" + studentAdmission.getDob());
+
+                        //set user information
+                        user.setIsChangePassword(false);
+                        user.setAccountNonExpired(true);
+                        user.setAccountNonLocked(true);
+                        user.setCredentialsNonExpired(true);
+
+                        //set default authorities to user
+                        user.setAuthorities(studentService.getDefaultAuthoritiesStudent());
+
+                        // set user to student
+                        student.setUser(user);
+
+                        //add user to user Set
+                        users.add(user);
+
+                        //set student uuid to admission
+                        studentAdmission.setStudentUuid(student.getUuid());
+
+                        //set isStudent true(mark for admission that already add to student)
+                        studentAdmission.setStudent(true);
+
+
+                        Set<Course> studentCourses = new HashSet<>();
+                        if (student.getCourses() != null) {
+
+                            //get all course that student enrolled
+                            studentCourses = student.getCourses();
+                        }
+
+                        //add all course in class to student course(appen on old course that student enrolled)
+                        studentCourses.addAll(courses);
+
+                        //set all course(include course that student enrolled before and new course from class)
+                        student.setCourses(studentCourses);
+
+                        return student;
+                    }
+
+                })
+                .collect(Collectors.toSet());
+
+        //save user to database
+        userRepository.saveAll(users);
+
+        //save student to database
+        studentRepository.saveAll(students);
+
+        //save all studentAdmission to database
+        studentAdmissionRepository.saveAll(studentAdmissions);
+
+        //get all student in class
+        Set<Student> allStudents = aClass.getStudents();
+
+        //add new student from request
+        allStudents.addAll(students);
+
+        //set student to class(include old and new student)
+        aClass.setStudents(allStudents);
+
+        //save to database
+        classRepository.save(aClass);
+
+        //map to DTO and return
+        return classMapper.toClassDetailResponse(aClass);
+    }
+
+    @Override
+    public void deleteStudent(String uuid, String studentUuid) {
+
+        //validate class from DTO
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found", uuid)));
+
+        //find all student in database by  student uuid
+        Student student =
+                studentRepository.findStudentByUserUuid(studentUuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student = %s has not been found in database", studentUuid)));
+
+        //get all student from class
+        Set<Student> allStudents = aClass.getStudents();
+
+        //check for student is existed in class or not
+        if (allStudents == null || !allStudents.contains(student)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student = %s has not been found " +
+                    "in class %s", studentUuid, uuid));
+        }
+        //remove student from class
+        allStudents.remove(student);
+
+        //set new Set of student after remove to class
+        aClass.setStudents(allStudents);
+
+        //save to database
+        classRepository.save(aClass);
+    }
+
+    @Override
+    public void publicClassByUuid(String uuid) {
+
+        //validate class from dto by uuid
+        Class aClass =
+                classRepository.findByUuidAndIsDeletedFalse(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
+
+        //set isDraft to false(public)
+        aClass.setIsDraft(false);
+
+        //save to database
+        classRepository.save(aClass);
+    }
+
+    @Override
+    public void draftClassByUuid(String uuid) {
+
+        //validate class from dto by uuid
+        Class aClass =
+                classRepository.findByUuid(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Class = %s has not been found ! ", uuid)));
+
+        //set isDraft to true(draft)
+        aClass.setIsDraft(true);
+
+        //save to database
+        classRepository.save(aClass);
+    }
+
+    @Override
+    public Page<StudentResponse> getAllStudentInClass(String classUuid, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "cardId");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+
+        //find all student in class
+        Page<Student> students = studentRepository.findStudentByClassesUuid(classUuid, pageRequest);
+
+        //map entity to DTO and return
+        return students.map(studentMapper::toResponse);
+    }
+
+    @Override
+    public Page<CourseDetailResponse> getAllCourseInClass(String classUuid, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.ASC, "courseStart");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+
+        //find all student in class
+        Page<Course> students = courseRepository.findByOneClassUuid(classUuid, pageRequest);
+
+        //map entity to DTO and return
+        return students.map(courseMapper::toCourseDetailResponse);
+    }
+
+}

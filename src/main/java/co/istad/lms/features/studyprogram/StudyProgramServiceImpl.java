@@ -1,0 +1,325 @@
+package co.istad.lms.features.studyprogram;
+
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.*;
+import co.istad.lms.features.degree.DegreeRepository;
+import co.istad.lms.features.faculties.FacultyRepository;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.media.MediaService;
+import co.istad.lms.features.minio.MinioStorageService;
+import co.istad.lms.features.studyprogram.dto.StudyProgramDetailResponse;
+import co.istad.lms.features.studyprogram.dto.StudyProgramRequest;
+import co.istad.lms.features.studyprogram.dto.StudyProgramUpdateRequest;
+import co.istad.lms.features.subject.SubjectRepository;
+import co.istad.lms.features.subject.dto.SubjectYearOfStudyDetailResponse;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyDetailResponse;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudySubjectResponse;
+import co.istad.lms.mapper.StudyProgramMapper;
+import co.istad.lms.mapper.SubjectMapper;
+import co.istad.lms.mapper.YearOfStudyMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+
+@Service
+@RequiredArgsConstructor
+public class StudyProgramServiceImpl implements StudyProgramService {
+
+    private final StudyProgramRepository studyProgramRepository;
+
+    private final StudyProgramMapper studyProgramMapper;
+
+    private final BaseSpecification<StudyProgram> baseSpecification;
+
+    private final DegreeRepository degreeRepository;
+
+    private final FacultyRepository facultyRepository;
+
+    private final MinioStorageService minioStorageService;
+
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final MediaService mediaService;
+
+    private final YearOfStudyRepository yearOfStudyRepository;
+
+    private final YearOfStudyMapper yearOfStudyMapper;
+
+    private  final SubjectMapper subjectMapper;
+
+    private final SubjectRepository subjectRepository;
+
+
+    @Override
+    public void createStudyProgram(StudyProgramRequest studyProgramRequest) {
+
+        //validate studyProgram from dto by alias
+        if (studyProgramRepository.existsByAlias(studyProgramRequest.alias())) {
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Study program = %s has already existed.", studyProgramRequest.alias()));
+        }
+
+        //validate logo from DTO
+        if (studyProgramRequest.logo() != null && !studyProgramRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studyProgramRequest.logo())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
+                    studyProgramRequest.logo()));
+        }
+
+        //validate degree by alias from DTO
+        Degree degree =
+                degreeRepository.findByAliasAndIsDeletedFalse(studyProgramRequest.degreeAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("degree = %s has not been found.", studyProgramRequest.degreeAlias())));
+
+        //validate faculty by alias from DTO
+        Faculty faculty =
+                facultyRepository.findByAliasAndIsDeletedFalse(studyProgramRequest.facultyAlias()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Faculty = %s has not been found.", studyProgramRequest.facultyAlias())));
+
+
+        //map from DTO to entity
+        StudyProgram studyProgram = studyProgramMapper.fromStudyProgramRequest(studyProgramRequest);
+
+        //set isDeleted to false(enable)
+        studyProgram.setIsDeleted(false);
+
+        //set degree
+        studyProgram.setDegree(degree);
+
+        //set faculty
+        studyProgram.setFaculty(faculty);
+
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+
+        Set<YearOfStudy> yearOfStudies =new HashSet<>();
+
+        if(degree.getNumberOfYear()!=null&&degree.getNumberOfYear()>0){
+            for(int i=1;i<=degree.getNumberOfYear();i++){
+
+                for(int j=1;j<=2;j++){
+
+                    YearOfStudy yearOfStudy=new YearOfStudy();
+
+                    yearOfStudy.setStudyProgram(studyProgram);
+
+                    String uuid;
+                    do {
+                        uuid = UUID.randomUUID().toString();
+                    } while (yearOfStudyRepository.existsByUuid(uuid));
+
+                    yearOfStudy.setUuid(uuid);
+
+                    yearOfStudy.setIsDeleted(false);
+                    yearOfStudy.setIsDraft(false);
+                    yearOfStudy.setYear(i);
+                    yearOfStudy.setSemester(j);
+
+                    yearOfStudies.add(yearOfStudy);
+
+                }
+            }
+        }
+
+        //save year of study to database
+        yearOfStudyRepository.saveAll(yearOfStudies);
+
+    }
+
+    @Override
+    public StudyProgramDetailResponse getStudyProgramByAlias(String alias) {
+
+        //validate studyProgram from DTO by alias
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found.", alias)));
+
+
+        //map to DTO and return
+        return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
+    }
+
+    @Override
+    public Page<StudyProgramDetailResponse> getAllStudyPrograms(int pageNumber, int pageSize) {
+
+        //crate sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //find all studyProgram in database
+        Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(pageRequest);
+
+        //map entity to DTO and return
+        return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);
+    }
+
+    @Override
+    public StudyProgramDetailResponse updateStudyProgramByAlias(String alias, StudyProgramUpdateRequest studyProgramUpdateRequest) {
+
+        //validate studyProgram from DTO by alias
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", alias)));
+
+        //check null alias from DTO
+        if (studyProgramUpdateRequest.alias() != null) {
+
+            //validate alias from dto with original alias
+            if (!alias.equalsIgnoreCase(studyProgramUpdateRequest.alias())) {
+
+                //validate new alias is conflict with other alias or not
+                if (studyProgramRepository.existsByAlias(studyProgramUpdateRequest.alias())) {
+
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("StudyProgram = %s already exist.", studyProgramUpdateRequest.alias()));
+                }
+            }
+        }
+
+
+        //map from DTO to entity
+        studyProgramMapper.updateStudyProgramFromRequest(studyProgram, studyProgramUpdateRequest);
+
+        //update logo url for studyProgram
+        if (studyProgramUpdateRequest.logo() != null && !studyProgramUpdateRequest.logo().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studyProgramUpdateRequest.logo())) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Logo = %s has not been found",
+                    studyProgramUpdateRequest.logo()));
+        }
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+
+        //map entity to DTO and return
+        return studyProgramMapper.toStudyProgramDetailResponse(studyProgram);
+
+    }
+
+    @Override
+    public void deleteStudyProgramByAlias(String alias) {
+
+        //validate studyProgram from DTO by alias
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s was not found.", alias)));
+
+        //delete from database
+        studyProgramRepository.delete(studyProgram);
+
+    }
+
+    @Override
+    public void enableStudyProgramByAlias(String alias) {
+
+        //validate degree from dto by alias
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
+
+        //set isDeleted to false(enable)
+        studyProgram.setIsDeleted(false);
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+
+    }
+
+    @Override
+    public void disableStudyProgramByAlias(String alias) {
+
+        //validate degree from dto by alias
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
+
+        //set isDeleted to false(enable)
+        studyProgram.setIsDeleted(true);
+
+        //set isDraft to true(private)
+        studyProgram.setIsDraft(true);
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+
+    }
+
+    @Override
+    public void publicStudyProgramByAlias(String alias) {
+
+        //validate degree from dto by alias
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
+
+        //set isDraft to false(public)
+        studyProgram.setIsDraft(false);
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+    }
+
+    @Override
+    public void draftStudyProgramByAlias(String alias) {
+
+        //validate degree from dto by alias
+        StudyProgram studyProgram =
+                studyProgramRepository.findByAliasAndIsDeletedFalse(alias).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Study program = %s has not been found ! ", alias)));
+
+        //set isDraft to true(private)
+        studyProgram.setIsDraft(true);
+
+        //save to database
+        studyProgramRepository.save(studyProgram);
+    }
+
+    @Override
+    public Page<StudyProgramDetailResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+        //create sort order
+        Sort sortById = Sort.by(Sort.Direction.DESC, "createdAt");
+
+        //create pagination with current pageNumber and pageSize of pageNumber
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortById);
+
+        //create a dynamic query specification for filtering YearOfStudy entities based on the criteria provided
+        Specification<StudyProgram> specification = baseSpecification.filter(filterDto);
+
+        //get all entity that match with filter condition
+        Page<StudyProgram> studyPrograms = studyProgramRepository.findAll(specification, pageRequest);
+
+
+        //map to DTO and return
+        return studyPrograms.map(studyProgramMapper::toStudyProgramDetailResponse);
+    }
+
+    @Override
+    public Page<SubjectYearOfStudyDetailResponse> getAllYearOfStudySubject(String alias, int pageNumber, int pageSize) {
+        // Create sort order
+        Sort sortByAlias = Sort.by(Sort.Direction.ASC, "alias");
+
+        // Create pagination with current pageNumber and pageSize
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortByAlias);
+
+        // Find study program by alias
+        StudyProgram studyProgram = studyProgramRepository.findByAlias(alias)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("StudyProgram with alias = %s has not been found", alias)));
+
+        // Find all yearOfStudies by study program
+        Set<YearOfStudy> yearOfStudies = yearOfStudyRepository.findYearOfStudiesByStudyProgram(studyProgram);
+
+        // Collect all subjects and map to DTO
+        List<SubjectYearOfStudyDetailResponse> subjectDtos = yearOfStudies.stream()
+                .flatMap(yearOfStudy -> yearOfStudy.getSubjects().stream()
+                        .map(subject -> subjectMapper.toSubjectYearOfStudyDetailResponse(subject,yearOfStudyMapper.toYearOfStudySubjectResponse(yearOfStudy))))
+                .collect(Collectors.toList());
+
+        // Create a sublist for pagination
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), subjectDtos.size());
+        List<SubjectYearOfStudyDetailResponse> pageContent = subjectDtos.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, subjectDtos.size());
+    }
+
+}

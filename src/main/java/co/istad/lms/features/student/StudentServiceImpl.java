@@ -1,0 +1,757 @@
+package co.istad.lms.features.student;
+
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.domain.*;
+import co.istad.lms.domain.Class;
+import co.istad.lms.domain.roles.Student;
+import co.istad.lms.features.authority.AuthorityRepository;
+import co.istad.lms.features.course.CourseRepository;
+import co.istad.lms.features.course.dto.CourseResponse;
+import co.istad.lms.features.course.dto.CourseWithUsersResponse;
+import co.istad.lms.features.file.FileMetaDataRepository;
+import co.istad.lms.features.student.dto.*;
+import co.istad.lms.features.studyprogram.StudyProgramRepository;
+import co.istad.lms.features.user.UserRepository;
+import co.istad.lms.features.user.UserService;
+import co.istad.lms.features.yearofstudy.YearOfStudyRepository;
+import co.istad.lms.features.yearofstudy.dto.YearOfStudyStudentAchievementResponse;
+import co.istad.lms.mapper.CourseMapper;
+import co.istad.lms.mapper.StudentMapper;
+import co.istad.lms.mapper.UserMapper;
+import co.istad.lms.util.DateTimeUtil;
+import co.istad.lms.util.MediaUtil;
+import co.istad.lms.util.OtpUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.crypto.SecretKey;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class StudentServiceImpl implements StudentService {
+
+
+    private final StudentRepository studentRepository;
+
+    private final StudentMapper studentMapper;
+
+    private final CourseRepository courseRepository;
+
+    private final CourseMapper courseMapper;
+
+    private final UserRepository userRepository;
+
+    private final AuthorityRepository authorityRepository;
+
+    private final UserService userService;
+
+    private final UserMapper userMapper;
+
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final BaseSpecification<Student> baseSpecification;
+
+    private final YearOfStudyRepository yearOfStudyRepository;
+
+    private final StudyProgramRepository studyProgramRepository;
+
+
+
+
+    private String generateNextCardId() {
+        Optional<Student> optionalStudent = studentRepository.findStudentWithMaxCardId();
+        if (optionalStudent.isPresent()) {
+            String maxCardId = optionalStudent.get().getCardId();
+            int nextId = Integer.parseInt(maxCardId.substring(2)) + 1;
+            return String.format("G-%04d", nextId);
+        } else {
+            return "G-0001";
+        }
+    }
+
+
+
+
+    public String calculateGrade(double score) {
+        if (score >= 90) {
+            return "A";
+        } else if (score >= 80) {
+            return "B";
+        } else if (score >= 70) {
+            return "C";
+        } else if (score >= 60) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
+
+    @Override
+    public Set<Authority> getDefaultAuthoritiesStudent() {
+        // Set default authorities
+        Set<Authority> authorities = new HashSet<>();
+        authorities.addAll(authorityRepository.findAllByAuthorityName("course:read"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("material:write"));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("material:update"));
+//        authorities.addAll(authorityRepository.findAllByAuthorityName(""));
+        authorities.addAll(authorityRepository.findAllByAuthorityName("user:read"));
+
+        return authorities;
+
+    }
+
+
+    @Override
+    public Page<StudentResponse> getStudents(int page, int limit) {
+        // Create page request with sort by id
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+        // Find all students that in studentRepository
+        Page<Student> students = studentRepository.findAll(pageRequest);
+        // Filter students that is not deleted and not status
+        List<Student> filteredStudents = students.stream()
+                .filter(student -> !student.getUser().getIsDeleted())
+                .filter(student -> !student.getUser().getStatus())
+                .toList();
+
+        return new PageImpl<>(filteredStudents, pageRequest, filteredStudents.size())
+                .map(studentMapper::toResponse);
+
+
+    }
+
+
+    @Override
+    public Page<StudentResponseDetail> getStudentsDetail(int page, int limit) {
+
+        // Create page request with sort by id
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
+
+        // Find all students that in studentRepository
+        Page<Student> students = studentRepository.findAll(pageRequest);
+
+        // Filter students that is not deleted and not status
+        List<Student> filteredStudents = students.stream()
+                .filter(student -> !student.getUser().getIsDeleted())
+                .filter(student -> !student.getUser().getStatus())
+                .toList();
+
+        // Return page of students
+        return new PageImpl<>(filteredStudents, pageRequest, filteredStudents.size())
+                .map(studentMapper::toResponseDetail);
+
+    }
+
+
+    @Override
+    public Page<StudentCourseResponse> filterStudyPrograms(BaseSpecification.FilterDto filterDto, int pageNumber, int pageSize) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        Specification<Student> specification = baseSpecification.filter(filterDto);
+
+        Page<Student> students = studentRepository.findAll(specification, pageRequest);
+
+        //map to DTO and return
+        return students.map(studentMapper::toResponseCourse);
+
+    }
+
+
+    @Override
+    public void createStudent(StudentRequest studentRequest) {
+
+
+        // Check if the email already exists from the database
+        if (userRepository.existsByEmail(studentRequest.email())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with email = %s already exists", studentRequest.email())
+            );
+        }
+
+        if (studentRequest.profileImage() != null && !studentRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", studentRequest.profileImage()));
+        }
+
+        String username = studentRequest.nameEn().trim().replaceAll("\\s+", "-") + "-" + studentRequest.dob();
+        if (userRepository.existsByUsername(username)){
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("User with username = %s already exists", username)
+            );
+        }
+
+
+        // Map user request to user
+        User user = userMapper.fromStudentRequest(studentRequest);
+
+        user.setUuid(UUID.randomUUID().toString());
+
+        // Generate password rawPassword to encrypt
+        String rawPassword = userService.generateStrongPassword(10);
+        try {
+            //generate key for encrypt
+            SecretKey key = OtpUtil.generateKey();
+
+            //encrypt password
+            String encryptedPassword = OtpUtil.encryptOTP(rawPassword, key);
+
+            //set raw password with encrypt password
+            user.setRawPassword(encryptedPassword);
+            // Set password to null
+            user.setPassword(null);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating or encrypting password", e);
+        }
+
+        // Set dob from string to LocalDate that comes from the request validation
+        LocalDate dob = DateTimeUtil.stringToLocalDate(studentRequest.dob(), "dob");
+        user.setDob(dob);
+
+        user.setIsDeleted(false);
+        user.setStatus(false);
+        user.setUsername(username);
+        user.setIsChangePassword(false);
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
+        user.setAuthorities(getDefaultAuthoritiesStudent());
+
+        // Save user
+        userRepository.save(user);
+
+        // Map student request to student
+        Student student = studentMapper.toRequest(studentRequest);
+        student.setUuid(UUID.randomUUID().toString());
+
+        student.setCardId(generateNextCardId());
+        student.setStudentStatus(1); // 1 : Active , 2 : Drop , 3 : Hiatus , 4 : Stop learning
+
+        // Save user in student
+        student.setUser(user);
+
+        // Save student
+        studentRepository.save(student);
+    }
+
+
+    @Override
+    public StudentResponseDetail updateStudentByUuid(String uuid, StudentRequestUpdate studentRequest) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        if (studentRequest.profileImage() != null && !studentRequest.profileImage().trim().isEmpty() && !fileMetaDataRepository.existsByFileName(studentRequest.profileImage())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("File with name = %s not found!", studentRequest.profileImage()));
+        }
+
+        // Update user from student request
+        userMapper.updateUserFromStudentRequest(user, studentRequest);
+
+        // Save user
+        userRepository.save(user);
+
+        // Find student by user
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        // Update student from student request
+        student.setUser(user);
+
+        // validate student status can input only 1-4
+        if (studentRequest.studentStatus() < 1 || studentRequest.studentStatus() > 4) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Student status must be 1, 2, 3 or 4"
+            );
+        }
+        student.setStudentStatus(studentRequest.studentStatus());
+
+        // Save student
+        Student savedStudent = studentRepository.save(student);
+
+        // Return student response detail
+        studentMapper.updateStudentFromRequest(savedStudent, studentRequest);
+
+        return studentMapper.toResponseDetail(savedStudent);
+
+
+    }
+
+
+    @Override
+    public void updateSettingStudent(StudentSetting studentSettingRequest) {
+
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+
+
+        userMapper.updateUserFromStudentSettingRequest(user, studentSettingRequest);
+
+
+        // Save user
+        userRepository.save(user);
+
+
+        // Update user from student request
+        studentMapper.updateStudentSettingRequest(student, studentSettingRequest);
+
+        // Save student
+        studentRepository.save(user.getStudent());
+
+
+    }
+
+    @Override
+    public StudentSetting getStudentSetting() {
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+        return studentMapper.toStudentSettingResponse(student);
+
+    }
+
+
+    @Override
+    public StudentAchievementResponse getStudentAchievement() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+        Set<Class> studentClasses = student.getClasses();
+        if (studentClasses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have class ", student.getUser().getNameEn()));
+        }
+
+        // Get all courses from student
+        Set<Course> courses = student.getCourses();
+        if (courses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Student with username %s don't have course ", student.getUser().getNameEn()));
+        }
+
+        List<Score> scores = new ArrayList<>();
+        for (Course c : courses) {
+            scores.addAll(c.getScores());
+        }
+
+
+        StudyProgram studyProgram = studyProgramRepository.findByClassesIn(studentClasses)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Study program = %s not found" , studentClasses)
+                ));
+
+        Set<YearOfStudy> yearOfStudies = new HashSet<>();
+        for (Course c : courses) {
+            yearOfStudies.addAll(yearOfStudyRepository.findByCourses(c));
+        }
+        if (yearOfStudies.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Year of study not found");
+        }
+
+        Set<YearOfStudyStudentAchievementResponse> yearOfStudyResponses = yearOfStudies.stream()
+                .map(yearOfStudy -> new YearOfStudyStudentAchievementResponse(
+                        yearOfStudy.getYear(),
+                        yearOfStudy.getSemester(),
+                        yearOfStudy.getCourses().stream()
+                                .map(course -> {
+                                    double courseScore = course.getScores().stream()
+                                            .mapToDouble(Score::getTotal)
+                                            .sum();
+                                    String studentGrade = course.getScores().stream()
+                                            .map(Score::getGrade)
+                                            .findFirst()
+                                            .orElse(null);
+                                    return new CourseResponse(course.getTitle(), courseScore, course.getSubject().getCredit(), studentGrade);
+                                })
+                                .collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toSet());
+
+        return new StudentAchievementResponse(
+                MediaUtil.getUrl(user.getProfileImage()),
+                user.getNameEn(),
+                user.getNameKh(),
+                user.getDob(),
+                studyProgram.getDegree().getLevel(),
+                studyProgram.getStudyProgramName(),
+                MediaUtil.getUrl( user.getAvatar()),
+                yearOfStudyResponses
+        );
+    }
+
+
+
+
+    @Override
+    public StudentCourseResponse studentCourse() {
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with username %s not found", email)
+                ));
+
+        // Find student by user
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with username %s not found", email)
+                ));
+
+        // Map course student responses from student courses
+        Set<CourseWithUsersResponse> courseStudentResponses = studentMapper.toCourseStudentResponses(student.getCourses(), courseMapper);
+
+        return new StudentCourseResponse(
+                user.getUuid(),
+                user.getNameEn(),
+                user.getNameKh(),
+                user.getUsername(),
+                user.getGender(),
+                MediaUtil.getUrl( user.getAvatar()),
+                courseStudentResponses
+        );
+
+    }
+
+
+
+    public StudentCourseDetailResponse studentCourseDetail(String courseUuid) {
+
+        // Get authentication from security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if authentication is null or not authenticated
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get principal from authentication
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated");
+        }
+
+        // Get email from UserDetails
+        UserDetails userDetails = (UserDetails) principal;
+        String email = userDetails.getUsername();
+
+
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("User with email %s not found", email)
+                ));
+
+
+        // Find student by user
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Student with email %s not found", email)
+                ));
+
+
+        // Get the first course for simplicity, adjust as necessary
+        Course course = courseRepository.findByUuid(courseUuid)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Course with uuid = %s not found", courseUuid)
+                ));
+
+
+        return studentMapper.toStudentCourseDetailResponse(student, course);
+    }
+
+
+    @Override
+    public void deleteStudentByUuid(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        // delete student that found by uuid
+        studentRepository.delete(student);
+
+    }
+
+
+    @Override
+    public StudentResponseDetail getStudentDetailByUuid(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        return studentMapper.toResponseDetail(student);
+    }
+
+
+    @Override
+    public StudentResponseDetail getStudentByUuid(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        return studentMapper.toResponseDetail(student);
+
+
+    }
+
+
+    @Override
+    public void disableStudentByUuid(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        // Set status to true
+        user.setStatus(true);
+
+        // Save user
+        studentRepository.save(student);
+
+
+    }
+
+
+    @Override
+    public void enableStudentByUuid(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        // Set status to false
+        user.setStatus(false);
+
+        // Save user
+        studentRepository.save(student);
+
+
+    }
+
+
+    @Override
+    public void blockStudentByUuid(String uuid) {
+
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("User with uuid = %s not found", uuid)
+                        )
+                );
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(
+                        () -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Student with uuid = %s not found", uuid)
+                        )
+                );
+
+        // Set isDeleted to true
+        user.setIsDeleted(true);
+
+        // Save user
+        studentRepository.save(student);
+
+
+    }
+
+
+}

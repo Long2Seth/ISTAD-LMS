@@ -1,6 +1,7 @@
 package co.istad.lms.domain;
 
 
+import co.istad.lms.config.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,37 +12,43 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "materials")
 @Entity
-public class Material extends Auditable{
+public class Material extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( name = "alias" , nullable = false )
-    private String alias;
+    @Column(nullable = false, unique = true,length = 100)
+    private String uuid;
 
-    @Column ( name = "title" , nullable = false )
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String title;
 
-    @Column( name = "content_type" )
     private String contentType;
 
-    @Column( name = "extension")
     private String extension;
 
-    @Column( name = "size" )
     private Long size;
 
-    @Column( name = "file_url" , nullable = false )
-    private String fileUrl;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String fileName;
 
-    @Column ( name = "thumbnail" )
+    private String fileType;
+
+    @Column(columnDefinition = "TEXT")
     private String thumbnail;
 
-    @Column( name = "description" )
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column ( name = "subject_id" , nullable = false)
-    private Long subjectId;
+    @ManyToOne
+    @JoinColumn(name = "subject_id", nullable = false)
+    private Subject subject;
+
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
+    @Column(nullable = false)
+    private Boolean isDraft;
 
 }

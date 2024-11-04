@@ -1,14 +1,22 @@
 package co.istad.lms.features.degree.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record DegreeUpdateRequest(
-        @Size(max = 50, message = "Alias cannot be longer than 50 characters")
-        String alias,
 
-        @Size(max = 50, message = "Level cannot be longer than 50 characters")
+
+
+        @Size(max = 100,message = "alias can not be longer than 100 characters")
+        String alias,
+        @Size(max = 100, message = "Level can not be longer than 100 characters")
         String level,
 
-        String description
+        Integer numberOfYear,
+
+        String description,
+        Boolean isDraft
 ) {
 }
+

@@ -1,0 +1,109 @@
+package co.istad.lms.features.material;
+
+import co.istad.lms.base.BaseSpecification;
+import co.istad.lms.features.material.dto.MaterialDetailResponse;
+import co.istad.lms.features.material.dto.MaterialRequest;
+import co.istad.lms.features.material.dto.MaterialResponse;
+import co.istad.lms.features.material.dto.MaterialUpdateRequest;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/materials")
+public class MaterialController {
+
+    private final MaterialService materialService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('material:write')")
+    void creatMaterial(@Valid @RequestBody MaterialRequest materialRequest) {
+
+        materialService.createMaterial(materialRequest);
+
+    }
+
+    @GetMapping("/{uuid}")
+    @PreAuthorize("hasAnyAuthority('material:read')")
+    MaterialDetailResponse getMaterialByUuid(@PathVariable String uuid) {
+
+        return materialService.getMaterialByUuid(uuid);
+
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('material:read')")
+    public Page<MaterialDetailResponse> getAllMaterials(
+
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return materialService.getAllMaterials(pageNumber, pageSize);
+    }
+
+
+    @PatchMapping("/{uuid}")
+    @PreAuthorize("hasAnyAuthority('material:update')")
+    public MaterialDetailResponse updateMaterial(@PathVariable String uuid,
+                                                 @Valid @RequestBody MaterialUpdateRequest materialUpdateRequest) {
+
+        return materialService.updateMaterialByUuid(uuid, materialUpdateRequest);
+    }
+
+
+    @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('material:delete')")
+    public void deleteMaterial(@PathVariable String uuid) {
+
+        materialService.deleteMaterialByUuid(uuid);
+    }
+
+    @PutMapping("/{uuid}/enable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('material:update')")
+    void enableMaterial(@PathVariable String uuid) {
+
+        materialService.enableMaterialByUuid(uuid);
+    }
+
+    @PutMapping("/{uuid}/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyAuthority('material:update')")
+    void disableMaterial(@PathVariable String uuid) {
+
+        materialService.disableMaterialByUuid(uuid);
+    }
+
+    @PostMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('material:read')")
+    public Page<MaterialDetailResponse> filterMaterials(
+
+            @RequestBody BaseSpecification.FilterDto filterDto,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return materialService.filterMaterials(filterDto, pageNumber, pageSize);
+    }
+
+    @GetMapping("/types/{type}")
+    @PreAuthorize("hasAnyAuthority('material:read')")
+    public Page<MaterialDetailResponse> getAllMaterialByFileType(
+
+            @PathVariable String type,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "25") int pageSize
+    ) {
+
+        return materialService.getAllMaterialsByFileType(type,pageNumber, pageSize);
+    }
+
+
+}
